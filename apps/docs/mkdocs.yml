@@ -1,0 +1,39 @@
+site_name: Moonlight Terminal Game
+
+repo_name:  "2025.1-Moonlighter"
+repo_url: https://github.com/SBD1/2025.1-Moonlighter
+
+theme:
+  name: material
+  language: pt-BR
+
+  features:
+    - content.code.annotate
+    - content.tabs.link
+    - header.autohide
+    - navigation.instant
+    - navigation.top
+    - navigation.tracking
+  
+  palette:
+    - scheme: default
+      primary: 'custom'
+      accent: 'lime'
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Mude para o tema escuro
+        
+    - scheme: slate
+      primary: 'custom'
+      accent: 'lime'
+      toggle:
+        icon: material/toggle-switch
+        name: Mude para o tema claro
+
+  
+  logo: assets/Moonlighter_Icon.png
+  favicon: assets/Moonlighter_Icon.png
+  highlightjs: true
+
+extra_css:
+  - overrides/styles.css
