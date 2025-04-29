@@ -1,0 +1,29 @@
+{
+  "name": "2025.1-moonlighter",
+  "version": "1.0.0",
+  "description": "![Capa Moonlighter](./assets/Moonlighter_Capa.webp)",
+  "homepage": "https://github.com/SBD1/2025.1-Moonlighter#readme",
+  "bugs": {
+    "url": "https://github.com/SBD1/2025.1-Moonlighter/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SBD1/2025.1-Moonlighter.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky",
+    "buildDoc": "cd apps/docs && mkdocs build"
+  },
+  "dependencies": {
+    "husky": "^9.1.7"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0"
+  }
+}

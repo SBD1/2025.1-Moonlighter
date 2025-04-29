@@ -1,0 +1,9 @@
+echo "\n 🔠 Analisando se sua mensagem segue o padrão de protocolo CONVENTIONAL COMMITS..."
+
+sleep 3
+
+npx --no -- commitlint --edit ${1} || (echo "\n\n ⚠️ Erro com a estrutura da mensagem de seu commit. Faça as correções solicitadas acima. \n\n" && exit 1)
+
+echo "\n\n ✅ Tudo certo com a MENSAGEM DE COMMIT!\n Continuando com o seu commit...\n\n"
+
+sleep 3

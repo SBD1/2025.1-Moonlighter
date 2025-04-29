@@ -1,0 +1,10 @@
+echo "\n\n 🚀 Tentando realizar o Build de suas aplicações!"
+
+sleep 3
+
+echo "\n\n 🚀 Construindo Documentação..."
+npm run buildDoc || (echo "\n\n ⚠️  Erro de Build! Por favor, corrija os erros e tente novamente. \n\n" && exit 1)
+
+echo "\n\n ✅ Tudo certo!\n Continuando com o seu push...\n\n"
+
+sleep 3

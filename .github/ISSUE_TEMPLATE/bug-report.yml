@@ -1,0 +1,40 @@
+name: Reportar Bug
+description: Reporte um Bug identificado no projeto Moonlighter.
+title: "[BUG]: <Título BREVE do bug>"
+labels: ["bug"]
+body:
+  - type: textarea
+    id: text-zone1
+    attributes:
+      label: Descreva o bug e o erro identificado.
+      description: Como é o comportamento do erro no sistema?
+      placeholder: Digite...
+    validations:
+      required: true
+  - type: textarea
+    id: text-zone2
+    attributes:
+      label: Quais os passos necessário para reproduzir o bug?
+      description: Escreva o passo a passo para que o bug aconteça.
+      value: |
+        - Faça '...'
+        - Depois faça '...'
+        - Teste '...'
+    validations:
+      required: true
+  - type: textarea
+    id: text-zone3
+    attributes:
+      label: Você suspeita de onde vem o bug?
+      description: Escreva o nome do arquivo seguida da parte do código que você suspeita de onde vem o erro.
+      placeholder: |
+        Arquivo: Pasta/Pasta/nomeArquivo.js
+        __
+        Cole o código aqui
+  - type: textarea
+    id: text-zone4
+    attributes:
+      label: Detalhes adicionais?
+      description: Acrescente detalhes pertinentes.
+      placeholder: |
+        Escreva ou deixe em branco.
