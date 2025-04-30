@@ -17,7 +17,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky",
-    "buildDoc": "cd apps/docs && mkdocs build"
+    "buildDoc": "cd apps/docs && mkdocs build",
+    "devDoc": "cd apps/docs && mkdocs serve"
   },
   "dependencies": {
     "husky": "^9.1.7"
