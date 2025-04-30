@@ -37,3 +37,6 @@ theme:
 
 extra_css:
   - overrides/styles.css
+nav:
+  - Home: index.md
+  - Metodologia: metodologia.md
