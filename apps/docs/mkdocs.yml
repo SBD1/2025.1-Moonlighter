@@ -3,6 +3,11 @@ site_name: Moonlight Terminal Game
 repo_name:  "2025.1-Moonlighter"
 repo_url: https://github.com/SBD1/2025.1-Moonlighter
 
+nav:
+  - Home: index.md
+  - Modulo 1:
+    - Diagrama Entidade-Relacionamento: pages/Modulo1/Diagrama_Entidade_Relacionamento.md
+
 theme:
   name: material
   language: pt-BR
@@ -37,3 +42,8 @@ theme:
 
 extra_css:
   - overrides/styles.css
+
+markdown_extensions:
+    - admonition
+    - pymdownx.details
+    - pymdownx.superfences
