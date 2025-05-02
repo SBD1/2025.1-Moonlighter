@@ -7,6 +7,10 @@ O Diagrama Entidade-Relacionamento (DER) representa as principais entidades do s
 Ele oferece uma visão lógica e abstrata da estrutura dos dados, facilitando o entendimento de como as informações estão organizadas e interligadas dentro do sistema. O DER é composto por elementos como entidades, atributos (incluindo chaves primárias), relacionamentos e restrições estruturais.
 
 ## Diagrama Entidade-Relacionamento do Projeto:
+
+!!! Warning "Atenção!"
+    O conteúdo deste tópico **poderá sofrer alterações** ao longo da Disciplina de Sistema de Banco de Dados 1. Portanto, os Diagramas Entidade-Relacionamento serão organizadas iniciando pela versão mais recente e finalizando com a versão mais antiga.
+
 A seguir, está a imagem do diagrama de entidade-relacionamento desenvolvido para o jogo _Moonlighter_:
 
 ![Versão Atual](../../assets/Diagrama_Entidade_Relacionamento.svg)

@@ -28,6 +28,12 @@ O projeto se baseia em uma versão adaptada e simplificada do Moonlighter, execu
 
 A aplicação será construída em Python (interface em terminal), com toda a lógica de dados estruturada em PostgreSQL, utilizando SQL puro para modelagem, triggers, views e controle de acesso.
 
+##  📝 Acesse a Documentação!
+
+O conteúdo da documentação do projeto Moonlighter aborda os assuntos e atividades cobradas durante a disciplina de Sistema de Bancos de Dados 1 da Universidade de Brasília do Campus Faculdade de Ciências e Tecnologias em Engenharia - FCTE.
+
+Para acessar a documentação do projeto, [Clique aqui!](sbd1.github.io/2025.1-Moonlighter/)
+
 ## 🗃️ Estrutura do Projeto:
 
 O projeto Moonlighter é dividido em três ambientes principais, organizados dentro da pasta `/apps`. Cada um deles cumpre um papel específico na arquitetura do sistema, mantendo o projeto modular e fácil de navegar:
@@ -40,7 +46,98 @@ Essa organização facilita a separação entre lógica do jogo, estrutura de da
 
 ## 🚀 Executando o Projeto:
 
-## 📝 Acesse a Documentação do Projeto!
+O projeto utiliza de pacotes JavaScript para auxiliar na execução e padronização de qualidade para o time de desenvolvimento, se restringindo apenas para este uso. Portanto, é necessário que o usuário possua Node.Js na versão 22+.
+
+O arquivo `package.json` dispõe de comandos que auxiliam a subir os diferentes ambientes de execução separadamente:
+
+### Rodando a Documentação 📝
+
+Para rodar a documentação em ambiente de desenvolvimento, é necessário:
+
+- Python3 | Versão 3.12+
+- PIP | Versão 24+ (Geralmente instalado junto com o Python)
+
+Em versões de **Windows 10+ ou Ubuntu 22.04** execute o comando:
+
+#### 1. Instale o mkdocs:
+```shell
+pip install mkdocs
+```
+#### 2. Instale o Tema _Meterial_ do mkdocs:
+```shell
+pip install mkdocs-material
+```
+#### 3. Inicialize a documentação localmente:
+```shell
+npm run devDoc
+```
+
+Para usuários com o **Ubuntu na versão 24.04** ou sistemas onde o Python está configurado para **impedir a instalação de pacotes globalmente com pip**, como uma medida de segurança (PEP 668) por conta do gerenciado de pacotes padrão: `apt`, utilize os passos abaixo:
+
+#### 1. Inicialize um Ambiente Virtual:
+```shell
+python3 -m venv .venv
+```
+
+#### 2. Ative o Ambiente Virtual:
+```shell
+source .venv/bin/activate
+```
+#### 3. Instale o mkdocs:
+```shell
+pip install mkdocs
+```
+
+#### 4. Instale o Tema _Meterial_ do mkdocs:
+```shell
+pip install mkdocs-material
+```
+#### 5. Inicialize a documentação localmente:
+```shell
+npm run devDoc
+```
+
+### Rodando o Jogo 🎮
+
+_EM CONTRUÇÃO..._
+
+## 📝 Contribua com o projeto!
+
+Para acessar a documentação do projeto Moonlighter, [Clique Aqui](https://sbd1.github.io/2025.1-Moonlighter/) ou clique no link disponível na descrição do repositório.
+
+O projeto utiliza o protocolo **_Coventional Commits_** nas mensagens de commit, e portanto, deve seguir o seguinte padrão:
+
+`tipo(escopo opcional): descrição breve`
+
+Para controle de qualidade, o projeto utiliza a biblioteca **Husky** para executar comandos verificadores em diferentes fases de interação com o Git, como o pré-commit.
+
+Para contribuir no projeto. Realize os seguintes passos:
+
+#### 1. Certifique de instalar as tecnologias utilizadas no projeto:
+
+- Node.Js | Versão 22+;
+- PIP | Versão 24+;
+- Python3 | Versão 3+;
+
+#### 2. Clone o Repositório:
+
+Selecione uma pasta de sua preferência e execute o seguinte comando para clonagem do repositório:
+
+```shell
+git clone https://github.com/SBD1/2025.1-Moonlighter.git
+```
+
+#### 3. Baixe as dependências do projeto:
+
+Para contribuir no projeto com os commits, baixe as dependências do Husky para que as verificações possam acontecer:
+
+```shell
+npm install
+```
+
+#### 4. Suba o serviço de sua escolha
+
+Acesse o tópico **"Executando o projeto"** para obter detalhes de como acessar os ambientes do projeto.
 
 
 ---
