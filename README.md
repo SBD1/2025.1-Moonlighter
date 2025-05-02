@@ -32,7 +32,7 @@ A aplicação será construída em Python (interface em terminal), com toda a l�
 
 O conteúdo da documentação do projeto Moonlighter aborda os assuntos e atividades cobradas durante a disciplina de Sistema de Bancos de Dados 1 da Universidade de Brasília do Campus Faculdade de Ciências e Tecnologias em Engenharia - FCTE.
 
-Para acessar a documentação do projeto, [Clique aqui!](sbd1.github.io/2025.1-Moonlighter/)
+Para acessar a documentação do projeto, [Clique aqui!](https://sbd1.github.io/2025.1-Moonlighter/)
 
 ## 🗃️ Estrutura do Projeto:
 
