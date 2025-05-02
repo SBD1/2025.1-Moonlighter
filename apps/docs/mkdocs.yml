@@ -11,6 +11,7 @@ nav:
     - Diagrama Entidade-Relacionamento: pages/Modulo1/Diagrama_Entidade_Relacionamento.md
     - Modelo Relacional: pages/Modulo1/modelo_relacional.md
     - Dicionário de Dados: pages/Modulo1/Dicionario.md
+    - Vídeo de Apresentação: pages/Modulo1/VideoApresentacao.md
 
 theme:
   name: material

@@ -6,6 +6,10 @@
 O Modelo Relacional é uma forma de representar os dados de um sistema de forma organizada e estruturada, com um nível de abstração menor que o MER. Ele é composto por tabelas, que são formadas por linhas e colunas, e relacionamentos entre essas tabelas. O Modelo Relacional é uma das formas mais comuns de representar dados em um banco de dados.
 
 ## Modelo do Relacional do Projeto:
+
+!!! Warning "Atenção!"
+    O conteúdo deste tópico **poderá sofrer alterações** ao longo da Disciplina de Sistema de Banco de Dados 1. Portanto, os Modelos Relacionais serão organizadas iniciando pela versão mais recente e finalizando com a versão mais antiga.
+
 A seguir, está a imagem do Modelo Relacional desenvolvido para o jogo _Moonlighter_:
 
 ![Versão Atual](../../assets/mer.drawio.png)
