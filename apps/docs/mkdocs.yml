@@ -2,6 +2,12 @@ site_name: Moonlight Terminal Game
 
 repo_name:  "2025.1-Moonlighter"
 repo_url: https://github.com/SBD1/2025.1-Moonlighter
+site_description: "Documentação do jogo Moonlight Terminal Game"
+
+nav:
+  - Home: index.md
+  - Módulo 1:
+      - Dicionário de Dados: pages/Modulo1/Dicionario.md
 
 nav:
   - Home: index.md
@@ -43,6 +49,7 @@ theme:
 
 extra_css:
   - overrides/styles.css
+
 markdown_extensions:
     - admonition
     - pymdownx.details
