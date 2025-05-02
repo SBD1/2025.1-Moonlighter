@@ -24,6 +24,6 @@ A seguir, está a imagem do diagrama de entidade-relacionamento desenvolvido par
 
 | Data       | Versão | Autor(es)        | Mudanças                                               |
 | ---------- | ------ | ---------------- | ------------------------------------------------------ |
-| 30/04/2024 | `1.0`  | João Paulo Lima  | Criação da Página e Inserção da Primeira Versão do DER |
-| 30/04/2024 | `1.1`  | Daniel Rodrigues | Adição de Títulos e Tags de Versionamento              |
+| 30/04/2025 | `1.0`  | João Paulo Lima  | Criação da Página e Inserção da Primeira Versão do DER |
+| 30/04/2025 | `1.1`  | Daniel Rodrigues | Adição de Títulos e Tags de Versionamento              |
 
