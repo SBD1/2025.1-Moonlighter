@@ -1,0 +1,35 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: moonlighter-postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: moonlighter
+      POSTGRES_PASSWORD: moonlighter
+      POSTGRES_DB: moonlighter
+    volumes:
+    - ./postgres_data:/var/lib/postgresql/data
+    - ./apps/sql:/docker-entrypoint-initdb.d
+    networks:
+      - moonlighter-net
+  
+  adminer:
+    image: adminer
+    container_name: moonlighter-adminer
+    restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      - moonlighter-net
+    depends_on:
+      - postgres
+  
+volumes:
+  postgres_data:
+      
+networks:
+  moonlighter-net:
+    driver: bridge
+  

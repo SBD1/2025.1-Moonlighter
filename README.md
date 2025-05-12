@@ -99,7 +99,33 @@ npm run devDoc
 
 ### Rodando o Jogo 🎮
 
-_EM CONTRUÇÃO..._
+Antes de rodar o jogo, é necessário subir o banco de dados PostgreSQL. Para isso, utilizamos o Docker, que cria e gerencia o ambiente de forma isolada.
+
+> 🛠 Pré-requisito: Certifique-se de que o Docker está instalado em sua máquina. Você pode baixá-lo em: [https://www.docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop)
+
+##### 🚀 PASSO 1: Subindo o banco de dados
+- Opção 1: Usando comandos Docker diretamente
+
+Com o terminal aberto na raiz do projeto, execute:
+
+```shell
+docker compose up -d
+```
+
+Esse comando irá baixar as imagens necessárias e iniciar os containers do PostgreSQL e do Adminer.
+
+- Opção 2: Usando scripts com NPM
+
+Também na raiz do projeto, você pode subir os containers com o seguinte comando:
+
+```shell
+npm run db:up
+```
+
+Isso executa o mesmo processo anterior, mas via script definido no `package.json`, facilitando o uso para toda a equipe.
+
+#### PASSO 2: Execute o jogo!
+_[Em construção...]_
 
 ## 📝 Contribua com o projeto!
 
@@ -147,12 +173,12 @@ Acesse o tópico **"Executando o projeto"** para obter detalhes de como acessar 
 <div align="center">
   <table>
     <tr>
-      <td align="center"><a href="https://github.com/arthurevg"><img style="border-radius: 50%;" src="https://github.com/arthurevg.png" width="100px;" alt=""/><br /><sub><b>Arthur Evangelista</b></sub></a><br /><a href="https://github.com/arthurevg" title="Rocketseat">231027032</a></td>
-      <td align="center"><a href="https://github.com/DanielRogs"><img style="border-radius: 50%;" src="https://github.com/DanielRogs.png" width="100px;" alt=""/><br /><sub><b>Daniel Rodrigues</b></sub></a><br /><a href="https://github.com/DanielRogs" title="Rocketseat">211061583</a></td>
-      <td align="center"><a href="https://github.com/IgorJustino"><img style="border-radius: 50%;" src="https://github.com/IgorJustino.png" width="100px;" alt=""/><br /><sub><b>Igor Justino</b></sub></a><br /><a href="https://github.com/arthur-suares" title="Rocketseat">211061897</a></td>
+      <td align="center"><a href="https://github.com/arthurevg"><img style="border-radius: 50%;" src="https://github.com/arthurevg.png" width="100px;" alt=""/><br /><sub><b>231027032</b></sub></a><br /><a href="https://github.com/arthurevg" title="Rocketseat">Arthur Evangelista</a></td>
+      <td align="center"><a href="https://github.com/DanielRogs"><img style="border-radius: 50%;" src="https://github.com/DanielRogs.png" width="100px;" alt=""/><br /><sub><b>211061583</b></sub></a><br /><a href="https://github.com/DanielRogs" title="Rocketseat">Daniel Rodrigues</a></td>
+      <td align="center"><a href="https://github.com/IgorJustino"><img style="border-radius: 50%;" src="https://github.com/IgorJustino.png" width="100px;" alt=""/><br /><sub><b>211061897</b></sub></a><br /><a href="https://github.com/arthur-suares" title="Rocketseat">Igor Justino</a></td>
       </tr>
       <tr>
-      <td align="center"><a href="https://github.com/jpaulohe4rt"><img style="border-radius: 50%;" src="https://github.com/jpaulohe4rt.png" width="100px;" alt=""/><br /><sub><b>João Paulo</b></sub></a><br /><a href="https://github.com/jpaulohe4rt" title="Rocketseat">190030755</a></td>
-      <td align="center"><a href="https://github.com/Yanmatheus0812"><img style="border-radius: 50%;" src="https://github.com/Yanmatheus0812.png" width="100px;" alt=""/><br /><sub><b>Yan Matheus</b></sub></a><br /><a href="https://github.com/Yanmatheus0812" title="Rocketseat">231038303</a></td>
+      <td align="center"><a href="https://github.com/jpaulohe4rt"><img style="border-radius: 50%;" src="https://github.com/jpaulohe4rt.png" width="100px;" alt=""/><br /><sub><b>190030755</b></sub></a><br /><a href="https://github.com/jpaulohe4rt" title="Rocketseat">João Paulo</a></td>
+      <td align="center"><a href="https://github.com/Yanmatheus0812"><img style="border-radius: 50%;" src="https://github.com/Yanmatheus0812.png" width="100px;" alt=""/><br /><sub><b>231038303</b></sub></a><br /><a href="https://github.com/Yanmatheus0812" title="Rocketseat">Yan Matheus</a></td>
   </table>
 </div>
