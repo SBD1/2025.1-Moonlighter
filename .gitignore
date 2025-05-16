@@ -3,3 +3,5 @@
 **/dist/
 **/build/
 **/site/
+**/.env
+**/postgres_data/

@@ -18,7 +18,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky",
     "buildDoc": "cd apps/docs && mkdocs build",
-    "devDoc": "cd apps/docs && mkdocs serve"
+    "devDoc": "cd apps/docs && mkdocs serve",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down"
   },
   "dependencies": {
     "husky": "^9.1.7"
