@@ -63,6 +63,16 @@ CREATE TABLE "masmorra_mapa" (
 );
 
 
+CREATE TABLE "efeito" (
+    "idEfeito" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    "nome" character varying(30) NOT NULL,
+    "descricao" character varying(100) NOT NULL,
+    "tipo" character varying(15) NOT NULL,
+    "valor" integer NOT NULL,
+    "duracaoTurnos" integer NOT NULL
+);
+
+
 CREATE TABLE "monstro" (
     "idMonstro" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     "nome" character varying(30) NOT NULL,
@@ -109,7 +119,7 @@ CREATE TABLE "item" (
 
 
 CREATE TABLE "arma" (
-    "idItem" integer NOT NULL,
+    "idItem" integer PRIMARY KEY,
     "dadoAtaque" character varying(3) NOT NULL,
     "chanceCritico" integer NOT NULL,
     "multiplicador" integer NOT NULL,
@@ -122,7 +132,7 @@ CREATE TABLE "arma" (
 
 
 CREATE TABLE "armadura" (
-    "idItem" integer NOT NULL,
+    "idItem" integer PRIMARY KEY,
     "dadoDefesa" character varying(3) NOT NULL,
     "defesaPassiva" integer NOT NULL,
     "criticoDefensivo" integer NOT NULL,
@@ -134,28 +144,10 @@ CREATE TABLE "armadura" (
 
 
 CREATE TABLE "pocao" (
-    "idItem" integer NOT NULL,
+    "idItem" integer PRIMARY KEY,
     "duracaoTurnos" integer NOT NULL,
 
     CONSTRAINT "fk_item" FOREIGN KEY ("idItem") REFERENCES "item" ("idItem") ON DELETE CASCADE
-);
-
-
-CREATE TABLE "inst_item" (
-    "idItem" integer PRIMARY KEY,
-    "quantidade" integer NOT NULL,
-    "idMonstro" integer,
-    "idInventario" integer,
-    "idLojaNPC" integer,
-    "seedSala" character varying(10),
-    "nickName" character varying(60),
-
-    CONSTRAINT "fk_item" FOREIGN KEY ("idItem") REFERENCES "item" ("idItem") ON DELETE CASCADE,
-    CONSTRAINT "fk_inst_monstro" FOREIGN KEY ("idMonstro") REFERENCES "inst_monstro" ("idMonstro") ON DELETE CASCADE,
-    CONSTRAINT "fk_inst_inventario" FOREIGN KEY ("idInventario") REFERENCES "inst_inventario" ("idInventario") ON DELETE CASCADE,
-    CONSTRAINT "fk_lojaNPC" FOREIGN KEY ("idLojaNPC") REFERENCES "lojaNPC" ("idLojaNPC") ON DELETE CASCADE,
-    CONSTRAINT "fk_sala" FOREIGN KEY ("seedSala") REFERENCES "sala" ("seedSala") ON DELETE CASCADE,
-    CONSTRAINT "fk_lojaJogador" FOREIGN KEY ("nickName") REFERENCES "lojaJogador" ("nickName") ON DELETE CASCADE
 );
 
 
@@ -171,23 +163,13 @@ CREATE TABLE "monstro_item" (
 );
 
 
-CREATE TABLE "efeito" (
-    "idEfeito" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    "nome" character varying(30) NOT NULL,
-    "descricao" character varying(100) NOT NULL,
-    "tipo" character varying(15) NOT NULL,
-    "valor" integer NOT NULL,
-    "duracaoTurnos" integer NOT NULL
-);
-
-
 CREATE TABLE "receita" (
+    "idItemR" integer NOT NULL,
     "idItem" integer NOT NULL,
-    "idItemr" integer NOT NULL,
     "quantidade" integer NOT NULL,
 
-    CONSTRAINT "fk_item" FOREIGN KEY ("idItem") REFERENCES "item" ("idItem") ON DELETE CASCADE,
-    CONSTRAINT "fk_item" FOREIGN KEY ("idItemr") REFERENCES "item" ("idItem") ON DELETE CASCADE
+    CONSTRAINT "fk_itemResultado" FOREIGN KEY ("idItemR") REFERENCES "item" ("idItem") ON DELETE CASCADE,
+    CONSTRAINT "fk_item" FOREIGN KEY ("idItem") REFERENCES "item" ("idItem") ON DELETE CASCADE
 );
 
 
@@ -255,26 +237,44 @@ CREATE TABLE "lojaNPC" (
 
 
 CREATE TABLE "forjaria" (
-    "idLojaNPC" integer NOT NULL,
+    "idLojaNPC" integer PRIMARY KEY,
 
-    CONSTRAINT "fk_lojaNPC" PRIMARY KEY ("idLojaNPC") REFERENCES "lojaNPC" ("idLojaNPC") ON DELETE CASCADE
+    CONSTRAINT "fk_lojaNPC" FOREIGN KEY ("idLojaNPC") REFERENCES "lojaNPC" ("idLojaNPC") ON DELETE CASCADE
 );
 
 
 CREATE TABLE "varejo" (
-    "idLojaNPC" integer NOT NULL,
+    "idLojaNPC" integer PRIMARY KEY,
     "margemLucro" integer NOT NULL,
 
-    CONSTRAINT "fk_lojaNPC" PRIMARY KEY ("idLojaNPC") REFERENCES "lojaNPC" ("idLojaNPC") ON DELETE CASCADE
+    CONSTRAINT "fk_lojaNPC" FOREIGN KEY ("idLojaNPC") REFERENCES "lojaNPC" ("idLojaNPC") ON DELETE CASCADE
 );
 
 
 CREATE TABLE "banco" (
-    "idLojaNPC" integer NOT NULL,
+    "idLojaNPC" integer PRIMARY KEY,
     "valorEntrada" integer,
     "valorAtual" integer NOT NULL,
 
-    CONSTRAINT "fk_lojaNPC" PRIMARY KEY ("idLojaNPC") REFERENCES "lojaNPC" ("idLojaNPC") ON DELETE CASCADE
+    CONSTRAINT "fk_lojaNPC" FOREIGN KEY ("idLojaNPC") REFERENCES "lojaNPC" ("idLojaNPC") ON DELETE CASCADE
+);
+
+
+CREATE TABLE "inst_item" (
+    "idItem" integer PRIMARY KEY,
+    "quantidade" integer NOT NULL,
+    "idMonstro" integer,
+    "idInventario" integer,
+    "idLojaNPC" integer,
+    "seedSala" character varying(10),
+    "nickName" character varying(60),
+
+    CONSTRAINT "fk_item" FOREIGN KEY ("idItem") REFERENCES "item" ("idItem") ON DELETE CASCADE,
+    CONSTRAINT "fk_inst_monstro" FOREIGN KEY ("idMonstro") REFERENCES "inst_monstro" ("idMonstro") ON DELETE CASCADE,
+    CONSTRAINT "fk_inst_inventario" FOREIGN KEY ("idInventario") REFERENCES "inst_inventario" ("idInventario") ON DELETE CASCADE,
+    CONSTRAINT "fk_lojaNPC" FOREIGN KEY ("idLojaNPC") REFERENCES "lojaNPC" ("idLojaNPC") ON DELETE CASCADE,
+    CONSTRAINT "fk_sala" FOREIGN KEY ("seedSala") REFERENCES "sala" ("seedSala") ON DELETE CASCADE,
+    CONSTRAINT "fk_lojaJogador" FOREIGN KEY ("nickName") REFERENCES "lojaJogador" ("nickName") ON DELETE CASCADE
 );
 
 
@@ -283,9 +283,9 @@ CREATE TABLE "dialogo" (
     "conteudo" character varying(300) NOT NULL,
     "ordem" integer NOT NULL,
     "tipo" character varying(60) NOT NULL,
-    "idDialogo" integer,
+    "idDialogoPai" integer,
 
-    CONSTRAINT "fk_dialogo" FOREIGN KEY ("idDialogo") REFERENCES "dialogo" ("idDialogo") ON DELETE CASCADE
+    CONSTRAINT "fk_dialogo" FOREIGN KEY ("idDialogoPai") REFERENCES "dialogo" ("idDialogo") ON DELETE CASCADE
 );
 
 
