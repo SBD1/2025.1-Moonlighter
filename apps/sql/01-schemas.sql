@@ -11,7 +11,7 @@ CREATE TABLE "masmorra" (
     "nomeMasmorra" character varying(30) PRIMARY KEY,
     "descricao" character varying(100) NOT NULL,
     "nivel" integer NOT NULL,
-    "qtdAndar" integer NOT NULL,
+    "qtdAndar" integer NOT NULL
 );
 
 
@@ -49,7 +49,7 @@ CREATE TABLE "sala_inst_masmorra" (
 CREATE TABLE "mapa" (
     "idMapa" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     "periodo" character varying(8) NOT NULL,
-    "dia" integer NOT NULL,
+    "dia" integer NOT NULL
 );
 
 
@@ -152,7 +152,7 @@ CREATE TABLE "inst_item" (
 
     CONSTRAINT "fk_item" FOREIGN KEY ("idItem") REFERENCES "item" ("idItem") ON DELETE CASCADE,
     CONSTRAINT "fk_inst_monstro" FOREIGN KEY ("idMonstro") REFERENCES "inst_monstro" ("idMonstro") ON DELETE CASCADE,
-    CONSTRAINT "fk_inst_inventario" FOREIGN KEY ("idInventario") REFERENCES "inst_inventario" ("idInventario") ON DELETE CASCADE
+    CONSTRAINT "fk_inst_inventario" FOREIGN KEY ("idInventario") REFERENCES "inst_inventario" ("idInventario") ON DELETE CASCADE,
     CONSTRAINT "fk_lojaNPC" FOREIGN KEY ("idLojaNPC") REFERENCES "lojaNPC" ("idLojaNPC") ON DELETE CASCADE,
     CONSTRAINT "fk_sala" FOREIGN KEY ("seedSala") REFERENCES "sala" ("seedSala") ON DELETE CASCADE,
     CONSTRAINT "fk_lojaJogador" FOREIGN KEY ("nickName") REFERENCES "lojaJogador" ("nickName") ON DELETE CASCADE
@@ -215,9 +215,9 @@ CREATE TABLE "lojaJogador" (
 
 
 CREATE TABLE "inventario" (
-    "idInentario" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    "idInventario" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     "nome" character varying(30) NOT NULL,
-    "slotMaximo" integer NOT NULL,
+    "slotMaximo" integer NOT NULL
 );
 
 
@@ -226,7 +226,7 @@ CREATE TABLE "inst_inventario" (
     "nickname" character varying(60) NOT NULL,
     "slotOcupado" integer NOT NULL,
 
-    CONSTRAINT "fk_inventario" FOREIGN KEY ("idInventario") REFERENCES "inventario" ("idInentario") ON DELETE CASCADE,
+    CONSTRAINT "fk_inventario" FOREIGN KEY ("idInventario") REFERENCES "inventario" ("idInventario") ON DELETE CASCADE,
     CONSTRAINT "fk_jogador" FOREIGN KEY ("nickname") REFERENCES "jogador" ("nickName") ON DELETE CASCADE
 );
 
