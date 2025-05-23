@@ -167,7 +167,7 @@ Cada tabela está documentada com seus respectivos campos, tipos de dados, restr
     | `IdItem`         | Referência à Tabela "Item"                     | Integer  |        | `FK`, `NOT NULL` |
     | `DuraçãoTurnos`  | Duração de turnos de efeito da poção           | Integer  |        | `NOT NULL`       |
 
-??? info "Tabela INST_ITEM | 1.0v"
+??? info "Tabela INST_ITEM | 1.1v"
     **Nome da Tabela:** Inst_Item <br/>
     **Descrição**: Armazena as informações das instâncias dos itens <br/>
 
@@ -178,8 +178,8 @@ Cada tabela está documentada com seus respectivos campos, tipos de dados, restr
     | `IdMonstro`    | Referência à Tabela "Inst_Monstro" que está com o item       | Integer  |        | `FK`         |
     | `IdInventário` | Referência à Tabela "Inst_Inventário" em que está o item     | Integer  |        | `FK`         |
     | `IdLojaNPC`    | Referência à Tabela "LojaNPC" em que está o item             | Integer  |        | `FK`         |
-    | `SeedSala`     | Referência à Tabela "Sala" que contém o item                 | Integer  |        | `FK`         |
-    | `NickName`     | Referência à Tabela "LojaJogador" que contém o item          | Integer  |        | `FK`         |
+    | `SeedSala`     | Referência à Tabela "Sala" que contém o item                 | Varchar  | 10     | `FK`         |
+    | `NickName`     | Referência à Tabela "LojaJogador" que contém o item          | Varchar  | 60     | `FK`         |
 
 ??? info "Tabela MONSTRO_ITEM | 1.0v"
     **Nome da Tabela:** Monstro_Item <br/>
@@ -216,7 +216,7 @@ Cada tabela está documentada com seus respectivos campos, tipos de dados, restr
     | `IdItem`    | Referência à Tabela "Item", identificando o item Fabricador     | Integer  |        | `FK`, `NOT NULL` |
     | `Quantidade`| Quantidade de itens em _stack_ necessários para fabricar o item | Integer  |        | `NOT NULL`       |
 
-??? info "Tabela JOGADOR | 1.0v"
+??? info "Tabela JOGADOR | 1.1v"
     **Nome da Tabela:** Jogador <br/>
     **Descrição**: Armazena as informações do jogador <br/>
 
@@ -225,7 +225,7 @@ Cada tabela está documentada com seus respectivos campos, tipos de dados, restr
     | `Nickname` | Nome único do jogador                                                          | Varchar  | 60     | `PK`       |
     | `MaxHP`    | Número máximo de vida do jogador                                               | Integer  |        | `NOT NULL` |
     | `AtualHP`  | Vida atual do jogador                                                          | Integer  |        | `NOT NULL` |
-    | `Ouro`     | Quantidade de Ouro do jogador                                                  | Interger |        | `NOT NULL` |
+    | `Ouro`     | Quantidade de Ouro do jogador                                                  | Float    |        | `NOT NULL` |
     | `IdEfeito` | Referência à Tabela "Efeito", identificando se o jogador está sob algum efeito | Integer  |        | `FK`       |
 
 ??? info "Tabela LOJAJOGADOR | 1.0v"
