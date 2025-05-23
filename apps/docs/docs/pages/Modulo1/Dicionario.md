@@ -85,6 +85,19 @@ Cada tabela está documentada com seus respectivos campos, tipos de dados, restr
     | `IdMapa`        | Referência à Tabela "Mapa"               | Integer  |        | `FK`, `NOT NULL`  |
     | `Desbloqueado`  | A masmorra foi desbloqueada?             | Boolean  |        | `NOT NULL`        |
 
+??? info "Tabela EFEITO | 1.0v"
+    **Nome da Tabela:** Efeito <br/>
+    **Descrição**: Armazena as informações dos efeitos dos itens ou jogador <br/>
+
+    | Atributo         | Descrição                                            | Tipo     | Limite | Restrições      |
+    | ---------------- | ---------------------------------------------------- | -------- | ------ | --------------- |
+    | `IdEfeito`       | Número de identificação do efeito                    | Integer  |        | `PK`, `IDENTITY`|
+    | `Nome`           | Nome do efeito                                       | Varchar  | 30     | `NOT NULL`      |
+    | `Descrição`      | Descrição do efeito                                  | Varchar  | 100    | `NOT NULL`      |
+    | `Tipo`           | Tipo do efeito                                       | Varchar  | 15     | `NOT NULL`      |
+    | `Valor`          | Quantificação de impacto do efeito                   | Integer  |        | `NOT NULL`      |
+    | `DuraçãoTurnos`  | Duração de turnos do efeito                          | Integer  |        | `NOT NULL`      |
+
 ??? info "Tabela MONSTRO | 1.0v"
     **Nome da Tabela:** Monstro <br/>
     **Descrição**: Armazena as informações de monstros  <br/>
@@ -131,13 +144,13 @@ Cada tabela está documentada com seus respectivos campos, tipos de dados, restr
     | `StackMáximo`   | Quantidade máxima que o item pode ser empilhado                         | Integer  |        | `NOT NULL`       |
     | `IdEfeito`      | Referência à Tabela "Efeito", indicando que efeito o item pode aplicar  | Integer  |        | `FK`             |
 
-??? info "Tabela ARMA | 1.0v"
+??? info "Tabela ARMA | 1.1v"
     **Nome da Tabela:** Arma <br/>
     **Descrição**: Armazena as informações dos itens tipo arma <br/>
 
     | Atributo              | Descrição                                    | Tipo     | Limite | Restrições       |
     | --------------------- | -------------------------------------------- | -------- | ------ | ---------------- |
-    | `IdItem`              | Referência à Tabela "Item"                   | Integer  |        | `FK`, `NOT NULL` |
+    | `IdItem`              | Referência à Tabela "Item"                   | Integer  |        | `PK`, `FK`       |
     | `DadoAtaque`          | Número do dado de ataque                     | Varchar  | 3      | `NOT NULL`       |
     | `ChanceCrítico`       | Número da chance de dano crítico             | Float    |        | `NOT NULL`       | 
     | `Multiplicador`       | Número do multiplicador de dano              | Integer  |        | `NOT NULL`       |
@@ -145,41 +158,27 @@ Cada tabela está documentada com seus respectivos campos, tipos de dados, restr
     | `Alcance`             | Alcance da arma                              | Integer  |        | `NOT NULL`       |
     | `TipoArma`            | Tipo de arma                                 | Varchar  | 15     | `NOT NULL`       |
 
-??? info "Tabela ARMADURA | 1.0v"
+??? info "Tabela ARMADURA | 1.1v"
     **Nome da Tabela:** Armadura <br/>
     **Descrição**: Armazena as informações dos itens tipo armadura <br/>
 
     | Atributo           | Descrição                                                      | Tipo     | Limite | Restrições       |
     | ------------------ | -------------------------------------------------------------- | -------- | ------ | ---------------- |
-    | `IdItem`           | Referência à Tabela "Item"                                     | Integer  |        | `FK`, `NOT NULL` |
+    | `IdItem`           | Referência à Tabela "Item"                                     | Integer  |        | `PK`, `FK`       |
     | `DadoDefesa`       | Número do dado de defesa                                       | Varchar  | 3      | `NOT NULL`       |
     | `DefesaPassiva`    | Número de defesa passiva da armadura                           | Integer  |        | `NOT NULL`       |
     | `CríticoDefensivo` | Valor mínimo no dado para ganhar um bônus de defesa            | Integer  |        | `NOT NULL`       |
     | `BonusDefesa`      | Valor atribuído à defesa passiva, aumentando a defesa total    | Integer  |        | `NOT NULL`       |
     | `TipoArmadura`     | Tipo de armadura                                               | Varchar  | 15     | `NOT NULL`       |
 
-??? info "Tabela POÇÃO | 1.0v"
+??? info "Tabela POÇÃO | 1.1v"
     **Nome da Tabela:** Poção <br/>
     **Descrição**: Armazena as informações dos itens tipo poção <br/>
 
     | Atributo         | Descrição                                      | Tipo     | Limite | Restrições       |
     | ---------------- | ---------------------------------------------- | -------- | ------ | ---------------- |
-    | `IdItem`         | Referência à Tabela "Item"                     | Integer  |        | `FK`, `NOT NULL` |
+    | `IdItem`         | Referência à Tabela "Item"                     | Integer  |        | `PK`, `FK`       |
     | `DuraçãoTurnos`  | Duração de turnos de efeito da poção           | Integer  |        | `NOT NULL`       |
-
-??? info "Tabela INST_ITEM | 1.1v"
-    **Nome da Tabela:** Inst_Item <br/>
-    **Descrição**: Armazena as informações das instâncias dos itens <br/>
-
-    | Atributo       | Descrição                                                    | Tipo     | Limite | Restrições   |
-    | -------------- | ------------------------------------------------------------ | -------- | ------ | ------------ |
-    | `IdItem`       | Referência à Tabela "Item"                                   | Integer  |        | `PK`, `FK`   |
-    | `Quantidade`   | Quantidade em _stack_ do item                                | Integer  |        | `NOT NULL`   |
-    | `IdMonstro`    | Referência à Tabela "Inst_Monstro" que está com o item       | Integer  |        | `FK`         |
-    | `IdInventário` | Referência à Tabela "Inst_Inventário" em que está o item     | Integer  |        | `FK`         |
-    | `IdLojaNPC`    | Referência à Tabela "LojaNPC" em que está o item             | Integer  |        | `FK`         |
-    | `SeedSala`     | Referência à Tabela "Sala" que contém o item                 | Varchar  | 10     | `FK`         |
-    | `NickName`     | Referência à Tabela "LojaJogador" que contém o item          | Varchar  | 60     | `FK`         |
 
 ??? info "Tabela MONSTRO_ITEM | 1.0v"
     **Nome da Tabela:** Monstro_Item <br/>
@@ -193,26 +192,13 @@ Cada tabela está documentada com seus respectivos campos, tipos de dados, restr
     | `QtdMinima`  | Quantidade mínima em _stack_ do "IdItem" que o monstro "IdMonstro" precisa deixar cair     | Integer  |        | `NOT NULL`       |
     | `QtdMaxima`  | Quantidade máxima em _stack_ do "IdItem" que o monstro "IdMonstro" pode deixar cair        | Integer  |        | `NOT NULL`       |
 
-??? info "Tabela EFEITO | 1.0v"
-    **Nome da Tabela:** Efeito <br/>
-    **Descrição**: Armazena as informações dos efeitos dos itens ou jogador <br/>
-
-    | Atributo         | Descrição                                            | Tipo     | Limite | Restrições      |
-    | ---------------- | ---------------------------------------------------- | -------- | ------ | --------------- |
-    | `IdEfeito`       | Número de identificação do efeito                    | Integer  |        | `PK`, `IDENTITY`|
-    | `Nome`           | Nome do efeito                                       | Varchar  | 30     | `NOT NULL`      |
-    | `Descrição`      | Descrição do efeito                                  | Varchar  | 100    | `NOT NULL`      |
-    | `Tipo`           | Tipo do efeito                                       | Varchar  | 15     | `NOT NULL`      |
-    | `Valor`          | Quantificação de impacto do efeito                   | Integer  |        | `NOT NULL`      |
-    | `DuraçãoTurnos`  | Duração de turnos do efeito                          | Integer  |        | `NOT NULL`      |
-
-??? info "Tabela RECEITA | 1.0v"
+??? info "Tabela RECEITA | 1.1v"
     **Nome da Tabela:** Receita <br/>
     **Descrição**: Armazena as informações das receitas para se fabricar um item <br/>
 
     | Atributo    | Descrição                                                       | Tipo     | Limite | Restrições       |
     | ----------- | --------------------------------------------------------------- | -------- | ------ | ---------------- |
-    | `IdItem`    | Referência à Tabela "Item", identificando o item Fabricado      | Integer  |        | `FK`, `NOT NULL` |
+    | `IdItemR`   | Referência à Tabela "Item", identificando o item Fabricado      | Integer  |        | `FK`, `NOT NULL` |
     | `IdItem`    | Referência à Tabela "Item", identificando o item Fabricador     | Integer  |        | `FK`, `NOT NULL` |
     | `Quantidade`| Quantidade de itens em _stack_ necessários para fabricar o item | Integer  |        | `NOT NULL`       |
 
@@ -287,35 +273,49 @@ Cada tabela está documentada com seus respectivos campos, tipos de dados, restr
     | `IdNPC`      | Referência à Tabela "NPC", indicando qual NPC cuida da loja              | Integer  |        | `FK`, `NOT NULL` |
     | `IdMapa`     | Referência à Tabela "Mapa", indicando a qual mapa a loja pertence        | Integer  |        | `FK`, `NOT NULL` |
 
-??? info "Tabela FORJARIA | 1.0v"
+??? info "Tabela FORJARIA | 1.1v"
     **Nome da Tabela:** Forjaria <br/>
     **Descrição**: Armazena as informações da loja do NPC tipo forjaria <br/>
 
     | Atributo     | Descrição                                  | Tipo     | Limite | Restrições       |
     | ------------ | ------------------------------------------ | -------- | ------ | ---------------- |
-    | `IdLojaNPC`  | Referência à Tabela "LojaNPC"              | Integer  |        | `FK`, `NOT NULL` |
+    | `IdLojaNPC`  | Referência à Tabela "LojaNPC"              | Integer  |        | `PK`, `FK`       |
 
 
-??? info "Tabela VAREJO | 1.0v"
+??? info "Tabela VAREJO | 1.1v"
     **Nome da Tabela:** Varejo <br/>
     **Descrição**: Armazena as informações da loja do NPC tipo varejo <br/>
 
     | Atributo      | Descrição                                         | Tipo     | Limite | Restrições       |
     | ------------- | ------------------------------------------------- | -------- | ------ | ---------------- |
-    | `IdLojaNPC`   | Referência à Tabela "LojaNPC"                     | Integer  |        | `FK`, `NOT NULL` |
+    | `IdLojaNPC`   | Referência à Tabela "LojaNPC"                     | Integer  |        | `PK`, `FK`       |
     | `MargemLucro` | Margem de lucro dos itens do NPC                  | Interger |        | `NOT NULL`       |
 
-??? info "Tabela BANCO | 1.0v"
+??? info "Tabela BANCO | 1.1v"
     **Nome da Tabela:** Banco <br/>
     **Descrição**: Armazena as informações da loja do NPC tipo banco <br/>
 
     | Atributo        | Descrição                                               | Tipo     | Limite | Restrições       |
     | --------------- | ------------------------------------------------------- | -------- | ------ | ---------------- |
-    | `IdLojaNPC`     | Referência à Tabela "LojaNPC"                           | Integer  |        | `FK`, `NOT NULL` |
+    | `IdLojaNPC`     | Referência à Tabela "LojaNPC"                           | Integer  |        | `PK`, `FK`       |
     | `ValorEntrada`  | Valor do ouro de entrada depositado pelo jogador        | Integer  |        |                  |
     | `ValorAtual`    | Valor atual do ouro com rendimento do jogador           | Integer  |        | `NOT NULL`       |
 
-??? info "Tabela DIÁLOGO | 1.0v"
+??? info "Tabela INST_ITEM | 1.1v"
+    **Nome da Tabela:** Inst_Item <br/>
+    **Descrição**: Armazena as informações das instâncias dos itens <br/>
+
+    | Atributo       | Descrição                                                    | Tipo     | Limite | Restrições   |
+    | -------------- | ------------------------------------------------------------ | -------- | ------ | ------------ |
+    | `IdItem`       | Referência à Tabela "Item"                                   | Integer  |        | `PK`, `FK`   |
+    | `Quantidade`   | Quantidade em _stack_ do item                                | Integer  |        | `NOT NULL`   |
+    | `IdMonstro`    | Referência à Tabela "Inst_Monstro" que está com o item       | Integer  |        | `FK`         |
+    | `IdInventário` | Referência à Tabela "Inst_Inventário" em que está o item     | Integer  |        | `FK`         |
+    | `IdLojaNPC`    | Referência à Tabela "LojaNPC" em que está o item             | Integer  |        | `FK`         |
+    | `SeedSala`     | Referência à Tabela "Sala" que contém o item                 | Varchar  | 10     | `FK`         |
+    | `NickName`     | Referência à Tabela "LojaJogador" que contém o item          | Varchar  | 60     | `FK`         |
+
+??? info "Tabela DIÁLOGO | 1.1v"
     **Nome da Tabela:** Diálogo <br/>
     **Descrição**: Armazena as informações de cada diálogo possível <br/>
 
@@ -325,7 +325,7 @@ Cada tabela está documentada com seus respectivos campos, tipos de dados, restr
     | `Conteúdo`    | Conteúdo do diálogo                                                                   | Varchar  | 300    | `NOT NULL`       |
     | `Ordem`       | Ordem do diálogo                                                                      | Integer  |        | `NOT NULL`       |
     | `Tipo`        | Tipo de diálogo                                                                       | Varchar  | 60     | `NOT NULL`       |
-    | `IdDialogo`   | Referência à Tabela "Diálogo", indicando se este diálogo procede após um diálogo pai  | Integer  |        | `FK`             |
+    | `IdDialogoPai`| Referência à Tabela "Diálogo", indicando se este diálogo procede após um diálogo pai  | Integer  |        | `FK`             |
 
 ??? info "Tabela DIÁLOGO_NPC | 1.0v"
     **Nome da Tabela:** Diálogo_NPC <br/>
@@ -346,8 +346,9 @@ Cada tabela está documentada com seus respectivos campos, tipos de dados, restr
 
 # Versão:
 
-| Data       | Versão | Autor(es)        | Mudanças                                           |
-| ---------- | ------ | ---------------- | -------------------------------------------------- |
-| 30/04/2025 | `1.0`  | Daniel Rodrigues | Adição do Tópico "O que é um dicionário de dados?" |
-| 01/05/2025 | `1.1`  | Yan Matheus      | Adição das tabelas do dicionário de dados          |
-| 01/05/2025 | `1.2`  | Daniel Rodrigues | Reorganização das Tabelas e Adição das Restrições  |
+| Data       | Versão | Autor(es)        | Mudanças                                             |
+| ---------- | ------ | ---------------- | ---------------------------------------------------- |
+| 30/04/2025 | `1.0`  | Daniel Rodrigues | Adição do Tópico "O que é um dicionário de dados?"   |
+| 01/05/2025 | `1.1`  | Yan Matheus      | Adição das tabelas do dicionário de dados            |
+| 01/05/2025 | `1.2`  | Daniel Rodrigues | Reorganização das Tabelas e Adição das Restrições    |
+| 23/05/2025 | `1.3`  | Yan Matheus      | Reorganização das Tabelas e correção das Restrições  |
