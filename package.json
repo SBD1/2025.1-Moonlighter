@@ -20,7 +20,8 @@
     "buildDoc": "cd apps/docs && mkdocs build",
     "devDoc": "cd apps/docs && mkdocs serve",
     "db:up": "docker compose up -d",
-    "db:down": "docker compose down"
+    "db:down": "docker compose down",
+    "db:refresh": "docker exec -i moonlighter-postgres bash -c 'for f in /docker-entrypoint-initdb.d/*.sql; do psql -U moonlighter -d moonlighter -f \"$f\"; done'"
   },
   "dependencies": {
     "husky": "^9.1.7"
