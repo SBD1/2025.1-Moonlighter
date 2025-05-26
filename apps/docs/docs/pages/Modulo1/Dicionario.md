@@ -1,4 +1,4 @@
-<span style="background-color:#1ec68e; color:white; font-size:0.8em; font-weight: bold; padding:2px 6px; border-radius:4px;">Versão 1.4</span>
+<span style="background-color:#1ec68e; color:white; font-size:0.8em; font-weight: bold; padding:2px 6px; border-radius:4px;">Versão 1.5</span>
 
 # Dicionário de Dados
 
@@ -139,11 +139,11 @@ Cada tabela está documentada com seus respectivos campos, tipos de dados, restr
     | --------------- | ----------------------------------------------------------------------- | -------- | ------ | ---------------- |
     | `IdItem`        | Número de identificação do item                                         | Integer  |        | `PK`, `IDENTITY` |
     | `Nome`          | Nome do item                                                            | Varchar  | 30     | `NOT NULL`       |
-    | `Descrição`     | Descrição do item                                                       | Varchar  | 100    | `NOT NULL`       |
-    | `Tipo`          | Tipo do item                                                            | Varchar  | 15     | `NOT NULL`       |
+    | `Descrição`     | Descrição do item                                                       | Varchar  | 500    | `NOT NULL`       |
+    | `Tipo`          | Tipo do item                                                            | Varchar  | 15     |                  |
     | `PreçoBase`     | Preço base que o item vale em sua venda                                 | SmallInt |        | `NOT NULL`       |
-    | `Raridade`      | Número de raridade do item                                              | SmallInt |        | `NOT NULL`       |
-    | `StackMáximo`   | Quantidade máxima que o item pode ser empilhado                         | SmallInt |        | `NOT NULL`       |
+    | `Cultura`       | À qual cultura de masmorra o item pertence                              | Varchar  | 10     | `NOT NULL`       |
+    | `StackMaximo`   | Quantos itens do mesmo tipo eu posso empilhar no mesmo slot             | SmallInt |        | `NOT NULL`       |
     | `IdEfeito`      | Referência à Tabela "Efeito", indicando que efeito o item pode aplicar  | Integer  |        | `FK`             |
 
 ??? info "Tabela ARMA | 1.1v"
@@ -675,3 +675,4 @@ Cada tabela está documentada com seus respectivos campos, tipos de dados, restr
 | 01/05/2025 | `1.2`  | Daniel Rodrigues | Reorganização das Tabelas e Adição das Restrições                     |
 | 23/05/2025 | `1.3`  | Yan Matheus      | Reorganização das Tabelas e correção das Restrições                   |
 | 24/05/2025 | `1.4`  | Daniel Rodrigues | Separação das diferentes versões do Dicionário e correções Pontuais   |
+| 24/05/2025 | `1.5`  | Daniel Rodrigues | Atualização de atributos                                              |

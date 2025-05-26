@@ -110,10 +110,10 @@ CREATE TABLE "inst_monstro" (
 CREATE TABLE "item" (
     "idItem" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     "nome" character varying(30) NOT NULL,
-    "descricao" character varying(100) NOT NULL,
-    "tipo" character varying(15) NOT NULL,
+    "descricao" character varying(500) NOT NULL,
+    "tipo" character varying(15),
     "precoBase" SMALLINT NOT NULL,
-    "raridade" SMALLINT NOT NULL,
+    "cultura" CHARACTER varying(10) NOT NULL,
     "stackMaximo" SMALLINT NOT NULL,
     "idEfeito" integer,
 
