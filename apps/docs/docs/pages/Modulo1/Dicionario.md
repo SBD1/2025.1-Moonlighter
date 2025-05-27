@@ -138,10 +138,10 @@ Cada tabela está documentada com seus respectivos campos, tipos de dados, restr
     | Atributo        | Descrição                                                               | Tipo     | Limite | Restrições       |
     | --------------- | ----------------------------------------------------------------------- | -------- | ------ | ---------------- |
     | `IdItem`        | Número de identificação do item                                         | Integer  |        | `PK`, `IDENTITY` |
-    | `Nome`          | Nome do item                                                            | Varchar  | 30     | `NOT NULL`       |
+    | `Nome`          | Nome do item                                                            | Varchar  | 80     | `NOT NULL`       |
     | `Descrição`     | Descrição do item                                                       | Varchar  | 500    | `NOT NULL`       |
     | `Tipo`          | Tipo do item                                                            | Varchar  | 15     |                  |
-    | `PreçoBase`     | Preço base que o item vale em sua venda                                 | SmallInt |        | `NOT NULL`       |
+    | `PreçoBase`     | Preço base que o item vale em sua venda                                 | Interger |        | `NOT NULL`       |
     | `Cultura`       | À qual cultura de masmorra o item pertence                              | Varchar  | 10     | `NOT NULL`       |
     | `StackMaximo`   | Quantos itens do mesmo tipo eu posso empilhar no mesmo slot             | SmallInt |        | `NOT NULL`       |
     | `IdEfeito`      | Referência à Tabela "Efeito", indicando que efeito o item pode aplicar  | Integer  |        | `FK`             |
