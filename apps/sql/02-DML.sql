@@ -97,7 +97,7 @@ INSERT INTO "item"
     ('Cristal de Energia do Rei Golem', 'Um cristal enorme com energia suficiente para alimentar o enorme Rei Golem...', 'Item', 2500, 'Golem', 5, NULL),
     ('Anotações do Rei Golem', 'O rei da pedra. Imbuída do maior cristal de energia encontrado, essa entidade servirá para nos proteger de qualquer pessoa que nos queira mal.', 'Book', 2500, 'Golem', 5, NULL),
     ('Livro sobre Golem', 'O texto está muito desgastado, muito desbotado para ser legível. Mas os entalhes na capa de pedra são meticulosamente detalhados.', 'Item', 400, 'Golem', 5, NULL),
-    -- ITENS DO TIPO PORÇÃO:
+    -- ITENS DO TIPO POÇÃO:
     ('Poção do Deserto de Orientação', 'Os vaga-lumes guiarão o usuário até o próximo andar da Masmorra do Deserto.', 'Pocao', 8000, 'Mercador', 5, NULL);
 
 
@@ -105,3 +105,22 @@ INSERT INTO "item"
 
     -- ITENS DO TIPO ARMADURA:
 
+    -- EFEITOS:
+    INSERT INTO "efeito"
+    ("nome", "descricao", "tipo", "valor", "duracaoTurnos")
+    VALUES
+    ('Envenenado', 'Dano contínuo ao longo do tempo', 3, 'debuff', 5),
+    ('Queimado', 'Dano contínuo + interrupção de ações', 5, 'debuff', 4),
+    ('Congelado', 'Impede movimento e ações', NULL, 'debuff', 2),
+    ('Atordoado', 'Paralisa o alvo temporariamente', NULL, 'debuff', 1),
+    ('Proteção', 'Escudo que absorve dano', 20, 'buff', 3),
+    ('Cobiçado', 'Aumenta valor de venda do item', NULL, 'economia', NULL),
+    ('Amaldiçoado', 'Dano se item estiver no inventário', 8, 'maldição', NULL),
+    ('Maldição da Bolsa', 'Bloqueia uso do inventário', NULL, 'debuff', 3),
+    ('Cura Pequena', 'Restaura 35 pontos de vida', 35, 'cura', 0),
+    ('Cura Média', 'Restaura 70 pontos de vida', 70, 'cura', 0),
+    ('Cura Grande', 'Restaura 150 pontos de vida', 150, 'cura', 0);
+
+    -- DROPS DE MONSTROS
+
+    -- LOJAS DE NPC
