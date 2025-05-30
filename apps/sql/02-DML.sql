@@ -1,5 +1,352 @@
 -- INSERÇÕES DE TUPLAS NAS TABELAS
 
+-- INSERÇÃO NA TABELA MASMORRA:
+INSERT INTO "masmorra"
+    ("nomeMasmorra", "descricao", "nivel", "qtdAndar")
+    VALUES
+    ('Masmorra do Golem', 'Primeira masmorra acessível, repleta de sentinelas golem e criaturas de pedra. Enfrente o Rei Golem no 3º andar.', 1, 3),
+    ('Masmorra da Floresta', 'Masmorra florestal estreita, infestada de plantas mutantes e a Mutae Carnívora como chefe no último andar.', 2, 3),
+    ('Masmorra do Deserto', 'Antigas ruínas desérticas com tempestades de areia e o Guardião do Deserto aguardando no 3º andar.', 3, 3),
+    ('Masmorra da Tecnologia', 'Instalações tecnológicas abandonadas, protegidas por robôs, com o Guardião da Tecnologia aguardando no último andar.', 4, 3);
+
+-- INSERÇÃO NA TABELA MAPA:
+INSERT INTO "mapa"
+    ("periodo", "dia")
+    VALUES
+    ('Manhã', 1),
+    ('Tarde', 1),
+    ('Noite', 1),
+    ('Manhã', 2),
+    ('Tarde', 2),
+    ('Noite', 2),
+    ('Manhã', 3),
+    ('Tarde', 3),
+    ('Noite', 3);
+
+-- INSERÇÃO NA TABELA MASMORRA_MAPA (Dia 1: apenas Masmorra do Golem desbloqueada):
+INSERT INTO "masmorra_mapa"
+    ("nomeMasmorra", "idMapa", "desbloqueado")
+    VALUES
+    -- Dia 1
+    ('Masmorra do Golem', 1, TRUE),      -- Manhã
+    ('Masmorra da Floresta', 1, FALSE),
+    ('Masmorra do Deserto', 1, FALSE),
+    ('Masmorra da Tecnologia', 1, FALSE),
+    
+    ('Masmorra do Golem', 2, TRUE),      -- Tarde
+    ('Masmorra da Floresta', 2, FALSE),
+    ('Masmorra do Deserto', 2, FALSE),
+    ('Masmorra da Tecnologia', 2, FALSE),
+    
+    ('Masmorra do Golem', 3, TRUE),      -- Noite
+    ('Masmorra da Floresta', 3, FALSE),
+    ('Masmorra do Deserto', 3, FALSE),
+    ('Masmorra da Tecnologia', 3, FALSE),
+
+    -- Dia 2 (Floresta desbloqueada)
+    ('Masmorra do Golem', 4, TRUE),      -- Manhã
+    ('Masmorra da Floresta', 4, TRUE),
+    ('Masmorra do Deserto', 4, FALSE),
+    ('Masmorra da Tecnologia', 4, FALSE),
+    
+    ('Masmorra do Golem', 5, TRUE),      -- Tarde
+    ('Masmorra da Floresta', 5, TRUE),
+    ('Masmorra do Deserto', 5, FALSE),
+    ('Masmorra da Tecnologia', 5, FALSE),
+    
+    ('Masmorra do Golem', 6, TRUE),      -- Noite
+    ('Masmorra da Floresta', 6, TRUE),
+    ('Masmorra do Deserto', 6, FALSE),
+    ('Masmorra da Tecnologia', 6, FALSE),
+
+    -- Dia 3 (Deserto desbloqueado)
+    ('Masmorra do Golem', 7, TRUE),      -- Manhã
+    ('Masmorra da Floresta', 7, TRUE),
+    ('Masmorra do Deserto', 7, TRUE),
+    ('Masmorra da Tecnologia', 7, FALSE),
+    
+    ('Masmorra do Golem', 8, TRUE),      -- Tarde
+    ('Masmorra da Floresta', 8, TRUE),
+    ('Masmorra do Deserto', 8, TRUE),
+    ('Masmorra da Tecnologia', 8, FALSE),
+    
+    ('Masmorra do Golem', 9, TRUE),      -- Noite
+    ('Masmorra da Floresta', 9, TRUE),
+    ('Masmorra do Deserto', 9, TRUE),
+    ('Masmorra da Tecnologia', 9, FALSE);
+
+-- INSERÇÃO NA TABELA SALA :
+INSERT INTO "sala"
+    ("seedSala", "posicaoX", "posicaoY", "categoria", "nomeMasmorra")
+    VALUES
+    -- Andar 1 da Masmorra do Golem
+    ('GOL1_ENT', 0, 0, 'Entrada', 'Masmorra do Golem'),
+    ('GOL1_COM', 1, 0, 'Combate', 'Masmorra do Golem'),
+    ('GOL1_TES', 2, 0, 'Tesouro', 'Masmorra do Golem'),
+    ('GOL1_COM2', 2, 1, 'Combate', 'Masmorra do Golem'),
+    ('GOL1_ESC', 3, 1, 'Escada', 'Masmorra do Golem'),
+    
+    -- Andar 2 da Masmorra do Golem
+    ('GOL2_ENT', 0, 0, 'Entrada', 'Masmorra do Golem'),
+    ('GOL2_COM', 1, 0, 'Combate', 'Masmorra do Golem'),
+    ('GOL2_ARM', 1, 1, 'Armadilha', 'Masmorra do Golem'),
+    ('GOL2_TES', 2, 1, 'Tesouro', 'Masmorra do Golem'),
+    ('GOL2_ESC', 3, 1, 'Escada', 'Masmorra do Golem'),
+    
+    -- Andar 3 da Masmorra do Golem (Chefe)
+    ('GOL3_ENT', 0, 0, 'Entrada', 'Masmorra do Golem'),
+    ('GOL3_COM', 1, 0, 'Combate', 'Masmorra do Golem'),
+    ('GOL3_TES', 2, 0, 'Tesouro', 'Masmorra do Golem'),
+    ('GOL3_CHF', 3, 0, 'Chefe', 'Masmorra do Golem'),
+
+    -- Masmorra da Floresta
+    -- Andar 1
+    ('FLO1_ENT', 0, 0, 'Entrada', 'Masmorra da Floresta'),
+    ('FLO1_COM', 1, 0, 'Combate', 'Masmorra da Floresta'),
+    ('FLO1_ARM', 1, 1, 'Armadilha', 'Masmorra da Floresta'),
+    ('FLO1_TES', 2, 1, 'Tesouro', 'Masmorra da Floresta'),
+    ('FLO1_ESC', 2, 0, 'Escada', 'Masmorra da Floresta'),
+    
+    -- Andar 2
+    ('FLO2_ENT', 0, 0, 'Entrada', 'Masmorra da Floresta'),
+    ('FLO2_COM', 1, 0, 'Combate', 'Masmorra da Floresta'),
+    ('FLO2_TES', 2, 0, 'Tesouro', 'Masmorra da Floresta'),
+    ('FLO2_ARM', 1, 1, 'Armadilha', 'Masmorra da Floresta'),
+    ('FLO2_ESC', 2, 1, 'Escada', 'Masmorra da Floresta'),
+    
+    -- Andar 3 (Chefe)
+    ('FLO3_ENT', 0, 0, 'Entrada', 'Masmorra da Floresta'),
+    ('FLO3_ARM', 1, 0, 'Armadilha', 'Masmorra da Floresta'),
+    ('FLO3_TES', 1, 1, 'Tesouro', 'Masmorra da Floresta'),
+    ('FLO3_CHF', 2, 0, 'Chefe', 'Masmorra da Floresta'),
+
+    -- Masmorra do Deserto
+    -- Andar 1
+    ('DES1_ENT', 0, 0, 'Entrada', 'Masmorra do Deserto'),
+    ('DES1_COM', 1, 0, 'Combate', 'Masmorra do Deserto'),
+    ('DES1_ARM', 2, 0, 'Armadilha', 'Masmorra do Deserto'),
+    ('DES1_TES', 2, 1, 'Tesouro', 'Masmorra do Deserto'),
+    ('DES1_ESC', 3, 1, 'Escada', 'Masmorra do Deserto'),
+    
+    -- Andar 2
+    ('DES2_ENT', 0, 0, 'Entrada', 'Masmorra do Deserto'),
+    ('DES2_ARM', 1, 0, 'Armadilha', 'Masmorra do Deserto'),
+    ('DES2_COM', 2, 0, 'Combate', 'Masmorra do Deserto'),
+    ('DES2_TES', 2, 1, 'Tesouro', 'Masmorra do Deserto'),
+    ('DES2_ESC', 3, 1, 'Escada', 'Masmorra do Deserto'),
+    
+    -- Andar 3 (Chefe)
+    ('DES3_ENT', 0, 0, 'Entrada', 'Masmorra do Deserto'),
+    ('DES3_ARM', 1, 0, 'Armadilha', 'Masmorra do Deserto'),
+    ('DES3_TES', 2, 0, 'Tesouro', 'Masmorra do Deserto'),
+    ('DES3_CHF', 3, 0, 'Chefe', 'Masmorra do Deserto'),
+
+    -- Masmorra da Tecnologia
+    -- Andar 1
+    ('TEC1_ENT', 0, 0, 'Entrada', 'Masmorra da Tecnologia'),
+    ('TEC1_COM', 1, 0, 'Combate', 'Masmorra da Tecnologia'),
+    ('TEC1_ARM', 2, 0, 'Armadilha', 'Masmorra da Tecnologia'),
+    ('TEC1_TES', 2, 1, 'Tesouro', 'Masmorra da Tecnologia'),
+    ('TEC1_ESC', 3, 1, 'Escada', 'Masmorra da Tecnologia'),
+    
+    -- Andar 2
+    ('TEC2_ENT', 0, 0, 'Entrada', 'Masmorra da Tecnologia'),
+    ('TEC2_ARM', 1, 0, 'Armadilha', 'Masmorra da Tecnologia'),
+    ('TEC2_COM', 2, 0, 'Combate', 'Masmorra da Tecnologia'),
+    ('TEC2_TES', 2, 1, 'Tesouro', 'Masmorra da Tecnologia'),
+    ('TEC2_ESC', 3, 1, 'Escada', 'Masmorra da Tecnologia'),
+    
+    -- Andar 3 (Chefe)
+    ('TEC3_ENT', 0, 0, 'Entrada', 'Masmorra da Tecnologia'),
+    ('TEC3_ARM', 1, 0, 'Armadilha', 'Masmorra da Tecnologia'),
+    ('TEC3_TES', 2, 0, 'Tesouro', 'Masmorra da Tecnologia'),
+    ('TEC3_CHF', 3, 0, 'Chefe', 'Masmorra da Tecnologia');
+
+-- INSERÇÃO NA TABELA INST_MASMORRA (Exemplo de uma instância da Masmorra do Golem):
+INSERT INTO "inst_masmorra"
+    ("nomeMasmorra", "seedMasmorra", "posicaoX_Jogador", "posicaoY_Jogador")
+    VALUES
+    ('Masmorra do Golem', 'GOL_INST1', 0, 0),
+    ('Masmorra da Floresta', 'FLO_INST1', 0, 0),
+    ('Masmorra do Deserto', 'DES_INST1', 0, 0),
+    ('Masmorra da Tecnologia', 'TEC_INST1', 0, 0);
+
+-- INSERÇÃO NA TABELA SALA_INST_MASMORRA (Relacionando as salas com a instância):
+INSERT INTO "sala_inst_masmorra"
+    ("seedSala", "seedMasmorra", "explorada")
+    VALUES
+    -- Andar 1
+    ('GOL1_ENT', 'GOL_INST1', TRUE),
+    ('GOL1_COM', 'GOL_INST1', FALSE),
+    ('GOL1_TES', 'GOL_INST1', FALSE),
+    ('GOL1_COM2', 'GOL_INST1', FALSE),
+    ('GOL1_ESC', 'GOL_INST1', FALSE),
+    
+    -- Andar 2
+    ('GOL2_ENT', 'GOL_INST1', FALSE),
+    ('GOL2_COM', 'GOL_INST1', FALSE),
+    ('GOL2_ARM', 'GOL_INST1', FALSE),
+    ('GOL2_TES', 'GOL_INST1', FALSE),
+    ('GOL2_ESC', 'GOL_INST1', FALSE),
+    
+    -- Andar 3
+    ('GOL3_ENT', 'GOL_INST1', FALSE),
+    ('GOL3_COM', 'GOL_INST1', FALSE),
+    ('GOL3_TES', 'GOL_INST1', FALSE),
+    ('GOL3_CHF', 'GOL_INST1', FALSE),
+
+    -- Masmorra da Floresta
+    ('FLO1_ENT', 'FLO_INST1', TRUE),
+    ('FLO1_COM', 'FLO_INST1', FALSE),
+    ('FLO1_ARM', 'FLO_INST1', FALSE),
+    ('FLO1_TES', 'FLO_INST1', FALSE),
+    ('FLO1_ESC', 'FLO_INST1', FALSE),
+    ('FLO2_ENT', 'FLO_INST1', FALSE),
+    ('FLO2_COM', 'FLO_INST1', FALSE),
+    ('FLO2_TES', 'FLO_INST1', FALSE),
+    ('FLO2_ARM', 'FLO_INST1', FALSE),
+    ('FLO2_ESC', 'FLO_INST1', FALSE),
+    ('FLO3_ENT', 'FLO_INST1', FALSE),
+    ('FLO3_ARM', 'FLO_INST1', FALSE),
+    ('FLO3_TES', 'FLO_INST1', FALSE),
+    ('FLO3_CHF', 'FLO_INST1', FALSE),
+
+    -- Masmorra do Deserto
+    ('DES1_ENT', 'DES_INST1', TRUE),
+    ('DES1_COM', 'DES_INST1', FALSE),
+    ('DES1_ARM', 'DES_INST1', FALSE),
+    ('DES1_TES', 'DES_INST1', FALSE),
+    ('DES1_ESC', 'DES_INST1', FALSE),
+    ('DES2_ENT', 'DES_INST1', FALSE),
+    ('DES2_ARM', 'DES_INST1', FALSE),
+    ('DES2_COM', 'DES_INST1', FALSE),
+    ('DES2_TES', 'DES_INST1', FALSE),
+    ('DES2_ESC', 'DES_INST1', FALSE),
+    ('DES3_ENT', 'DES_INST1', FALSE),
+    ('DES3_ARM', 'DES_INST1', FALSE),
+    ('DES3_TES', 'DES_INST1', FALSE),
+    ('DES3_CHF', 'DES_INST1', FALSE),
+
+    -- Masmorra da Tecnologia
+    ('TEC1_ENT', 'TEC_INST1', TRUE),
+    ('TEC1_COM', 'TEC_INST1', FALSE),
+    ('TEC1_ARM', 'TEC_INST1', FALSE),
+    ('TEC1_TES', 'TEC_INST1', FALSE),
+    ('TEC1_ESC', 'TEC_INST1', FALSE),
+    ('TEC2_ENT', 'TEC_INST1', FALSE),
+    ('TEC2_ARM', 'TEC_INST1', FALSE),
+    ('TEC2_COM', 'TEC_INST1', FALSE),
+    ('TEC2_TES', 'TEC_INST1', FALSE),
+    ('TEC2_ESC', 'TEC_INST1', FALSE),
+    ('TEC3_ENT', 'TEC_INST1', FALSE),
+    ('TEC3_ARM', 'TEC_INST1', FALSE),
+    ('TEC3_TES', 'TEC_INST1', FALSE),
+    ('TEC3_CHF', 'TEC_INST1', FALSE);
+
+-- INSERÇÕES COMPLETAS NA TABELA MONSTRO (Base Game):
+INSERT INTO "monstro"
+    -- Masmorra Desconhecida
+    ('DES1_ENT', 'DESC_INST1', TRUE),
+    ('DES1_COM', 'DESC_INST1', FALSE),
+    ('DES1_ARM', 'DESC_INST1', FALSE),
+    ('DES1_TES', 'DESC_INST1', FALSE),
+    ('DES1_ESC', 'DESC_INST1', FALSE),
+    ('DES2_ENT', 'DESC_INST1', FALSE),
+    ('DES2_ARM', 'DESC_INST1', FALSE),
+    ('DES2_COM', 'DESC_INST1', FALSE),
+    ('DES2_TES', 'DESC_INST1', FALSE),
+    ('DES2_ESC', 'DESC_INST1', FALSE),
+    ('DES3_ENT', 'DESC_INST1', FALSE),
+    ('DES3_ARM', 'DESC_INST1', FALSE),
+    ('DES3_TES', 'DESC_INST1', FALSE),
+    ('DES3_CHF', 'DESC_INST1', FALSE);
+
+-- INSERÇÕES COMPLETAS NA TABELA MONSTRO (Base Game):
+INSERT INTO "monstro"
+  ("nome", "descricao", "nivel", "vidaMaxima", "ouroDropado", "dadoAtaque",
+   "chanceCritico", "multiplicador", "multiplicadorCritico", "chefe",
+   "nomeMasmorra", "idEfeito")
+VALUES
+-- Masmorra do Golem (nível 1)
+('Baby Slime',           'Pequeno slime que ataca em grupo.',             1,  60,  10, '1d4',  0.05, 1, 2, FALSE, 'Masmorra do Golem', NULL),
+('Torre Golem Quebrada',  'Torre de pedra inoperante que dispara fragmentos.',1,  80,  15, '1d6',  0.05, 1, 2, FALSE, 'Masmorra do Golem', NULL),
+('Guerreiro Golem Corrompido','Guerreiro golem com ataques pesados.',         1, 120,  20, '1d8',  0.05, 1, 2, FALSE, 'Masmorra do Golem', NULL),
+('Golem Voador',         'Drone voador que investe em alta velocidade.',      1, 100,  15, '1d6',  0.05, 1, 2, FALSE, 'Masmorra do Golem', NULL),
+('Golem Reparador Voador',  'Drone que repara aliados e empurra o jogador.',    1,  90,  12, '1d4',  0.05, 1, 2, FALSE, 'Masmorra do Golem', NULL),
+('Mimico Dourado',           'Baú dourado que se revela monstro ao ser atacado.', 1, 110,  25, '1d6',  0.05, 1, 2, FALSE, 'Masmorra do Golem', NULL),
+('Cabeça de Golem',           'Cabeça de golem que rola em direção ao jogador.',   1,  70,  12, '1d4',  0.05, 1, 2, FALSE, 'Masmorra do Golem', NULL),
+('Mina Golem',           'Dispositivo que explode ao se aproximar.',         1,  50,  10, '1d4',  0.05, 1, 2, FALSE, 'Masmorra do Golem', NULL),
+('Torre Golem',         'Torre que dispara projéteis de energia.',          1,  85,  15, '1d6',  0.05, 1, 2, FALSE, 'Masmorra do Golem', NULL),
+('Guerreiro Golem',        'Guerreiro de pedra padrão com ataques físicos.',    1, 130,  20, '1d8',  0.05, 1, 2, FALSE, 'Masmorra do Golem', NULL),
+('Mimico de Ferro',           'Baú metálico que se transforma em monstro.',       1, 115,  25, '1d6',  0.05, 1, 2, FALSE, 'Masmorra do Golem', NULL),
+('Slime',                'Grande slime que pode engolir o jogador.',         1, 140,  18, '1d8',  0.05, 1, 2, FALSE, 'Masmorra do Golem', NULL),
+('Manopla de Slime',       'Mão de pedra gigante com base de slime.',          1, 150,  22, '1d10', 0.05, 1, 2, FALSE, 'Masmorra do Golem', NULL),
+('Mordomo de Pedra',         'Golem com escudo e bastão que dispara luz.',       1, 120,  18, '1d8',  0.05, 1, 2, FALSE, 'Masmorra do Golem', NULL),
+('Soldado de Pedra',        'Soldado de pedra com capa que ataca com espada.',   1, 160,  20, '1d10', 0.05, 1, 2, FALSE, 'Masmorra do Golem', NULL),
+('Tangle',               'Criatura que se move em zigue-zague.',             1,  90,  12, '1d6',  0.05, 1, 2, FALSE, 'Masmorra do Golem', NULL),
+('Rei Golem',       'Rei dos golems, imenso e imóvel; braço de pedra.',  1, 500, 100, '2d12', 0.10, 2, 3, TRUE,  'Masmorra do Golem', NULL),
+('Errante',             'Inimigo raro que surge aleatoriamente.',           1, 300,  50, '1d12', 0.10, 2, 3, FALSE, 'Masmorra do Golem', NULL),
+('Mimico de Madeira',           'Baú de madeira que se transforma em monstro.',     1, 125,  25, '1d6',  0.05, 1, 2, FALSE, 'Masmorra do Golem', NULL),
+
+-- Masmorra da Floresta (nível 2)
+('Baby Slime Venenoso',    'Pequeno slime venenoso que aparece em grupos.',    2,  70,  12, '1d4',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', 1),
+('Árvore Lâmina',           'Tronco móvel que lança folhas afiadas.',           2, 110,  18, '1d6',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
+('Mutae Carnívora',    'Planta gigante com tentáculos que atacam em área.',2, 400,  60, '2d10', 0.10, 2, 3, TRUE,  'Masmorra da Floresta', NULL),
+('Árvore Mavu Corrompida',  'Árvore corrompida que invoca ramos venenosos.',     2, 130,  22, '1d8',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', 1),
+('Tangle da Floresta',        'Planta carnívora que se move rapidamente.',        2, 100,  16, '1d6',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
+('Torre de Fruta',         'Estrutura de madeira que dispara sementes.',      2,  90,  14, '1d4',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
+('Mimico Dourado',           'Baú dourado que se revela monstro ao ser atacado.',2, 145,  30, '1d6',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
+('Mimico de Ferro',           'Baú metálico que se transforma em monstro.',      2, 140,  28, '1d6',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
+('Jardineiro',           'Humanoide que lança espinhos e armadilhas.',      2, 150,  25, '1d8',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
+('Árvore Mavu',            'Árvore que lança explosões de sementes tóxicas.',2, 125,  20, '1d8',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', 1),
+('Slime Venenoso',         'Slime grande que solta veneno ao contato.',       2, 180,  24, '1d10', 0.06, 1, 2, FALSE, 'Masmorra da Floresta', 1),
+('Semeador',               'Dispositivo que planta sementes explosivas.',    2,  95,  15, '1d6',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
+('Cogumelo Giratório',    'Cogumelo que gira arremessando fragmentos.',      2, 120,  20, '1d8',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
+('Arbusto de Esporos',           'Arbusto que dispara nuvens de esporos venenosos.',2, 110,  18, '1d6',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', 1),
+('Tangle Venenoso',      'Variante tóxica do Tangle com chifres venenosos.',2, 105,  18, '1d6',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', 1),
+('Errante',             'Inimigo raro que surge aleatoriamente.',         2, 320,  55, '1d12', 0.10, 2, 3, FALSE, 'Masmorra da Floresta', NULL),
+('Árvore do Vento',            'Árvore que usa folha para lançar rajadas de vento.',2, 115,  19, '1d6',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
+('Mimico de Madeira',           'Baú de madeira que se transforma em monstro.',    2, 150,  28, '1d6',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
+
+-- Masmorra do Deserto (nível 3)
+('Baby Slime de Fogo',      'Pequeno slime de fogo que explode ao morrer.',    3,  80,  14, '1d4',  0.07, 1, 2, FALSE, 'Masmorra do Deserto', 2),
+('Fantoche Bardo',          'Fantoche que toca lâminas giratórias.',         3, 120,  20, '1d8',  0.07, 1, 2, FALSE, 'Masmorra do Deserto', NULL),
+('Tangle de Pano',         'Tangle reforçado com tecido resistente ao fogo.',3, 110,  18, '1d6',  0.07, 1, 2, FALSE, 'Masmorra do Deserto', NULL),
+('Hexa Corrompido',       'Caixa voadora corrompida que emite explosões.',3, 100,  16, '1d6',  0.07, 1, 2, FALSE, 'Masmorra do Deserto', NULL),
+('Fantoche de Fogo',          'Fantoche flamejante que libera ondas de calor.',3, 140,  25, '1d10', 0.07, 1, 2, FALSE, 'Masmorra do Deserto', 2),
+('Slime de Fogo',           'Slime ardente que queima tudo ao redor.',       3, 180,  30, '1d12', 0.07, 1, 2, FALSE, 'Masmorra do Deserto', 2),
+('Mimico Dourado',           'Baú dourado que se revela monstro ao ser atacado.',3,155,  32, '1d6',  0.07, 1, 2, FALSE, 'Masmorra do Deserto', NULL),
+('Hexa',                 'Caixa flutuante que dispara rajadas de areia.',3, 130,  22, '1d8',  0.07, 1, 2, FALSE, 'Masmorra do Deserto', NULL),
+('Mimico de Ferro',           'Baú metálico que se transforma em monstro.',    3, 160,  30, '1d6',  0.07, 1, 2, FALSE, 'Masmorra do Deserto', NULL),
+('Golem Katamari',       'Golem esférico que rola em alta velocidade.',   3, 200,  28, '1d10', 0.07, 1, 2, FALSE, 'Masmorra do Deserto', NULL),
+('Catapulta de Lava',        'Mecanismo que lança glóbulos de lava.',        3, 125,  20, '1d8',  0.07, 1, 2, FALSE, 'Masmorra do Deserto', 2),
+('Fantoche Mágico',      'Fantoche que lança fogo e teleporta.',         3, 140,  24, '1d8',  0.07, 1, 2, FALSE, 'Masmorra do Deserto', 2),
+('Golem Mãe',         'Golem enorme que invoca miniaturas.',           3, 450,  65, '2d10', 0.10, 2, 3, TRUE,  'Masmorra do Deserto', NULL),
+('Naja',                 'Guardião serpentino das ruínas desérticas.',    3, 480,  70, '2d12', 0.10, 2, 3, TRUE,  'Masmorra do Deserto', NULL),
+('Golem Patrulheiro',         'Golem que patrulha corredores e investe.',     3, 170,  28, '1d10', 0.07, 1, 2, FALSE, 'Masmorra do Deserto', NULL),
+('Errante',             'Inimigo raro que surge aleatoriamente.',         3, 350,  60, '1d12', 0.10, 2, 3, FALSE, 'Masmorra do Deserto', NULL),
+('Mimico de Madeira',           'Baú de madeira que se transforma em monstro.',  3, 160,  32, '1d6',  0.07, 1, 2, FALSE, 'Masmorra do Deserto', NULL),
+
+-- Masmorra da Tecnologia (nível 4)
+('Baby Slime Elétrico',  'Pequeno slime elétrico que causa choque.',      4,  90,  16, '1d4',  0.08, 1, 2, FALSE, 'Masmorra da Tecnologia', NULL),
+('Oscilador Corrompido', 'Dispositivo que emite ondas elétricas.',       4, 130,  22, '1d6',  0.08, 1, 2, FALSE, 'Masmorra da Tecnologia', NULL),
+('Gerador da Morte',      'Gerador que dispara rajadas de energia mortal.',4, 140,  24, '1d8',  0.08, 1, 2, FALSE, 'Masmorra da Tecnologia', NULL),
+('Poste Elétrico',        'Torre que dispara raios elétricos.',            4, 120,  20, '1d6',  0.08, 1, 2, FALSE, 'Masmorra da Tecnologia', NULL),
+('Slime Elétrico',       'Slime que emite descargas elétricas.',          4, 160,  28, '1d10', 0.08, 1, 2, FALSE, 'Masmorra da Tecnologia', NULL),
+('Bola Eletromagnética', 'Esfera que teleporta e lança raios.',           4, 150,  26, '1d8',  0.08, 1, 2, FALSE, 'Masmorra da Tecnologia', NULL),
+('Fluxo de Energia',          'Núcleo de energia instável que dispara lasers.', 4, 480,  80, '2d12', 0.12, 2, 3, TRUE,  'Masmorra da Tecnologia', NULL),
+('Lançador Golem',         'Golem que arremessa projéteis explosivos.',     4, 180,  30, '1d10', 0.08, 1, 2, FALSE, 'Masmorra da Tecnologia', NULL),
+('Gerador Graaf',      'Dispositivo que gera escudos para aliados.',    4, 125,  18, '1d6',  0.08, 1, 2, FALSE, 'Masmorra da Tecnologia', NULL),
+('Mimico de Ferro',           'Baú metálico que se transforma em monstro.',    4, 170,  32, '1d6',  0.08, 1, 2, FALSE, 'Masmorra da Tecnologia', NULL),
+('Oscilador',           'Dispositivo que emite pulsos elétricos.',       4, 135,  24, '1d8',  0.08, 1, 2, FALSE, 'Masmorra da Tecnologia', NULL),
+('Recarregador',            'Unidade que recarrega energia de aliados.',     4, 140,  26, '1d6',  0.08, 1, 2, FALSE, 'Masmorra da Tecnologia', NULL),
+('Drone Reparador',         'Drone que repara aliados automaticamente.',     4, 145,  28, '1d6',  0.08, 1, 2, FALSE, 'Masmorra da Tecnologia', NULL),
+('Redemoinho de Areia',           'Gera redemoinhos de areia para atrapalhar.',    4, 110,  18, '1d4',  0.08, 1, 2, FALSE, 'Masmorra da Tecnologia', NULL),
+('Armadilha de Slime',           'Armadilha que libera slime pegajoso.',         4, 100,  16, '1d4',  0.08, 1, 2, FALSE, 'Masmorra da Tecnologia', NULL),
+('Corrente de Espinhos',          'Corrente com espinhos que gira em torno.',      4, 175,  30, '1d10', 0.08, 1, 2, FALSE, 'Masmorra da Tecnologia', NULL),
+('Errante',             'Inimigo raro que surge aleatoriamente.',         4, 380,  65, '1d12', 0.12, 2, 3, FALSE, 'Masmorra da Tecnologia', NULL),
+('Mimico de Madeira',           'Baú de madeira que se transforma em monstro.',  4, 180,  34, '1d6',  0.08, 1, 2, FALSE, 'Masmorra da Tecnologia', NULL),
+
 -- INSERÇÃO NA TABELA ITENS:
 INSERT INTO "item"
     ("nome", "descricao", "tipo", "precoBase", "cultura", "stackMaximo", "idEfeito")
@@ -44,7 +391,7 @@ INSERT INTO "item"
     ('Pistola de Solda', 'Com o uso de vários outros recursos, esse dispositivo pode unir firmemente determinados metais.', 'Item', 11650, 'Tecnologia', 5, NULL),
     ('Fios', 'Pequenos fios de metal usados para conduzir eletricidade.', 'Item', 2550, 'Tecnologia', 10, NULL),
     ('Pedra de Wolfram', 'Uma versão bruta do metal tungstênio. Não processado, mas certamente valioso para quem precisa do material.', 'Item', 6350, 'Tecnologia', 5, NULL),
-    ('Adapatador AC', 'Normalmente, eles se encontram entre uma “bateria” e o que requer energia. Deve ser algum tipo de conversor.', 'Item', 15550, 'Tenologia', 5, NULL),
+    ('Adapatador AC', 'Normalmente, eles se encontram entre uma "bateria" e o que requer energia. Deve ser algum tipo de conversor.', 'Item', 15550, 'Tenologia', 5, NULL),
     ('Pote Antigo', 'Tem uma ou duas pequenas rachaduras, mas ainda pode conter algo. Muito bem trabalhado. Curioso para saber para que poderia ter sido usado.', 'Item', 100, 'Tecnologia', 5, NULL),
     ('Frasco de Argônio', 'Com frequência, eu encontrava o gás nesse frasco perto de metal limpo e sem manchas. Ele deve evitar algum tipo de processo químico que resulte em ferrugem.', 'Item', 12050, 'Tecnologia', 5, NULL),
     ('Folhas de Lâminas', 'Folhas afiadas usadas como armas de projétil por vários inimigos bastante incômodos...', 'Item', 300, 'Floresta', 10, NULL),
@@ -87,7 +434,7 @@ INSERT INTO "item"
     ('História da Floresta III', 'No entanto, a floresta não parou de crescer... e, aos poucos, nosso mundo foi coberto. As plantas não pararam de crescer... e lentamente... elas tomaram conta.', 'Book', 5000, 'Floresta', 5, NULL),
     ('Lentes de Vidro', 'Vidro moldado em uma lente com o único propósito de focalizar a energia mágica. Muito útil na fabricação de armas mágicas.', 'Item', 100, 'Golem', 5, NULL),
     ('Runas de Ouro', 'Essas Runas de Ouro criam padrões maravilhosos nos Golems. Ocasionalmente, você pode recuperar uma intacta após a batalha.', 'Item', 300, 'Golem', 5, NULL),
-    ('Nécleo de Golem', 'O núcleo do próprio “coração” de um Golem. Encontramos maneiras de aproveitar a energia, mas não conseguimos criar vida a partir dela.', 'Item', 100, 'Golem', 5, NULL),
+    ('Nécleo de Golem', 'O núcleo do próprio "coração" de um Golem. Encontramos maneiras de aproveitar a energia, mas não conseguimos criar vida a partir dela.', 'Item', 100, 'Golem', 5, NULL),
     ('Design de Golem I', 'Essas imagens e anotações escritas às pressas parecem se assemelhar a um esquema de algum tipo. Algo parecido com o Golem que perambula pela Masmorra do Golem.', 'Book', 1500, 'Golem', 5, NULL),
     ('Design de Golem II', 'Assim como nós viemos da terra, a pedra também veio. Aproveitando a energia vital que flui pelo solo, animamos a pedra para nos servir.', 'Book', 2500, 'Golem', 1, NULL),
     ('Design de Golem III', 'Finalmente, imagens sobre a inserção de uma fonte de energia em um Golem. O mais frustrante, porém, é que a parte sobre a fusão da fonte de energia está riscada...', 'Book', 1500, 'Golem', 5, NULL),
@@ -109,8 +456,8 @@ INSERT INTO "item"
     ('Design de um Velho Minion Golem', 'O texto está desbotado, mas parece ser instruções sobre como criar uma das estátuas vivas encontradas na Masmorra do Golem.', 'Book', 400, 'Golem', 5, NULL),
     ('Pétalas', 'Algumas pétalas de várias plantas nas masmorras que achei particularmente agradáveis aos olhos.', 'Item', 100, 'Floresta', 10, NULL),
     ('Carne Vegetal', 'Alta contagem de fibras nessas plantas. Muito útil para o artesanato.', 'Item', 60, 'Floresta', 10, NULL),
-    ('Plástico Filme', 'Uma camada muito fina de “plástico”. Encontrei-o enrolado em um monte de fios.', 'Item', 2200, 'Tecnologia', 5, NULL),
-    ('Fonte de Energia', 'Um compartimento com formato perfeito para guardar os objetos chamados “baterias”.', 'Item', 14550, 'Tecnologia', 5, NULL),
+    ('Plástico Filme', 'Uma camada muito fina de "plástico". Encontrei-o enrolado em um monte de fios.', 'Item', 2200, 'Tecnologia', 5, NULL),
+    ('Fonte de Energia', 'Um compartimento com formato perfeito para guardar os objetos chamados "baterias".', 'Item', 14550, 'Tecnologia', 5, NULL),
     ('Vidro Resistente', 'Vidro jateado com calor e areia. Usado como isolante para vários objetos contra temperaturas extremas.', 'Item', 4300, 'Deserto', 5, NULL),
     ('Ferro de Solda', 'Uma ferramenta usada para fundir vários metais.', 'Item', 5350, 'Deserto', 5, NULL),
     ('Pó da Velocidade', 'Um pó que pode acelerar o crescimento das plantas. Talvez seja útil em uma poção?', 'Item', 2000, 'Floresta', 5, NULL),
@@ -229,3 +576,28 @@ INSERT INTO "item"
     -- DROPS DE MONSTROS
 
     -- LOJAS DE NPC
+
+-- INSERÇÃO NA TABELA INVENTÁRIO:
+INSERT INTO "inventario"
+    ("nome", "slotMaximo")
+    VALUES
+    -- Inventários Básicos do Jogador
+    ('Mochila', 15),              -- Inventário principal, perde ao morrer
+    ('Bolsos', 5),                -- Slots seguros, mantém após morte
+    ('Equipamento - Armadura', 1), -- Slot para conjunto de armadura
+    ('Equipamento - Arma 1', 1),   -- Slot para arma primária
+    ('Equipamento - Arma 2', 1),   -- Slot para arma secundária
+    ('Equipamento - Acessório', 3), -- Slots para acessórios
+    ('Familiar Mimic', 28);        -- Slots extras do familiar, mantém após morte
+
+-- INSERÇÃO NA TABELA INST_INVENTARIO (Exemplo para um jogador):
+INSERT INTO "inst_inventario"
+    ("idInventario", "nickname", "slotOcupado")
+    VALUES
+    (1, 'Will', 0),  -- Mochila vazia inicialmente
+    (2, 'Will', 0),  -- Bolsos vazios inicialmente
+    (3, 'Will', 0),  -- Sem armadura equipada
+    (4, 'Will', 0),  -- Sem arma primária
+    (5, 'Will', 0),  -- Sem arma secundária
+    (6, 'Will', 0),  -- Sem acessórios
+    (7, 'Will', 0);  -- Familiar Mimic vazio
