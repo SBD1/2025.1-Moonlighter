@@ -97,7 +97,7 @@ INSERT INTO "item"
     ('Cristal de Energia do Rei Golem', 'Um cristal enorme com energia suficiente para alimentar o enorme Rei Golem...', 'Item', 2500, 'Golem', 5, NULL),
     ('Anotações do Rei Golem', 'O rei da pedra. Imbuída do maior cristal de energia encontrado, essa entidade servirá para nos proteger de qualquer pessoa que nos queira mal.', 'Book', 2500, 'Golem', 5, NULL),
     ('Livro sobre Golem', 'O texto está muito desgastado, muito desbotado para ser legível. Mas os entalhes na capa de pedra são meticulosamente detalhados.', 'Item', 400, 'Golem', 5, NULL),
-    ('Núicleo de Alta Levitação', 'Núcleo grande geralmente preso a grandes pedaços de metal que flutuam sobre a areia diamagnética na Masmorra do deserto. Holay molay essa coisa é cara!', 'Item', 15000, 'Deserto', 5, NULL),
+    ('Núcleo de Alta Levitação', 'Núcleo grande geralmente preso a grandes pedaços de metal que flutuam sobre a areia diamagnética na Masmorra do deserto. Holay molay essa coisa é cara!', 'Item', 15000, 'Deserto', 5, NULL),
     ('Líquido Inflamável', 'Facilmente inflamável...', 'Item', 4500, 'Deserto', 5, NULL),
     ('Fluído da Vida', 'Um fluido que parece animar e dar vida a plantas comuns. Observação - Mantenha-se afastado da armadilha da mosca de Vênus.', 'Item', 40, 'Floresta', 10, NULL),
     ('Essência de Luz', 'Aparentemente comum quando contido, mas começou a brilhar quando derramado em meu braço. Deve reagir a organismos vivos.', 'Item', 400, 'Floresta', 5, NULL),
@@ -151,7 +151,7 @@ INSERT INTO "item"
     ('Arco de Treinamento', 'Nada muito especial. Você puxa a flecha para trás e ela solta uma flecha. Os arcos são as únicas armas de longo alcance que podem ser encontradas em Rynoka.', 'Arma', 950, 'Mercador', 1, NULL),
     ('Monopla de Treinamento', 'Incrivelmente leves, incrivelmente rápidas, incrivelmente satisfatórias. No entanto, devido ao seu curto alcance, elas são muito mais arriscadas do que outras armas.', 'Arma', 950, 'Mercador', 1, NULL),
     ('Espada Curta de Treinamento', 'Com a espada na mão e o escudo na outra, essa combinação atinge um equilíbrio perfeito entre ataque e defesa.', 'Arma', 950, 'Mercador', 1, NULL),
-    ('Lança de Treinamento', 'A lança é a arma corpo a corpo de maior alcance que se pode empunhar. Fácil de arremessar, mas difícil de dominar.', 'Arma', 950, 'Mercador', 1 NULL),
+    ('Lança de Treinamento', 'A lança é a arma corpo a corpo de maior alcance que se pode empunhar. Fácil de arremessar, mas difícil de dominar.', 'Arma', 950, 'Mercador', 1, NULL),
     ('Monopla de Luta', 'Vamos ser honestos por um momento. Essas são apenas garras gigantes feitas de ferro golem. Tão ferozes quanto rudes.', 'Arma', 4000, 'Golem', 1, NULL),
     ('Lança de Perfuração de Golem', 'Pode atordoar. Destinada à mineração, a ponta da lança foi feita para ser incrivelmente difícil de perfurar a rocha. Esse princípio se aplica à maioria dos inimigos.', 'Arma', 4000, 'Golem', 1, NULL),
     ('Arco do Herói', 'Estranho arco antigo feito de materiais que não podem ser encontrados neste mundo.', 'Arma', 4000, 'Deserto', 1, NULL),
@@ -159,7 +159,7 @@ INSERT INTO "item"
     ('Arco de Caçador', 'A madeira e o metal da cultura Golem se fundem harmoniosamente para criar um arco bem equilibrado.', 'Arma', 4000, 'Floresta', 1, NULL),
     ('Espada Grande de Pedra', 'Pode atordoar. Realmente, eles decidiram jogar fora a ideia de cortar uma espada com essa. Projetada para simplesmente esmagar seus inimigos.', 'Arma', 4000, 'Floresta', 1, NULL),
     ('Monopla Rústicas', 'Pode atordoar. Não se trata tanto de luvas, mas de pequenas pedras grosseiramente presas às suas mãos.', 'Arma', 4000, 'Floresta', 1, NULL),
-    ('Espada Curta Enferrujada', 'Pode atordoar. Por que cortar quando você pode bater. Pelo menos.... esse é o pensamento com este.', 'Arma', 'Floresta', 1, NULL),
+    ('Espada Curta Enferrujada', 'Pode atordoar. Por que cortar quando você pode bater. Pelo menos.... esse é o pensamento com este.', 'Arma', 4000, 'Floresta', 1, NULL),
     ('Espada Curta de Soldado', 'Os melhores materiais da Masmorra do Golem são polidos ao máximo.', 'Arma', 4000, 'Golem', 1, NULL),
     ('Lança do Guerreiro', 'Uma lança poderosa construída com a força necessária para moldar Golems.', 'Arma', 4000, 'Floresta', 1, NULL),
     ('Monopla dos Espíritos da Floresta', 'Videiras cobertas de espinhos enroladas na mão para simbolizar a morte simples que a própria natureza pode proporcionar.', 'Arma', 65500, 'Floresta', 1, NULL),
@@ -186,7 +186,7 @@ INSERT INTO "item"
     ('Bandana de Tecido', 'Essa bandana semi-ordinária é tecida com as fibras mais resistentes para ajudar a proteger o usuário.', 'Armadura', 4000, 'Mercador', 1, NULL),
     ('Bandana de Tecido II', 'Essa bandana semi-ordinária é tecida com as fibras mais resistentes para ajudar a proteger o usuário.', 'Armadura', 39000, 'Mercador', 1, NULL),
     ('Bandana de Tecido III', 'Essa bandana semi-ordinária é tecida com as fibras mais resistentes para ajudar a proteger o usuário.', 'Armadura', 90500, 'Mercador', 1, NULL),
-    ('Botas de Tecido', 'Botas feitas de tecido resistente. Perfeitas para viajantes, mas não são as melhores para proteger os pés de ataques inimigos.', 'Armadura' , 4000, 'Mercador', 1, NULL);
+    ('Botas de Tecido', 'Botas feitas de tecido resistente. Perfeitas para viajantes, mas não são as melhores para proteger os pés de ataques inimigos.', 'Armadura' , 4000, 'Mercador', 1, NULL),
     ('Peitoral de Tecido', 'O tecido resistente dessa túnica é durável e, ao mesmo tempo, leve.', 'Armadura', 4000, 'Mercador', 1, NULL),
     ('Botas de Ferro', 'Originalmente produzido em massa para soldados do Grande Exército, mas funciona igualmente bem para qualquer pessoa que esteja mergulhando na masmorra.', 'Armadura', 4000, 'Mercador', 1, NULL),
     ('Peitoral de Ferro', 'Armadura básica mais comumente usada por mercadores. Bastante leve, com resistência e mobilidade decentes.', 'Armadura', 4000, 'Mercador', 1, NULL),
@@ -214,17 +214,17 @@ INSERT INTO "item"
     INSERT INTO "efeito"
     ("nome", "descricao", "tipo", "valor", "duracaoTurnos")
     VALUES
-    ('Envenenado', 'Dano contínuo de veneneo ao longo do tempo', 3, 'debuff', 5),
-    ('Queimado', 'Dano contínuo de fogo ao longo do tempo', 5, 'debuff', 4),
-    ('Congelado', 'Congela o inimigo, impedindo seus movimentos e ações', 2, 'debuff', 2),
-    ('Atordoado', 'Paralisa o alvo temporariamente', 0, 'debuff', 1),
-    ('Proteção', 'Escudo temporário que absorve dano', 20, 'buff', 3),
-    ('Cobiçado', 'Aumenta valor de venda do item', 0, 'economia', NULL),
-    ('Amaldiçoado', 'Dano se item estiver no inventário', 8, 'maldição', NULL),
-    ('Maldição da Bolsa', 'Bloqueia uso do inventário', 0, 'debuff', 3),
-    ('Cura Pequena', 'Restaura 35 pontos de vida', 35, 'cura', 0),
-    ('Cura Média', 'Restaura 70 pontos de vida', 70, 'cura', 0),
-    ('Cura Grande', 'Restaura 150 pontos de vida', 150, 'cura', 0);
+    ('Envenenado', 'Dano contínuo de veneno ao longo do tempo', 'debuff', 3, 5),
+    ('Queimado', 'Dano contínuo de fogo ao longo do tempo', 'debuff', 5, 4),
+    ('Congelado', 'Congela o inimigo, impedindo seus movimentos e ações','debuff', 2, 2),
+    ('Atordoado', 'Paralisa o alvo temporariamente', 'debuff', 0, 1),
+    ('Proteção', 'Escudo temporário que absorve dano', 'buff', 20, 3),
+    ('Cobiçado', 'Aumenta valor de venda do item', 'economia', 0, NULL),
+    ('Amaldiçoado', 'Dano se item estiver no inventário', 'maldição', 8, NULL),
+    ('Maldição da Bolsa', 'Bloqueia uso do inventário', 'debuff', 0, 3),
+    ('Cura Pequena', 'Restaura 35 pontos de vida', 'cura', 35, 0),
+    ('Cura Média', 'Restaura 70 pontos de vida', 'cura', 70, 0),
+    ('Cura Grande', 'Restaura 150 pontos de vida', 'cura', 150, 0);
 
     -- DROPS DE MONSTROS
 
