@@ -124,7 +124,7 @@ INSERT INTO "item"
     ('Lâmpada de Água', 'Que curioso. Uma lâmpada não de chama, mas de água incandescente. Mais pesada, com certeza, mas mais confiável a longo prazo.', 'Item', 250, 'Golem', 5, NULL),
     ('Hastes de Soldagem', 'Metal em um fio fino. Usado como agente de ligação.', 'Item', 3400, 'Tecnologia', 10, NULL),
     ('Pedra Branca', 'Peça de um recipiente para preservar as propriedades da água infundida.', 'Item', 250, 'Golem', 5, NULL),
-    -- ITENS DO TIPO PORÇÃO:
+    -- ITENS DO TIPO POÇÃO:
     ('Poção do Deserto de Orientação', 'Os vaga-lumes guiarão o usuário até o próximo andar da Masmorra do Deserto.', 'Pocao', 8000, 'Mercador', 5, NULL),
     ('Poção da Floresta de Orientação', 'Os vaga-lumes guiarão o usuário até o próximo andar da Masmorra da Floresta.', 'Pocao', 2500, 'Mercador', 5, NULL),
     ('Poção do Golem de Orientação', 'Os vaga-lumes guiarão o usuário até o próximo andar da Masmorra do Golem.', 'Pocao', 400, 'Mercador', 5, NULL),
@@ -182,7 +182,6 @@ INSERT INTO "item"
     ('Lança do Macaco', 'A história do Rei Macaco vem à mente quando se olha para essa lança carmesim. Verdadeiramente uma lança digna dele.', 'Arma', 265800, 'Tecnologia', 1, NULL),
     ('Espada Curta Reborn', 'Provoca Queimadura. As chamas da forja nunca deixaram essa espada, o calor do deserto ainda irradia da lâmina.', 'Arma', 265800, 'Tecnologia', 1, NULL),
     ('Arco do Soldado', 'Criado de forma rudimentar com as fibras limitadas da Cultura do Deserto, esse arco fica melhor nas mãos de um soldado. De qualquer forma, ele dá conta do recado.', 'Arma', 265800, 'Tecnologia', 1, NULL),
-
     -- ITENS DO TIPO ARMADURA:
     ('Bandana de Tecido', 'Essa bandana semi-ordinária é tecida com as fibras mais resistentes para ajudar a proteger o usuário.', 'Armadura', 4000, 'Mercador', 1, NULL),
     ('Bandana de Tecido II', 'Essa bandana semi-ordinária é tecida com as fibras mais resistentes para ajudar a proteger o usuário.', 'Armadura', 39000, 'Mercador', 1, NULL),
@@ -210,3 +209,23 @@ INSERT INTO "item"
     ('Botas de Aço III', 'Oferecem uma proteção retumbante. O que é bom, porque ninguém vai se esquivar de musgo com tanto metal preso aos pés.', 'Armadura', 90000, 'Mercador', 1, NULL),
     ('Peitoral de Aço III', 'A placa peitoral oferece a melhor proteção contra inimigos. No entanto, é incrivelmente pesado. Basicamente, é um pedaço de aço preso ao peito.', 'Armadura', 90000, 'Mercador', 1, NULL),
     ('Capacete de Aço III', 'Camadas dos metais mais pesados e espessos criados em um capacete robusto, resistente e redutor de danos.', 'Armadura', 90000, 'Mercador', 1, NULL);
+
+    -- EFEITOS:
+    INSERT INTO "efeito"
+    ("nome", "descricao", "tipo", "valor", "duracaoTurnos")
+    VALUES
+    ('Envenenado', 'Dano contínuo de veneneo ao longo do tempo', 3, 'debuff', 5),
+    ('Queimado', 'Dano contínuo de fogo ao longo do tempo', 5, 'debuff', 4),
+    ('Congelado', 'Congela o inimigo, impedindo seus movimentos e ações', 2, 'debuff', 2),
+    ('Atordoado', 'Paralisa o alvo temporariamente', 0, 'debuff', 1),
+    ('Proteção', 'Escudo temporário que absorve dano', 20, 'buff', 3),
+    ('Cobiçado', 'Aumenta valor de venda do item', 0, 'economia', NULL),
+    ('Amaldiçoado', 'Dano se item estiver no inventário', 8, 'maldição', NULL),
+    ('Maldição da Bolsa', 'Bloqueia uso do inventário', 0, 'debuff', 3),
+    ('Cura Pequena', 'Restaura 35 pontos de vida', 35, 'cura', 0),
+    ('Cura Média', 'Restaura 70 pontos de vida', 70, 'cura', 0),
+    ('Cura Grande', 'Restaura 150 pontos de vida', 150, 'cura', 0);
+
+    -- DROPS DE MONSTROS
+
+    -- LOJAS DE NPC

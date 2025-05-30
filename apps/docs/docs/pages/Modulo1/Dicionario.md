@@ -97,7 +97,7 @@ Cada tabela está documentada com seus respectivos campos, tipos de dados, restr
     | `Descrição`      | Descrição do efeito                                  | Varchar  | 100    | `NOT NULL`      |
     | `Tipo`           | Tipo do efeito                                       | Varchar  | 15     | `NOT NULL`      |
     | `Valor`          | Quantificação de impacto do efeito                   | SmallInt |        | `NOT NULL`      |
-    | `DuraçãoTurnos`  | Duração de turnos do efeito                          | SmallInt |        | `NOT NULL`      |
+    | `DuraçãoTurnos`  | Duração de turnos do efeito                          | SmallInt |        |       |
 
 ??? info "Tabela MONSTRO | 1.1v"
     **Nome da Tabela:** Monstro <br/>
