@@ -70,7 +70,7 @@ CREATE TABLE "efeito" (
     "descricao" character varying(100) NOT NULL,
     "tipo" character varying(15) NOT NULL,
     "valor" SMALLINT NOT NULL,
-    "duracaoTurnos" SMALLINT NOT NULL
+    "duracaoTurnos" SMALLINT
 );
 
 

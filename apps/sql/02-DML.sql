@@ -109,14 +109,14 @@ INSERT INTO "item"
     INSERT INTO "efeito"
     ("nome", "descricao", "tipo", "valor", "duracaoTurnos")
     VALUES
-    ('Envenenado', 'Dano contínuo ao longo do tempo', 3, 'debuff', 5),
-    ('Queimado', 'Dano contínuo + interrupção de ações', 5, 'debuff', 4),
-    ('Congelado', 'Impede movimento e ações', NULL, 'debuff', 2),
-    ('Atordoado', 'Paralisa o alvo temporariamente', NULL, 'debuff', 1),
-    ('Proteção', 'Escudo que absorve dano', 20, 'buff', 3),
-    ('Cobiçado', 'Aumenta valor de venda do item', NULL, 'economia', NULL),
+    ('Envenenado', 'Dano contínuo de veneneo ao longo do tempo', 3, 'debuff', 5),
+    ('Queimado', 'Dano contínuo de fogo ao longo do tempo', 5, 'debuff', 4),
+    ('Congelado', 'Congela o inimigo, impedindo seus movimentos e ações', 2, 'debuff', 2),
+    ('Atordoado', 'Paralisa o alvo temporariamente', 0, 'debuff', 1),
+    ('Proteção', 'Escudo temporário que absorve dano', 20, 'buff', 3),
+    ('Cobiçado', 'Aumenta valor de venda do item', 0, 'economia', NULL),
     ('Amaldiçoado', 'Dano se item estiver no inventário', 8, 'maldição', NULL),
-    ('Maldição da Bolsa', 'Bloqueia uso do inventário', NULL, 'debuff', 3),
+    ('Maldição da Bolsa', 'Bloqueia uso do inventário', 0, 'debuff', 3),
     ('Cura Pequena', 'Restaura 35 pontos de vida', 35, 'cura', 0),
     ('Cura Média', 'Restaura 70 pontos de vida', 70, 'cura', 0),
     ('Cura Grande', 'Restaura 150 pontos de vida', 150, 'cura', 0);
