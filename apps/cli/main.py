@@ -1,9 +1,15 @@
 from iniciar_jogo import iniciar_jogo
 from colorama import Fore, Style, init
+import pygame
 import os
 
 # definicoes e funcoes iniciais
-init(autoreset=True)
+init(autoreset=True) #terminal colorido
+
+def musicTheme():
+    pygame.mixer.init() #musica
+    pygame.mixer.music.load("apps/docs/docs/musics/MoonlighterOST_01_TitleScreen.mp3")
+    pygame.mixer.music.play(-1, fade_ms=3000)
 
 def limpar_terminal():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -14,6 +20,7 @@ def enter_continue():
 #funcao principal
 def tela_inicial():
     while True:
+        musicTheme()
         limpar_terminal()
 
         print(Style.BRIGHT + Fore.CYAN + "== MOONLIGHT ==\n")
@@ -29,6 +36,7 @@ def tela_inicial():
             exit()
 
         if (escolha == 1): #continuar
+            pygame.mixer.music.stop()
             iniciar_jogo() 
 
 # Executa a tela inicial

@@ -1,8 +1,15 @@
-import os
 from colorama import Fore, Back, Style, init
+import pygame
+import os
 
 # definicoes e funcoes iniciais
-init(autoreset=True)
+init(autoreset=True) #terminal colorido
+
+def musicCity(): #musica da cidade
+    pygame.mixer.init() 
+    pygame.mixer.music.load("apps/docs/docs/musics/MoonlighterOST_02_Cidade.mp3")
+    pygame.mixer.music.play(-1, fade_ms=3000)
+
 def limpar_terminal():
     os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -11,6 +18,7 @@ def enter_continue():
 
 #funcao principal
 def iniciar_jogo():
+    musicCity()
     local_jogador: str = 'loja' # o jogador sempre comeca o jogo em sua loja 
 
     # loop dos locais no terminal
@@ -30,6 +38,7 @@ def iniciar_jogo():
         escolha: str = input("\nDigite: ")
 
         if (escolha == 'x'): #sair do jogo
+            pygame.mixer.music.stop()
             print("Salvando seu progresso...")
             print("Jogo salvo!")
             enter_continue()
