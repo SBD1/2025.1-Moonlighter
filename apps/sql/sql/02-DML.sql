@@ -15,22 +15,6 @@ INSERT INTO "masmorra"
     ('Masmorra do Deserto', 'Antigas ruínas desérticas com tempestades de areia e o Guardião do Deserto aguardando no 3º andar.', 3, 3),
     ('Masmorra da Tecnologia', 'Instalações tecnológicas abandonadas, protegidas por robôs, com o Guardião da Tecnologia aguardando no último andar.', 4, 3);
 
-    -- EFEITOS:
-    INSERT INTO "efeito"
-    ("nome", "descricao", "tipo", "valor", "duracaoTurnos")
-    VALUES
-    ('Envenenado', 'Dano contínuo de veneno ao longo do tempo', 'debuff', 3, 5),
-    ('Queimado', 'Dano contínuo de fogo ao longo do tempo', 'debuff', 5, 4),
-    ('Congelado', 'Congela o inimigo, impedindo seus movimentos e ações','debuff', 2, 2),
-    ('Atordoado', 'Paralisa o alvo temporariamente', 'debuff', 0, 1),
-    ('Proteção', 'Escudo temporário que absorve dano', 'buff', 20, 3),
-    ('Cobiçado', 'Aumenta valor de venda do item', 'economia', 0, NULL),
-    ('Amaldiçoado', 'Dano se item estiver no inventário', 'maldição', 8, NULL),
-    ('Maldição da Bolsa', 'Bloqueia uso do inventário', 'debuff', 0, 3),
-    ('Cura Pequena', 'Restaura 35 pontos de vida', 'cura', 35, 0),
-    ('Cura Média', 'Restaura 70 pontos de vida', 'cura', 70, 0),
-    ('Cura Grande', 'Restaura 150 pontos de vida', 'cura', 150, 0);
-
 -- INSERÇÕES COMPLETAS NA TABELA MONSTRO (Base Game):
 INSERT INTO "monstro"
   ("nome", "descricao", "nivel", "vidaMaxima", "ouroDropado", "dadoAtaque",
@@ -62,18 +46,18 @@ VALUES
 ('Baby Slime Venenoso',    'Pequeno slime venenoso que aparece em grupos.',    2,  70,  12, '1d4',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', 1),
 ('Árvore Lâmina',           'Tronco móvel que lança folhas afiadas.',           2, 110,  18, '1d6',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
 ('Mutae Carnívora',    'Planta gigante com tentáculos que atacam em área.',2, 400,  60, '2d10', 0.10, 2, 3, TRUE,  'Masmorra da Floresta', NULL),
-('Árvore Mavu Corrompida',  'Árvore corrompida que invoca ramos venenosos.',     2, 130,  22, '1d8',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
+('Árvore Mavu Corrompida',  'Árvore corrompida que invoca ramos venenosos.',     2, 130,  22, '1d8',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', 1),
 ('Tangle da Floresta',        'Planta carnívora que se move rapidamente.',        2, 100,  16, '1d6',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
 ('Torre de Fruta',         'Estrutura de madeira que dispara sementes.',      2,  90,  14, '1d4',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
 ('Mimico Dourado',           'Baú dourado que se revela monstro ao ser atacado.',2, 145,  30, '1d6',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
 ('Mimico de Ferro',           'Baú metálico que se transforma em monstro.',      2, 140,  28, '1d6',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
 ('Jardineiro',           'Humanoide que lança espinhos e armadilhas.',      2, 150,  25, '1d8',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
-('Árvore Mavu',            'Árvore que lança explosões de sementes tóxicas.',2, 125,  20, '1d8',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
-('Slime Venenoso',         'Slime grande que solta veneno ao contato.',       2, 180,  24, '1d10', 0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
+('Árvore Mavu',            'Árvore que lança explosões de sementes tóxicas.',2, 125,  20, '1d8',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', 1),
+('Slime Venenoso',         'Slime grande que solta veneno ao contato.',       2, 180,  24, '1d10', 0.06, 1, 2, FALSE, 'Masmorra da Floresta', 1),
 ('Semeador',               'Dispositivo que planta sementes explosivas.',    2,  95,  15, '1d6',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
 ('Cogumelo Giratório',    'Cogumelo que gira arremessando fragmentos.',      2, 120,  20, '1d8',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
-('Arbusto de Esporos',           'Arbusto que dispara nuvens de esporos venenosos.',2, 110,  18, '1d6',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
-('Tangle Venenoso',      'Variante tóxica do Tangle com chifres venenosos.',2, 105,  18, '1d6',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
+('Arbusto de Esporos',           'Arbusto que dispara nuvens de esporos venenosos.',2, 110,  18, '1d6',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', 1),
+('Tangle Venenoso',      'Variante tóxica do Tangle com chifres venenosos.',2, 105,  18, '1d6',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', 1),
 ('Errante',             'Inimigo raro que surge aleatoriamente.',         2, 320,  55, '1d12', 0.10, 2, 3, FALSE, 'Masmorra da Floresta', NULL),
 ('Árvore do Vento',            'Árvore que usa folha para lançar rajadas de vento.',2, 115,  19, '1d6',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
 ('Mimico de Madeira',           'Baú de madeira que se transforma em monstro.',    2, 150,  28, '1d6',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
@@ -327,11 +311,27 @@ INSERT INTO "item"
     ('Peitoral de Aço III', 'A placa peitoral oferece a melhor proteção contra inimigos. No entanto, é incrivelmente pesado. Basicamente, é um pedaço de aço preso ao peito.', 'Armadura', 90000, 'Mercador', 1, NULL),
     ('Capacete de Aço III', 'Camadas dos metais mais pesados e espessos criados em um capacete robusto, resistente e redutor de danos.', 'Armadura', 90000, 'Mercador', 1, NULL);
 
-
+    -- EFEITOS:
+    INSERT INTO "efeito"
+    ("nome", "descricao", "tipo", "valor", "duracaoTurnos")
+    VALUES
+    ('Envenenado', 'Dano contínuo de veneno ao longo do tempo', 'debuff', 3, 5),
+    ('Queimado', 'Dano contínuo de fogo ao longo do tempo', 'debuff', 5, 4),
+    ('Congelado', 'Congela o inimigo, impedindo seus movimentos e ações','debuff', 2, 2),
+    ('Atordoado', 'Paralisa o alvo temporariamente', 'debuff', 0, 1),
+    ('Proteção', 'Escudo temporário que absorve dano', 'buff', 20, 3),
+    ('Cobiçado', 'Aumenta valor de venda do item', 'economia', 0, NULL),
+    ('Amaldiçoado', 'Dano se item estiver no inventário', 'maldição', 8, NULL),
+    ('Maldição da Bolsa', 'Bloqueia uso do inventário', 'debuff', 0, 3),
+    ('Cura Pequena', 'Restaura 35 pontos de vida', 'cura', 35, 0),
+    ('Cura Média', 'Restaura 70 pontos de vida', 'cura', 70, 0),
+    ('Cura Grande', 'Restaura 150 pontos de vida', 'cura', 150, 0);
 
 --            PGADMIN NÃO TA QUERENDO FUNCIONAR, ENTÃO NÃO TENHO ACESSO AO ID, VOU FAZER USANDO SELECT -- 
 
 -- INSERÇÃO DOS DROPS DE MONSTROS
+INSERT INTO "monstro_item"
+
 INSERT INTO "monstro_item" ("idMonstro", "idItem", "chanceDrop", "qtdMinima", "qtdMaxima")
 VALUES
 
@@ -1442,3 +1442,15 @@ INSERT INTO "inventario"
     ('Equipamento - Arma 2', 1),   -- Slot para arma secundária
     ('Equipamento - Acessório', 3), -- Slots para acessórios
     ('Familiar Mimic', 28);        -- Slots extras do familiar, mantém após morte
+
+-- INSERÇÃO NA TABELA INST_INVENTARIO (Exemplo para um jogador):
+INSERT INTO "inst_inventario"
+    ("idInventario", "nickname", "slotOcupado")
+    VALUES
+    (1, 'Will', 0),  -- Mochila vazia inicialmente
+    (2, 'Will', 0),  -- Bolsos vazios inicialmente
+    (3, 'Will', 0),  -- Sem armadura equipada
+    (4, 'Will', 0),  -- Sem arma primária
+    (5, 'Will', 0),  -- Sem arma secundária
+    (6, 'Will', 0),  -- Sem acessórios
+    (7, 'Will', 0);  -- Familiar Mimic vazio
