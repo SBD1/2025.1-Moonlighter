@@ -29,10 +29,14 @@ def tela_inicial():
         print(Fore.LIGHTBLACK_EX +  "2 - novo Jogo")
         print(Fore.LIGHTBLACK_EX +  "0 - sair")
 
-        escolha: int = int(input("\nDigite: "))
+        try:
+            escolha:int = int(input("\nDigite: "))
+        except ValueError:
+            print("Por favor, digite um número válido.")
+            enter_continue()
+            continue
 
         if (escolha == 0):
-            print("Saindo...")
             exit()
 
         if (escolha == 1): #continuar

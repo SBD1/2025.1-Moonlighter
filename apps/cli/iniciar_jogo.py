@@ -1,5 +1,6 @@
 from colorama import Fore, Back, Style, init
 import pygame
+import subprocess
 import os
 
 # definicoes e funcoes iniciais
@@ -73,7 +74,7 @@ def iniciar_jogo():
                     break
 
                 if(escolha_masmorra == 1):
-                    print("Ainda estamos construindo aqui, volte mais tarde!")
+                    print("Parece que nao ha nada a o que fazer aqui ainda, volte mais tarde!")
                     enter_continue()
                 
                 if(escolha_masmorra == 2):
