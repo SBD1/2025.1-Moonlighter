@@ -321,9 +321,1108 @@ INSERT INTO "item"
     ('Cura Média', 'Restaura 70 pontos de vida', 'cura', 70, 0),
     ('Cura Grande', 'Restaura 150 pontos de vida', 'cura', 150, 0);
 
-    -- DROPS DE MONSTROS
+--            PGADMIN NÃO TA QUERENDO FUNCIONAR, ENTÃO NÃO TENHO ACESSO AO ID, VOU FAZER USANDO SELECT -- 
 
-    -- LOJAS DE NPC
+-- INSERÇÃO DOS DROPS DE MONSTROS
+INSERT INTO "monstro_item"
+
+INSERT INTO "monstro_item" ("idMonstro", "idItem", "chanceDrop", "qtdMinima", "qtdMaxima")
+VALUES
+
+-- ### Masmorra do Golem ###
+
+-- Baby Slime (Masmorra do Golem)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Baby Slime'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Geléia Rica'),
+    0.6,  
+    1,    
+    2     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Baby Slime'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Tecido'),
+    0.1,  
+    1,    
+    1     
+),
+
+-- Torre Golem Quebrada / Torre Golem (Masmorra do Golem)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Torre Golem Quebrada'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Núcleo de Golem'),
+    0.25, 
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Torre Golem Quebrada'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Restos de Fundição'),
+    0.15, 
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Torre Golem Quebrada'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Barra de Ferro'),
+    0.1,  
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Torre Golem'), 
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Núcleo de Golem'),
+    0.3,  
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Torre Golem'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Lentes de Vidro'),
+    0.15, 
+    1,    
+    1     
+),
+
+-- Guerreiro Golem Corrompido / Guerreiro Golem / Soldado de Pedra (Masmorra do Golem)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Guerreiro Golem Corrompido'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Espada Quebrada'),
+    0.2,  
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Guerreiro Golem Corrompido'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Barra de Ferro'),
+    0.25, 
+    1,    
+    2     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Guerreiro Golem Corrompido'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Dente'),
+    0.15, 
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Guerreiro Golem'), -- Guerreiro Golem (não corrompido)
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Aço Endurecido'),
+    0.1,  
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Guerreiro Golem'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Runas de Ouro'),
+    0.05, 
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Soldado de Pedra'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Cinzel de Golem'),
+    0.1,  
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Soldado de Pedra'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Amolar'),
+    0.2,  
+    1,    
+    1     
+),
+
+-- Golem Voador / Golem Reparador Voador (Masmorra do Golem)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Golem Voador'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Núcleo de Golem'),
+    0.2,  
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Golem Voador'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Restos de Fundição'), 
+    0.05, 
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Golem Reparador Voador'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Núcleo de Golem'),
+    0.25, 
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Golem Reparador Voador'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Ferramenta Rúnica'), 
+    0.02,
+    1,    
+    1     
+),
+
+-- Mimicos (Masmorra do Golem)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico Dourado' AND "nomeMasmorra" = 'Masmorra do Golem'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Runas de Ouro'),
+    0.5,  
+    1,    
+    3     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico Dourado' AND "nomeMasmorra" = 'Masmorra do Golem'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Rocha de Cristal'), 
+    0.3,  
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico de Ferro' AND "nomeMasmorra" = 'Masmorra do Golem'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Barra de Ferro'),
+    0.8,  
+    2,    
+    5     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico de Madeira' AND "nomeMasmorra" = 'Masmorra do Golem'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Mágica'), 
+    0.8,  
+    2,    
+    4     
+),
+
+-- Cabeça de Golem (Masmorra do Golem)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Cabeça de Golem'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Núcleo de Golem'),
+    0.15, 
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Cabeça de Golem'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Dente'),
+    0.2,  
+    1,    
+    2     
+),
+
+-- Slime (Grande) (Masmorra do Golem)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Slime' AND "nomeMasmorra" = 'Masmorra do Golem'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Geléia Rica'),
+    0.8, 
+    2,    
+    4     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Slime' AND "nomeMasmorra" = 'Masmorra do Golem'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Esfera de Água'),
+    0.1,  
+    1,    
+    1     
+),
+
+-- Manopla de Slime (Masmorra do Golem)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Manopla de Slime'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Geléia Rica'),
+    0.5,  
+    1,    
+    2     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Manopla de Slime'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Barra de Ferro'), 
+    0.2,  
+    1,    
+    1     
+),
+
+-- Mordomo de Pedra (Masmorra do Golem)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mordomo de Pedra'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Tecido'),
+    0.25, 
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mordomo de Pedra'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Lâmpada de Água'),
+    0.1,  
+    1,    
+    1     
+),
+
+-- Tangle (Masmorra do Golem)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Tangle' AND "nomeMasmorra" = 'Masmorra do Golem'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Cipó'),
+    0.7,  
+    1,    
+    3     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Tangle' AND "nomeMasmorra" = 'Masmorra do Golem'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Raíz'), 
+    0.2,  
+    1,    
+    1     
+),
+
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Rei Golem'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Cristal de Energia do Rei Golem'),
+    1.0,  
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Rei Golem'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Anotações do Rei Golem'), 
+    1.0,  
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Rei Golem'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Energia Cristalizada'),
+    0.5,  
+    2,    
+    5     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Rei Golem'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Design de Golem II'), 
+    0.3,  
+    1,    
+    1     
+),
+
+-- Errante (Masmorra do Golem)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Errante' AND "nomeMasmorra" = 'Masmorra do Golem'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Ferramenta Rúnica'), 
+    0.3,  
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Errante' AND "nomeMasmorra" = 'Masmorra do Golem'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Rocha de Cristal'),
+    0.5,  
+    3,    
+    5     
+),
+
+
+-- ### Masmorra da Floresta ###
+
+-- Baby Slime Venenoso (Masmorra da Floresta)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Baby Slime Venenoso'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Geléia de Veneno'),
+    0.6,  
+    1,    
+    2     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Baby Slime Venenoso'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Ácido Puro'),
+    0.1,  
+    1,    
+    1     
+),
+
+-- Árvore Lâmina (Masmorra da Floresta)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Árvore Lâmina'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Folhas de Lâminas'),
+    0.5,  
+    1,    
+    3     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Árvore Lâmina'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Mágica'),
+    0.2,  
+    1,    
+    1     
+),
+
+-- Árvore Mavu Corrompida / Árvore Mavu (Masmorra da Floresta)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Árvore Mavu Corrompida'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Antiga'),
+    0.25, 
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Árvore Mavu Corrompida'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Esporos Venenosos'),
+    0.3,  
+    1,    
+    2     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Árvore Mavu'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Mágica'),
+    0.3,  
+    1,    
+    2     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Árvore Mavu'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Sementes Modificadas'),
+    0.1,  
+    1,    
+    1     
+),
+
+-- Tangle da Floresta / Tangle Venenoso (Masmorra da Floresta)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Tangle da Floresta'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Cipó'), 
+    0.5,  
+    1,    
+    2     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Tangle da Floresta'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Folhas Fortes'),
+    0.2,  
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Tangle Venenoso'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Cipó'),
+    0.4,  
+    1,    
+    2     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Tangle Venenoso'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Esporos Venenosos'),
+    0.3,  
+    1,    
+    1     
+),
+
+-- Torre de Fruta / Semeador (Masmorra da Floresta)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Torre de Fruta'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Frutas da Floresta'),
+    0.6,  
+    1,    
+    3     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Torre de Fruta'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Mágica'),
+    0.15, 
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Semeador'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Sementes Modificadas'),
+    0.4,  
+    1,    
+    2     
+),
+
+-- Mimicos (Masmorra da Floresta)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico Dourado' AND "nomeMasmorra" = 'Masmorra da Floresta'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Antiga'), 
+    0.3,  
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico de Ferro' AND "nomeMasmorra" = 'Masmorra da Floresta'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Barra de Ferro'),
+    0.8,  
+    1,    
+    3     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico de Madeira' AND "nomeMasmorra" = 'Masmorra da Floresta'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Mágica'),
+    0.8,  
+    2,    
+    4     
+),
+
+-- Jardineiro (Masmorra da Floresta)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Jardineiro'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Pétalas'),
+    0.3,  
+    1,    
+    2     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Jardineiro'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Solo Fértil'),
+    0.1,  
+    1,    
+    1     
+),
+
+-- Slime Venenoso (Grande) (Masmorra da Floresta)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Slime Venenoso'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Geléia de Veneno'),
+    0.8,  
+    2,    
+    4     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Slime Venenoso'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Ácido Puro'),
+    0.25, 
+    1,    
+    1     
+),
+
+-- Cogumelo Giratório (Masmorra da Floresta)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Cogumelo Giratório'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Cogumelo Mágico'), -- Item poção, mas e drop aqui
+    0.4,  
+    1,    
+    2     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Cogumelo Giratório'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Esporos Venenosos'),
+    0.2,  
+    1,    
+    1     
+),
+
+-- Arbusto de Esporos (Masmorra da Floresta)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Arbusto de Esporos'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Esporos Venenosos'),
+    0.7,  
+    1,    
+    3     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Arbusto de Esporos'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Carne Vegetal'),
+    0.2,  
+    1,    
+    1     
+),
+
+-- Árvore do Vento (Masmorra da Floresta)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Árvore do Vento'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Folhas Fortes'),
+    0.5,  
+    1,    
+    2     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Árvore do Vento'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Mágica'),
+    0.15, 
+    1,    
+    1     
+),
+
+-- Mutae Carnívora (CHEFE - Masmorra da Floresta)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mutae Carnívora'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Sementes de Mutae Carnívora'),
+    1.0,  
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mutae Carnívora'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Observações sobre Mutae Carnívora'), 
+    1.0,  
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mutae Carnívora'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Bulbo Antigo'),
+    0.5,  
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mutae Carnívora'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Anotações de Botânica I'), 
+    0.3,  
+    1,    
+    1     
+),
+
+-- Errante (Masmorra da Floresta)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Errante' AND "nomeMasmorra" = 'Masmorra da Floresta'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Bulbo Antigo'), 
+    0.1,  
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Errante' AND "nomeMasmorra" = 'Masmorra da Floresta'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Raíz Preservada'),
+    0.5,  
+    1,    
+    2     
+),
+
+-- ### Masmorra do Deserto ###
+
+-- Baby Slime de Fogo (Masmorra do Deserto)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Baby Slime de Fogo'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Geléia de Fogo'),
+    0.6,  
+    1,    
+    2     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Baby Slime de Fogo'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Pó Inflamável'),
+    0.1,  
+    1,    
+    1     
+),
+
+-- Fantoche Bardo (Masmorra do Deserto)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Fantoche Bardo'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Corda do Deserto'),
+    0.3,  
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Fantoche Bardo'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Tecido à Prova de Fogo'),
+    0.15, 
+    1,    
+    1     
+),
+
+-- Tangle de Pano (Masmorra do Deserto)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Tangle de Pano'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Tecido à Prova de Fogo'),
+    0.5,  
+    1,    
+    2     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Tangle de Pano'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Corda do Deserto'),
+    0.2,  
+    1,    
+    1     
+),
+
+-- Hexa Corrompido / Hexa (Masmorra do Deserto)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Hexa Corrompido'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Núcleo Magnético'),
+    0.2,  
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Hexa Corrompido'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Areia Doamantinética'),
+    0.1,  
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Hexa'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Núcleo Magnético'),
+    0.25, 
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Hexa'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Magnetita'),
+    0.15, 
+    1,    
+    1     
+),
+
+-- Fantoche de Fogo / Fantoche Mágico (Masmorra do Deserto)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Fantoche de Fogo'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Joia de Fogo'),
+    0.3,  
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Fantoche de Fogo'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Líquido Inflamável'),
+    0.15, 
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Fantoche Mágico'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Joia de Fogo'),
+    0.25, 
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Fantoche Mágico'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Cristal Capacitador'),
+    0.1,  
+    1,    
+    1     
+),
+
+-- Slime de Fogo (Grande) (Masmorra do Deserto)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Slime de Fogo'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Geléia de Fogo'),
+    0.8,  
+    2,    
+    4     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Slime de Fogo'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra Vulcânica'),
+    0.2,  
+    1,    
+    2     
+),
+
+-- Mimicos (Masmorra do Deserto)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico Dourado' AND "nomeMasmorra" = 'Masmorra do Deserto'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Lingote De Aço do Deserto'), 
+    0.2,  
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico de Ferro' AND "nomeMasmorra" = 'Masmorra do Deserto'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Chapa de Aço do Deserto'),
+    0.5,  
+    1,    
+    2     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico de Madeira' AND "nomeMasmorra" = 'Masmorra do Deserto'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Tratada'), 
+    0.5,  
+    1,    
+    2     
+),
+
+-- Golem Katamari / Golem Patrulheiro (Masmorra do Deserto)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Golem Katamari'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Chapa de Aço do Deserto'),
+    0.3,  
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Golem Katamari'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra do Deserto'),
+    0.15, 
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Golem Patrulheiro'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Aço Endurecido'), 
+    0.25, 
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Golem Patrulheiro'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Núcleo Magnético'),
+    0.1,  
+    1,    
+    1     
+),
+
+-- Catapulta de Lava (Masmorra do Deserto)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Catapulta de Lava'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Lava Resfriada'),
+    0.4,  
+    1,    
+    2     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Catapulta de Lava'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra Vulcânica'),
+    0.2,  
+    1,    
+    1     
+),
+
+-- Golem Mãe (CHEFE - Masmorra do Deserto)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Golem Mãe'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Motor Termomagnético'), 
+    1.0,  
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Golem Mãe'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Núcleo de Alta Levitação'),
+    0.3,  
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Golem Mãe'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'História do Deserto I'), 
+    0.5,  
+    1,    
+    1     
+),
+
+-- Naja (BOSS DAA Masmorra do Deserto)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Naja'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Anotações de Naja'), 
+    1.0,  
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Naja'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Lingote De Aço do Deserto'),
+    0.5,  
+    1,    
+    2     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Naja'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Joia de Fogo'),
+    0.8,  
+    2,    
+    4     
+),
+
+-- Errante (Masmorra do Deserto)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Errante' AND "nomeMasmorra" = 'Masmorra do Deserto'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Motor Termomagnético'), 
+    0.2,  
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Errante' AND "nomeMasmorra" = 'Masmorra do Deserto'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Pó Isolante'),
+    0.4,  
+    1,    
+    2     
+),
+
+-- ### Masmorra da Tecnologia ###
+
+-- Baby Slime Elétrico (Masmorra da Tecnologia)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Baby Slime Elétrico'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Geléia Elétrica'),
+    0.6,  
+    1,    
+    2     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Baby Slime Elétrico'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Fios'),
+    0.1,  
+    1,    
+    1     
+),
+
+-- Oscilador Corrompido / Oscilador (Masmorra da Tecnologia)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Oscilador Corrompido'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Bateria Quebrada'),
+    0.3,  
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Oscilador Corrompido'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Metal Condutor'),
+    0.15, 
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Oscilador'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Capacitor de Energia'),
+    0.25, 
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Oscilador'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Motor de Bobina Tesla'),
+    0.1,  
+    1,    
+    1     
+),
+
+-- Gerador da Morte / Poste Elétrico / Gerador Graaf (Masmorra da Tecnologia)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Gerador da Morte'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Fonte de Energia'), 
+    0.2,  
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Poste Elétrico'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Fios de Ouro'),
+    0.15, 
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Gerador Graaf'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Plástico Filme'),
+    0.2,  
+    1,    
+    1     
+),
+
+-- Slime Elétrico (Grande) (Masmorra da Tecnologia)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Slime Elétrico'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Geléia Elétrica'),
+    0.8,  
+    2,    
+    4     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Slime Elétrico'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Bateria de Célula Tripla'), 
+    0.05, 
+    1,    
+    1     
+),
+
+-- Bola Eletromagnética (Masmorra da Tecnologia)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Bola Eletromagnética'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Mercúrio'), 
+    0.25, 
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Bola Eletromagnética'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Bobina de Cobre'),
+    0.1,  
+    1,    
+    1     
+),
+
+-- Lançador Golem (Masmorra da Tecnologia)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Lançador Golem'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Aço Endurecido'), 
+    0.3,  
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Lançador Golem'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Wolfram'),
+    0.1,  
+    1,    
+    1     
+),
+
+-- Mimicos (Masmorra da Tecnologia)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico de Ferro' AND "nomeMasmorra" = 'Masmorra da Tecnologia'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Wolfram'), 
+    0.3,  
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico de Madeira' AND "nomeMasmorra" = 'Masmorra da Tecnologia'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Tratada'),
+    0.6,  
+    1,    
+    2     
+),
+
+-- Recarregador / Drone Reparador (Masmorra da Tecnologia)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Recarregador'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Adapatador AC'),
+    0.15, 
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Drone Reparador'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Pistola de Solda'),
+    0.1,  
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Drone Reparador'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Hastes de Soldagem'),
+    0.2,  
+    1,    
+    2     
+),
+
+-- Redemoinho de Areia / Armadilha de Slime / Corrente de Espinhos (Masmorra da Tecnologia - no jogo, n sao monstros dropaveis, mas da para fazer drops simples tematicos
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Armadilha de Slime'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Geléia Elétrica'), 
+    0.2,  
+    1,    
+    1     
+),
+
+-- Fluxo de Energia (CHEFE - Masmorra da Tecnologia)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Fluxo de Energia'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Observações sobre a Energia de Fluxo'), 
+    1.0,  
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Fluxo de Energia'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Bateria de Célula Tripla'),
+    0.8,  
+    1,    
+    2     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Fluxo de Energia'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Frasco de Argônio'),
+    0.5,  
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Fluxo de Energia'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'História da Tecnologia I'), 
+    0.3,  
+    1,    
+    1     
+),
+
+-- Errante (Masmorra da Tecnologia)
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Errante' AND "nomeMasmorra" = 'Masmorra da Tecnologia'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Adapatador AC'), 
+    0.2,  
+    1,    
+    1     
+),
+(
+    (SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Errante' AND "nomeMasmorra" = 'Masmorra da Tecnologia'),
+    (SELECT "idItem" FROM "item" WHERE "nome" = 'Tubo de Vácuo'),
+    0.3,  
+    1,    
+    1     
+);
+
+
+-- INSERÇÃO DOS NPCS
+INSERT INTO "npc" ("nome", "tipoNPC", "descricao", "ativo")
+    VALUES
+    ('Zenon', 'Guia', 'Sábio ancião que oferece conselhos e conhecimento.', TRUE),
+    ('Andrei', 'Ferreiro', 'Ferreiro que aprimora armas e armaduras na Forja Vulcânica.', TRUE),
+    ('Eris', 'Alquimista', 'Alquimista que vende e aprimora poções no Chapéu de Madeira.', TRUE),
+    ('Edward', 'Banqueiro', 'Banqueiro que gerencia investimentos para a cidade de Rynoka.', TRUE),
+    ('Juliette', 'Decoradora', 'Ajuda a melhorar e decorar a loja Moonlighter em "Le Retailer".', TRUE),
+    ('Tom', 'Vendedor Ambulante', 'Vendedor ambulante que oferece itens raros e exóticos.', TRUE),
+    ('Mercador Viajante', 'Comprador Especializado', 'Compra itens específicos por um preço elevado periodicamente.', TRUE),
+    ('Pedro Doidão', 'Residente', 'Residente excêntrico da cidade de Rynoka com dicas peculiares.', TRUE),
+    ('Bruxa dos Murmúrios', 'Encantadora', 'Bruxa misteriosa que pode encantar equipamentos com efeitos.', TRUE);
+
+-- INSERÇÃO DAS LOJAS DE NPC
+
+INSERT INTO "lojaNPC" ("nome", "tipoLoja", "descricao", "status", "idNPC", "idMapa")
+    VALUES
+    (
+        'Forja Vulcânica',
+        'Ferraria',
+        'Local para forjar e aprimorar armas e armaduras com o ferreiro Andrei.',
+        TRUE,
+        (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei'), -- Substitua pelo ID real de Andrei se preferir buscar manualmente
+        1 -- Substitua pelo ID real do mapa de Rynoka
+    ),
+    (
+        'O Chapéu de Madeira',
+        'Alquimia',
+        'Loja da alquimista Eris, para criar e aprimorar poções e misturas alquímicas.',
+        TRUE,
+        (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris'), -- Substitua pelo ID real de Eris
+        1 -- Substitua pelo ID real do mapa de Rynoka
+    ),
+    (
+        'Le Retailer',
+        'Decoração e Varejo',
+        'Estabelecimento de Juliette, focado em melhorias estéticas e de varejo para a loja Moonlighter.',
+        TRUE,
+        (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Juliette'), -- Substitua pelo ID real de Juliette
+        1 -- Substitua pelo ID real do mapa de Rynoka
+    ),
+    (
+        'Banco de Rynoka',
+        'Banco',
+        'Instituição financeira gerenciada por Edward, para investimentos na cidade e na loja.',
+        TRUE,
+        (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward'), -- Substitua pelo ID real de Edward
+        1 -- Substitua pelo ID real do mapa de Rynoka
+    ),
+    (
+        'Tenda da Bruxa',
+        'Encantamentos',
+        'Local misterioso onde a Bruxa dos Murmúrios oferece poderosos serviços de encantamento para equipamentos.',
+        TRUE,
+        (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Bruxa dos Murmúrios'), -- Substitua pelo ID real da Bruxa
+        1 -- Substitua pelo ID real do mapa de Rynoka
+    ),
+    (
+        'Barraca do Tom',
+        'Comércio Itinerante',
+        'Barraca temporária montada por Tom, o vendedor ambulante, que oferece itens raros e exóticos de suas viagens.',
+        TRUE,
+        (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Tom'), -- Substitua pelo ID real de Tom
+        1 -- Substitua pelo ID real do mapa de Rynoka
+    );
 
 -- INSERÇÃO NA TABELA INVENTÁRIO:
 INSERT INTO "inventario"
