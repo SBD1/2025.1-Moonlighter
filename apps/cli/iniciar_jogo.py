@@ -12,7 +12,7 @@ def enter_continue():
 #funcao principal
 def iniciar_jogo():
     local_jogador: str = 'loja' # o jogador sempre comeca o jogo em sua loja 
-    
+
     # loop dos locais no terminal
     while True:
         limpar_terminal()
@@ -55,6 +55,7 @@ def iniciar_jogo():
                 print(Fore.RED + "2- Masmorra da floresta")
                 print(Fore.RED + "3- Masmorra do deserto")
                 print(Fore.RED + "4- Masmorra tech")
+                print(Fore.RED + "5- Masmorra desconhecida")
                 print(Fore.LIGHTBLACK_EX + "0- voltar")
 
                 escolha_masmorra: int = int(input("\nDigite: "))
@@ -75,6 +76,10 @@ def iniciar_jogo():
                     enter_continue()
 
                 if(escolha_masmorra == 4):
+                    print("Masmorra nao desbloqueada")
+                    enter_continue()
+
+                if(escolha_masmorra == 5):
                     print("Masmorra nao desbloqueada")
                     enter_continue()
 
