@@ -1,3 +1,4 @@
+import masmorra
 from colorama import Fore, Back, Style, init
 import pygame
 import subprocess
@@ -38,14 +39,14 @@ def iniciar_jogo():
 
         escolha: str = input("\nDigite: ")
 
-        if (escolha == 'x'): #sair do jogo
+        if (escolha == 'x' or escolha == 'X'): #sair do jogo
             pygame.mixer.music.stop()
             print("Salvando seu progresso...")
             print("Jogo salvo!")
             enter_continue()
             break;
 
-        if (escolha == 'l'): #loja do jogador        
+        if (escolha == 'l' or escolha == 'L'): #loja do jogador        
             local_jogador = 'loja'
             limpar_terminal()
 
@@ -53,7 +54,7 @@ def iniciar_jogo():
             print("Parece que nao ha nada a o que fazer aqui ainda, volte mais tarde!")
             enter_continue()
 
-        if (escolha == 'm'): #area das masmorras
+        if (escolha == 'm' or escolha == 'M'): #area das masmorras
             local_jogador = 'area das masmorras'
 
             while True: #loop nterno do lobby das masmorras
@@ -68,14 +69,31 @@ def iniciar_jogo():
                 print(Fore.RED + "5- Masmorra desconhecida")
                 print(Fore.LIGHTBLACK_EX + "0- voltar")
 
-                escolha_masmorra: int = int(input("\nDigite: "))
+                try:
+                    escolha_masmorra: int = int(input("\nDigite: "))
+                except ValueError:
+                    print("Por favor, digite um numero válido.")
+                    enter_continue()
+                    continue
 
                 if(escolha_masmorra == 0): #voltar
                     break
 
                 if(escolha_masmorra == 1):
-                    print("Parece que nao ha nada a o que fazer aqui ainda, volte mais tarde!")
-                    enter_continue()
+                    limpar_terminal()
+                    print(Fore.YELLOW + "infos da masmorra")
+                    print(Fore.CYAN + "deseja entrar na masmorra?\n")
+                    print("s - sim")
+                    print("n - nao")
+
+                    escolha = input("\nDigite: ")
+
+                    if (escolha == 's' or escolha == 'S'): 
+                        print("\nentrando na masmorra do golem")
+                        enter_continue()
+                        masmorra.area_masmorra()
+
+                    else: continue
                 
                 if(escolha_masmorra == 2):
                     print("Masmorra nao desbloqueada")
@@ -93,7 +111,7 @@ def iniciar_jogo():
                     print("Masmorra nao desbloqueada")
                     enter_continue()
 
-        if (escolha == 'f'): #forjaria        
+        if (escolha == 'f' or escolha == 'F'): #forjaria        
             local_jogador = 'forjaria'
             limpar_terminal()
 
@@ -101,7 +119,7 @@ def iniciar_jogo():
             print("Parece que nao ha nada a o que fazer aqui ainda, volte mais tarde!")
             enter_continue()
 
-        if (escolha == 'v'): #varejo       
+        if (escolha == 'v' or escolha == 'V'): #varejo       
             local_jogador = 'varejo'
             limpar_terminal()
 
@@ -109,7 +127,7 @@ def iniciar_jogo():
             print("Parece que nao ha nada a o que fazer aqui ainda, volte mais tarde!")
             enter_continue()
 
-        if (escolha == 'b'): #banco       
+        if (escolha == 'b' or escolha == 'B'): #banco       
             local_jogador = 'banco'
             limpar_terminal()
 

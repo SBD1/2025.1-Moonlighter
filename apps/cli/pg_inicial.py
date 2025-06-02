@@ -1,6 +1,7 @@
 from iniciar_jogo import iniciar_jogo
 from colorama import Fore, Style, init
 import pygame
+import pyfiglet
 import os
 
 # definicoes e funcoes iniciais
@@ -23,7 +24,7 @@ def tela_inicial():
         musicTheme()
         limpar_terminal()
 
-        print(Style.BRIGHT + Fore.CYAN + "== MOONLIGHT ==\n")
+        print(Style.BRIGHT + Fore.CYAN + pyfiglet.figlet_format("MOONLIGHTER"))
 
         print("1- continuar")
         print(Fore.LIGHTBLACK_EX +  "2 - novo Jogo")
