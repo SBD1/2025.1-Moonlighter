@@ -76,12 +76,12 @@ CREATE TABLE "efeito" (
 
 CREATE TABLE "monstro" (
     "idMonstro" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    "nome" character varying(30) UNIQUE NOT NULL,
+    "nome" character varying(30) NOT NULL,
     "descricao" character varying(100) NOT NULL,
     "nivel" SMALLINT NOT NULL,
     "vidaMaxima" SMALLINT NOT NULL,
     "ouroDropado" SMALLINT NOT NULL,
-    "dadoAtaque" character varying(4) NOT NULL,
+    "dadoAtaque" character varying(3) NOT NULL,
     "chanceCritico" REAL NOT NULL,
     "multiplicador" SMALLINT NOT NULL,
     "multiplicadorCritico" SMALLINT NOT NULL,
@@ -109,7 +109,7 @@ CREATE TABLE "inst_monstro" (
 
 CREATE TABLE "item" (
     "idItem" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    "nome" character varying(80) UNIQUE NOT NULL,
+    "nome" character varying(80) NOT NULL,
     "descricao" character varying(500) NOT NULL,
     "tipo" character varying(15),
     "precoBase" INTEGER NOT NULL,

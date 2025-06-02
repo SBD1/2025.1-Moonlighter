@@ -1,5 +1,119 @@
 -- INSERÇÕES DE TUPLAS NAS TABELAS
 
+-- INSERÇÃO NA TABELA MAPA:
+INSERT INTO "mapa" 
+    ("periodo", "dia")
+    VALUES
+    ('Manhã', 1);
+
+-- INSERÇÃO NA TABELA MASMORRA:
+INSERT INTO "masmorra"
+    ("nomeMasmorra", "descricao", "nivel", "qtdAndar")
+    VALUES
+    ('Masmorra do Golem', 'Primeira masmorra acessível, repleta de sentinelas golem e criaturas de pedra. Enfrente o Rei Golem no 3º andar.', 1, 3),
+    ('Masmorra da Floresta', 'Masmorra florestal estreita, infestada de plantas mutantes e a Mutae Carnívora como chefe no último andar.', 2, 3),
+    ('Masmorra do Deserto', 'Antigas ruínas desérticas com tempestades de areia e o Guardião do Deserto aguardando no 3º andar.', 3, 3),
+    ('Masmorra da Tecnologia', 'Instalações tecnológicas abandonadas, protegidas por robôs, com o Guardião da Tecnologia aguardando no último andar.', 4, 3);
+    
+-- INSERÇÃO NA TABELA EFEITOS:
+INSERT INTO "efeito"
+    ("nome", "descricao", "tipo", "valor", "duracaoTurnos")
+    VALUES
+    ('Envenenado', 'Dano contínuo de veneno ao longo do tempo', 'debuff', 3, 5),
+    ('Queimado', 'Dano contínuo de fogo ao longo do tempo', 'debuff', 5, 4),
+    ('Congelado', 'Congela o inimigo, impedindo seus movimentos e ações','debuff', 2, 2),
+    ('Atordoado', 'Paralisa o alvo temporariamente', 'debuff', 0, 1),
+    ('Proteção', 'Escudo temporário que absorve dano', 'buff', 20, 3),
+    ('Cobiçado', 'Aumenta valor de venda do item', 'economia', 0, NULL),
+    ('Amaldiçoado', 'Dano se item estiver no inventário', 'maldição', 8, NULL),
+    ('Maldição da Bolsa', 'Bloqueia uso do inventário', 'debuff', 0, 3),
+    ('Cura Pequena', 'Restaura 35 pontos de vida', 'cura', 35, 0),
+    ('Cura Média', 'Restaura 70 pontos de vida', 'cura', 70, 0),
+    ('Cura Grande', 'Restaura 150 pontos de vida', 'cura', 150, 0);
+
+-- INSERÇÃO NA TABELA MONSTRO:
+INSERT INTO "monstro"
+    ("nome", "descricao", "nivel", "vidaMaxima", "ouroDropado", "dadoAtaque",
+    "chanceCritico", "multiplicador", "multiplicadorCritico", "chefe",
+    "nomeMasmorra", "idEfeito")
+    VALUES
+    -- Masmorra do Golem (nível 1)
+    ('Baby Slime', 'Pequeno slime que ataca em grupo.', 1, 60, 10, '1d4', 0.05, 1, 2, FALSE, 'Masmorra do Golem', NULL),
+    ('Torre Golem Quebrada', 'Torre de pedra inoperante que dispara fragmentos.', 1, 80, 15, '1d6', 0.05, 1, 2, FALSE, 'Masmorra do Golem', NULL),
+    ('Guerreiro Golem Corrompido','Guerreiro golem com ataques pesados.', 1, 120,  20, '1d8', 0.05, 1, 2, FALSE, 'Masmorra do Golem', NULL),
+    ('Golem Voador', 'Drone voador que investe em alta velocidade.', 1, 100, 15, '1d6', 0.05, 1, 2, FALSE, 'Masmorra do Golem', NULL),
+    ('Golem Reparador Voador', 'Drone que repara aliados e empurra o jogador.', 1,  90, 12, '1d4', 0.05, 1, 2, FALSE, 'Masmorra do Golem', NULL),
+    ('Mimico Dourado', 'Baú dourado que se revela monstro ao ser atacado.', 1, 110, 25, '1d6', 0.05, 1, 2, FALSE, 'Masmorra do Golem', NULL),
+    ('Cabeça de Golem', 'Cabeça de golem que rola em direção ao jogador.', 1, 70, 12, '1d4', 0.05, 1, 2, FALSE, 'Masmorra do Golem', NULL),
+    ('Mina Golem', 'Dispositivo que explode ao se aproximar.', 1, 50, 10, '1d4', 0.05, 1, 2, FALSE, 'Masmorra do Golem', NULL),
+    ('Torre Golem', 'Torre que dispara projéteis de energia.', 1,  85,  15, '1d6', 0.05, 1, 2, FALSE, 'Masmorra do Golem', NULL),
+    ('Guerreiro Golem', 'Guerreiro de pedra padrão com ataques físicos.', 1, 130, 20, '1d8',  0.05, 1, 2, FALSE, 'Masmorra do Golem', NULL),
+    ('Mimico de Ferro', 'Baú metálico que se transforma em monstro.', 1, 115, 25, '1d6', 0.05, 1, 2, FALSE, 'Masmorra do Golem', NULL),
+    ('Slime', 'Grande slime que pode engolir o jogador.', 1, 140,  18, '1d8',  0.05, 1, 2, FALSE, 'Masmorra do Golem', NULL),
+    ('Manopla de Slime', 'Mão de pedra gigante com base de slime.', 1, 150,  22, '1d10', 0.05, 1, 2, FALSE, 'Masmorra do Golem', NULL),
+    ('Mordomo de Pedra', 'Golem com escudo e bastão que dispara luz.', 1, 120,  18, '1d8',  0.05, 1, 2, FALSE, 'Masmorra do Golem', NULL),
+    ('Soldado de Pedra',        'Soldado de pedra com capa que ataca com espada.',   1, 160,  20, '1d10', 0.05, 1, 2, FALSE, 'Masmorra do Golem', NULL),
+    ('Tangle',               'Criatura que se move em zigue-zague.',             1,  90,  12, '1d6',  0.05, 1, 2, FALSE, 'Masmorra do Golem', NULL),
+    ('Rei Golem',       'Rei dos golems, imenso e imóvel; braço de pedra.',  1, 500, 100, '2d12', 0.10, 2, 3, TRUE,  'Masmorra do Golem', NULL),
+    ('Errante',             'Inimigo raro que surge aleatoriamente.',           1, 300,  50, '1d12', 0.10, 2, 3, FALSE, 'Masmorra do Golem', NULL),
+    ('Mimico de Madeira',           'Baú de madeira que se transforma em monstro.',     1, 125,  25, '1d6',  0.05, 1, 2, FALSE, 'Masmorra do Golem', NULL),
+    -- Masmorra da Floresta (nível 2)
+    ('Baby Slime Venenoso',    'Pequeno slime venenoso que aparece em grupos.',    2,  70,  12, '1d4',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', 1),
+    ('Árvore Lâmina',           'Tronco móvel que lança folhas afiadas.',           2, 110,  18, '1d6',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
+    ('Mutae Carnívora',    'Planta gigante com tentáculos que atacam em área.',2, 400,  60, '2d10', 0.10, 2, 3, TRUE,  'Masmorra da Floresta', NULL),
+    ('Árvore Mavu Corrompida',  'Árvore corrompida que invoca ramos venenosos.',     2, 130,  22, '1d8',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
+    ('Tangle da Floresta',        'Planta carnívora que se move rapidamente.',        2, 100,  16, '1d6',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
+    ('Torre de Fruta',         'Estrutura de madeira que dispara sementes.',      2,  90,  14, '1d4',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
+    ('Mimico Dourado',           'Baú dourado que se revela monstro ao ser atacado.',2, 145,  30, '1d6',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
+    ('Mimico de Ferro',           'Baú metálico que se transforma em monstro.',      2, 140,  28, '1d6',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
+    ('Jardineiro',           'Humanoide que lança espinhos e armadilhas.',      2, 150,  25, '1d8',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
+    ('Árvore Mavu',            'Árvore que lança explosões de sementes tóxicas.',2, 125,  20, '1d8',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
+    ('Slime Venenoso',         'Slime grande que solta veneno ao contato.',       2, 180,  24, '1d10', 0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
+    ('Semeador',               'Dispositivo que planta sementes explosivas.',    2,  95,  15, '1d6',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
+    ('Cogumelo Giratório',    'Cogumelo que gira arremessando fragmentos.',      2, 120,  20, '1d8',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
+    ('Arbusto de Esporos',           'Arbusto que dispara nuvens de esporos venenosos.',2, 110,  18, '1d6',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
+    ('Tangle Venenoso',      'Variante tóxica do Tangle com chifres venenosos.',2, 105,  18, '1d6',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
+    ('Errante',             'Inimigo raro que surge aleatoriamente.',         2, 320,  55, '1d12', 0.10, 2, 3, FALSE, 'Masmorra da Floresta', NULL),
+    ('Árvore do Vento',            'Árvore que usa folha para lançar rajadas de vento.',2, 115,  19, '1d6',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
+    ('Mimico de Madeira',           'Baú de madeira que se transforma em monstro.',    2, 150,  28, '1d6',  0.06, 1, 2, FALSE, 'Masmorra da Floresta', NULL),
+    -- Masmorra do Deserto (nível 3)
+    ('Baby Slime de Fogo',      'Pequeno slime de fogo que explode ao morrer.',    3,  80,  14, '1d4',  0.07, 1, 2, FALSE, 'Masmorra do Deserto', 2),
+    ('Fantoche Bardo',          'Fantoche que toca lâminas giratórias.',         3, 120,  20, '1d8',  0.07, 1, 2, FALSE, 'Masmorra do Deserto', NULL),
+    ('Tangle de Pano',         'Tangle reforçado com tecido resistente ao fogo.',3, 110,  18, '1d6',  0.07, 1, 2, FALSE, 'Masmorra do Deserto', NULL),
+    ('Hexa Corrompido',       'Caixa voadora corrompida que emite explosões.',3, 100,  16, '1d6',  0.07, 1, 2, FALSE, 'Masmorra do Deserto', NULL),
+    ('Fantoche de Fogo',          'Fantoche flamejante que libera ondas de calor.',3, 140,  25, '1d10', 0.07, 1, 2, FALSE, 'Masmorra do Deserto', 2),
+    ('Slime de Fogo',           'Slime ardente que queima tudo ao redor.',       3, 180,  30, '1d12', 0.07, 1, 2, FALSE, 'Masmorra do Deserto', 2),
+    ('Mimico Dourado',           'Baú dourado que se revela monstro ao ser atacado.',3,155,  32, '1d6',  0.07, 1, 2, FALSE, 'Masmorra do Deserto', NULL),
+    ('Hexa',                 'Caixa flutuante que dispara rajadas de areia.',3, 130,  22, '1d8',  0.07, 1, 2, FALSE, 'Masmorra do Deserto', NULL),
+    ('Mimico de Ferro',           'Baú metálico que se transforma em monstro.',    3, 160,  30, '1d6',  0.07, 1, 2, FALSE, 'Masmorra do Deserto', NULL),
+    ('Golem Katamari',       'Golem esférico que rola em alta velocidade.',   3, 200,  28, '1d10', 0.07, 1, 2, FALSE, 'Masmorra do Deserto', NULL),
+    ('Catapulta de Lava',        'Mecanismo que lança glóbulos de lava.',        3, 125,  20, '1d8',  0.07, 1, 2, FALSE, 'Masmorra do Deserto', 2),
+    ('Fantoche Mágico',      'Fantoche que lança fogo e teleporta.',         3, 140,  24, '1d8',  0.07, 1, 2, FALSE, 'Masmorra do Deserto', 2),
+    ('Golem Mãe',         'Golem enorme que invoca miniaturas.',           3, 450,  65, '2d10', 0.10, 2, 3, TRUE,  'Masmorra do Deserto', NULL),
+    ('Naja',                 'Guardião serpentino das ruínas desérticas.',    3, 480,  70, '2d12', 0.10, 2, 3, TRUE,  'Masmorra do Deserto', NULL),
+    ('Golem Patrulheiro',         'Golem que patrulha corredores e investe.',     3, 170,  28, '1d10', 0.07, 1, 2, FALSE, 'Masmorra do Deserto', NULL),
+    ('Errante',             'Inimigo raro que surge aleatoriamente.',         3, 350,  60, '1d12', 0.10, 2, 3, FALSE, 'Masmorra do Deserto', NULL),
+    ('Mimico de Madeira',           'Baú de madeira que se transforma em monstro.',  3, 160,  32, '1d6',  0.07, 1, 2, FALSE, 'Masmorra do Deserto', NULL),
+    -- Masmorra da Tecnologia (nível 4)
+    ('Baby Slime Elétrico',  'Pequeno slime elétrico que causa choque.',      4,  90,  16, '1d4',  0.08, 1, 2, FALSE, 'Masmorra da Tecnologia', NULL),
+    ('Oscilador Corrompido', 'Dispositivo que emite ondas elétricas.',       4, 130,  22, '1d6',  0.08, 1, 2, FALSE, 'Masmorra da Tecnologia', NULL),
+    ('Gerador da Morte',      'Gerador que dispara rajadas de energia mortal.',4, 140,  24, '1d8',  0.08, 1, 2, FALSE, 'Masmorra da Tecnologia', NULL),
+    ('Poste Elétrico',        'Torre que dispara raios elétricos.',            4, 120,  20, '1d6',  0.08, 1, 2, FALSE, 'Masmorra da Tecnologia', NULL),
+    ('Slime Elétrico',       'Slime que emite descargas elétricas.',          4, 160,  28, '1d10', 0.08, 1, 2, FALSE, 'Masmorra da Tecnologia', NULL),
+    ('Bola Eletromagnética', 'Esfera que teleporta e lança raios.',           4, 150,  26, '1d8',  0.08, 1, 2, FALSE, 'Masmorra da Tecnologia', NULL),
+    ('Fluxo de Energia',          'Núcleo de energia instável que dispara lasers.', 4, 480,  80, '2d12', 0.12, 2, 3, TRUE,  'Masmorra da Tecnologia', NULL),
+    ('Lançador Golem',         'Golem que arremessa projéteis explosivos.',     4, 180,  30, '1d10', 0.08, 1, 2, FALSE, 'Masmorra da Tecnologia', NULL),
+    ('Gerador Graaf',      'Dispositivo que gera escudos para aliados.',    4, 125,  18, '1d6',  0.08, 1, 2, FALSE, 'Masmorra da Tecnologia', NULL),
+    ('Mimico de Ferro',           'Baú metálico que se transforma em monstro.',    4, 170,  32, '1d6',  0.08, 1, 2, FALSE, 'Masmorra da Tecnologia', NULL),
+    ('Oscilador',           'Dispositivo que emite pulsos elétricos.',       4, 135,  24, '1d8',  0.08, 1, 2, FALSE, 'Masmorra da Tecnologia', NULL),
+    ('Recarregador',            'Unidade que recarrega energia de aliados.',     4, 140,  26, '1d6',  0.08, 1, 2, FALSE, 'Masmorra da Tecnologia', NULL),
+    ('Drone Reparador',         'Drone que repara aliados automaticamente.',     4, 145,  28, '1d6',  0.08, 1, 2, FALSE, 'Masmorra da Tecnologia', NULL),
+    ('Redemoinho de Areia',           'Gera redemoinhos de areia para atrapalhar.',    4, 110,  18, '1d4',  0.08, 1, 2, FALSE, 'Masmorra da Tecnologia', NULL),
+    ('Armadilha de Slime',           'Armadilha que libera slime pegajoso.',         4, 100,  16, '1d4',  0.08, 1, 2, FALSE, 'Masmorra da Tecnologia', NULL),
+    ('Corrente de Espinhos',          'Corrente com espinhos que gira em torno.',      4, 175,  30, '1d10', 0.08, 1, 2, FALSE, 'Masmorra da Tecnologia', NULL),
+    ('Errante',             'Inimigo raro que surge aleatoriamente.',         4, 380,  65, '1d12', 0.12, 2, 3, FALSE, 'Masmorra da Tecnologia', NULL),
+    ('Mimico de Madeira',           'Baú de madeira que se transforma em monstro.',  4, 180,  34, '1d6',  0.08, 1, 2, FALSE, 'Masmorra da Tecnologia', NULL);
+
 -- INSERÇÃO NA TABELA ITENS:
 INSERT INTO "item"
     ("nome", "descricao", "tipo", "precoBase", "cultura", "stackMaximo", "idEfeito")
@@ -44,7 +158,7 @@ INSERT INTO "item"
     ('Pistola de Solda', 'Com o uso de vários outros recursos, esse dispositivo pode unir firmemente determinados metais.', 'Item', 11650, 'Tecnologia', 5, NULL),
     ('Fios', 'Pequenos fios de metal usados para conduzir eletricidade.', 'Item', 2550, 'Tecnologia', 10, NULL),
     ('Pedra de Wolfram', 'Uma versão bruta do metal tungstênio. Não processado, mas certamente valioso para quem precisa do material.', 'Item', 6350, 'Tecnologia', 5, NULL),
-    ('Adapatador AC', 'Normalmente, eles se encontram entre uma “bateria” e o que requer energia. Deve ser algum tipo de conversor.', 'Item', 15550, 'Tenologia', 5, NULL),
+    ('Adapatador AC', 'Normalmente, eles se encontram entre uma "bateria" e o que requer energia. Deve ser algum tipo de conversor.', 'Item', 15550, 'Tenologia', 5, NULL),
     ('Pote Antigo', 'Tem uma ou duas pequenas rachaduras, mas ainda pode conter algo. Muito bem trabalhado. Curioso para saber para que poderia ter sido usado.', 'Item', 100, 'Tecnologia', 5, NULL),
     ('Frasco de Argônio', 'Com frequência, eu encontrava o gás nesse frasco perto de metal limpo e sem manchas. Ele deve evitar algum tipo de processo químico que resulte em ferrugem.', 'Item', 12050, 'Tecnologia', 5, NULL),
     ('Folhas de Lâminas', 'Folhas afiadas usadas como armas de projétil por vários inimigos bastante incômodos...', 'Item', 300, 'Floresta', 10, NULL),
@@ -109,8 +223,8 @@ INSERT INTO "item"
     ('Design de um Velho Minion Golem', 'O texto está desbotado, mas parece ser instruções sobre como criar uma das estátuas vivas encontradas na Masmorra do Golem.', 'Livro', 400, 'Golem', 5, NULL),
     ('Pétalas', 'Algumas pétalas de várias plantas nas masmorras que achei particularmente agradáveis aos olhos.', 'Item', 100, 'Floresta', 10, NULL),
     ('Carne Vegetal', 'Alta contagem de fibras nessas plantas. Muito útil para o artesanato.', 'Item', 60, 'Floresta', 10, NULL),
-    ('Plástico Filme', 'Uma camada muito fina de “plástico”. Encontrei-o enrolado em um monte de fios.', 'Item', 2200, 'Tecnologia', 5, NULL),
-    ('Fonte de Energia', 'Um compartimento com formato perfeito para guardar os objetos chamados “baterias”.', 'Item', 14550, 'Tecnologia', 5, NULL),
+    ('Plástico Filme', 'Uma camada muito fina de "plástico". Encontrei-o enrolado em um monte de fios.', 'Item', 2200, 'Tecnologia', 5, NULL),
+    ('Fonte de Energia', 'Um compartimento com formato perfeito para guardar os objetos chamados "baterias".', 'Item', 14550, 'Tecnologia', 5, NULL),
     ('Vidro Resistente', 'Vidro jateado com calor e areia. Usado como isolante para vários objetos contra temperaturas extremas.', 'Item', 4300, 'Deserto', 5, NULL),
     ('Ferro de Solda', 'Uma ferramenta usada para fundir vários metais.', 'Item', 5350, 'Deserto', 5, NULL),
     ('Pó da Velocidade', 'Um pó que pode acelerar o crescimento das plantas. Talvez seja útil em uma poção?', 'Item', 2000, 'Floresta', 5, NULL),
@@ -210,22 +324,232 @@ INSERT INTO "item"
     ('Peitoral de Aço III', 'A placa peitoral oferece a melhor proteção contra inimigos. No entanto, é incrivelmente pesado. Basicamente, é um pedaço de aço preso ao peito.', 'Armadura', 90000, 'Mercador', 1, NULL),
     ('Capacete de Aço III', 'Camadas dos metais mais pesados e espessos criados em um capacete robusto, resistente e redutor de danos.', 'Armadura', 90000, 'Mercador', 1, NULL);
 
--- INSERÇÃO NA TABELA EFEITOS:
-INSERT INTO "efeito"
-    ("nome", "descricao", "tipo", "valor", "duracaoTurnos")
+-- INSERÇÃO DOS DROPS DE MONSTROS
+INSERT INTO "monstro_item" 
+    ("idMonstro", "idItem", "chanceDrop", "qtdMinima", "qtdMaxima")
     VALUES
-    ('Envenenado', 'Dano contínuo de veneno ao longo do tempo', 'debuff', 3, 5),
-    ('Queimado', 'Dano contínuo de fogo ao longo do tempo', 'debuff', 5, 4),
-    ('Congelado', 'Congela o inimigo, impedindo seus movimentos e ações','debuff', 2, 2),
-    ('Atordoado', 'Paralisa o alvo temporariamente', 'debuff', 0, 1),
-    ('Proteção', 'Escudo temporário que absorve dano', 'buff', 20, 3),
-    ('Cobiçado', 'Aumenta valor de venda do item', 'economia', 0, NULL),
-    ('Amaldiçoado', 'Dano se item estiver no inventário', 'maldição', 8, NULL),
-    ('Maldição da Bolsa', 'Bloqueia uso do inventário', 'debuff', 0, 3),
-    ('Cura Pequena', 'Restaura 35 pontos de vida', 'cura', 35, 0),
-    ('Cura Média', 'Restaura 70 pontos de vida', 'cura', 70, 0),
-    ('Cura Grande', 'Restaura 150 pontos de vida', 'cura', 150, 0);
+    -- ### Masmorra do Golem ###
 
-    -- DROPS DE MONSTROS
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Baby Slime'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Geléia Rica'), 0.6, 1, 2),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Baby Slime'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Tecido'), 0.1, 1, 1),
+    -- Torre Golem Quebrada / Torre Golem (Masmorra do Golem)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Torre Golem Quebrada'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Núcleo de Golem'), 0.25, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Torre Golem Quebrada'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Restos de Fundição'), 0.15, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Torre Golem Quebrada'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Barra de Ferro'), 0.1, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Torre Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Núcleo de Golem'), 0.3, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Torre Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Lentes de Vidro'), 0.15, 1, 1),
+    -- Guerreiro Golem Corrompido / Guerreiro Golem / Soldado de Pedra (Masmorra do Golem)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Guerreiro Golem Corrompido'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Espada Quebrada'), 0.2, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Guerreiro Golem Corrompido'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Barra de Ferro'), 0.25, 1, 2),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Guerreiro Golem Corrompido'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Dente'), 0.15, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Guerreiro Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Aço Endurecido'), 0.1, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Guerreiro Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Runas de Ouro'), 0.05, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Soldado de Pedra'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Cinzel de Golem'), 0.1, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Soldado de Pedra'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Amolar'), 0.2, 1, 1),
+    -- Golem Voador / Golem Reparador Voador (Masmorra do Golem)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Golem Voador'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Núcleo de Golem'), 0.2, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Golem Voador'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Restos de Fundição'), 0.05, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Golem Reparador Voador'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Núcleo de Golem'), 0.25, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Golem Reparador Voador'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Ferramenta Rúnica'), 0.02, 1, 1),
+    -- Mimicos (Masmorra do Golem)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico Dourado' AND "nomeMasmorra" = 'Masmorra do Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Runas de Ouro'), 0.5, 1, 3),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico Dourado' AND "nomeMasmorra" = 'Masmorra do Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Rocha de Cristal'), 0.3, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico de Ferro' AND "nomeMasmorra" = 'Masmorra do Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Barra de Ferro'), 0.8, 2, 5),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico de Madeira' AND "nomeMasmorra" = 'Masmorra do Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Mágica'), 0.8, 2, 4),
+    -- Cabeça de Golem (Masmorra do Golem)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Cabeça de Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Núcleo de Golem'), 0.15, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Cabeça de Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Dente'), 0.2, 1, 2),
+    -- Slime (Grande) (Masmorra do Golem)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Slime' AND "nomeMasmorra" = 'Masmorra do Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Geléia Rica'), 0.8, 2, 4),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Slime' AND "nomeMasmorra" = 'Masmorra do Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Esfera de Água'), 0.1, 1, 1),
+    -- Manopla de Slime (Masmorra do Golem)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Manopla de Slime'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Geléia Rica'), 0.5, 1, 2),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Manopla de Slime'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Barra de Ferro'), 0.2, 1, 1),
+    -- Mordomo de Pedra (Masmorra do Golem)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mordomo de Pedra'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Tecido'), 0.25, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mordomo de Pedra'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Lâmpada de Água'), 0.1, 1, 1),
+    -- Tangle (Masmorra do Golem)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Tangle' AND "nomeMasmorra" = 'Masmorra do Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Cipó'), 0.7, 1, 3),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Tangle' AND "nomeMasmorra" = 'Masmorra do Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Raíz'), 0.2, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Rei Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Cristal de Energia do Rei Golem'), 1.0, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Rei Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Anotações do Rei Golem'), 1.0, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Rei Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Energia Cristalizada'), 0.5, 2, 5),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Rei Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Design de Golem II'), 0.3, 1, 1),
+    -- Errante (Masmorra do Golem)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Errante' AND "nomeMasmorra" = 'Masmorra do Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Ferramenta Rúnica'), 0.3, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Errante' AND "nomeMasmorra" = 'Masmorra do Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Rocha de Cristal'), 0.5, 3, 5),
+    -- ### Masmorra da Floresta ###
 
-    -- LOJAS DE NPC
+    -- Baby Slime Venenoso (Masmorra da Floresta)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Baby Slime Venenoso'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Geléia de Veneno'), 0.6, 1, 2),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Baby Slime Venenoso'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Ácido Puro'), 0.1, 1, 1),
+    -- Árvore Lâmina (Masmorra da Floresta)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Árvore Lâmina'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Folhas de Lâminas'), 0.5, 1, 3),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Árvore Lâmina'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Mágica'), 0.2, 1, 1),
+    -- Árvore Mavu Corrompida / Árvore Mavu (Masmorra da Floresta)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Árvore Mavu Corrompida'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Antiga'), 0.25, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Árvore Mavu Corrompida'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Esporos Venenosos'), 0.3, 1, 2),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Árvore Mavu'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Mágica'), 0.3, 1, 2),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Árvore Mavu'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Sementes Modificadas'), 0.1, 1, 1),
+    -- Tangle da Floresta / Tangle Venenoso (Masmorra da Floresta)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Tangle da Floresta'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Cipó'), 0.5, 1, 2),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Tangle da Floresta'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Folhas Fortes'), 0.2, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Tangle Venenoso'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Cipó'), 0.4, 1, 2),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Tangle Venenoso'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Esporos Venenosos'), 0.3, 1, 1),
+    -- Torre de Fruta / Semeador (Masmorra da Floresta)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Torre de Fruta'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Frutas da Floresta'), 0.6, 1, 3),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Torre de Fruta'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Mágica'), 0.15, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Semeador'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Sementes Modificadas'), 0.4, 1, 2),
+    -- Mimicos (Masmorra da Floresta)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico Dourado' AND "nomeMasmorra" = 'Masmorra da Floresta'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Antiga'), 0.3, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico de Ferro' AND "nomeMasmorra" = 'Masmorra da Floresta'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Barra de Ferro'), 0.8, 1, 3),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico de Madeira' AND "nomeMasmorra" = 'Masmorra da Floresta'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Mágica'), 0.8, 2, 4),
+    -- Jardineiro (Masmorra da Floresta)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Jardineiro'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pétalas'), 0.3, 1, 2),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Jardineiro'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Solo Fértil'), 0.1, 1, 1),
+    -- Slime Venenoso (Grande) (Masmorra da Floresta)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Slime Venenoso'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Geléia de Veneno'), 0.8, 2, 4),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Slime Venenoso'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Ácido Puro'), 0.25, 1, 1),
+    -- Cogumelo Giratório (Masmorra da Floresta)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Cogumelo Giratório'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Cogumelo Mágico'), 0.4, 1, 2),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Cogumelo Giratório'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Esporos Venenosos'), 0.2, 1, 1),
+    -- Arbusto de Esporos (Masmorra da Floresta)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Arbusto de Esporos'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Esporos Venenosos'), 0.7, 1, 3),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Arbusto de Esporos'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Carne Vegetal'), 0.2, 1, 1),
+    -- Árvore do Vento (Masmorra da Floresta)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Árvore do Vento'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Folhas Fortes'), 0.5, 1, 2),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Árvore do Vento'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Mágica'), 0.15, 1, 1),
+    -- Mutae Carnívora (CHEFE - Masmorra da Floresta)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mutae Carnívora'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Sementes de Mutae Carnívora'), 1.0, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mutae Carnívora'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Observações sobre Mutae Carnívora'), 1.0, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mutae Carnívora'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Bulbo Antigo'), 0.5, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mutae Carnívora'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Anotações de Botânica I'), 0.3, 1, 1),
+    -- Errante (Masmorra da Floresta)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Errante' AND "nomeMasmorra" = 'Masmorra da Floresta'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Bulbo Antigo'), 0.1, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Errante' AND "nomeMasmorra" = 'Masmorra da Floresta'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Raíz Preservada'), 0.5, 1, 2),
+    -- ### Masmorra do Deserto ###
+
+    -- Baby Slime de Fogo (Masmorra do Deserto)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Baby Slime de Fogo'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Geléia de Fogo'), 0.6, 1, 2),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Baby Slime de Fogo'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pó Inflamável'), 0.1, 1, 1),
+    -- Fantoche Bardo (Masmorra do Deserto)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Fantoche Bardo'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Corda do Deserto'), 0.3, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Fantoche Bardo'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Tecido à Prova de Fogo'), 0.15, 1, 1),
+    -- Tangle de Pano (Masmorra do Deserto)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Tangle de Pano'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Tecido à Prova de Fogo'), 0.5, 1, 2),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Tangle de Pano'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Corda do Deserto'), 0.2, 1, 1),
+    -- Hexa Corrompido / Hexa (Masmorra do Deserto)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Hexa Corrompido'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Núcleo Magnético'), 0.2, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Hexa Corrompido'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Areia Doamantinética'), 0.1, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Hexa'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Núcleo Magnético'), 0.25, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Hexa'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Magnetita'), 0.15, 1, 1),
+    -- Fantoche de Fogo / Fantoche Mágico (Masmorra do Deserto)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Fantoche de Fogo'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Joia de Fogo'), 0.3, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Fantoche de Fogo'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Líquido Inflamável'), 0.15, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Fantoche Mágico'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Joia de Fogo'), 0.25, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Fantoche Mágico'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Cristal Capacitador'), 0.1, 1, 1),
+    -- Slime de Fogo (Grande) (Masmorra do Deserto)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Slime de Fogo'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Geléia de Fogo'), 0.8, 2, 4),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Slime de Fogo'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra Vulcânica'), 0.2, 1, 2),
+    -- Mimicos (Masmorra do Deserto)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico Dourado' AND "nomeMasmorra" = 'Masmorra do Deserto'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Lingote De Aço do Deserto'), 0.2, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico de Ferro' AND "nomeMasmorra" = 'Masmorra do Deserto'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Chapa de Aço do Deserto'), 0.5, 1, 2),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico de Madeira' AND "nomeMasmorra" = 'Masmorra do Deserto'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Tratada'), 0.5, 1, 2),
+    -- Golem Katamari / Golem Patrulheiro (Masmorra do Deserto)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Golem Katamari'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Chapa de Aço do Deserto'), 0.3, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Golem Katamari'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra do Deserto'), 0.15, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Golem Patrulheiro'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Aço Endurecido'), 0.25, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Golem Patrulheiro'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Núcleo Magnético'), 0.1, 1, 1),
+    -- Catapulta de Lava (Masmorra do Deserto)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Catapulta de Lava'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Lava Resfriada'), 0.4, 1, 2),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Catapulta de Lava'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra Vulcânica'), 0.2, 1, 1),
+    -- Golem Mãe (CHEFE - Masmorra do Deserto)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Golem Mãe'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Motor Termomagnético'), 1.0, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Golem Mãe'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Núcleo de Alta Levitação'), 0.3, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Golem Mãe'), (SELECT "idItem" FROM "item" WHERE "nome" = 'História do Deserto I'), 0.5, 1, 1),
+    -- Naja (BOSS DAA Masmorra do Deserto)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Naja'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Anotações de Naja'), 1.0, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Naja'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Lingote De Aço do Deserto'), 0.5, 1, 2),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Naja'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Joia de Fogo'), 0.8, 2, 4),
+    -- Errante (Masmorra do Deserto)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Errante' AND "nomeMasmorra" = 'Masmorra do Deserto'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Motor Termomagnético'), 0.2, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Errante' AND "nomeMasmorra" = 'Masmorra do Deserto'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pó Isolante'), 0.4, 1, 2),
+    -- ### Masmorra da Tecnologia ###
+
+    -- Baby Slime Elétrico (Masmorra da Tecnologia)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Baby Slime Elétrico'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Geléia Elétrica'), 0.6, 1, 2),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Baby Slime Elétrico'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Fios'), 0.1, 1, 1),
+    -- Oscilador Corrompido / Oscilador (Masmorra da Tecnologia)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Oscilador Corrompido'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Bateria Quebrada'), 0.3, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Oscilador Corrompido'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Metal Condutor'), 0.15, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Oscilador'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Capacitor de Energia'), 0.25, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Oscilador'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Motor de Bobina Tesla'), 0.1, 1, 1),
+    -- Gerador da Morte / Poste Elétrico / Gerador Graaf (Masmorra da Tecnologia)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Gerador da Morte'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Fonte de Energia'), 0.2, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Poste Elétrico'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Fios de Ouro'), 0.15, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Gerador Graaf'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Plástico Filme'), 0.2, 1, 1),
+    -- Slime Elétrico (Grande) (Masmorra da Tecnologia)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Slime Elétrico'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Geléia Elétrica'), 0.8, 2, 4),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Slime Elétrico'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Bateria de Célula Tripla'), 0.05, 1, 1),
+    -- Bola Eletromagnética (Masmorra da Tecnologia)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Bola Eletromagnética'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Mercúrio'), 0.25, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Bola Eletromagnética'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Bobina de Cobre'), 0.1, 1, 1),
+    -- Lançador Golem (Masmorra da Tecnologia)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Lançador Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Aço Endurecido'), 0.3, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Lançador Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Wolfram'), 0.1, 1, 1),
+    -- Mimicos (Masmorra da Tecnologia)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico de Ferro' AND "nomeMasmorra" = 'Masmorra da Tecnologia'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Wolfram'), 0.3, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico de Madeira' AND "nomeMasmorra" = 'Masmorra da Tecnologia'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Tratada'), 0.6, 1, 2),
+    -- Recarregador / Drone Reparador (Masmorra da Tecnologia)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Recarregador'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Adapatador AC'), 0.15, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Drone Reparador'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pistola de Solda'), 0.1, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Drone Reparador'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Hastes de Soldagem'), 0.2, 1, 2),
+    -- Redemoinho de Areia / Armadilha de Slime / Corrente de Espinhos (Masmorra da Tecnologia - no jogo, n sao monstros dropaveis, mas da para fazer drops simples tematicos
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Armadilha de Slime'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Geléia Elétrica'), 0.2, 1, 1),
+    -- Fluxo de Energia (CHEFE - Masmorra da Tecnologia)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Fluxo de Energia'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Observações sobre a Energia de Fluxo'), 1.0, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Fluxo de Energia'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Bateria de Célula Tripla'), 0.8, 1, 2),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Fluxo de Energia'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Frasco de Argônio'), 0.5, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Fluxo de Energia'), (SELECT "idItem" FROM "item" WHERE "nome" = 'História da Tecnologia I'), 0.3, 1, 1),
+    -- Errante (Masmorra da Tecnologia)
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Errante' AND "nomeMasmorra" = 'Masmorra da Tecnologia'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Adapatador AC'), 0.2, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Errante' AND "nomeMasmorra" = 'Masmorra da Tecnologia'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Tubo de Vácuo'), 0.3, 1, 1);
+
+
+-- INSERÇÃO DOS NPCS
+INSERT INTO "npc" ("nome", "tipoNPC", "descricao", "ativo")
+    VALUES
+    ('Zenon', 'Guia', 'Sábio ancião que oferece conselhos e conhecimento.', TRUE),
+    ('Andrei', 'Ferreiro', 'Ferreiro que aprimora armas e armaduras na Forja Vulcânica.', TRUE),
+    ('Eris', 'Alquimista', 'Alquimista que vende e aprimora poções no Chapéu de Madeira.', TRUE),
+    ('Edward', 'Banqueiro', 'Banqueiro que gerencia investimentos para a cidade de Rynoka.', TRUE),
+    ('Juliette', 'Decoradora', 'Ajuda a melhorar e decorar a loja Moonlighter em "Le Retailer".', TRUE),
+    ('Tom', 'Vendedor Ambulante', 'Vendedor ambulante que oferece itens raros e exóticos.', TRUE),
+    ('Mercador Viajante', 'Comprador Especializado', 'Compra itens específicos por um preço elevado periodicamente.', TRUE),
+    ('Pedro Doidão', 'Residente', 'Residente excêntrico da cidade de Rynoka com dicas peculiares.', TRUE),
+    ('Bruxa dos Murmúrios', 'Encantadora', 'Bruxa misteriosa que pode encantar equipamentos com efeitos.', TRUE);
+
+-- INSERÇÃO DAS LOJAS DE NPC
+
+INSERT INTO "lojaNPC"
+    ("nome", "tipoLoja", "descricao", "status", "idNPC", "idMapa")
+    VALUES
+    ('Forja Vulcânica', 'Ferraria', 'Local para forjar e aprimorar armas e armaduras com o ferreiro Andrei.', TRUE, (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei'), 1),
+    ('O Chapéu de Madeira', 'Alquimia', 'Loja da alquimista Eris, para criar e aprimorar poções e misturas alquímicas.', TRUE, (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris'), 1),
+    ('Le Retailer', 'Decoração e Varejo', 'Estabelecimento de Juliette, focado em melhorias estéticas e de varejo para a loja Moonlighter.', TRUE, (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Juliette'), 1),
+    ('Banco de Rynoka', 'Banco', 'Instituição financeira gerenciada por Edward, para investimentos na cidade e na loja.', TRUE, (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward'), 1),
+    ('Tenda da Bruxa', 'Encantamentos', 'Local misterioso onde a Bruxa dos Murmúrios oferece poderosos serviços de encantamento para equipamentos.', TRUE, (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Bruxa dos Murmúrios'), 1),
+    ('Barraca do Tom', 'Comércio Itinerante', 'Barraca temporária montada por Tom, o vendedor ambulante, que oferece itens raros e exóticos de suas viagens.', TRUE, (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Tom'), 1);
+
+-- INSERÇÃO NA TABELA INVENTÁRIO:
+INSERT INTO "inventario"
+    ("nome", "slotMaximo")
+    VALUES
+    -- Inventários Básicos do Jogador
+    ('Mochila', 15),              -- Inventário principal, perde ao morrer
+    ('Bolsos', 5),                -- Slots seguros, mantém após morte
+    ('Equipamento - Armadura', 1), -- Slot para conjunto de armadura
+    ('Equipamento - Arma 1', 1),   -- Slot para arma primária
+    ('Equipamento - Arma 2', 1),   -- Slot para arma secundária
+    ('Equipamento - Acessório', 3), -- Slots para acessórios
+    ('Familiar Mimic', 28);        -- Slots extras do familiar, mantém após morte

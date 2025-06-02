@@ -247,7 +247,7 @@ Cada tabela está documentada com seus respectivos campos, tipos de dados, restr
     | `SlotOcupado`  | Quantidade de lugares do inventário ocupados                                         | Integer  |        | `NOT NULL`       |
     | `Nickname`     | Referência à Tabela "Jogador", indicando à qual jogador esta instância pertence      | Varchar  | 60     | `FK`, `NOT NULL` |
 
-??? info "Tabela NPC | 1.1v"
+??? info "Tabela NPC | 1.2v"
     **Nome da Tabela:** NPC <br/>
     **Descrição**: Armazena as informações dos NPCs  <br/>
 
@@ -256,7 +256,7 @@ Cada tabela está documentada com seus respectivos campos, tipos de dados, restr
     | `IdNPC`     | Número de identificação do NPC                    | Integer  |        | `PK`, `IDENTITY` |
     | `Nome`      | Nome do NPC                                       | Varchar  | 60     | `NOT NULL`       |
     | `TipoNPC`   | Tipo de NPC                                       | Varchar  | 30     | `NOT NULL`       |
-    | `Descrição` | Descrição do NPC                                  | Varchar  | 60     | `NOT NULL`       |
+    | `Descrição` | Descrição do NPC                                  | Varchar  | 100     | `NOT NULL`       |
     | `Ativo`     | O NPC está interagindo com o jogador?             | Boolean  |        | `NOT NULL`       |
 
 
@@ -676,3 +676,4 @@ Cada tabela está documentada com seus respectivos campos, tipos de dados, restr
 | 23/05/2025 | `1.3`  | Yan Matheus      | Reorganização das Tabelas e correção das Restrições                   |
 | 24/05/2025 | `1.4`  | Daniel Rodrigues | Separação das diferentes versões do Dicionário e correções Pontuais   |
 | 24/05/2025 | `1.5`  | Daniel Rodrigues | Atualização de atributos                                              |
+| 01/06/2025 | `1.6`  | Arthur Evangelista | Atualização do tamanho da descrição na Tabela NPC.                                              |
