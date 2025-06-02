@@ -76,7 +76,7 @@ CREATE TABLE "efeito" (
 
 CREATE TABLE "monstro" (
     "idMonstro" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    "nome" character varying(30) UNIQUE NOT NULL,
+    "nome" character varying(30) NOT NULL,
     "descricao" character varying(100) NOT NULL,
     "nivel" SMALLINT NOT NULL,
     "vidaMaxima" SMALLINT NOT NULL,

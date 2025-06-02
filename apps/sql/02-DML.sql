@@ -141,7 +141,7 @@ INSERT INTO "item"
     ('Folhas Fortes', 'Folhas endurecidas que são flexíveis o suficiente para ricochetear nas paredes em vez de se estilhaçar. Essa foi uma lição duramente aprendida...', 'Item', 400, 'Floresta', 10, NULL),
     ('Geléia de Veneno', 'Uma variante de geleia venenosa encontrada em slimes da floresta. Extraia com cuidado.', 'Item', 20, 'Floresta', 10, NULL),
     ('Corda do Deserto', 'Uma corda... que não pega fogo... Quem quer que tenha residido na Masmorra do Deserto deve ter sido um povo incrivelmente inventivo.', 'Item', 450, 'Deserto', 5, NULL),
-    ('Lingote De Aço do Deserto', 'Aço bruto encontrado na Masmorra do Deserto. Anos de ventos arenosos parecem tê-lo endurecido mais do que a maioria dos metais.', 'Item', 7500, 'Deserto', 5, NULL),
+    ('Lingote de Aço do Deserto', 'Aço bruto encontrado na Masmorra do Deserto. Anos de ventos arenosos parecem tê-lo endurecido mais do que a maioria dos metais.', 'Item', 7500, 'Deserto', 5, NULL),
     ('Joia de Fogo', 'Faísca instantânea ao entrar em contato com uma pedra ou até mesmo com um pano grosso. Um iniciador de fogo perfeito.', 'Item', 1700, 'Deserto', 10, NULL),
     ('Geléia de Fogo', 'Uma variante de gelatina que parece estar sempre pegando fogo... Encontrada nos Slimes do Deserto. Não posso beber nada feito com isso... posso?', 'Item', 100, 'Mercador', 10, NULL),
     ('Tecido à Prova de Fogo', 'Um tecido que se recusa a queimar. Frequentemente encontrado enrolado em pilhas de areia. Possivelmente usado para proteger a areia durante um processo de aquecimento extremo?', 'Item', 1150, 'Deserto', 10, NULL),
@@ -201,7 +201,7 @@ INSERT INTO "item"
     ('História da Floresta III', 'No entanto, a floresta não parou de crescer... e, aos poucos, nosso mundo foi coberto. As plantas não pararam de crescer... e lentamente... elas tomaram conta.', 'Livro', 5000, 'Floresta', 5, NULL),
     ('Lentes de Vidro', 'Vidro moldado em uma lente com o único propósito de focalizar a energia mágica. Muito útil na fabricação de armas mágicas.', 'Item', 100, 'Golem', 5, NULL),
     ('Runas de Ouro', 'Essas Runas de Ouro criam padrões maravilhosos nos Golems. Ocasionalmente, você pode recuperar uma intacta após a batalha.', 'Item', 300, 'Golem', 5, NULL),
-    ('Nécleo de Golem', 'O núcleo do próprio “coração” de um Golem. Encontramos maneiras de aproveitar a energia, mas não conseguimos criar vida a partir dela.', 'Item', 100, 'Golem', 5, NULL),
+    ('Núcleo de Golem', 'O núcleo do próprio “coração” de um Golem. Encontramos maneiras de aproveitar a energia, mas não conseguimos criar vida a partir dela.', 'Item', 100, 'Golem', 5, NULL),
     ('Design de Golem I', 'Essas imagens e anotações escritas às pressas parecem se assemelhar a um esquema de algum tipo. Algo parecido com o Golem que perambula pela Masmorra do Golem.', 'Livro', 1500, 'Golem', 5, NULL),
     ('Design de Golem II', 'Assim como nós viemos da terra, a pedra também veio. Aproveitando a energia vital que flui pelo solo, animamos a pedra para nos servir.', 'Livro', 2500, 'Golem', 1, NULL),
     ('Design de Golem III', 'Finalmente, imagens sobre a inserção de uma fonte de energia em um Golem. O mais frustrante, porém, é que a parte sobre a fusão da fonte de energia está riscada...', 'Livro', 1500, 'Golem', 5, NULL),
@@ -296,6 +296,7 @@ INSERT INTO "item"
     ('Lança do Macaco', 'A história do Rei Macaco vem à mente quando se olha para essa lança carmesim. Verdadeiramente uma lança digna dele.', 'Arma', 265800, 'Tecnologia', 1, NULL),
     ('Espada Curta Reborn', 'Provoca Queimadura. As chamas da forja nunca deixaram essa espada, o calor do deserto ainda irradia da lâmina.', 'Arma', 265800, 'Tecnologia', 1, NULL),
     ('Arco do Soldado', 'Criado de forma rudimentar com as fibras limitadas da Cultura do Deserto, esse arco fica melhor nas mãos de um soldado. De qualquer forma, ele dá conta do recado.', 'Arma', 265800, 'Tecnologia', 1, NULL),
+    ('Espada Grande Vulcânica', 'Uma das mais pesadas de Rynoka. Forjada em Aço do Deserto, é uma máquina de destruição imparável.', 'Arma', 265800, 'Deserto', 1, NULL),
     -- ITENS DO TIPO ARMADURA:
     ('Bandana de Tecido', 'Essa bandana semi-ordinária é tecida com as fibras mais resistentes para ajudar a proteger o usuário.', 'Armadura', 4000, 'Mercador', 1, NULL),
     ('Bandana de Tecido II', 'Essa bandana semi-ordinária é tecida com as fibras mais resistentes para ajudar a proteger o usuário.', 'Armadura', 39000, 'Mercador', 1, NULL),
@@ -452,7 +453,7 @@ INSERT INTO "monstro_item"
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Slime de Fogo'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Geléia de Fogo'), 0.8, 2, 4),
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Slime de Fogo'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra Vulcânica'), 0.2, 1, 2),
     -- Mimicos (Masmorra do Deserto)
-    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico Dourado' AND "nomeMasmorra" = 'Masmorra do Deserto'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Lingote De Aço do Deserto'), 0.2, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico Dourado' AND "nomeMasmorra" = 'Masmorra do Deserto'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Lingote de Aço do Deserto'), 0.2, 1, 1),
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico de Ferro' AND "nomeMasmorra" = 'Masmorra do Deserto'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Chapa de Aço do Deserto'), 0.5, 1, 2),
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico de Madeira' AND "nomeMasmorra" = 'Masmorra do Deserto'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Tratada'), 0.5, 1, 2),
     -- Golem Katamari / Golem Patrulheiro (Masmorra do Deserto)
@@ -469,7 +470,7 @@ INSERT INTO "monstro_item"
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Golem Mãe'), (SELECT "idItem" FROM "item" WHERE "nome" = 'História do Deserto I'), 0.5, 1, 1),
     -- Naja (BOSS DAA Masmorra do Deserto)
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Naja'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Anotações de Naja'), 1.0, 1, 1),
-    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Naja'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Lingote De Aço do Deserto'), 0.5, 1, 2),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Naja'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Lingote de Aço do Deserto'), 0.5, 1, 2),
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Naja'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Joia de Fogo'), 0.8, 2, 4),
     -- Errante (Masmorra do Deserto)
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Errante' AND "nomeMasmorra" = 'Masmorra do Deserto'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Motor Termomagnético'), 0.2, 1, 1),
