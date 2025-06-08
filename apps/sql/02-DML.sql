@@ -1,4 +1,10 @@
--- INSERÇÕES DE TUPLAS NAS TABELAS
+-- ---------------------------------------------------------------------------------------------------------------
+-- Data de Criação ........: 02/05/2025                                                                         --
+-- Autor(es) ..............: Daniel Rodrigues, Arthur Evangelista, Igor de Sousa                                --
+-- Versão .................: 1.0                                                                                --
+-- Banco de Dados .........: PostgreSQL                                                                         --
+-- Descrição ..............: Inserção de dados fundamentais para o jogo Moonlighter                             --
+-- ---------------------------------------------------------------------------------------------------------------
 
 -- INSERÇÃO NA TABELA MAPA:
 INSERT INTO "mapa" 

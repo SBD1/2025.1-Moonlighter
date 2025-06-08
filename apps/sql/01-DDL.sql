@@ -1,3 +1,11 @@
+-- ---------------------------------------------------------------------------------------------------------------
+-- Data de Criação ........: 14/04/2025                                                                         --
+-- Autor(es) ..............: Yan Matheus, João Pedro                                                            --
+-- Versão .................: 1.0                                                                                --
+-- Banco de Dados .........: PostgreSQL                                                                         --
+-- Descrição ..............: Criação das tabelas para o jogo Moonlighter                                        --
+-- ---------------------------------------------------------------------------------------------------------------
+
 -- CONFIG DO DATABASE
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
@@ -206,12 +214,13 @@ CREATE TABLE "inventario" (
 
 -- REVISAR ESSA TABELA
 CREATE TABLE "inst_inventario" (
-    "idInventario" integer PRIMARY KEY,
+    "idInventario" integer,
     "nickname" character varying(60) NOT NULL,
     "slotOcupado" integer NOT NULL,
 
     CONSTRAINT "fk_inventario" FOREIGN KEY ("idInventario") REFERENCES "inventario" ("idInventario") ON DELETE CASCADE,
-    CONSTRAINT "fk_jogador" FOREIGN KEY ("nickname") REFERENCES "jogador" ("nickName") ON DELETE CASCADE
+    CONSTRAINT "fk_jogador" FOREIGN KEY ("nickname") REFERENCES "jogador" ("nickName") ON DELETE CASCADE,
+    CONSTRAINT "pk_inst_inventario" PRIMARY KEY ("idInventario", "nickname")
 );
 
 
@@ -273,7 +282,7 @@ CREATE TABLE "inst_item" (
 
     CONSTRAINT "fk_item" FOREIGN KEY ("idItem") REFERENCES "item" ("idItem") ON DELETE CASCADE,
     CONSTRAINT "fk_inst_monstro" FOREIGN KEY ("seedMonstro") REFERENCES "inst_monstro" ("seedMonstro") ON DELETE CASCADE,
-    CONSTRAINT "fk_inst_inventario" FOREIGN KEY ("idInventario") REFERENCES "inst_inventario" ("idInventario") ON DELETE CASCADE,
+    CONSTRAINT "fk_inst_inventario" FOREIGN KEY ("idInventario") REFERENCES "inst_inventario" ("idInventario", "nickname") ON DELETE CASCADE,
     CONSTRAINT "fk_lojaNPC" FOREIGN KEY ("idLojaNPC") REFERENCES "lojaNPC" ("idLojaNPC") ON DELETE CASCADE,
     CONSTRAINT "fk_sala" FOREIGN KEY ("seedSala") REFERENCES "sala" ("seedSala") ON DELETE CASCADE,
     CONSTRAINT "fk_lojaJogador" FOREIGN KEY ("nickName") REFERENCES "lojaJogador" ("nickName") ON DELETE CASCADE
