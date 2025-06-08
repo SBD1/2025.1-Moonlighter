@@ -750,15 +750,38 @@ INSERT INTO "monstro_item"
 -- INSERÇÃO DOS NPCS
 INSERT INTO "npc" ("nome", "tipoNPC", "descricao", "ativo")
     VALUES
-    ('Zenon', 'Guia', 'Sábio ancião que oferece conselhos e conhecimento.', TRUE),
-    ('Andrei', 'Ferreiro', 'Ferreiro que aprimora armas e armaduras na Forja Vulcânica.', TRUE),
-    ('Eris', 'Alquimista', 'Alquimista que vende e aprimora poções no Chapéu de Madeira.', TRUE),
-    ('Edward', 'Banqueiro', 'Banqueiro que gerencia investimentos para a cidade de Rynoka.', TRUE),
-    ('Juliette', 'Decoradora', 'Ajuda a melhorar e decorar a loja Moonlighter em "Le Retailer".', TRUE),
-    ('Tom', 'Vendedor Ambulante', 'Vendedor ambulante que oferece itens raros e exóticos.', TRUE),
-    ('Mercador Viajante', 'Comprador Especializado', 'Compra itens específicos por um preço elevado periodicamente.', TRUE),
-    ('Pedro Doidão', 'Residente', 'Residente excêntrico da cidade de Rynoka com dicas peculiares.', TRUE),
-    ('Bruxa dos Murmúrios', 'Encantadora', 'Bruxa misteriosa que pode encantar equipamentos com efeitos.', TRUE);
+    ('Zenon', 'Guia', 'Sábio ancião que oferece conselhos e conhecimento.', FALSE),
+    ('Andrei', 'Ferreiro', 'Ferreiro que aprimora armas e armaduras na Forja Vulcânica.', FALSE),
+    ('Eris', 'Alquimista', 'Alquimista que vende e aprimora poções no Chapéu de Madeira.', FALSE),
+    ('Edward', 'Banqueiro', 'Banqueiro que gerencia investimentos para a cidade de Rynoka.', FALSE),
+    ('Juliette', 'Decoradora', 'Ajuda a melhorar e decorar a loja Moonlighter em "Le Retailer".', FALSE),
+    ('Tom', 'Vendedor Ambulante', 'Vendedor ambulante que oferece itens raros e exóticos.', FALSE),
+    ('Mercador Viajante', 'Comprador Especializado', 'Compra itens específicos por um preço elevado periodicamente.', FALSE),
+    ('Pedro Doidão', 'Residente', 'Residente excêntrico da cidade de Rynoka com dicas peculiares.', FALSE),
+    ('Bruxa dos Murmúrios', 'Encantadora', 'Bruxa misteriosa que pode encantar equipamentos com efeitos.', FALSE),
+    ('Mundo', 'Mundo', 'Interações relacionadas à narração do mundo', FALSE);
+
+INSERT INTO "dialogo" ("conteudo", "ordem", "tipo")
+    VALUES
+    ('Dentre as estrelas da noite, existe uma terra mais velha que a imaginação', 1, 'Tutorial'),
+    ('Uma noite, labirintos cheios de tesouros extraordinários e criaturas mortais apareceram por lá', 2, 'Tutorial'),
+    ('Foram chamados de Masmorras - estranhas, sempre oscilantes ruínas de terras desconhecidas', 3, 'Tutorial'),
+    ('Logo, curiosos formaram uma vila próxima a essas masmorras. E a chamaram de Rynoka', 4, 'Tutorial'),
+    ('Entre os moradores, dois grupos se destacaram. Heróis e Mercadores. Glória e Riquezas', 5, 'Tutorial'),
+    ('Mas as masmorras se provaram perigosas. E foram fechadas pelas vidas perdidas em suas profundezas', 6, 'Tutorial'),
+    ('A vida se tornou difícil, sobretudo para o jovem dono da loja mais antiga - <NOME_DO_JOGADOR>, da Moonlighter', 7, 'Tutorial'),
+    ('Há tanto sonhado em abrir a misteriosa 5ª porta das Masmorras...', 8, 'Tutorial');
+
+INSERT INTO "dialogo_npc" ("idDialogo", "idNPC")
+    VALUES
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Dentre as estrelas da noite, existe uma terra mais velha que a imaginação'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Uma noite, labirintos cheios de tesouros extraordinários e criaturas mortais apareceram por lá'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Foram chamados de Masmorras - estranhas, sempre oscilantes ruínas de terras desconhecidas'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Logo, curiosos formaram uma vila próxima a essas masmorras. E a chamaram de Rynoka'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Entre os moradores, dois grupos se destacaram. Heróis e Mercadores. Glória e Riquezas'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Mas as masmorras se provaram perigosas. E foram fechadas pelas vidas perdidas em suas profundezas'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'A vida se tornou difícil, sobretudo para o jovem dono da loja mais antiga - <NOME_DO_JOGADOR>, da Moonlighter'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Há tanto sonhado em abrir a misteriosa 5ª porta das Masmorras...'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo'));
 
 -- INSERÇÃO DAS LOJAS DE NPC
 

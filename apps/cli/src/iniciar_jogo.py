@@ -9,7 +9,7 @@ init(autoreset=True) #terminal colorido
 
 def musicCity(): #musica da cidade
     pygame.mixer.init() 
-    pygame.mixer.music.load("apps/docs/docs/musics/MoonlighterOST_02_Cidade.mp3")
+    pygame.mixer.music.load("apps/cli/assets/musics/MoonlighterOST_02_Cidade.mp3")
     pygame.mixer.music.play(-1, fade_ms=3000)
 
 def limpar_terminal():
