@@ -11,22 +11,32 @@ import os
 import sys
 import textwrap
 
-def buscarNarracao(ordem):
+def buscarNarracao(busca):
     connection = connect_to_db()
     if connection is None:
         print(Fore.RED + "Erro ao conectar ao banco de dados.")
         return None
 
     cursor = connection.cursor()
-    cursor.execute("""SELECT D."conteudo", D."ordem"
-                    FROM "dialogo" D 
-                        INNER JOIN "dialogo_npc" DN 
+
+    if busca is None:
+        cursor.execute("""SELECT D."conteudo", D."idDialogo"
+                        FROM "dialogo" D
+                        INNER JOIN "dialogo_npc" DN
                         ON D."idDialogo" = DN."idDialogo"
                         INNER JOIN "npc" N
                         ON N."idNPC" = DN."idNPC"
-                    WHERE N."idNPC" = (SELECT "idNPC" FROM npc WHERE "nome" = 'Mundo') AND D."ordem" = %s;""",
-                    (ordem,)
-                  )
+                        WHERE N."idNPC" = (SELECT "idNPC" FROM npc WHERE "nome" = 'Mundo') AND D."idDialogoPai" IS NULL;""")
+    else:
+        cursor.execute("""SELECT D."conteudo", D."idDialogo"
+                        FROM "dialogo" D 
+                            INNER JOIN "dialogo_npc" DN 
+                            ON D."idDialogo" = DN."idDialogo"
+                            INNER JOIN "npc" N
+                            ON N."idNPC" = DN."idNPC"
+                        WHERE N."idNPC" = (SELECT "idNPC" FROM npc WHERE "nome" = 'Mundo') AND D."idDialogoPai" = %s;""",
+                        (busca,)
+                    )
     narracao = cursor.fetchone()
     cursor.close()
     connection.close()
@@ -55,7 +65,7 @@ def exibirHistoria(dadosJogador):
   print('\033[?25l', end='', flush=True)
   musicTheme()
   dialogo = ""
-  busca = 1
+  busca = None
   time.sleep(3)
 
   while True:
@@ -69,7 +79,7 @@ def exibirHistoria(dadosJogador):
 
     print_fade_in_centered(recolocarTexto("<NOME_DO_JOGADOR>", dialogo[0], dadosJogador[0]), delay=0.04)
     time.sleep(3)
-    busca += 1
+    busca = dialogo[1]
 
   limpar_terminal()
   pygame.mixer.music.fadeout(7000)

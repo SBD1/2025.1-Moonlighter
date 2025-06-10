@@ -1,6 +1,7 @@
 from setup.database import connect_to_db
 from iniciar_jogo import iniciar_jogo
 from utils.limparTerminal import limpar_terminal
+from utils.geradorSeed import gerarSeed
 from tutorial import exibirHistoria
 from colorama import Fore, Style, init
 import time
@@ -67,7 +68,7 @@ def buscarJogador(nomeJogador):
         return None
 
     cursor = connection.cursor()
-    cursor.execute("SELECT * FROM jogador WHERE \"nickName\" = %s;", (nomeJogador,))
+    cursor.execute("SELECT * FROM jogador WHERE \"nickname\" = %s;", (nomeJogador,))
     jogador = cursor.fetchone()
     cursor.close()
     connection.close()
@@ -148,10 +149,13 @@ def novoJogador():
                 if connection is None:
                     print(Fore.RED + "Erro ao conectar ao banco de dados.")
                     return
+                
+                seed = gerarSeed()
                 cursor = connection.cursor()
-                cursor.execute("INSERT INTO jogador VALUES (%s, 100, 100, 0, NULL);", (nickname,))
+                cursor.execute("INSERT INTO jogador VALUES (%s, 100, 100, 0, 0, 0, 'Vila Rynoka', NULL);", (nickname,))
                 cursor.execute("INSERT INTO inst_inventario VALUES (1, %s, 0), (2, %s, 0), (3, %s, 0), (4, %s, 0), (5, %s, 0), (6, %s, 0), (7, %s, 0);", tuple([nickname]*7))
-                cursor.execute("INSERT INTO \"lojaJogador\" VALUES (%s, 1, 10, 0, 1)", (nickname,))
+                cursor.execute("INSERT INTO mundo VALUES (%s, %s, 'Manhã', 1, 1);", (seed, nickname,))
+                cursor.execute("INSERT INTO \"loja_jogador\" VALUES (%s, 'Moonlighter', 1, 10, 0)", (seed,))
                 connection.commit()
                 cursor.close()
                 connection.close()
