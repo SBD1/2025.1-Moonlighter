@@ -1,6 +1,6 @@
 from setup.database import connect_to_db
 from colorama import Fore, Style, init
-from iniciar_jogo import iniciar_jogo
+from iniciar_jogo.iniciar_jogo import iniciar_jogo
 from utils.limparTerminal import limpar_terminal
 from utils.recolocarTexto import recolocarTexto
 import time
