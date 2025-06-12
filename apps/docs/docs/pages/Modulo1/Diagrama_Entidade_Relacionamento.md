@@ -1,4 +1,4 @@
-<span style="background-color:#1ec68e; color:white; font-size:0.8em; font-weight: bold; padding:2px 6px; border-radius:4px;">Versão 1.1</span>
+<span style="background-color:#1ec68e; color:white; font-size:0.8em; font-weight: bold; padding:2px 6px; border-radius:4px;">Versão 2.0</span>
 
 # Diagrama Entidade-Relacionamento (DER)
 
@@ -13,14 +13,28 @@ Ele oferece uma visão lógica e abstrata da estrutura dos dados, facilitando o 
 
 A seguir, está a imagem do diagrama de entidade-relacionamento desenvolvido para o jogo _Moonlighter_:
 
-![Versão Atual](../../assets/Diagrama_Entidade_Relacionamento.svg)
+![Versão Atual](../../assets/DER2v.png)
+
+<center>
+  <span style="background-color:#1ec68e; color:white; font-size:0.8em; font-weight: bold; padding:2px 6px; border-radius:4px;">DER | Versão 2.0</span>
+</center>
+
+<div style="text-align: center">
+  <p>Figura 1: DER Moonlighter</p>
+  <p style="margin-top: -1%; font-size: 12px">Fonte: Autores</p>
+</div>
+
+---
+As versões abaixo registram Diagramas de Entidade-Relacionamento que foram depreciadas após análises resultantes da evolução e produção do jogo _Moonlighter_:
+
+![Versão Antiga](../../assets/MER1v.svg)
 
 <center>
   <span style="background-color:#1ec68e; color:white; font-size:0.8em; font-weight: bold; padding:2px 6px; border-radius:4px;">DER | Versão 1.0</span>
 </center>
 
 <div style="text-align: center">
-  <p>Figura 1: DER Moonlighter</p>
+  <p>Figura 2: DER Moonlighter <i>(Depreciado)</i></p>
   <p style="margin-top: -1%; font-size: 12px">Fonte: Autores</p>
 </div>
 
@@ -30,4 +44,5 @@ A seguir, está a imagem do diagrama de entidade-relacionamento desenvolvido par
 | ---------- | ------ | ---------------- | ------------------------------------------------------ |
 | 30/04/2025 | `1.0`  | João Paulo Lima  | Criação da Página e Inserção da Primeira Versão do DER |
 | 30/04/2025 | `1.1`  | Daniel Rodrigues | Adição de Títulos e Tags de Versionamento              |
+| 11/06/2025 | `2.0`  | Daniel Rodrigues | Adição da nova versão do DER                           |
 

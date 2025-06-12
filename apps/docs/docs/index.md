@@ -28,17 +28,54 @@ A aplicação é desenvolvida em **Python**, com a lógica de dados estruturada 
 
 # 👩‍💻 Contribuidores:
 
-<div align="center">
-  <table>
-    <tr>
-      <td align="center"><a href="https://github.com/arthurevg"><img style="border-radius: 50%;" src="https://github.com/arthurevg.png" width="100px;" alt=""/><br /><sub><b>Arthur Evangelista</b></sub></a><br />231027032</td>
-      <td align="center"><a href="https://github.com/DanielRogs"><img style="border-radius: 50%;" src="https://github.com/DanielRogs.png" width="100px;" alt=""/><br /><sub><b>Daniel Rodrigues</b></sub></a><br />211061583</td>
-      <td align="center"><a href="https://github.com/IgorJustino"><img style="border-radius: 50%;" src="https://github.com/IgorJustino.png" width="100px;" alt=""/><br /><sub><b>Igor Justino</b></sub></a><br />211061897</td>
-      <td align="center"><a href="https://github.com/jpaulohe4rt"><img style="border-radius: 50%;" src="https://github.com/jpaulohe4rt.png" width="100px;" alt=""/><br /><sub><b>João Paulo</b></sub></a><br />190030755</td>
-      <td align="center"><a href="https://github.com/Yanmatheus0812"><img style="border-radius: 50%;" src="https://github.com/Yanmatheus0812.png" width="100px;" alt=""/><br /><sub><b>Yan Matheus</b></sub></a><br />231038303</td>
-    </tr>
-  </table>
+<div style="
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 20px;
+  margin-top: 30px;
+">
+
+<a href="https://github.com/arthurevg" style="text-decoration: none; color: inherit; box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.2)">
+  <div style="text-align: center; background: #f5f5f5; padding: 20px;">
+    <img src="https://github.com/arthurevg.png" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 3px solid #149d73;">
+    <h5 style="margin: 20px 0px 0px 0px; padding: 0px; color: #149d73">231027032</h5>
+    <p style="color: black; margin: 0px 0px 20px 0px; padding: 0px">Arthur Evangelista</p>
+  </div>
+</a>
+
+<a href="https://github.com/DanielRogs" style="text-decoration: none; color: inherit; box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.2)">
+  <div style="text-align: center; background: #f5f5f5; padding: 20px;">
+    <img src="https://github.com/DanielRogs.png" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 3px solid #149d73;">
+    <h5 style="margin: 20px 0px 0px 0px; padding: 0px; color: #149d73">211061583</h5>
+    <p style="color: black; margin: 0px 0px 20px 0px; padding: 0px">Daniel Rodrigues</p>
+  </div>
+</a>
+
+<a href="https://github.com/IgorJustino" style="text-decoration: none; color: inherit; box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.2)">
+  <div style="text-align: center; background: #f5f5f5; padding: 20px;">
+    <img src="https://github.com/IgorJustino.png" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 3px solid #149d73;">
+    <h5 style="margin: 20px 0px 0px 0px; padding: 0px; color: #149d73">211061897</h5>
+    <p style="color: black; margin: 0px 0px 20px 0px; padding: 0px">Igor Justino</p>
+  </div>
+</a>
+
+<a href="https://github.com/jpaulohe4rt" style="text-decoration: none; color: inherit; box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.2)">
+  <div style="text-align: center; background: #f5f5f5; padding: 20px;">
+    <img src="https://github.com/jpaulohe4rt.png" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 3px solid #149d73;">
+    <h5 style="margin: 20px 0px 0px 0px; padding: 0px; color: #149d73">190030755</h5>
+    <p style="color: black; margin: 0px 0px 20px 0px; padding: 0px">João Paulo</p>
+  </div>
+</a>
+
+<a href="https://github.com/Yanmatheus0812" style="text-decoration: none; color: inherit; box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.2)">
+  <div style="text-align: center; background: #f5f5f5; padding: 20px;">
+    <img src="https://github.com/Yanmatheus0812.png" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 3px solid #149d73;">
+    <h5 style="margin: 20px 0px 0px 0px; padding: 0px; color: #149d73">231038303</h5>
+    <p style="color: black; margin: 0px 0px 20px 0px; padding: 0px">Yan Matheus</p>
+  </div>
+</a>
 </div>
+
 
 ## 🗃️ Estrutura do Projeto
 
