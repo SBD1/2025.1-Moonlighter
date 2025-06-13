@@ -38,7 +38,18 @@ def cabecalho_completo():
         if (local_jogador == 'Vila Rynoka'): print(Fore.LIGHTBLACK_EX + "0- sair do jogo")
         else: print(Fore.LIGHTBLACK_EX + "0- voltar")
 
-        return int(input("\nDigite: ")), local_jogador
+        while True:
+            entrada = input("\nDigite: ").strip()
+            if entrada == '':
+                print("Por favor, digite um número.")
+                continue
+            
+            try:
+                escolha = int(entrada)
+                return escolha, local_jogador
+            except ValueError:
+                print("Por favor, digite um número válido.")
+                continue
 
 
 #funcao principal
