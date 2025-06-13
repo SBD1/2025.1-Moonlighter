@@ -1,20 +1,51 @@
--- INSERÇÕES DE TUPLAS NAS TABELAS
+-- ---------------------------------------------------------------------------------------------------------------
+-- Data de Criação ........: 02/05/2025                                                                         --
+-- Autor(es) ..............: Daniel Rodrigues, Arthur Evangelista, Igor de Sousa                                --
+-- Versão .................: 1.0                                                                                --
+-- Banco de Dados .........: PostgreSQL                                                                         --
+-- Descrição ..............: Inserção de dados fundamentais para o jogo Moonlighter                             --
+-- ---------------------------------------------------------------------------------------------------------------
 
--- INSERÇÃO NA TABELA MAPA:
-INSERT INTO "mapa" 
-    ("periodo", "dia")
-    VALUES
-    ('Manhã', 1);
+-- INSERÇÃO NA TABELA LOCAL:
+INSERT INTO "local" VALUES
+    ('Vila Rynoka', '', 'Local', NULL);
+-- INSERÇÃO DE FILHOS NA TABELA LOCAL:
+INSERT INTO "local" VALUES
+    ('Centro Comercial', '', 'Local', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Vila Rynoka')),
+    ('Praça', '', 'Local', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Vila Rynoka')),
+    ('Moonlighter', '', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Vila Rynoka')),
+    ('Área das Masmorras', '', 'Local', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Vila Rynoka'));
+INSERT INTO "local" VALUES
+    ('Masmorra do Golem', 'Primeira masmorra acessível, repleta de sentinelas golem e criaturas de pedra. Enfrente o Rei Golem no 3º andar.', 'Masmorra', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Área das Masmorras')),
+    ('Masmorra da Floresta', 'Masmorra florestal estreita, infestada de plantas mutantes e a Mutae Carnívora como chefe no último andar.', 'Masmorra', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Área das Masmorras')),
+    ('Masmorra do Deserto', 'Antigas ruínas desérticas com tempestades de areia e o Guardião do Deserto aguardando no 3º andar.', 'Masmorra', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Área das Masmorras')),
+    ('Masmorra da Tecnologia', 'Instalações tecnológicas abandonadas, protegidas por robôs, com o Guardião da Tecnologia aguardando no último andar.', 'Masmorra', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Área das Masmorras')),
+    ('Forja Vulcânica', '', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Centro Comercial')),
+    ('O Chapéu de Madeira', '', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Centro Comercial')),
+    ('Banco de Rynoka', '', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Centro Comercial')),
+    ('Tenda da Bruxa', '', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Centro Comercial')),
+    ('Barraca do Tom', '', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Centro Comercial')),
+    ('Quarto', '', 'Local', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Moonlighter')),
+    ('Salão de Exposição', '', 'Local', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Moonlighter'));
 
 -- INSERÇÃO NA TABELA MASMORRA:
 INSERT INTO "masmorra"
-    ("nomeMasmorra", "descricao", "nivel", "qtdAndar")
     VALUES
-    ('Masmorra do Golem', 'Primeira masmorra acessível, repleta de sentinelas golem e criaturas de pedra. Enfrente o Rei Golem no 3º andar.', 1, 3),
-    ('Masmorra da Floresta', 'Masmorra florestal estreita, infestada de plantas mutantes e a Mutae Carnívora como chefe no último andar.', 2, 3),
-    ('Masmorra do Deserto', 'Antigas ruínas desérticas com tempestades de areia e o Guardião do Deserto aguardando no 3º andar.', 3, 3),
-    ('Masmorra da Tecnologia', 'Instalações tecnológicas abandonadas, protegidas por robôs, com o Guardião da Tecnologia aguardando no último andar.', 4, 3);
-    
+    ('Masmorra do Golem', 1, 3),
+    ('Masmorra da Floresta', 2, 3),
+    ('Masmorra do Deserto', 3, 3),
+    ('Masmorra da Tecnologia', 4, 3);
+
+-- INSERÇÃO NA TABELA ESTABELECIMENTO:
+INSERT INTO "estabelecimento" 
+    VALUES
+    ('Moonlighter'),
+    ('Forja Vulcânica'),
+    ('O Chapéu de Madeira'),
+    ('Banco de Rynoka'),
+    ('Tenda da Bruxa'),
+    ('Barraca do Tom');
+
 -- INSERÇÃO NA TABELA EFEITOS:
 INSERT INTO "efeito"
     ("nome", "descricao", "tipo", "valor", "duracaoTurnos")
@@ -35,7 +66,7 @@ INSERT INTO "efeito"
 INSERT INTO "monstro"
     ("nome", "descricao", "nivel", "vidaMaxima", "ouroDropado", "dadoAtaque",
     "chanceCritico", "multiplicador", "multiplicadorCritico", "chefe",
-    "nomeMasmorra", "idEfeito")
+    "nomeLocal", "idEfeito")
     VALUES
     -- Masmorra do Golem (nível 1)
     ('Baby Slime', 'Pequeno slime que ataca em grupo.', 1, 60, 10, '1d4', 0.05, 1, 2, FALSE, 'Masmorra do Golem', NULL),
@@ -577,16 +608,16 @@ INSERT INTO "monstro_item"
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Golem Reparador Voador'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Núcleo de Golem'), 0.25, 1, 1),
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Golem Reparador Voador'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Ferramenta Rúnica'), 0.02, 1, 1),
     -- Mimicos (Masmorra do Golem)
-    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico Dourado' AND "nomeMasmorra" = 'Masmorra do Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Runas de Ouro'), 0.5, 1, 3),
-    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico Dourado' AND "nomeMasmorra" = 'Masmorra do Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Rocha de Cristal'), 0.3, 1, 1),
-    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico de Ferro' AND "nomeMasmorra" = 'Masmorra do Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Barra de Ferro'), 0.8, 2, 5),
-    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico de Madeira' AND "nomeMasmorra" = 'Masmorra do Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Mágica'), 0.8, 2, 4),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico Dourado' AND "nomeLocal" = 'Masmorra do Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Runas de Ouro'), 0.5, 1, 3),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico Dourado' AND "nomeLocal" = 'Masmorra do Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Rocha de Cristal'), 0.3, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico de Ferro' AND "nomeLocal" = 'Masmorra do Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Barra de Ferro'), 0.8, 2, 5),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico de Madeira' AND "nomeLocal" = 'Masmorra do Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Mágica'), 0.8, 2, 4),
     -- Cabeça de Golem (Masmorra do Golem)
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Cabeça de Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Núcleo de Golem'), 0.15, 1, 1),
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Cabeça de Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Dente'), 0.2, 1, 2),
     -- Slime (Grande) (Masmorra do Golem)
-    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Slime' AND "nomeMasmorra" = 'Masmorra do Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Geléia Rica'), 0.8, 2, 4),
-    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Slime' AND "nomeMasmorra" = 'Masmorra do Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Esfera de Água'), 0.1, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Slime' AND "nomeLocal" = 'Masmorra do Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Geléia Rica'), 0.8, 2, 4),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Slime' AND "nomeLocal" = 'Masmorra do Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Esfera de Água'), 0.1, 1, 1),
     -- Manopla de Slime (Masmorra do Golem)
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Manopla de Slime'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Geléia Rica'), 0.5, 1, 2),
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Manopla de Slime'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Barra de Ferro'), 0.2, 1, 1),
@@ -594,15 +625,15 @@ INSERT INTO "monstro_item"
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mordomo de Pedra'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Tecido'), 0.25, 1, 1),
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mordomo de Pedra'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Lâmpada de Água'), 0.1, 1, 1),
     -- Tangle (Masmorra do Golem)
-    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Tangle' AND "nomeMasmorra" = 'Masmorra do Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Cipó'), 0.7, 1, 3),
-    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Tangle' AND "nomeMasmorra" = 'Masmorra do Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Raiz'), 0.2, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Tangle' AND "nomeLocal" = 'Masmorra do Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Cipó'), 0.7, 1, 3),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Tangle' AND "nomeLocal" = 'Masmorra do Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Raiz'), 0.2, 1, 1),
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Rei Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Cristal de Energia do Rei Golem'), 1.0, 1, 1),
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Rei Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Anotações do Rei Golem'), 1.0, 1, 1),
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Rei Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Energia Cristalizada'), 0.5, 2, 5),
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Rei Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Design de Golem II'), 0.3, 1, 1),
     -- Errante (Masmorra do Golem)
-    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Errante' AND "nomeMasmorra" = 'Masmorra do Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Ferramenta Rúnica'), 0.3, 1, 1),
-    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Errante' AND "nomeMasmorra" = 'Masmorra do Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Rocha de Cristal'), 0.5, 3, 5),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Errante' AND "nomeLocal" = 'Masmorra do Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Ferramenta Rúnica'), 0.3, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Errante' AND "nomeLocal" = 'Masmorra do Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Rocha de Cristal'), 0.5, 3, 5),
     -- ### Masmorra da Floresta ###
 
     -- Baby Slime Venenoso (Masmorra da Floresta)
@@ -626,9 +657,9 @@ INSERT INTO "monstro_item"
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Torre de Fruta'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Mágica'), 0.15, 1, 1),
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Semeador'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Sementes Modificadas'), 0.4, 1, 2),
     -- Mimicos (Masmorra da Floresta)
-    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico Dourado' AND "nomeMasmorra" = 'Masmorra da Floresta'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Antiga'), 0.3, 1, 1),
-    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico de Ferro' AND "nomeMasmorra" = 'Masmorra da Floresta'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Barra de Ferro'), 0.8, 1, 3),
-    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico de Madeira' AND "nomeMasmorra" = 'Masmorra da Floresta'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Mágica'), 0.8, 2, 4),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico Dourado' AND "nomeLocal" = 'Masmorra da Floresta'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Antiga'), 0.3, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico de Ferro' AND "nomeLocal" = 'Masmorra da Floresta'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Barra de Ferro'), 0.8, 1, 3),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico de Madeira' AND "nomeLocal" = 'Masmorra da Floresta'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Mágica'), 0.8, 2, 4),
     -- Jardineiro (Masmorra da Floresta)
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Jardineiro'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pétalas'), 0.3, 1, 2),
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Jardineiro'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Solo Fértil'), 0.1, 1, 1),
@@ -650,8 +681,8 @@ INSERT INTO "monstro_item"
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mutae Carnívora'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Bulbo Antigo'), 0.5, 1, 1),
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mutae Carnívora'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Anotações de Botânica I'), 0.3, 1, 1),
     -- Errante (Masmorra da Floresta)
-    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Errante' AND "nomeMasmorra" = 'Masmorra da Floresta'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Bulbo Antigo'), 0.1, 1, 1),
-    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Errante' AND "nomeMasmorra" = 'Masmorra da Floresta'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Raiz Preservada'), 0.5, 1, 2),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Errante' AND "nomeLocal" = 'Masmorra da Floresta'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Bulbo Antigo'), 0.1, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Errante' AND "nomeLocal" = 'Masmorra da Floresta'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Raiz Preservada'), 0.5, 1, 2),
     -- ### Masmorra do Deserto ###
 
     -- Baby Slime de Fogo (Masmorra do Deserto)
@@ -677,9 +708,9 @@ INSERT INTO "monstro_item"
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Slime de Fogo'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Geléia de Fogo'), 0.8, 2, 4),
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Slime de Fogo'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra Vulcânica'), 0.2, 1, 2),
     -- Mimicos (Masmorra do Deserto)
-    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico Dourado' AND "nomeMasmorra" = 'Masmorra do Deserto'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Lingote de Aço do Deserto'), 0.2, 1, 1),
-    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico de Ferro' AND "nomeMasmorra" = 'Masmorra do Deserto'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Chapa de Aço do Deserto'), 0.5, 1, 2),
-    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico de Madeira' AND "nomeMasmorra" = 'Masmorra do Deserto'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Tratada'), 0.5, 1, 2),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico Dourado' AND "nomeLocal" = 'Masmorra do Deserto'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Lingote de Aço do Deserto'), 0.2, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico de Ferro' AND "nomeLocal" = 'Masmorra do Deserto'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Chapa de Aço do Deserto'), 0.5, 1, 2),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico de Madeira' AND "nomeLocal" = 'Masmorra do Deserto'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Tratada'), 0.5, 1, 2),
     -- Golem Katamari / Golem Patrulheiro (Masmorra do Deserto)
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Golem Katamari'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Chapa de Aço do Deserto'), 0.3, 1, 1),
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Golem Katamari'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra do Deserto'), 0.15, 1, 1),
@@ -697,8 +728,8 @@ INSERT INTO "monstro_item"
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Naja'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Lingote de Aço do Deserto'), 0.5, 1, 2),
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Naja'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Joia de Fogo'), 0.8, 2, 4),
     -- Errante (Masmorra do Deserto)
-    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Errante' AND "nomeMasmorra" = 'Masmorra do Deserto'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Motor Termomagnético'), 0.2, 1, 1),
-    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Errante' AND "nomeMasmorra" = 'Masmorra do Deserto'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pó Isolante'), 0.4, 1, 2),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Errante' AND "nomeLocal" = 'Masmorra do Deserto'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Motor Termomagnético'), 0.2, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Errante' AND "nomeLocal" = 'Masmorra do Deserto'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pó Isolante'), 0.4, 1, 2),
     -- ### Masmorra da Tecnologia ###
 
     -- Baby Slime Elétrico (Masmorra da Tecnologia)
@@ -723,8 +754,8 @@ INSERT INTO "monstro_item"
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Lançador Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Aço Endurecido'), 0.3, 1, 1),
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Lançador Golem'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Wolfram'), 0.1, 1, 1),
     -- Mimicos (Masmorra da Tecnologia)
-    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico de Ferro' AND "nomeMasmorra" = 'Masmorra da Tecnologia'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Wolfram'), 0.3, 1, 1),
-    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico de Madeira' AND "nomeMasmorra" = 'Masmorra da Tecnologia'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Tratada'), 0.6, 1, 2),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico de Ferro' AND "nomeLocal" = 'Masmorra da Tecnologia'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Wolfram'), 0.3, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Mimico de Madeira' AND "nomeLocal" = 'Masmorra da Tecnologia'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Tratada'), 0.6, 1, 2),
     -- Recarregador / Drone Reparador (Masmorra da Tecnologia)
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Recarregador'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Adapatador AC'), 0.15, 1, 1),
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Drone Reparador'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pistola de Solda'), 0.1, 1, 1),
@@ -737,34 +768,59 @@ INSERT INTO "monstro_item"
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Fluxo de Energia'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Frasco de Argônio'), 0.5, 1, 1),
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Fluxo de Energia'), (SELECT "idItem" FROM "item" WHERE "nome" = 'História da Tecnologia I'), 0.3, 1, 1),
     -- Errante (Masmorra da Tecnologia)
-    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Errante' AND "nomeMasmorra" = 'Masmorra da Tecnologia'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Adapatador AC'), 0.2, 1, 1),
-    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Errante' AND "nomeMasmorra" = 'Masmorra da Tecnologia'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Tubo de Vácuo'), 0.3, 1, 1);
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Errante' AND "nomeLocal" = 'Masmorra da Tecnologia'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Adapatador AC'), 0.2, 1, 1),
+    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Errante' AND "nomeLocal" = 'Masmorra da Tecnologia'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Tubo de Vácuo'), 0.3, 1, 1);
 
 
 -- INSERÇÃO DOS NPCS
 INSERT INTO "npc" ("nome", "tipoNPC", "descricao", "ativo")
     VALUES
-    ('Zenon', 'Guia', 'Sábio ancião que oferece conselhos e conhecimento.', TRUE),
-    ('Andrei', 'Ferreiro', 'Ferreiro que aprimora armas e armaduras na Forja Vulcânica.', TRUE),
-    ('Eris', 'Alquimista', 'Alquimista que vende e aprimora poções no Chapéu de Madeira.', TRUE),
-    ('Edward', 'Banqueiro', 'Banqueiro que gerencia investimentos para a cidade de Rynoka.', TRUE),
-    ('Juliette', 'Decoradora', 'Ajuda a melhorar e decorar a loja Moonlighter em "Le Retailer".', TRUE),
-    ('Tom', 'Vendedor Ambulante', 'Vendedor ambulante que oferece itens raros e exóticos.', TRUE),
-    ('Mercador Viajante', 'Comprador Especializado', 'Compra itens específicos por um preço elevado periodicamente.', TRUE),
-    ('Pedro Doidão', 'Residente', 'Residente excêntrico da cidade de Rynoka com dicas peculiares.', TRUE),
-    ('Bruxa dos Murmúrios', 'Encantadora', 'Bruxa misteriosa que pode encantar equipamentos com efeitos.', TRUE);
+    ('Zenon', 'Guia', 'Sábio ancião que oferece conselhos e conhecimento.', FALSE),
+    ('Andrei', 'Ferreiro', 'Ferreiro que aprimora armas e armaduras na Forja Vulcânica.', FALSE),
+    ('Eris', 'Alquimista', 'Alquimista que vende e aprimora poções no Chapéu de Madeira.', FALSE),
+    ('Edward', 'Banqueiro', 'Banqueiro que gerencia investimentos para a cidade de Rynoka.', FALSE),
+    ('Juliette', 'Decoradora', 'Ajuda a melhorar e decorar a loja Moonlighter em "Le Retailer".', FALSE),
+    ('Tom', 'Vendedor Ambulante', 'Vendedor ambulante que oferece itens raros e exóticos.', FALSE),
+    ('Mercador Viajante', 'Comprador Especializado', 'Compra itens específicos por um preço elevado periodicamente.', FALSE),
+    ('Pedro Doidão', 'Residente', 'Residente excêntrico da cidade de Rynoka com dicas peculiares.', FALSE),
+    ('Bruxa dos Murmúrios', 'Encantadora', 'Bruxa misteriosa que pode encantar equipamentos com efeitos.', FALSE),
+    ('Mundo', 'Mundo', 'Interações relacionadas à narração do mundo', FALSE);
 
--- INSERÇÃO DAS LOJAS DE NPC
-
-INSERT INTO "lojaNPC"
-    ("nome", "tipoLoja", "descricao", "status", "idNPC", "idMapa")
+INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
     VALUES
-    ('Forja Vulcânica', 'Ferraria', 'Local para forjar e aprimorar armas e armaduras com o ferreiro Andrei.', TRUE, (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei'), 1),
-    ('O Chapéu de Madeira', 'Alquimia', 'Loja da alquimista Eris, para criar e aprimorar poções e misturas alquímicas.', TRUE, (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris'), 1),
-    ('Le Retailer', 'Decoração e Varejo', 'Estabelecimento de Juliette, focado em melhorias estéticas e de varejo para a loja Moonlighter.', TRUE, (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Juliette'), 1),
-    ('Banco de Rynoka', 'Banco', 'Instituição financeira gerenciada por Edward, para investimentos na cidade e na loja.', TRUE, (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward'), 1),
-    ('Tenda da Bruxa', 'Encantamentos', 'Local misterioso onde a Bruxa dos Murmúrios oferece poderosos serviços de encantamento para equipamentos.', TRUE, (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Bruxa dos Murmúrios'), 1),
-    ('Barraca do Tom', 'Comércio Itinerante', 'Barraca temporária montada por Tom, o vendedor ambulante, que oferece itens raros e exóticos de suas viagens.', TRUE, (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Tom'), 1);
+    ('Dentre as estrelas da noite, existe uma terra mais velha que a imaginação', 1, 'Tutorial', NULL);
+INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+    VALUES
+    ('Uma noite, labirintos cheios de tesouros extraordinários e criaturas mortais apareceram por lá', 2, 'Tutorial', (SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Dentre as estrelas da noite, existe uma terra mais velha que a imaginação'));
+INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+    VALUES
+    ('Foram chamados de Masmorras - estranhas, sempre oscilantes ruínas de terras desconhecidas', 3, 'Tutorial', (SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Uma noite, labirintos cheios de tesouros extraordinários e criaturas mortais apareceram por lá'));
+INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+    VALUES
+    ('Logo, curiosos formaram uma vila próxima a essas masmorras. E a chamaram de Rynoka', 4, 'Tutorial', (SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Foram chamados de Masmorras - estranhas, sempre oscilantes ruínas de terras desconhecidas'));
+INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+    VALUES
+    ('Entre os moradores, dois grupos se destacaram. Heróis e Mercadores. Glória e Riquezas', 5, 'Tutorial', (SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Logo, curiosos formaram uma vila próxima a essas masmorras. E a chamaram de Rynoka'));
+INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+    VALUES
+    ('Mas as masmorras se provaram perigosas. E foram fechadas pelas vidas perdidas em suas profundezas', 6, 'Tutorial', (SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Entre os moradores, dois grupos se destacaram. Heróis e Mercadores. Glória e Riquezas'));
+INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+    VALUES
+    ('A vida se tornou difícil, sobretudo para o jovem dono da loja mais antiga - <NOME_DO_JOGADOR>, da Moonlighter', 7, 'Tutorial', (SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Mas as masmorras se provaram perigosas. E foram fechadas pelas vidas perdidas em suas profundezas'));
+INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+    VALUES
+    ('Há tanto sonhado em abrir a misteriosa 5ª porta das Masmorras...', 8, 'Tutorial', (SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'A vida se tornou difícil, sobretudo para o jovem dono da loja mais antiga - <NOME_DO_JOGADOR>, da Moonlighter'));
+
+INSERT INTO "dialogo_npc" ("idDialogo", "idNPC")
+    VALUES
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Dentre as estrelas da noite, existe uma terra mais velha que a imaginação'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Uma noite, labirintos cheios de tesouros extraordinários e criaturas mortais apareceram por lá'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Foram chamados de Masmorras - estranhas, sempre oscilantes ruínas de terras desconhecidas'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Logo, curiosos formaram uma vila próxima a essas masmorras. E a chamaram de Rynoka'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Entre os moradores, dois grupos se destacaram. Heróis e Mercadores. Glória e Riquezas'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Mas as masmorras se provaram perigosas. E foram fechadas pelas vidas perdidas em suas profundezas'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'A vida se tornou difícil, sobretudo para o jovem dono da loja mais antiga - <NOME_DO_JOGADOR>, da Moonlighter'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Há tanto sonhado em abrir a misteriosa 5ª porta das Masmorras...'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo'));
 
 -- INSERÇÃO NA TABELA INVENTÁRIO:
 INSERT INTO "inventario"
