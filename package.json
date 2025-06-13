@@ -18,7 +18,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky",
     "buildDoc": "cd apps/docs && mkdocs build",
-    "devDoc": "cd apps/docs && mkdocs serve"
+    "devDoc": "cd apps/docs && mkdocs serve",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "db:refresh": "docker exec -i moonlighter-postgres sh -c 'ls /docker-entrypoint-initdb.d && for f in /docker-entrypoint-initdb.d/*.sql; do echo Executando \"$f\"; psql -U moonlighter -d moonlighter -f \"$f\"; done'"
   },
   "dependencies": {
     "husky": "^9.1.7"

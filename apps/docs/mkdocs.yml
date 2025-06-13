@@ -7,11 +7,15 @@ site_description: "Documentação do jogo Moonlight Terminal Game"
 nav:
   - Home: index.md
   - Metodologia: metodologia.md
-  - Modulo 1:
+  - Módulo 1:
     - Diagrama Entidade-Relacionamento: pages/Modulo1/Diagrama_Entidade_Relacionamento.md
     - Modelo Relacional: pages/Modulo1/modelo_relacional.md
     - Dicionário de Dados: pages/Modulo1/Dicionario.md
     - Vídeo de Apresentação: pages/Modulo1/VideoApresentacao.md
+  - Módulo 2:
+    - Data Definition Language: pages/Modulo2/DDL.md
+    - Data Manipulation Language: pages/Modulo2/DML.md
+    - Data Query Language: pages/Modulo2/DQL.md
 
 theme:
   name: material
