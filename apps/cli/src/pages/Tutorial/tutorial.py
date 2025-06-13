@@ -52,4 +52,4 @@ def exibirHistoria(dadosJogador):
   limpar_terminal()
   pygame.mixer.music.fadeout(7000)
   print('\033[?25h', end='', flush=True)
-  iniciar_jogo(dadosJogador)
+  iniciar_jogo()

@@ -7,7 +7,7 @@
 
 ## Conceito:
 
-A Data Manipulation Language (DML), ou Linguagem de Manipulação de Dados, é a parte do SQL responsável por lidar diretamente com os dados armazenados nas estruturas definidas pela DDL. Enquanto a DDL define "onde" os dados vão ficar, a DML atua sobre "quais" dados vão ocupar esses espaços e "como" serão manipulados. Com comandos como `SELECT`, `INSERT`, `UPDATE` e `DELETE`, a DML permite consultar, adicionar, modificar e remover registros dentro das tabelas do banco de dados.
+A Data Manipulation Language (DML), ou Linguagem de Manipulação de Dados, é a parte do SQL responsável por lidar diretamente com os dados armazenados nas estruturas definidas pela DDL. Enquanto a DDL define "onde" os dados vão ficar, a DML atua sobre "quais" dados vão ocupar esses espaços e "como" serão manipulados. Com comandos como `INSERT`, `UPDATE` e `DELETE`, a DML permite adicionar, modificar e remover registros dentro das tabelas do banco de dados.
 
 Ao contrário dos comandos DDL, que geralmente afetam a estrutura do banco de forma permanente, os comandos DML operam sobre os dados em si e podem ser revertidos com o uso de transações (`BEGIN`, `COMMIT`, `ROLLBACK`). Isso garante maior controle sobre as operações, especialmente em aplicações que exigem consistência e segurança na manipulação de dados.
 

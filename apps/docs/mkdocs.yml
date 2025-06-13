@@ -16,6 +16,7 @@ nav:
     - Data Definition Language: pages/Modulo2/DDL.md
     - Data Manipulation Language: pages/Modulo2/DML.md
     - Data Query Language: pages/Modulo2/DQL.md
+    - Vídeo de Apresentação: pages/Modulo2/VideoApresentacao.md
 
 theme:
   name: material
