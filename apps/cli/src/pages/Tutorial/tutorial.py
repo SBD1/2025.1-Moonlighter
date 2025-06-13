@@ -1,6 +1,6 @@
-from setup.database import connect_to_db
 from colorama import Fore, Style, init
-from iniciar_jogo.iniciar_jogo import iniciar_jogo
+from pages.IniciarJogo.iniciarJogo import iniciar_jogo
+from pages.Tutorial.db_tutorial import buscarNarracao
 from utils.limparTerminal import limpar_terminal
 from utils.recolocarTexto import recolocarTexto
 import time
@@ -10,38 +10,6 @@ import pyfiglet
 import os
 import sys
 import textwrap
-
-def buscarNarracao(busca):
-    connection = connect_to_db()
-    if connection is None:
-        print(Fore.RED + "Erro ao conectar ao banco de dados.")
-        return None
-
-    cursor = connection.cursor()
-
-    if busca is None:
-        cursor.execute("""SELECT D."conteudo", D."idDialogo"
-                        FROM "dialogo" D
-                        INNER JOIN "dialogo_npc" DN
-                        ON D."idDialogo" = DN."idDialogo"
-                        INNER JOIN "npc" N
-                        ON N."idNPC" = DN."idNPC"
-                        WHERE N."idNPC" = (SELECT "idNPC" FROM npc WHERE "nome" = 'Mundo') AND D."idDialogoPai" IS NULL;""")
-    else:
-        cursor.execute("""SELECT D."conteudo", D."idDialogo"
-                        FROM "dialogo" D 
-                            INNER JOIN "dialogo_npc" DN 
-                            ON D."idDialogo" = DN."idDialogo"
-                            INNER JOIN "npc" N
-                            ON N."idNPC" = DN."idNPC"
-                        WHERE N."idNPC" = (SELECT "idNPC" FROM npc WHERE "nome" = 'Mundo') AND D."idDialogoPai" = %s;""",
-                        (busca,)
-                    )
-    narracao = cursor.fetchone()
-    cursor.close()
-    connection.close()
-
-    return narracao
 
 def musicTheme():
     pygame.mixer.init()
@@ -83,4 +51,5 @@ def exibirHistoria(dadosJogador):
 
   limpar_terminal()
   pygame.mixer.music.fadeout(7000)
-  iniciar_jogo()
+  print('\033[?25h', end='', flush=True)
+  iniciar_jogo(dadosJogador)

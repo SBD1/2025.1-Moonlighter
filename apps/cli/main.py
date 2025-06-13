@@ -11,4 +11,4 @@ def abrir_terminal(script_rel_path):
     elif sistema == "Linux":
         subprocess.Popen(['gnome-terminal', '--geometry=100x30', '--', 'python3', main_path])
 
-abrir_terminal("apps/cli/src/pg_inicial.py")
+abrir_terminal("apps/cli/src/inicial.py")

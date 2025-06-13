@@ -1,11 +1,13 @@
 import time
-import masmorra
-from iniciar_jogo.db_iniciar_jogo import *
+from pages.IniciarJogo.db_iniciarJogo import *
 from utils.limparTerminal import limpar_terminal
 from utils.enterContinue import enter_continue
 from colorama import Fore, Back, Style, init
 import pygame
+import shutil
 
+# definição da largura da janela do terminal:
+largura_terminal = shutil.get_terminal_size().columns
 
 def musicCity(): #musica da cidade
     pygame.mixer.init() 
@@ -14,12 +16,19 @@ def musicCity(): #musica da cidade
 
 def cabecalho():
         local_jogador: str = buscar_local_jogador()
-        print(Fore.YELLOW + f"dia: XX, periodo: XX, local: {local_jogador}")
+        print(f"{Fore.LIGHTGREEN_EX}{Style.BRIGHT}=================== MOONLIGHTER GAME ===================".center(largura_terminal))
+        print(Fore.YELLOW + f"dia: XX, periodo: XX, local: {local_jogador}".center(largura_terminal))
+        print(f"{Fore.LIGHTGREEN_EX}{Style.BRIGHT}========================================================".center(largura_terminal))
+
 
 def cabecalho_completo():
         local_jogador: str = buscar_local_jogador()
-        print(Fore.YELLOW + f"dia: XX, periodo: XX, local: {local_jogador}")
-        print(Style.BRIGHT + Fore.CYAN + "Para onde deseja ir?\n")
+        print(f"{Fore.LIGHTGREEN_EX}{Style.BRIGHT}=================== MOONLIGHTER GAME ===================".center(largura_terminal))
+        print(Fore.YELLOW + f"dia: XX, periodo: XX, local: {local_jogador}".center(largura_terminal))
+        print(Style.BRIGHT + Fore.CYAN + "Para onde deseja ir?".center(largura_terminal))
+        print(f"{Fore.LIGHTGREEN_EX}{Style.BRIGHT}========================================================".center(largura_terminal))
+        print("\n\n")
+
 
         locais = exibir_locais(local_jogador)
 

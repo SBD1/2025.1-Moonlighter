@@ -1,8 +1,8 @@
 from setup.database import connect_to_db
-from iniciar_jogo.iniciar_jogo import iniciar_jogo
+from pages.IniciarJogo.iniciarJogo import iniciar_jogo
 from utils.limparTerminal import limpar_terminal
 from utils.geradorSeed import gerarSeed
-from tutorial import exibirHistoria
+from pages.Tutorial.tutorial import exibirHistoria
 from colorama import Fore, Style, init
 import time
 import shutil
@@ -23,11 +23,11 @@ logo = f"{Style.BRIGHT + Fore.LIGHTGREEN_EX}\n\n{centralizacao}\n\n\n"
 
 def introducao():
     limpar_terminal()
-    #time.sleep(2)
+    time.sleep(2)
     print("\n\n\n\n\n\n\n\n\n\n\n\n\n")
     print(f"{Fore.YELLOW}{Style.BRIGHT}Desenvolvido durante o curso de".center(largura_terminal))
     print(f"{Fore.YELLOW}{Style.BRIGHT}Sistema de Banco de Dados 1 - UnB".center(largura_terminal))
-    #time.sleep(2)
+    time.sleep(2)
     limpar_terminal()
     print("\n\n\n\n\n\n\n\n\n\n\n")
     print(f"{Fore.LIGHTGREEN_EX}{Style.BRIGHT}Desenvolvedores:".center(largura_terminal))
@@ -36,15 +36,15 @@ def introducao():
     print(f"{Fore.YELLOW}{Style.BRIGHT}Igor de Sousa".center(largura_terminal))
     print(f"{Fore.YELLOW}{Style.BRIGHT}João Paulo".center(largura_terminal))
     print(f"{Fore.YELLOW}{Style.BRIGHT}Yan Matheus".center(largura_terminal))
-    #time.sleep(2)
+    time.sleep(2)
     limpar_terminal()
     print("\n\n\n\n\n\n\n\n\n\n\n\n\n")
     print(f"{Fore.YELLOW}{Style.BRIGHT}Jogo inspirado em Moonlighter, por Digital Sun Games".center(largura_terminal))
-    #time.sleep(3)
+    time.sleep(3)
     limpar_terminal()
     print("\n\n\n\n\n\n\n\n\n")
     print(logo)
-    #time.sleep(3)
+    time.sleep(3)
     return
 
 def buscaTodosJogadores():
