@@ -1,9 +1,10 @@
 import random
-seedMasmorra = random.randint(100, 999)
+seedMasmorra = 41859
+#seedMasmorra = random.randint(1000, 9999)
 
 def gerar_numero_salas(dificuldade):
     if (dificuldade == 'Fácil'):
-        qtd_salas: int = random.randint(5, 10)
+        qtd_salas: int = (seedMasmorra % 10) + 5
     elif (dificuldade == 'Médio'):
         qtd_salas: int = random.randint(7, 15)
     elif (dificuldade == 'Díficil'):
@@ -19,9 +20,10 @@ def gerar_seed(seedMasmorra): #gerar seed da sala
     cofA = 2654435761
     cofB = 1597334677
     seedSala: int = (seedMasmorra * cofA) + (index* cofB)
+    random.seed(seedSala)
 
-    qtd_conexoes: int = random.randint(0,3)
-    ordem_preenchimento: int = random.randint(0,3)
+    qtd_conexoes: int = random.randint(0, 3)
+    ordem_preenchimento: int = random.randint(0, 3)
 
     seedSala = seedSala * 10 + qtd_conexoes
     seedSala = seedSala * 10 + ordem_preenchimento
@@ -88,17 +90,19 @@ def criar_sala(x, y, matriz, limite):
     else: 
         return
     
+while True:
+    global index
+    index = 1
 
+    qtd_salas = gerar_numero_salas('Fácil')
+    matriz = criar_matriz()
+    posicaoX = 7
+    posicaoY = 7
 
-global index
-index = 1
+    criar_sala(posicaoX, posicaoY, matriz, qtd_salas)
 
-qtd_salas = gerar_numero_salas('Fácil')
-matriz = criar_matriz()
-posicaoX = 7
-posicaoY = 7
-
-criar_sala(posicaoX, posicaoY, matriz, qtd_salas)
+    if index == qtd_salas:
+        break
 
 for linha in matriz:
     print([0 if x != 0 else "." for x in linha])

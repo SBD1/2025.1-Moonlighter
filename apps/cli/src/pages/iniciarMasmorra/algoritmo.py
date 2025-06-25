@@ -3,25 +3,28 @@ from db_iniciarMasmorra import salvarMasmorra
 
 def gerar_numero_salas(dificuldade):
     if (dificuldade == 'Fácil'):
-        qtd_salas: int = random.randint(5, 10)
+        qtd_salas: int = (seedMasmorra % 5) + 5 #de 5 a 10 salas
     elif (dificuldade == 'Médio'):
-        qtd_salas: int = random.randint(7, 15)
+        qtd_salas: int = (seedMasmorra % 7) + 8 #de 7 a 15 salas
     elif (dificuldade == 'Díficil'):
-        qtd_salas: int = random.randint(10, 20)
+        qtd_salas: int = (seedMasmorra % 10) + 10 #de 10 a 20 salas
     else:
         print("Erro ao gerar o numero de salas")
 
     return qtd_salas
 
-def gerar_seed(seedMasmorra): #gerar seed da sala
+def gerar_seed(): #gerar seed da sala
+
+    global seedMasmorra
 
     #fazer algoritmo de gerar seed
     cofA = 2654435761
     cofB = 1597334677
     seedSala: int = (seedMasmorra * cofA) + (index * cofB)
+    random.seed(seedSala)
 
-    qtd_conexoes: int = random.randint(0,3)
-    ordem_preenchimento: int = random.randint(0,3)
+    qtd_conexoes: int = random.randint(0, 3)
+    ordem_preenchimento: int = random.randint(0, 3)
 
     seedSala = seedSala * 10 + qtd_conexoes
     seedSala = seedSala * 10 + ordem_preenchimento
@@ -94,16 +97,21 @@ def criar_sala(x, y, matriz, limite):
 
 def algoritmo_central(nickname):
     global index
-    index = 1
+    global seedMasmorra
 
-    qtd_salas = gerar_numero_salas(dificuldade)
-    matriz = criar_matriz()
     posicaoX = 7
     posicaoY = 7
 
-    criar_sala(posicaoX, posicaoY, matriz, qtd_salas) #comeca a geracao de salas a partir do centro
+    while True: #Verifica a quantidade de salas, se nao foi criado todas, descarta a matriz e comeca do zero
+        index = 1
+        seedMasmorra = random.randint(1000, 9999)
+        qtd_salas = gerar_numero_salas(dificuldade)
+        
+        matriz = criar_matriz()
+        criar_sala(posicaoX, posicaoY, matriz, qtd_salas) #comeca a geracao de salas a partir do centro
 
-    #logica de verificacao da quantidade de salas, se foram realmente criadas todas elas, caso nao, reinicia o processo
-
+        if (index == qtd_salas):  
+            break
+       
     salvarMasmorra(nickname)
     return matriz #mapa completo, matriz preenchida
