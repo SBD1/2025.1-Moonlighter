@@ -162,10 +162,62 @@ def criar_sala(x, y, matriz, limite):
 
     else: 
         return
+    
+def encontrar_caminho_mais_longo(matriz, inicio_x, inicio_y):
+    linhas = len(matriz)
+    colunas = len(matriz[0])
+    
+    melhor_caminho = []
+    visitados = set()
+
+    # Mapear direções para deslocamentos (x, y)
+    direcoes = {
+        "N": (-1, 0),
+        "S": (1, 0),
+        "L": (0, 1),
+        "O": (0, -1)
+    }
+
+    def dfs(x, y, caminho_atual):
+        nonlocal melhor_caminho
+
+        visitados.add((x, y))
+        caminho_atual.append((x, y))
+
+        # Atualiza o melhor caminho se o atual for maior
+        if len(caminho_atual) > len(melhor_caminho):
+            melhor_caminho = caminho_atual.copy()
+
+        # Explora conexões
+        for direcao in matriz[x][y]["conexoes"]:
+            dx, dy = direcoes[direcao]
+            nx, ny = x + dx, y + dy
+
+            if 0 <= nx < linhas and 0 <= ny < colunas:
+                if matriz[nx][ny] != 0 and (nx, ny) not in visitados:
+                    dfs(nx, ny, caminho_atual)
+
+        caminho_atual.pop()
+        visitados.remove((x, y))
+
+    dfs(inicio_x, inicio_y, [])
+
+    return melhor_caminho
+
+def marcar_sala_boss(matriz, caminho):
+    if not caminho:
+        print("Nenhum caminho encontrado.")
+        return
+
+    boss_x, boss_y = caminho[-1]
+    matriz[boss_x][boss_y]["boss"] = True
+    print(Fore.YELLOW + f"Sala do Boss definida em ({boss_x},{boss_y})")
+
 
 def imprimir_mapa_detalhado(matriz):
     print(Fore.YELLOW + f"seed da masmorra: {seedMasmorra}\n")
     
+    # Imprime detalhes de cada sala
     for x, linha in enumerate(matriz):
         for y, sala in enumerate(linha):
             if sala == 0:
@@ -177,26 +229,32 @@ def imprimir_mapa_detalhado(matriz):
                 print(f"({x},{y}): Ordem {ordem}, Seed {seed}, Conexoes: {conexoes}")
     
     print("\n")
+    
+    # Imprime o mapa visual
     for x, linha in enumerate(matriz):
         linha_str = []
         for y, valor in enumerate(linha):
             if valor != 0:
-                cor = Fore.RED
-                char = "0"
+                if "boss" in valor and valor["boss"]:
+                    cor = Fore.YELLOW
+                    char = "B"
+                else:
+                    cor = Fore.RED
+                    char = "0"
             else:
                 cor = Style.RESET_ALL
                 char = "."
             
             if x == 7 and y == 7:
                 cor = Fore.YELLOW
-                char = "0"  
+                char = "0"
             
             linha_str.append(cor + char + Style.RESET_ALL)
         print(" ".join(linha_str))
 
 
-#seedMasmorra = 41859
-seedMasmorra = random.randint(1000, 9999)
+seedMasmorra = 6267
+#seedMasmorra = random.randint(1000, 9999)
 
 while True:
     global index
@@ -204,7 +262,9 @@ while True:
 
     qtd_salas = gerar_numero_salas('Díficil')
     matriz = criar_matriz()
-    posicaoX = 7
+
+    #centro da matriz
+    posicaoX = 7 
     posicaoY = 7
 
     criar_sala(posicaoX, posicaoY, matriz, qtd_salas)
@@ -212,4 +272,6 @@ while True:
     if index == qtd_salas:
         break
 
+caminho_mais_longo = encontrar_caminho_mais_longo(matriz, posicaoX, posicaoY)
+marcar_sala_boss(matriz, caminho_mais_longo)
 imprimir_mapa_detalhado(matriz)

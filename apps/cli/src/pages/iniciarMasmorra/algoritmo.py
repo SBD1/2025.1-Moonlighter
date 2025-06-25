@@ -163,12 +163,61 @@ def criar_sala(x, y, matriz, limite):
 
     else: 
         return
+
+def encontrar_caminho_mais_longo(matriz, inicio_x, inicio_y):
+    linhas = len(matriz)
+    colunas = len(matriz[0])
     
+    melhor_caminho = []
+    visitados = set()
+
+    # Mapear direções para deslocamentos (x, y)
+    direcoes = {
+        "N": (-1, 0),
+        "S": (1, 0),
+        "L": (0, 1),
+        "O": (0, -1)
+    }
+
+    def dfs(x, y, caminho_atual):
+        nonlocal melhor_caminho
+
+        visitados.add((x, y))
+        caminho_atual.append((x, y))
+
+        # Atualiza o melhor caminho se o atual for maior
+        if len(caminho_atual) > len(melhor_caminho):
+            melhor_caminho = caminho_atual.copy()
+
+        # Explora conexões
+        for direcao in matriz[x][y]["conexoes"]:
+            dx, dy = direcoes[direcao]
+            nx, ny = x + dx, y + dy
+
+            if 0 <= nx < linhas and 0 <= ny < colunas:
+                if matriz[nx][ny] != 0 and (nx, ny) not in visitados:
+                    dfs(nx, ny, caminho_atual)
+
+        caminho_atual.pop()
+        visitados.remove((x, y))
+
+    dfs(inicio_x, inicio_y, [])
+
+    return melhor_caminho
+
+def marcar_sala_boss(matriz, caminho):
+    if not caminho:
+        print("Nenhum caminho encontrado.")
+        return
+
+    boss_x, boss_y = caminho[-1]
+    matriz[boss_x][boss_y]["boss"] = True
 
 def algoritmo_central(nickname):
     global index
     global seedMasmorra
 
+    #centro da matriz
     posicaoX = 7
     posicaoY = 7
 
@@ -183,7 +232,9 @@ def algoritmo_central(nickname):
         if (index == qtd_salas):  
             break
 
-        #fazer logica de definir o chefe
-       
+    #logica de definir a sala do chefe
+    caminho_mais_longo = encontrar_caminho_mais_longo(matriz, posicaoX, posicaoY)
+    marcar_sala_boss(matriz, caminho_mais_longo)
+
     salvarMasmorra(nickname)
     return matriz #mapa completo, matriz preenchida
