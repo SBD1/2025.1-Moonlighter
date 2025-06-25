@@ -39,60 +39,98 @@ def criar_matriz():
 
     return matriz
 
-def criar_sala(x, y, matriz, limite):
+def pode_criar_sala(x, y, matriz, limite):
     global index 
 
     #verificacao se a sala criada sai do espaco da matriz
     if ((x >= 15) or (x < 0) or (y >= 15) or (y < 0)):
-        return
+        return False
     
     #verificacao se a sala criada sobrepoe outra
-    if (matriz[x][y] != 0):
-        return
+    elif (matriz[x][y] != 0):
+        return False
     
     #verificacao se a sala criada excede o limite maximo de salas
-    if (index >= limite):
-        return
+    elif (index >= limite):
+        return False
+    
+    return True
+
+
+def criar_sala(x, y, matriz, limite):
+    global index
 
     index += 1 #acresenta o index global para o calculo da seed
     seed = gerar_seed(seedMasmorra)
     saidas = seed % 100
     ordem = seed % 10
 
-    matriz[x][y] = seed #salva a seed da sala atual
+    matriz[x][y] = { #salva a seed da sala atual e armazena as conexoes da sala
+        "seed": seed,
+        "conexoes": []
+    } 
 
     if (saidas != 0): #se a sala tiver pelo menos uma saida
 
         #ordem de preenchimento das proximas salas
         if (ordem == 0): #ordem: N-L-S-O
-            criar_sala(x-1, y, matriz, limite) #norte
-            criar_sala(x, y+1, matriz, limite) #leste
-            criar_sala(x+1, y, matriz, limite) #sul
-            criar_sala(x, y-1, matriz, limite) #oeste
+            if (pode_criar_sala(x-1, y, matriz, limite)):
+                criar_sala(x-1, y, matriz, limite)
+                matriz[x][y]["conexoes"].append("N") #norte
+            if (pode_criar_sala(x, y+1, matriz, limite)):
+                criar_sala(x, y+1, matriz, limite) 
+                matriz[x][y]["conexoes"].append("L") #leste
+            if (pode_criar_sala(x+1, y, matriz, limite)):
+                criar_sala(x+1, y, matriz, limite) 
+                matriz[x][y]["conexoes"].append("S") #sul
+            if (pode_criar_sala(x, y-1, matriz, limite)):
+                criar_sala(x, y-1, matriz, limite) 
+                matriz[x][y]["conexoes"].append("O") #oeste
 
         elif (ordem == 1): #ordem: L-O-N-S
-            criar_sala(x, y+1, matriz, limite) #leste
-            criar_sala(x, y-1, matriz, limite) #oeste
-            criar_sala(x-1, y, matriz, limite) #norte
-            criar_sala(x+1, y, matriz, limite) #sul
+            if (pode_criar_sala(x, y+1, matriz, limite)):
+                criar_sala(x, y+1, matriz, limite) 
+                matriz[x][y]["conexoes"].append("L") #leste
+            if (pode_criar_sala(x, y-1, matriz, limite)):
+                criar_sala(x, y-1, matriz, limite) 
+                matriz[x][y]["conexoes"].append("O") #oeste
+            if (pode_criar_sala(x-1, y, matriz, limite)):
+                    criar_sala(x-1, y, matriz, limite)
+                    matriz[x][y]["conexoes"].append("N") #norte
+            if (pode_criar_sala(x+1, y, matriz, limite)):
+                criar_sala(x+1, y, matriz, limite) 
+                matriz[x][y]["conexoes"].append("S") #sul
 
         elif (ordem == 2): #ordem: S-L-N-O
-            criar_sala(x+1, y, matriz, limite) #sul
-            criar_sala(x, y+1, matriz, limite) #leste
-            criar_sala(x-1, y, matriz, limite) #norte
-            criar_sala(x, y-1, matriz, limite) #oeste
+            if (pode_criar_sala(x+1, y, matriz, limite)):
+                criar_sala(x+1, y, matriz, limite) 
+                matriz[x][y]["conexoes"].append("S") #sul
+            if (pode_criar_sala(x, y+1, matriz, limite)):
+                criar_sala(x, y+1, matriz, limite) 
+                matriz[x][y]["conexoes"].append("L") #leste
+            if (pode_criar_sala(x-1, y, matriz, limite)):
+                    criar_sala(x-1, y, matriz, limite)
+                    matriz[x][y]["conexoes"].append("N") #norte
+            if (pode_criar_sala(x, y-1, matriz, limite)):
+                criar_sala(x, y-1, matriz, limite) 
+                matriz[x][y]["conexoes"].append("O") #oeste
 
         elif (ordem == 3): #ordem: O-L-S-N
-            criar_sala(x, y-1, matriz, limite) #oeste
-            criar_sala(x, y+1, matriz, limite) #leste
-            criar_sala(x+1, y, matriz, limite) #sul
-            criar_sala(x-1, y, matriz, limite) #norte
+            if (pode_criar_sala(x, y-1, matriz, limite)):
+                criar_sala(x, y-1, matriz, limite) 
+                matriz[x][y]["conexoes"].append("O") #oeste
+            if (pode_criar_sala(x, y+1, matriz, limite)):
+                criar_sala(x, y+1, matriz, limite) 
+                matriz[x][y]["conexoes"].append("L") #leste
+            if (pode_criar_sala(x+1, y, matriz, limite)):
+                criar_sala(x+1, y, matriz, limite) 
+                matriz[x][y]["conexoes"].append("S") #sul
+            if (pode_criar_sala(x-1, y, matriz, limite)):
+                    criar_sala(x-1, y, matriz, limite)
+                    matriz[x][y]["conexoes"].append("N") #norte
 
     else: 
         return
-
-    #logica da criacao de conexoes
-    #logicas da criacao da sala, ex: se seed mod 10 < 8, sala contem monstros
     
 
 def algoritmo_central(nickname):
@@ -103,7 +141,7 @@ def algoritmo_central(nickname):
     posicaoY = 7
 
     while True: #Verifica a quantidade de salas, se nao foi criado todas, descarta a matriz e comeca do zero
-        index = 1
+        index = 0
         seedMasmorra = random.randint(1000, 9999)
         qtd_salas = gerar_numero_salas(dificuldade)
         
@@ -112,6 +150,8 @@ def algoritmo_central(nickname):
 
         if (index == qtd_salas):  
             break
+
+        #fazer logica de definir o chefe
        
     salvarMasmorra(nickname)
     return matriz #mapa completo, matriz preenchida
