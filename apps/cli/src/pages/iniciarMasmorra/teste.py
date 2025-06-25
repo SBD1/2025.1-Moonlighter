@@ -45,30 +45,45 @@ def pode_criar_sala(x, y, matriz, limite):
     if ((x >= 15) or (x < 0) or (y >= 15) or (y < 0)):
         return False
     
-    #verificacao se a sala criada sobrepoe outra
-    elif (matriz[x][y] != 0):
-        return False
+    #se a sala ainda nao existe verifica o limmite de salas
+    if (matriz[x][y] == 0):
+        if (index >= limite):
+            return False
+        return True
     
-    #verificacao se a sala criada excede o limite maximo de salas
-    elif (index >= limite):
-        return False
-    
-    return True
+    else:
+        return True #sala já existe mas pode criar conexao
 
+def adicionar_conexao(matriz, x, y, direcao): #evitar a conexao ser feita duas vezes na mesma direcao
+    if direcao not in matriz[x][y]["conexoes"]:
+        matriz[x][y]["conexoes"].append(direcao)
 
 def criar_sala(x, y, matriz, limite):
     global index
 
-    index += 1 #acresenta o index global para o calculo da seed
-    seed = gerar_seed(seedMasmorra)
-    saidas = seed % 100
-    ordem = seed % 10
+    if (matriz[x][y] == 0): 
 
-    matriz[x][y] = { #salva a seed da sala atual e armazena as conexoes da sala
-        "seed": seed,
-        "conexoes": [],
-        "ordem_criacao": index
-    } 
+        index += 1 #acresenta o index global para o calculo da seed
+        seed = gerar_seed(seedMasmorra)
+        saidas = seed % 100
+        ordem = seed % 10
+
+        matriz[x][y] = { #salva a seed da sala atual e armazena as conexoes da sala
+            "seed": seed,
+            "conexoes": [],
+            "ordem_criacao": index,
+            "visitado": True
+        } 
+    
+    else: #se a sala ja existe nao recria, apenas gera conexao
+        if "visitado" in matriz[x][y] and matriz[x][y]["visitado"]:
+            return
+        
+        matriz[x][y]["visitado"] = True
+        
+        seed = matriz[x][y]["seed"]
+        saidas = seed % 100
+        ordem = seed % 10
 
     if (saidas != 0): #se a sala tiver pelo menos uma saida
 
@@ -76,63 +91,77 @@ def criar_sala(x, y, matriz, limite):
         if (ordem == 0): #ordem: N-L-S-O
             if (pode_criar_sala(x-1, y, matriz, limite)):
                 criar_sala(x-1, y, matriz, limite)
-                matriz[x][y]["conexoes"].append("N") #norte
+                adicionar_conexao(matriz, x, y, "N") #norte
+                adicionar_conexao(matriz, x-1, y, "S") #conexao oposta sul
             if (pode_criar_sala(x, y+1, matriz, limite)):
                 criar_sala(x, y+1, matriz, limite) 
-                matriz[x][y]["conexoes"].append("L") #leste
+                adicionar_conexao(matriz, x, y, "L") #leste
+                adicionar_conexao(matriz, x, y+1, "O") #conexao oposta oeste
             if (pode_criar_sala(x+1, y, matriz, limite)):
                 criar_sala(x+1, y, matriz, limite) 
-                matriz[x][y]["conexoes"].append("S") #sul
+                adicionar_conexao(matriz, x, y, "S") #sul
+                adicionar_conexao(matriz, x+1, y, "N") #conexao oposta norte
             if (pode_criar_sala(x, y-1, matriz, limite)):
                 criar_sala(x, y-1, matriz, limite) 
-                matriz[x][y]["conexoes"].append("O") #oeste
+                adicionar_conexao(matriz, x, y, "O") #oeste
+                adicionar_conexao(matriz, x, y-1, "L") #conexao oposta leste
 
         elif (ordem == 1): #ordem: L-O-N-S
             if (pode_criar_sala(x, y+1, matriz, limite)):
                 criar_sala(x, y+1, matriz, limite) 
-                matriz[x][y]["conexoes"].append("L") #leste
+                adicionar_conexao(matriz, x, y, "L") #leste
+                adicionar_conexao(matriz, x, y+1, "O") #conexao oposta oeste
             if (pode_criar_sala(x, y-1, matriz, limite)):
                 criar_sala(x, y-1, matriz, limite) 
-                matriz[x][y]["conexoes"].append("O") #oeste
+                adicionar_conexao(matriz, x, y, "O") #oeste
+                adicionar_conexao(matriz, x, y-1, "L") #conexao oposta leste
             if (pode_criar_sala(x-1, y, matriz, limite)):
-                    criar_sala(x-1, y, matriz, limite)
-                    matriz[x][y]["conexoes"].append("N") #norte
+                criar_sala(x-1, y, matriz, limite)
+                adicionar_conexao(matriz, x, y, "N") #norte
+                adicionar_conexao(matriz, x-1, y, "S") #conexao oposta sul
             if (pode_criar_sala(x+1, y, matriz, limite)):
                 criar_sala(x+1, y, matriz, limite) 
-                matriz[x][y]["conexoes"].append("S") #sul
+                adicionar_conexao(matriz, x, y, "S") #sul
+                adicionar_conexao(matriz, x+1, y, "N") #conexao oposta norte
 
         elif (ordem == 2): #ordem: S-L-N-O
             if (pode_criar_sala(x+1, y, matriz, limite)):
                 criar_sala(x+1, y, matriz, limite) 
-                matriz[x][y]["conexoes"].append("S") #sul
+                adicionar_conexao(matriz, x, y, "S") #sul
+                adicionar_conexao(matriz, x+1, y, "N") #conexao oposta norte
             if (pode_criar_sala(x, y+1, matriz, limite)):
                 criar_sala(x, y+1, matriz, limite) 
-                matriz[x][y]["conexoes"].append("L") #leste
+                adicionar_conexao(matriz, x, y, "L") #leste
+                adicionar_conexao(matriz, x, y+1, "O") #conexao oposta oeste
             if (pode_criar_sala(x-1, y, matriz, limite)):
-                    criar_sala(x-1, y, matriz, limite)
-                    matriz[x][y]["conexoes"].append("N") #norte
+                criar_sala(x-1, y, matriz, limite)
+                adicionar_conexao(matriz, x, y, "N") #norte
+                adicionar_conexao(matriz, x-1, y, "S") #conexao oposta sul
             if (pode_criar_sala(x, y-1, matriz, limite)):
                 criar_sala(x, y-1, matriz, limite) 
-                matriz[x][y]["conexoes"].append("O") #oeste
+                adicionar_conexao(matriz, x, y, "O") #oeste
+                adicionar_conexao(matriz, x, y-1, "L") #conexao oposta leste
 
         elif (ordem == 3): #ordem: O-L-S-N
             if (pode_criar_sala(x, y-1, matriz, limite)):
                 criar_sala(x, y-1, matriz, limite) 
-                matriz[x][y]["conexoes"].append("O") #oeste
+                adicionar_conexao(matriz, x, y, "O") #oeste
+                adicionar_conexao(matriz, x, y-1, "L") #conexao oposta leste
             if (pode_criar_sala(x, y+1, matriz, limite)):
                 criar_sala(x, y+1, matriz, limite) 
-                matriz[x][y]["conexoes"].append("L") #leste
+                adicionar_conexao(matriz, x, y, "L") #leste
+                adicionar_conexao(matriz, x, y+1, "O") #conexao oposta oeste
             if (pode_criar_sala(x+1, y, matriz, limite)):
                 criar_sala(x+1, y, matriz, limite) 
-                matriz[x][y]["conexoes"].append("S") #sul
+                adicionar_conexao(matriz, x, y, "S") #sul
+                adicionar_conexao(matriz, x+1, y, "N") #conexao oposta norte
             if (pode_criar_sala(x-1, y, matriz, limite)):
-                    criar_sala(x-1, y, matriz, limite)
-                    matriz[x][y]["conexoes"].append("N") #norte
+                criar_sala(x-1, y, matriz, limite)
+                adicionar_conexao(matriz, x, y, "N") #norte
+                adicionar_conexao(matriz, x-1, y, "S") #conexao oposta sul
 
     else: 
         return
-
-from colorama import Fore, Style
 
 def imprimir_mapa_detalhado(matriz):
     print(Fore.YELLOW + f"seed da masmorra: {seedMasmorra}\n")
