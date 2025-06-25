@@ -20,6 +20,7 @@ INSERT INTO "local" VALUES
     ('Masmorra da Floresta', 'Masmorra florestal estreita, infestada de plantas mutantes e a Mutae Carnívora como chefe no último andar.', 'Masmorra', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Área das Masmorras')),
     ('Masmorra do Deserto', 'Antigas ruínas desérticas com tempestades de areia e o Guardião do Deserto aguardando no 3º andar.', 'Masmorra', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Área das Masmorras')),
     ('Masmorra da Tecnologia', 'Instalações tecnológicas abandonadas, protegidas por robôs, com o Guardião da Tecnologia aguardando no último andar.', 'Masmorra', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Área das Masmorras')),
+    ('Masmorra Desconhecida', 'A última masmorra', 'Masmorra', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Área das Masmorras')),
     ('Forja Vulcânica', '', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Centro Comercial')),
     ('O Chapéu de Madeira', '', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Centro Comercial')),
     ('Banco de Rynoka', '', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Centro Comercial')),
@@ -31,10 +32,12 @@ INSERT INTO "local" VALUES
 -- INSERÇÃO NA TABELA MASMORRA:
 INSERT INTO "masmorra"
     VALUES
-    ('Masmorra do Golem', 1, 3),
-    ('Masmorra da Floresta', 2, 3),
-    ('Masmorra do Deserto', 3, 3),
-    ('Masmorra da Tecnologia', 4, 3);
+    ('Masmorra do Golem', 1, 'Fácil', 3),
+    ('Masmorra da Floresta', 2, 'Fácil', 3),
+    ('Masmorra do Deserto', 3, 'Médio', 3),
+    ('Masmorra da Tecnologia', 4, 'Médio', 3),
+    ('Masmorra da Tecnologia', 4, 'Difícil', 3);
+
 
 -- INSERÇÃO NA TABELA ESTABELECIMENTO:
 INSERT INTO "estabelecimento" 

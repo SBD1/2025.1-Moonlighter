@@ -63,6 +63,7 @@ CREATE TABLE "mundo" (
 CREATE TABLE "masmorra" (
     "nomeLocal" character varying(60) PRIMARY KEY,
     "nivelDesbloqueio" SMALLINT NOT NULL,
+    "dificuldade" character varying(7) NOT NULL,
     "qtdAndar" SMALLINT NOT NULL,
 
     CONSTRAINT "fk_local" FOREIGN KEY ("nomeLocal") REFERENCES "local" ("nomeLocal") ON DELETE CASCADE
