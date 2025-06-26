@@ -46,12 +46,15 @@ def locomocao(dadosJogador):
         print(f"{Style.BRIGHT}{Fore.YELLOW}Escolha um local para se mover:".center(largura_terminal))
 
         locais = exibir_locais(dadosJogador[6])
+        print(locais)
+        if (dadosJogador[6] != 'Vila Rynoka'): locais.append(('Voltar ao Local Anterior',))
+        locais.pop(('Encerrar Locomoção',))
 
         for i, local in enumerate(locais, start=1):
-            print(f"{Fore.YELLOW}{Style.BRIGHT}{i} - {local[0]}")
-
-        if (dadosJogador[6] != 'Vila Rynoka'): print(f"{Fore.YELLOW}{Style.BRIGHT}{i + 1} - Voltar")
-        print(f"{Fore.RED}{Style.BRIGHT}{i + 2} - Finalizar Ação")
+            if local == "Encerrar Locomoção":
+                print(f"{Fore.RED}{Style.BRIGHT}{i} - {local[0]}")
+            else:
+                print(f"{Fore.YELLOW}{Style.BRIGHT}{i} - {local[0]}")
 
         print("\n\n\n\n" + f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}Digite o número da opção desejada:")
         entrada = input(f"{Style.BRIGHT}{Fore.MAGENTA}>> ")
