@@ -45,6 +45,8 @@ CREATE TABLE "jogador" (
     "PosiçãoY_Jogador" SMALLINT NOT NULL,
     "nomeLocal" CHARACTER varying(60) NOT NULL,
     "idEfeito" integer,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "fk_efeito" FOREIGN KEY ("idEfeito") REFERENCES "efeito" ("idEfeito") ON DELETE CASCADE,
     CONSTRAINT "fk_local" FOREIGN KEY ("nomeLocal") REFERENCES "local" ("nomeLocal") ON DELETE CASCADE
@@ -64,7 +66,6 @@ CREATE TABLE "masmorra" (
     "nomeLocal" character varying(60) PRIMARY KEY,
     "nivelDesbloqueio" SMALLINT NOT NULL,
     "dificuldade" character varying(7) NOT NULL,
-    "qtdAndar" SMALLINT NOT NULL,
 
     CONSTRAINT "fk_local" FOREIGN KEY ("nomeLocal") REFERENCES "local" ("nomeLocal") ON DELETE CASCADE
 );
@@ -93,7 +94,6 @@ CREATE TABLE "sala" (
     "categoria" character varying(60) NOT NULL,
     "seedMundo" character varying(30) NOT NULL,
     "seedMasmorra" character varying(30) NOT NULL,
-    "nomeLocal" character varying(60) NOT NULL,
 
     CONSTRAINT "fk_inst_masmorra" FOREIGN KEY ("seedMasmorra", "seedMundo") REFERENCES "inst_masmorra" ("seedMasmorra", "seedMundo") ON DELETE CASCADE,
     CONSTRAINT "fk_masmorra" FOREIGN KEY ("nomeLocal") REFERENCES "masmorra" ("nomeLocal") ON DELETE CASCADE

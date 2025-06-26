@@ -32,11 +32,11 @@ INSERT INTO "local" VALUES
 -- INSERÇÃO NA TABELA MASMORRA:
 INSERT INTO "masmorra"
     VALUES
-    ('Masmorra do Golem', 1, 'Fácil', 3),
-    ('Masmorra da Floresta', 2, 'Fácil', 3),
-    ('Masmorra do Deserto', 3, 'Médio', 3),
-    ('Masmorra da Tecnologia', 4, 'Médio', 3),
-    ('Masmorra da Tecnologia', 4, 'Difícil', 3);
+    ('Masmorra do Golem', 1, 'Fácil'),
+    ('Masmorra da Floresta', 2, 'Fácil'),
+    ('Masmorra do Deserto', 3, 'Médio'),
+    ('Masmorra da Tecnologia', 4, 'Médio'),
+    ('Masmorra Desconhecida', 5, 'Difícil');
 
 
 -- INSERÇÃO NA TABELA ESTABELECIMENTO:

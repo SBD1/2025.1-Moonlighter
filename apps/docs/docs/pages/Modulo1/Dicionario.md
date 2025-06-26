@@ -41,7 +41,6 @@ Cada tabela está documentada com seus respectivos campos, tipos de dados, restr
     | `nomeLocal`        | Referência à tabela `Local`, para indicar qual local é classificado como masmorra | Varchar  | 60     | `PK`, `FK`         |
     | `nivelDesbloqueio` | Indica o nível necessário de Mundo para desbloqueiar a masmorra                     | SmallInt  |        | `NOT NULL`       |
     | `dificuldade`      | Indica a dificuldade da masmorra          | Varchar   | 7      | `NOT NULL`       |
-    | `qntAndar`         | Indica quantos andares a masmorra possui  | SmallInt  |        | `NOT NULL`       |
 
 ??? info "Tabela ESTABELECIMENTO | 2.1v"
     **Nome da Tabela:** Estabelecimento <br/>
@@ -114,7 +113,6 @@ Cada tabela está documentada com seus respectivos campos, tipos de dados, restr
     | `categoria`      | Indica se a sala é de combate, loot ou do chefe       | Varchar  | 60     | `NOT NULL`          |
     | `seedMundo`      | Referência à Tabela `Inst_Masmorra` para indicar à qual instância de masmorra a sala pertence  | Varchar   | 30     | `FK`, `NOT NULL`    |
     | `seedMasmorra`   | Referência à Tabela `Inst_Masmorra` para indicar à qual instância de masmorra a sala pertence  | Varchar   | 30     | `FK`, `NOT NULL`    |
-    | `nomeLocal`      | Referência à Tabela `Masmorra` para indicar à qual tipo de masmorra a sala pertence            | Varchar   | 60     | `FK`, `NOT NULL`    |
 
 ??? info "Tabela MONSTRO | 2.1v"
     **Nome da Tabela:** Monstro <br/>
