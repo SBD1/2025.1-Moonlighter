@@ -99,3 +99,52 @@ def exibir_locais(local_atual):
     connection.close()
 
     return resultado
+
+def buscar_seed_mundo(jogador):
+    """
+    Busca o seed do mundo do jogador
+    """
+    connection = connect_to_db()
+    if connection is None:
+        print(Fore.RED + "Erro ao conectar ao banco de dados.")
+        enter_continue()
+        return None
+    
+    cursor = connection.cursor()
+    cursor.execute("""SELECT "seedMundo" 
+                    FROM "mundo"
+                    WHERE "nickname" = %s;
+                    """, (jogador,))
+    resultado = cursor.fetchone()
+
+    cursor.close()
+    connection.close()
+
+    if resultado:
+        return resultado[0]
+    else:
+        return None
+
+def buscar_nome_jogador():
+    """
+    Busca o nome do jogador atual
+    """
+    connection = connect_to_db()
+    if connection is None:
+        print(Fore.RED + "Erro ao conectar ao banco de dados.")
+        enter_continue()
+        return None
+    
+    cursor = connection.cursor()
+    cursor.execute("""SELECT "nickname" 
+                    FROM "jogador";
+                    """)
+    resultado = cursor.fetchone()
+
+    cursor.close()
+    connection.close()
+
+    if resultado:
+        return resultado[0]
+    else:
+        return None

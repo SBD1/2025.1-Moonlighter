@@ -1,5 +1,6 @@
 import time
 from pages.IniciarJogo.db_iniciarJogo import *
+from pages.Estabelecimento import menu_varejo, menu_forja, menu_banco
 from utils.limparTerminal import limpar_terminal
 from utils.enterContinue import enter_continue
 from colorama import Fore, Back, Style, init
@@ -87,16 +88,19 @@ def iniciar_jogo():
                     break
 
                 elif (escolhaCC == 1): #Forja vulcanica
-                    print(f"\nBem-vindo! Ainda estão nos desenvolvendo, volte mais tarde!")
-                    enter_continue()
+                    # Buscar dados do jogador atual
+                    jogador_atual = buscar_nome_jogador()
+                    menu_forja(jogador_atual)
                 
                 elif (escolhaCC == 2): #O chapeu de madeira
-                    print(f"\nBem-vindo! Ainda estão nos desenvolvendo, volte mais tarde!")
-                    enter_continue()
+                    # Buscar dados do jogador atual
+                    jogador_atual = buscar_nome_jogador()
+                    menu_varejo(jogador_atual)
 
                 elif (escolhaCC == 3): #Banco de rynoka
-                    print(f"\nBem-vindo! Ainda estão nos desenvolvendo, volte mais tarde!")
-                    enter_continue()
+                    # Buscar dados do jogador atual
+                    jogador_atual = buscar_nome_jogador()
+                    menu_banco(jogador_atual)
 
                 elif (escolhaCC == 4): #Tenda da bruxa
                     print(f"\nBem-vindo! Ainda estão nos desenvolvendo, volte mais tarde!")
