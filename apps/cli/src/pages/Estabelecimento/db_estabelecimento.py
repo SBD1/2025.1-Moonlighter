@@ -1,7 +1,8 @@
 from setup.database import connect_to_db
 from colorama import Fore
+import psycopg2
 
-# FUNÇÕES SIMPLIFICADAS DA FORJA (usando nickname diretamente)
+# FUNÇÕES DA FORJA
 
 def verificar_instancia_forja_por_jogador(nickname):
     """
@@ -235,32 +236,257 @@ def visualizar_saldo_banco_por_jogador(nickname):
 
 def aplicar_ouro_banco_por_jogador(nickname, quantidade):
     """
-    Aplica ouro no banco usando nickname do jogador
+    Aplica ouro do jogador no banco, validando saldo em Python
     """
     connection = connect_to_db()
     if connection is None:
-        print(Fore.RED + "Erro ao conectar ao banco de dados.")
         return False
 
     try:
         cursor = connection.cursor()
-        cursor.execute("""
-            UPDATE "inst_banco" 
+        # Buscar ouro atual do jogador
+        cursor.execute('SELECT "ouro" FROM "jogador" WHERE "nickname" = %s', (nickname,))
+        resultado = cursor.fetchone()
+        if not resultado:
+            return False
+        ouro_jogador = resultado[0]
+        if ouro_jogador < quantidade:
+            print(Fore.RED + f"❌ Ouro insuficiente! Jogador {nickname} tem {ouro_jogador} ouros, mas está tentando aplicar {quantidade} ouros.")
+            return False
+        # Atualizar saldo do banco
+        cursor.execute('''
+            UPDATE "inst_banco"
             SET "valorAtual" = "valorAtual" + %s
             WHERE "seedMundo" IN (
-                SELECT m."seedMundo" 
-                FROM "mundo" m 
+                SELECT m."seedMundo"
+                FROM "mundo" m
                 WHERE m."nickname" = %s
             )
-        """, (quantidade, nickname))
-        
-        linhas_afetadas = cursor.rowcount
+        ''', (quantidade, nickname))
+        # Atualizar ouro do jogador
+        cursor.execute('UPDATE "jogador" SET "ouro" = "ouro" - %s WHERE "nickname" = %s', (quantidade, nickname))
         connection.commit()
         cursor.close()
         connection.close()
-        return linhas_afetadas > 0
+        return True
     except Exception as e:
-        print(Fore.RED + f"Erro ao aplicar ouro no banco: {e}")
+        if connection:
+            connection.rollback()
+            connection.close()
+        return False
+
+def sacar_ouro_banco_por_jogador(nickname, quantidade):
+    """
+    Saca ouro do banco para o jogador, validando saldo em Python
+    """
+    connection = connect_to_db()
+    if connection is None:
+        return False
+    try:
+        cursor = connection.cursor()
+        # Buscar saldo atual do banco
+        cursor.execute('''
+            SELECT ib."valorAtual"
+            FROM "inst_banco" ib
+            JOIN "mundo" m ON ib."seedMundo" = m."seedMundo"
+            WHERE m."nickname" = %s
+        ''', (nickname,))
+        resultado = cursor.fetchone()
+        if not resultado:
+            return False
+        saldo_banco = resultado[0]
+        if saldo_banco < quantidade:
+            print(Fore.RED + f"❌ Saldo insuficiente! Saldo atual: {saldo_banco} ouro, tentativa de saque: {quantidade} ouro")
+            return False
+        # Atualizar saldo do banco
+        cursor.execute('''
+            UPDATE "inst_banco"
+            SET "valorAtual" = "valorAtual" - %s
+            WHERE "seedMundo" IN (
+                SELECT m."seedMundo"
+                FROM "mundo" m
+                WHERE m."nickname" = %s
+            )
+        ''', (quantidade, nickname))
+        # Atualizar ouro do jogador
+        cursor.execute('UPDATE "jogador" SET "ouro" = "ouro" + %s WHERE "nickname" = %s', (quantidade, nickname))
+        connection.commit()
+        cursor.close()
+        connection.close()
+        return True
+    except Exception as e:
+        if connection:
+            connection.rollback()
+            connection.close()
+        return False
+
+def visualizar_juros_banco_por_jogador(nickname):
+    """
+    Visualiza informações sobre juros do banco do jogador
+    """
+    connection = connect_to_db()
+    if connection is None:
+        return None
+
+    try:
+        cursor = connection.cursor()
+        cursor.execute("""
+            SELECT ib."valorAtual", m."dia", m."periodo"
+            FROM "inst_banco" ib
+            JOIN "mundo" m ON ib."seedMundo" = m."seedMundo"
+            WHERE m."nickname" = %s
+        """, (nickname,))
+        resultado = cursor.fetchone()
+        cursor.close()
+        connection.close()
+        return resultado
+    except Exception as e:
+        if connection:
+            connection.close()
+        return None
+
+def aplicar_juros_manualmente_por_jogador(nickname, dias=1):
+    """
+    Aplica juros manualmente no banco do jogador
+    """
+    connection = connect_to_db()
+    if connection is None:
+        return False
+
+    try:
+        cursor = connection.cursor()
+        
+        # Buscar dados atuais
+        cursor.execute("""
+            SELECT ib."valorAtual", m."dia", m."seedMundo"
+            FROM "inst_banco" ib
+            JOIN "mundo" m ON ib."seedMundo" = m."seedMundo"
+            WHERE m."nickname" = %s
+        """, (nickname,))
+        
+        resultado = cursor.fetchone()
+        if not resultado:
+            print(Fore.RED + "Banco não encontrado para este jogador!")
+            return False
+            
+        valor_atual, dia_atual, seed_mundo = resultado
+        taxa_juros = 2.50  # 2.5% ao dia
+        
+        # Calcular juros
+        juros = int(valor_atual * (taxa_juros / 100.0) * dias)
+        novo_valor = valor_atual + juros
+        
+        # Atualizar valor no banco
+        cursor.execute("""
+            UPDATE "inst_banco" 
+            SET "valorAtual" = %s
+            WHERE "seedMundo" = %s
+        """, (novo_valor, seed_mundo))
+        
+        # Atualizar dia no mundo (isso vai acionar o trigger automaticamente)
+        cursor.execute("""
+            UPDATE "mundo" 
+            SET "dia" = "dia" + %s
+            WHERE "seedMundo" = %s
+        """, (dias, seed_mundo))
+        
+        connection.commit()
+        cursor.close()
+        connection.close()
+        
+        print(Fore.GREEN + f"💰 Juros aplicados: +{juros} ouro ({dias} dia(s))")
+        print(Fore.CYAN + f"💳 Saldo anterior: {valor_atual} ouro")
+        print(Fore.CYAN + f"💳 Saldo atual: {novo_valor} ouro")
+        return True
+        
+    except Exception as e:
+        if connection:
+            connection.rollback()
+            connection.close()
+        return False
+
+def simular_juros_por_jogador(nickname, dias=1):
+    """
+    Simula quanto de juros seria aplicado sem aplicar de fato
+    """
+    connection = connect_to_db()
+    if connection is None:
+        return None
+
+    try:
+        cursor = connection.cursor()
+        cursor.execute("""
+            SELECT ib."valorAtual"
+            FROM "inst_banco" ib
+            JOIN "mundo" m ON ib."seedMundo" = m."seedMundo"
+            WHERE m."nickname" = %s
+        """, (nickname,))
+        
+        resultado = cursor.fetchone()
+        cursor.close()
+        connection.close()
+        
+        if resultado:
+            valor_atual = resultado[0]
+            taxa_juros = 2.50  # 2.5% ao dia
+            juros = int(valor_atual * (taxa_juros / 100.0) * dias)
+            novo_valor = valor_atual + juros
+            
+            return {
+                'saldo_atual': valor_atual,
+                'juros': juros,
+                'saldo_futuro': novo_valor,
+                'dias': dias
+            }
+        return None
+        
+    except Exception as e:
+        if connection:
+            connection.close()
+        return None
+
+def sacar_tudo_banco_por_jogador(nickname):
+    """
+    Saca todo o saldo disponível do banco para o jogador
+    """
+    connection = connect_to_db()
+    if connection is None:
+        return False
+
+    try:
+        cursor = connection.cursor()
+        # Buscar saldo atual do banco
+        cursor.execute('''
+            SELECT ib."valorAtual"
+            FROM "inst_banco" ib
+            JOIN "mundo" m ON ib."seedMundo" = m."seedMundo"
+            WHERE m."nickname" = %s
+        ''', (nickname,))
+        resultado = cursor.fetchone()
+        if not resultado:
+            return False
+        saldo_banco = resultado[0]
+        if saldo_banco <= 0:
+            print(Fore.YELLOW + "Não há saldo disponível para saque.")
+            return False
+        # Atualizar saldo do banco
+        cursor.execute('''
+            UPDATE "inst_banco"
+            SET "valorAtual" = 0
+            WHERE "seedMundo" IN (
+                SELECT m."seedMundo"
+                FROM "mundo" m
+                WHERE m."nickname" = %s
+            )
+        ''', (nickname,))
+        # Atualizar ouro do jogador
+        cursor.execute('UPDATE "jogador" SET "ouro" = "ouro" + %s WHERE "nickname" = %s', (saldo_banco, nickname))
+        connection.commit()
+        cursor.close()
+        connection.close()
+        print(Fore.GREEN + f"✅ Você sacou {saldo_banco} ouro do banco!")
+        return True
+    except Exception as e:
         if connection:
             connection.rollback()
             connection.close()
@@ -341,7 +567,7 @@ def visualizar_itens_varejo_por_jogador(nickname):
     try:
         cursor = connection.cursor()
         
-        # Busca todos os itens disponíveis
+        #atualmente busca todos os itens disponíveis
         # TODO:immplementar logica para buscar itens aleatorios
         cursor.execute("""
             SELECT i."idItem", i."nome", 
