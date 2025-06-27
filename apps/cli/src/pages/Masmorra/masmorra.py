@@ -133,7 +133,7 @@ def mainMasmorra(nickname):
         print(f"{Style.BRIGHT}{Fore.YELLOW}Você tem certeza que deseja entrar?".center(largura_terminal))
         print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}{dadosMasmorra[0]}".center(largura_terminal))
         print("\n")
-        print(f"{Fore.WHITE}Digite 's' para confirmar ou 'n' para escolher outro nome.".center(largura_terminal))
+        print(f"{Fore.WHITE}Digite 's' para confirmar ou 'n' para desistir.".center(largura_terminal))
 
         print("\n\n\n\n\n")
         confirmacao = input(f"{Style.BRIGHT}{Fore.MAGENTA}>>> ").strip().lower()
