@@ -17,7 +17,7 @@ CREATE SCHEMA public;
 -- CRIACAO DE TABELAS
 CREATE TABLE "local" (
     "nomeLocal" CHARACTER varying(60) PRIMARY KEY,
-    "descricao" CHARACTER varying(200) NOT NULL,
+    "descricao" CHARACTER varying(800) NOT NULL,
     "tipoLocal" CHARACTER varying(20) NOT NULL,
     "acesso" CHARACTER varying(60),
 
@@ -95,8 +95,7 @@ CREATE TABLE "sala" (
     "seedMundo" character varying(30) NOT NULL,
     "seedMasmorra" character varying(30) NOT NULL,
 
-    CONSTRAINT "fk_inst_masmorra" FOREIGN KEY ("seedMasmorra", "seedMundo") REFERENCES "inst_masmorra" ("seedMasmorra", "seedMundo") ON DELETE CASCADE,
-    CONSTRAINT "fk_masmorra" FOREIGN KEY ("nomeLocal") REFERENCES "masmorra" ("nomeLocal") ON DELETE CASCADE
+    CONSTRAINT "fk_inst_masmorra" FOREIGN KEY ("seedMasmorra", "seedMundo") REFERENCES "inst_masmorra" ("seedMasmorra", "seedMundo") ON DELETE CASCADE
 );
 
 CREATE TABLE "monstro" (

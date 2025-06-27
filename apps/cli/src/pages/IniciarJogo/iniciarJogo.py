@@ -9,6 +9,7 @@ import subprocess
 import platform
 import os
 import shutil
+import textwrap
 
 # definição da largura da janela do terminal:
 largura_terminal = shutil.get_terminal_size().columns
@@ -23,36 +24,52 @@ def musicCity(): #musica da cidade
     pygame.mixer.music.load("apps/cli/assets/musics/MoonlighterOST_02_Cidade.mp3")
     pygame.mixer.music.play(-1, fade_ms=3000)
 
-def cabecalho(dadosJogador):
-        local_jogador: str = buscar_local_jogador()
-        print(f"{Fore.LIGHTGREEN_EX}{Style.BRIGHT}╔════════════════════[ MOONLIGHTER GAME ]════════════════════╗".center(largura_terminal))
-        print(f"{Fore.WHITE}{Style.BRIGHT}{dadosJogador[0]}".center(largura_terminal))
-        print(f"{Fore.WHITE}{Style.BRIGHT}HP: {dadosJogador[1]} / {dadosJogador[2]} | OURO: {dadosJogador[3]}".center(largura_terminal))
-        print("\n")
-        if dadosJogador[4] == -1:
-            print(f"{Fore.WHITE}{Style.BRIGHT}{dadosJogador[6]}".center(largura_terminal))
-            print(f"{Fore.WHITE}{Style.BRIGHT}DIA: XX | PERÍODO: XX".center(largura_terminal))
-        else:
-            print(f"{Fore.WHITE}{Style.BRIGHT}MASMORRA: {dadosJogador[6]} | SEED: XXX".center(largura_terminal))
-            print(f"{Fore.WHITE}{Style.BRIGHT}SALA [Posição Horizontal][Posição Vertical]: [{dadosJogador[3]}][{dadosJogador[4]}]".center(largura_terminal))
-        print(f"{Fore.LIGHTGREEN_EX}{Style.BRIGHT}╚════════════════════════════════════════════════════════════╝".center(largura_terminal))
+def print_in_centered(text):
+    largura_terminal = shutil.get_terminal_size().columns
+    # Quebra o texto em linhas que caibam no terminal
+    linhas = textwrap.wrap(text, width=largura_terminal - 4)  # margem para centralizar
+    for linha in linhas:
+        linha_centralizada = linha.center(largura_terminal)
+        print(Style.BRIGHT + Fore.WHITE + linha_centralizada)
+
+def cabecalho(nickname):
         
-        print("\n")
+    dadosJogador = buscar_dadosJogador(nickname)
 
+    print(f"{Fore.LIGHTGREEN_EX}{Style.BRIGHT}╔════════════════════[ MOONLIGHTER GAME ]════════════════════╗".center(largura_terminal))
+    print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}{dadosJogador[0]}".center(largura_terminal))
+    print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}HP: {dadosJogador[1]} / {dadosJogador[2]} | OURO: {dadosJogador[3]}".center(largura_terminal))
+    print("\n")
+    if dadosJogador[4] == -1:
+        print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}{dadosJogador[6]}".center(largura_terminal))
+        print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}DIA: XX | PERÍODO: XX".center(largura_terminal))
+    else:
+        print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}MASMORRA: {dadosJogador[6]} | SEED: XXX".center(largura_terminal))
+        print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}SALA [Posição Horizontal][Posição Vertical]: [{dadosJogador[3]}][{dadosJogador[4]}]".center(largura_terminal))
+    print(f"{Fore.LIGHTGREEN_EX}{Style.BRIGHT}╚════════════════════════════════════════════════════════════╝".center(largura_terminal))
+    
+    print("\n")
 
-def locomocao(dadosJogador):
+    print_in_centered(buscarDescricaoLocal(dadosJogador[6]))
+    print("\n")
+
+def locomocao(nickname):
     while True:
-        cabecalho(dadosJogador)
+        dadosJogador = buscar_dadosJogador(nickname)
+        limpar_terminal()
+        cabecalho(nickname)
         print(f"{Style.BRIGHT}{Fore.YELLOW}Escolha um local para se mover:".center(largura_terminal))
+        print("\n")
 
         locais = exibir_locais(dadosJogador[6])
-        print(locais)
         if (dadosJogador[6] != 'Vila Rynoka'): locais.append(('Voltar ao Local Anterior',))
-        locais.pop(('Encerrar Locomoção',))
+        locais.append(('Encerrar Locomoção',))
 
         for i, local in enumerate(locais, start=1):
-            if local == "Encerrar Locomoção":
+            if local[0] == "Encerrar Locomoção":
                 print(f"{Fore.RED}{Style.BRIGHT}{i} - {local[0]}")
+            elif local[0] == "Voltar ao Local Anterior":
+                print(f"{Fore.LIGHTYELLOW_EX}{Style.BRIGHT}{i} - {local[0]}")
             else:
                 print(f"{Fore.YELLOW}{Style.BRIGHT}{i} - {local[0]}")
 
@@ -60,14 +77,41 @@ def locomocao(dadosJogador):
         entrada = input(f"{Style.BRIGHT}{Fore.MAGENTA}>> ")
         
         if entrada == '':
-            print("Por favor, digite um número.")
+            limpar_terminal()
+            print('\033[?25l', end='', flush=True)
+            print("\n\n\n\n\n\n\n\n")
+            print(f"{Style.BRIGHT}{Fore.RED}Por favor, digite um número.".center(largura_terminal))
+            time.sleep(2)
+            print('\033[?25h', end='', flush=True)
             continue
-        
+
+        if entrada < '1' or entrada > str(len(locais)):
+            limpar_terminal()
+            print('\033[?25l', end='', flush=True)
+            print("\n\n\n\n\n\n\n\n")
+            print(f"{Style.BRIGHT}{Fore.RED}Opção inválida. Por favor, escolha um número válido.".center(largura_terminal))
+            time.sleep(2)
+            print('\033[?25h', end='', flush=True)
+            continue
+
         try:
             escolha = int(entrada)
-            return escolha, dadosJogador[6]
+            
+            if locais[escolha - 1][0] == 'Encerrar Locomoção':
+                return
+            elif locais[escolha - 1][0] == 'Voltar ao Local Anterior':
+                atualizarParaLocalAnterior(dadosJogador)
+                continue
+            else:
+                atualizar_local_jogador(locais[escolha - 1][0], nickname)
+
         except ValueError:
-            print("Por favor, digite um número válido.")
+            limpar_terminal()
+            print('\033[?25l', end='', flush=True)
+            print("\n\n\n\n\n\n\n\n")
+            print(f"{Style.BRIGHT}{Fore.RED}Por favor, digite um número válido.".center(largura_terminal))
+            time.sleep(2)
+            print('\033[?25h', end='', flush=True)
             continue
 
 def exibirOpcoes():
@@ -105,7 +149,7 @@ def sairDoJogo():
         pygame.mixer.music.fadeout(7000)
         time.sleep(2)
         limpar_terminal()
-        print("\n\n\n\n\n")
+        print("\n\n\n\n\n\n\n\n\n\n")
         print(logo)
         time.sleep(7)
         return True
@@ -124,21 +168,21 @@ def exibirMapa():
         print("Sistema operacional não suportado para abrir nova janela de terminal.")
 
 #funcao principal
-def iniciar_jogo(dadosJogador):
+def iniciar_jogo(nickname):
     init(autoreset=True) #terminal colorido
     musicCity()
     # loop dos locais no terminal
     while True:
 
         limpar_terminal()
-        cabecalho(dadosJogador)
+        cabecalho(nickname)
         escolha = exibirOpcoes()
 
         try:
             if int(escolha) == 1:
                 exibirMapa()
             elif int(escolha) == 2:
-                locomocao(dadosJogador)
+                locomocao(nickname)
             elif int(escolha) == 5:
                 if sairDoJogo():
                     break

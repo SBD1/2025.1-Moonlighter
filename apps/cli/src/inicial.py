@@ -183,7 +183,7 @@ def novoJogador():
             pygame.mixer.music.fadeout(7000)
             time.sleep(2)
             limpar_terminal()
-            print("\n\n\n\n\n\n")
+            print("\n\n\n\n\n\n\n\n\n\n")
             print(logo)
             time.sleep(5)
             print('\033[?25h', end='', flush=True)
@@ -253,11 +253,11 @@ def continuar_jogo():
                 pygame.mixer.music.fadeout(7000)
                 time.sleep(2)
                 limpar_terminal()
-                print("\n\n\n\n\n\n")
+                print("\n\n\n\n\n\n\n\n\n\n")
                 print(logo)
                 time.sleep(5)
                 print('\033[?25h', end='', flush=True)
-                iniciar_jogo(jogador_selecionado)
+                iniciar_jogo(jogador_selecionado[0])
             elif confirmacao == 'n' or confirmacao == 'N':
                 limpar_terminal()
                 print(logo)
@@ -283,8 +283,11 @@ def enter_continue():
     input(Fore.LIGHTBLACK_EX + "\nPressione Enter para continuar...")
 
 #funcao principal
-def tela_inicial(opcoes, introduction = False):
+def tela_inicial(introduction = False):
     while True:
+        jogadores = buscaTodosJogadores()
+        opcoes = ["Continuar", "Novo Jogo", "Sair"] if len(jogadores) > 0 else ["Novo Jogo", "Sair"]
+
         musicTheme()
 
         if introduction:
@@ -332,9 +335,4 @@ def tela_inicial(opcoes, introduction = False):
 
 # Executa a tela inicial
 if __name__ == '__main__':
-    jogadores = buscaTodosJogadores()
-
-    if len(jogadores) == 0:
-        tela_inicial(["Novo Jogo", "Sair"], False)
-    else:
-        tela_inicial(["Continuar", "Novo Jogo", "Sair"], False)
+    tela_inicial()
