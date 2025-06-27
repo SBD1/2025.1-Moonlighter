@@ -9,6 +9,15 @@ import shutil
 import pygame
 import pyfiglet
 import os
+from pages.Estabelecimento.db_estabelecimento import (
+    criar_instancia_banco_por_jogador,
+    criar_instancia_varejo_por_jogador,
+    criar_instancia_forja_por_jogador
+)
+from pages.IniciarJogo.db_iniciarJogo import (
+    buscar_nome_jogador,
+    selecionar_jogador
+)
 
 # definicoes e funcoes iniciais
 init(autoreset=True) #terminal colorido
@@ -152,13 +161,45 @@ def novoJogador():
                 
                 seed = gerarSeed()
                 cursor = connection.cursor()
+                
+                # Criar jogador e mundo
                 cursor.execute("INSERT INTO jogador VALUES (%s, 100, 100, 0, 0, 0, 'Vila Rynoka', NULL);", (nickname,))
                 cursor.execute("INSERT INTO inst_inventario VALUES (1, %s, 0), (2, %s, 0), (3, %s, 0), (4, %s, 0), (5, %s, 0), (6, %s, 0), (7, %s, 0);", tuple([nickname]*7))
                 cursor.execute("INSERT INTO mundo VALUES (%s, %s, 'Manhã', 1, 1);", (seed, nickname,))
                 cursor.execute("INSERT INTO \"loja_jogador\" VALUES (%s, 'Moonlighter', 1, 10, 0)", (seed,))
+                
+                # Fazer commit das inserções principais
                 connection.commit()
+                
+                # Criar instâncias dos estabelecimentos para o novo jogador
+                sucesso_banco = criar_instancia_banco_por_jogador(nickname, "Banco de Rynoka", 1, 0)
+                if not sucesso_banco:
+                    print(f"{Fore.YELLOW}Aviso: Não foi possível criar instância do banco para {nickname}")
+                
+                sucesso_varejo = criar_instancia_varejo_por_jogador(nickname, "Loja de Varejo", 2, 15)
+                if not sucesso_varejo:
+                    print(f"{Fore.YELLOW}Aviso: Não foi possível criar instância do varejo para {nickname}")
+                
+                sucesso_forja = criar_instancia_forja_por_jogador(nickname, "Forja de Vulcan", 3)
+                if not sucesso_forja:
+                    print(f"{Fore.YELLOW}Aviso: Não foi possível criar instância da forja para {nickname}")
+                
                 cursor.close()
                 connection.close()
+                
+                limpar_terminal()
+                print("\n\n\n\n")
+                print(logo)
+                print("\n\n\n")
+                print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}JOGADOR CRIADO COM SUCESSO!".center(largura_terminal))
+                pygame.mixer.music.fadeout(7000)
+                time.sleep(2)
+                limpar_terminal()
+                print("\n\n\n\n\n\n\n\n\n")
+                print(logo)
+                time.sleep(5)
+                print('\033[?25h', end='', flush=True)
+                return exibirHistoria(buscarJogador(nickname))
             except:
                 limpar_terminal()
                 print("\n\n\n\n")
@@ -168,20 +209,6 @@ def novoJogador():
                 time.sleep(2)
                 print('\033[?25h', end='', flush=True)
                 return novoJogador()
-            
-            limpar_terminal()
-            print("\n\n\n\n")
-            print(logo)
-            print("\n\n\n")
-            print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}JOGADOR CRIADO COM SUCESSO!".center(largura_terminal))
-            pygame.mixer.music.fadeout(7000)
-            time.sleep(2)
-            limpar_terminal()
-            print("\n\n\n\n\n\n\n\n\n")
-            print(logo)
-            time.sleep(5)
-            print('\033[?25h', end='', flush=True)
-            return exibirHistoria(buscarJogador(nickname))
         elif confirmacao == 'n' or confirmacao == 'N':
             return novoJogador()
         else:
