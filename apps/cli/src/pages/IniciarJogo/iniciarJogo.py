@@ -1,5 +1,6 @@
 import time
 from pages.IniciarJogo.db_iniciarJogo import *
+from pages.IniciarJogo.db_iniciarJogo import selecionar_jogador
 from pages.Estabelecimento import menu_varejo, menu_forja, menu_banco
 from utils.limparTerminal import limpar_terminal
 from utils.enterContinue import enter_continue
@@ -56,6 +57,14 @@ def cabecalho_completo():
 #funcao principal
 def iniciar_jogo():
     init(autoreset=True) #terminal colorido
+    
+    # Selecionar jogador uma vez no início
+    jogador_atual = selecionar_jogador()
+    if not jogador_atual:
+        print(f"{Fore.RED}Erro ao selecionar jogador!")
+        enter_continue()
+        return
+    
     musicCity()
     local_inicial("Vila Rynoka")
 
@@ -88,18 +97,12 @@ def iniciar_jogo():
                     break
 
                 elif (escolhaCC == 1): #Forja vulcanica
-                    # Buscar dados do jogador atual
-                    jogador_atual = buscar_nome_jogador()
                     menu_forja(jogador_atual)
                 
                 elif (escolhaCC == 2): #O chapeu de madeira
-                    # Buscar dados do jogador atual
-                    jogador_atual = buscar_nome_jogador()
                     menu_varejo(jogador_atual)
 
                 elif (escolhaCC == 3): #Banco de rynoka
-                    # Buscar dados do jogador atual
-                    jogador_atual = buscar_nome_jogador()
                     menu_banco(jogador_atual)
 
                 elif (escolhaCC == 4): #Tenda da bruxa
