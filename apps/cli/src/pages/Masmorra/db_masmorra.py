@@ -1,6 +1,9 @@
 from setup.database import connect_to_db
 from setup.database import connect_to_db
 from colorama import Fore
+import hashlib
+from utils.geradorSeed import gerarSeed
+import time
 
 def ObterDadosMundo(nickname):
     connection = connect_to_db()
@@ -77,7 +80,7 @@ def atualizarParaLocalAnterior(dadosJogador):
     cursor.close()
     connection.close()
 
-def salvarMasmorra(dadosMundo, dadosMasmorra, matriz, seedMasmorra):
+def salvarMasmorra(dadosMundo, dadosMasmorra, seedMasmorra, matriz):
     maxLinhas = len(matriz)
     maxColunas = len(matriz[0])
 
@@ -85,34 +88,56 @@ def salvarMasmorra(dadosMundo, dadosMasmorra, matriz, seedMasmorra):
     if connection is None:
         print(Fore.RED + "Erro ao conectar ao banco de dados.")
         return None
+    
+    stringCompleta = f"{dadosMundo[1]}{dadosMasmorra[0]}"
+    hashVal = hashlib.sha256(stringCompleta.encode()).hexdigest()
+    seedMasmorraCompleta = f"{seedMasmorra}-{hashVal[:20]}-{gerarSeed(10)}"
 
     cursor = connection.cursor()
 
-    cursor.execute('''
-                  INSERT INTO 'inst_masmorra'
+    cursor.execute('''INSERT INTO "inst_masmorra"
                     VALUES
                     (%s, %s, %s, TRUE);
-                  ''', (dadosMundo[0], seedMasmorra, dadosMasmorra[0],)
+                  ''', (dadosMundo[0], seedMasmorraCompleta, dadosMasmorra[0],)
                   )
-    
+    connection.commit()
+
     seedSalasPercorrida = []
-    recursaoSalvarSalas(matriz)
-            
-    def recursaoSalvarSalas(matriz, x = 7, y = 7):
-        if matriz[x, y] == 0 or (x == maxLinhas or x == 0) or (y == maxColunas or y == 0):
+
+    def recursaoSalvarSalas(matriz, x, y):
+        if (
+            x < 0 or x >= maxLinhas or
+            y < 0 or y >= maxColunas
+        ):
             return
-        if matriz[x, y] in seedSalasPercorrida:
+        elif matriz[x][y] == 0:
+            return
+        elif matriz[x][y]["seed"] in seedSalasPercorrida:
             return
         else:
-          seedSalasPercorrida.pop(matriz[x, y])
-          cursor.execute('''
-                        INSERT INTO 'sala'
-                          VALUES 
-                          (%s, %s, %s, 'Teste', %s, %s, %s)
-                        ''', (matriz[x, y], x, y, dadosMundo[0], dadosMasmorra[0],)
-                        )
-          
-          recursaoSalvarSalas(matriz, x+1, y)
-          recursaoSalvarSalas(matriz, x-1, y)
-          recursaoSalvarSalas(matriz, x, y+1)
-          recursaoSalvarSalas(matriz, x, y-1)
+            seedSalasPercorrida.append(matriz[x][y]["seed"])
+            if x == 7 and y == 7:
+                tipoSala = "Entrada"
+            elif matriz[x][y]["boss"] == True:
+                tipoSala = "Boss"
+            else:
+                tipoSala = "Comum"
+            
+            conexoes = "".join(matriz[x][y]["conexoes"])
+            cursor.execute('''
+                            INSERT INTO "sala"
+                            VALUES 
+                            (%s, %s, %s, %s, %s, %s, %s)
+                            ''', (matriz[x][y]["seed"], x, y, conexoes, tipoSala, dadosMundo[0], seedMasmorraCompleta,)
+            )
+            connection.commit()
+            recursaoSalvarSalas(matriz, x, y+1)
+            recursaoSalvarSalas(matriz, x, y-1)
+            recursaoSalvarSalas(matriz, x+1, y)
+            recursaoSalvarSalas(matriz, x-1, y)
+
+    recursaoSalvarSalas(matriz, 7, 7)
+
+    cursor.close()
+    connection.close()
+    return seedMasmorraCompleta

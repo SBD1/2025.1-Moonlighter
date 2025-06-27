@@ -185,6 +185,8 @@ def iniciar_jogo(nickname):
                 exibirMapa()
             elif int(escolha) == 2:
                 locomocao(nickname)
+            elif int(escolha) == 3:
+                ver_inventario(nickname)
             elif int(escolha) == 5:
                 if sairDoJogo():
                     break

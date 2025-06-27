@@ -78,7 +78,7 @@ CREATE TABLE "estabelecimento" (
 
 CREATE TABLE "inst_masmorra" (
     "seedMundo" CHARACTER varying(30) NOT NULL,
-    "seedMasmorra" character varying(30) NOT NULL,
+    "seedMasmorra" character varying(36) NOT NULL,
     "nomeLocal" character varying(60) NOT NULL,
     "ativo" BOOLEAN NOT NULL,
 
@@ -91,9 +91,10 @@ CREATE TABLE "sala" (
     "seedSala" character varying(30) PRIMARY KEY,
     "posicaoX" integer NOT NULL,
     "posicaoY" integer NOT NULL,
+    "conexão" CHARACTER varying(4) NOT NULL,
     "categoria" character varying(60) NOT NULL,
     "seedMundo" character varying(30) NOT NULL,
-    "seedMasmorra" character varying(30) NOT NULL,
+    "seedMasmorra" character varying(36) NOT NULL,
 
     CONSTRAINT "fk_inst_masmorra" FOREIGN KEY ("seedMasmorra", "seedMundo") REFERENCES "inst_masmorra" ("seedMasmorra", "seedMundo") ON DELETE CASCADE
 );

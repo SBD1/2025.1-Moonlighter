@@ -208,11 +208,15 @@ def continuar_jogo():
     for i, jogador in enumerate(jogadores):
         nome_jogador = jogador[0]
         ultimoUpdate = jogador[9]
+        ourosJogador = jogador[3]
+        localizacaoJogador = jogador[6]
         ultimoUpdate = ultimoUpdate.replace(tzinfo=ZoneInfo("UTC"))
         ultimoUpdate_br = ultimoUpdate.astimezone(ZoneInfo("America/Sao_Paulo"))
-        data_formatada = ultimoUpdate_br.strftime('%d/%m/%Y %H:%M:%S')
+        data_formatada = ultimoUpdate_br.strftime('%d/%m/%Y às %H:%M:%S')
         print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}{nome_jogador}".center(largura_terminal))
-        print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}Último Salvamento: {data_formatada}".center(largura_terminal))
+        print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}Ouros: {Fore.MAGENTA}{ourosJogador}".center(largura_terminal + 3))
+        print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}Localização: {Fore.MAGENTA}{localizacaoJogador}".center(largura_terminal + 5))
+        print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}Último Salvamento: {Fore.MAGENTA}{data_formatada}".center(largura_terminal + 5))
         print(f"{Style.BRIGHT}{Fore.YELLOW}═════════════════════════[{Fore.LIGHTGREEN_EX}{i+1}{Fore.YELLOW}]═════════════════════════".center(largura_terminal + 12))
 
     print("\n\n")

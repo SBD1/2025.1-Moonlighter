@@ -155,9 +155,14 @@ def mainMasmorra(nickname):
             print(logo)
             print("\n\n\n\n")
             print(f"{Style.BRIGHT}{Fore.LIGHTYELLOW_EX}GERANDO MASMORRA...".center(largura_terminal))
-            novaMasmorra = gerarMasmorra(dadosMasmorra)
-
-            time.sleep(3)
+            novaMasmorra, seedMasmorra = gerarMasmorra(dadosMasmorra)
+            try:
+                seedMasmorra = salvarMasmorra(dadosMundo, dadosMasmorra, seedMasmorra, novaMasmorra)
+            except Exception as e:
+                print(Fore.RED + "Erro ao salvar a masmorra no banco de dados:", e)
+                time.sleep(3)
+                return
+            time.sleep(6)
             limpar_terminal()
             print(logo)
             print("\n\n")
@@ -165,7 +170,7 @@ def mainMasmorra(nickname):
             print("\n")
             print(f"{Style.BRIGHT}{Fore.YELLOW}════════════════════════════════════════════════════".center(largura_terminal))
             print(f"{Style.BRIGHT}{Fore.YELLOW}SEED DA MASMORRA".center(largura_terminal))
-            print(f"{Style.BRIGHT}{Fore.YELLOW}12399i102938498203948209348209348234234".center(largura_terminal))
+            print(f"{Style.BRIGHT}{Fore.YELLOW}{seedMasmorra}".center(largura_terminal))
             print(f"{Style.BRIGHT}{Fore.YELLOW}════════════════════════════════════════════════════".center(largura_terminal))
             pygame.mixer.music.fadeout(7000)
             time.sleep(7)

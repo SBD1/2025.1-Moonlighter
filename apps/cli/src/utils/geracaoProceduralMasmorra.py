@@ -72,7 +72,8 @@ def criar_sala(x, y, matriz, limite):
             "seed": seed,
             "conexoes": [],
             "ordem_criacao": index,
-            "visitado": True
+            "visitado": True,
+            "boss": False
         } 
     
     else: #se a sala ja existe nao recria, apenas gera conexao
@@ -277,5 +278,5 @@ def gerarMasmorra(dadosMasmorra):
 
     caminho_mais_longo = encontrar_caminho_mais_longo(matriz, posicaoX, posicaoY)
     marcar_sala_boss(matriz, caminho_mais_longo)
-    # imprimir_mapa_detalhado(matriz)
+    imprimir_mapa_detalhado(matriz)
     return matriz, seedMasmorra
