@@ -103,10 +103,7 @@ def novoJogador():
     nickname = input(f"{Style.BRIGHT}{Fore.MAGENTA}>>> ")
 
     if nickname == '0':
-        if len(jogadores) == 0:
-            tela_inicial(["Novo Jogo", "Sair"], False)
-        else:
-            tela_inicial(["Continuar", "Novo Jogo", "Sair"], False)
+        return
 
     if len(nickname) >= 60:
         limpar_terminal()

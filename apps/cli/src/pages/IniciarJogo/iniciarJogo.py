@@ -2,7 +2,7 @@ import time
 import pyfiglet
 from pages.IniciarJogo.db_iniciarJogo import *
 from utils.limparTerminal import limpar_terminal
-from utils.enterContinue import enter_continue
+from pages.Masmorra.masmorra import mainMasmorra
 from colorama import Fore, Back, Style, init
 import pygame
 import subprocess
@@ -104,6 +104,8 @@ def locomocao(nickname):
                 continue
             else:
                 atualizar_local_jogador(locais[escolha - 1][0], nickname)
+                if locais[escolha - 1][0].startswith('Masmorra'):
+                    mainMasmorra(nickname)
 
         except ValueError:
             limpar_terminal()
