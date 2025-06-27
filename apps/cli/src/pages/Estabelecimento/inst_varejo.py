@@ -29,10 +29,8 @@ def menu_varejo(jogador):
     
     # Verificar e criar instância da loja se necessário
     if not verificar_instancia_varejo_por_jogador(jogador):
-        # Buscar seed_mundo para criar instância
         seed_mundo = buscar_seed_mundo(jogador)
         if seed_mundo:
-            # Criar instância da loja
             sucesso = criar_instancia_varejo(seed_mundo, "O Chapéu de Madeira", 3, 15)
             if not sucesso:
                 print(f"{Fore.RED}Erro ao inicializar a loja!")
@@ -85,7 +83,7 @@ def ver_itens_disponiveis(jogador):
             id_item, nome, preco, descricao = item
             print(f"{Fore.WHITE}{id_item:<5} {nome:<25} {preco:<10}")
             print(f"{Fore.LIGHTBLACK_EX}     {descricao}")
-            print()  # Linha em branco entre itens
+            print()
     else:
         print(f"{Fore.RED}Nenhum item disponível para compra!")
     
