@@ -42,71 +42,143 @@ def limpar_terminal():
 def enter_continue():
     input(Fore.LIGHTBLACK_EX + "\nPressione Enter para continuar...")
 
-#mapa da masmorra
-def mapa_masmorra():
+def construir_matriz_masmorra(salas):
+    matriz = {}
 
-    mapa: list = [
-        "###############",
-        "#S............#",
-        "#.............#",
-        "#.............#",
-        "#.............#",
-        "#.............#",
-        "#.............#",
-        "###############"
-    ]
+    for x, y, conexoes, tipoSala in salas:
+        matriz[(x, y)] = {
+            "conexoes": conexoes,
+            "tipo": tipoSala,
+            "visitado": False,
+            "descoberto": False
+        }
 
+    return matriz
+
+def mostrar_minimapa(matriz, pos_jogador=(7, 7)):
+    if not matriz:
+        print("Nenhuma sala para mostrar.")
+        return
+
+    try:
+        xs = [coord[0] for coord in matriz.keys()]
+        ys = [coord[1] for coord in matriz.keys()]
+        min_x, max_x = min(xs), max(xs)
+        min_y, max_y = min(ys), max(ys)
+    except ValueError as e:
+        print(Fore.RED + "Não foi possível determinar os limites:", e)
+        return
+    
+    print(f"{Style.BRIGHT}{Fore.YELLOW}════════════════════════════════════════════════════".center(largura_terminal))
+    print(f"{Style.BRIGHT}{Fore.YELLOW}{dadosMasmorra[0]}".center(largura_terminal))
+    print(f"{Style.BRIGHT}{Fore.YELLOW}════════════════════════════════════════════════════".center(largura_terminal))
+    print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}Seed: {seedMasmorra}".center(largura_terminal))
     print("\n")
-    for linha in mapa:
-        for char in linha:
-            if char == "#":
-                print(Fore.LIGHTBLACK_EX + char, end="")
-            elif char == ".":
-                print(Fore.WHITE + char, end="")
-            elif char == "S":
-                print(Fore.GREEN + char, end="")
-            elif char == "T":
-                print(Fore.YELLOW + char, end="")
-        print()
-    print("\n")
 
-#funcao da area da masmorra
-def area_masmorra():
-    init(autoreset=True) #terminal colorido
-    limpar_terminal()
-    musicMasmorraGolem()
+    for x in range(min_x, max_x + 1):
+        linha = ""
+        for y in range(min_y, max_y + 1):
+            pos = (x, y)
+            sala = matriz.get(pos)
+
+            if not sala or not sala.get("descoberto"):
+                linha += "   "
+                continue
+
+            if pos == pos_jogador:
+                linha += f"{Fore.YELLOW}{Style.BRIGHT} P {Style.RESET_ALL}"
+            elif sala["visitado"] and sala["tipo"] != "Boss":
+                linha += f"{Fore.WHITE} ■ {Style.RESET_ALL}"
+            elif sala["tipo"] == "Boss":
+                linha += f"{Fore.RED} B {Style.RESET_ALL}"
+
+            else:
+                linha += f"{Fore.LIGHTBLACK_EX} ■ {Style.RESET_ALL}"
+        print(linha)
+
+
+
+def explorar_masmorra(matriz, pos_inicial=(7, 7)):
+    global seedMasmorra
+
+    def revelar_salvas_conectadas(matriz, pos):
+        sala = matriz.get(pos)
+        if not sala:
+            return
+
+        sala["descoberto"] = True
+        direcoes = sala["conexoes"]
+
+        dx_dy = {
+            'N': (-1, 0),
+            'S': (1, 0),
+            'L': (0, 1),
+            'O': (0, -1)
+        }
+
+        for direcao in direcoes:
+            dx, dy = dx_dy[direcao]
+            vizinha = (pos[0] + dx, pos[1] + dy)
+            if vizinha in matriz:
+                matriz[vizinha]["descoberto"] = True
+
+
+
+    pos = pos_inicial
+    matriz[pos]["visitado"] = True
+    matriz[pos]["descoberto"] = True
+    revelar_salvas_conectadas(matriz, pos)
 
     while True:
-        print(Fore.RED + f"Vida: XX")
-        print(Fore.YELLOW + f"dinheiro: $XX.xx")
+        limpar_terminal()
+        mostrar_minimapa(matriz, pos)
+        sala_atual = matriz.get(pos)
 
-        mapa_masmorra()
+        if not sala_atual:
+            print("Você está em uma sala inválida.")
+            break
 
-        print("wasd - movimentar personagem")
-        print("i - abrir inventario")
-        print("x - sair da masmorra (usar pingente)")
+        opcoes = {}
+        if 'N' in sala_atual["conexoes"]:
+            opcoes['w'] = (pos[0] - 1, pos[1])
+        if 'S' in sala_atual["conexoes"]:
+            opcoes['s'] = (pos[0] + 1, pos[1])
+        if 'L' in sala_atual["conexoes"]:
+            opcoes['d'] = (pos[0], pos[1] + 1)
+        if 'O' in sala_atual["conexoes"]:
+            opcoes['a'] = (pos[0], pos[1] - 1)
 
-        escolha: str = input("\nDigite: ")
+        print(Fore.CYAN + "\nMovimentos possíveis:")
+        for tecla in opcoes:
+            direcao = {
+                'w': "↑ Cima",
+                's': "↓ Baixo",
+                'a': "← Esquerda",
+                'd': "→ Direita"
+            }[tecla]
+            print(Fore.YELLOW + f"  {tecla.upper()} - {direcao}")
 
-        if (escolha == 'x' or escolha == 'X'): #sair da masmorra
-            continue
+        comando = input("\nDigite uma direção ou 'q' para sair: ").lower()
 
-        if (escolha == 'w' or escolha == 'W'):
-            continue
-
-        if (escolha == 'a' or escolha == 'A'):
-            continue
-
-        if (escolha == 's' or escolha == 'S'):
-            continue
-
-        if (escolha == 'd' or escolha == 'D'):
-            continue
-
-        if (escolha == 'i' or escolha == 'I'):
-            continue
+        if comando == 'q':
+            print("Saindo da masmorra...")
+            break
+        elif comando in opcoes:
+            nova_pos = opcoes[comando]
+            if nova_pos in matriz:
+                pos = nova_pos
+                matriz[pos]["visitado"] = True
+                revelar_salvas_conectadas(matriz, pos)
+            else:
+                print("Movimento inválido. Nenhuma sala nessa direção.")
+                time.sleep(1)
+        else:
+            print("Comando inválido.")
+            time.sleep(1)
 
 def mainMasmorra(nickname):
+    global seedMasmorra, dadosMasmorra, dadosMundo
+
     dadosJogador = ObterDadosJogador(nickname)
     dadosMasmorra = ObterDadosMasmorra(dadosJogador[6])
     dadosMundo = ObterDadosMundo(nickname)
@@ -155,7 +227,17 @@ def mainMasmorra(nickname):
             print(logo)
             print("\n\n\n\n")
             print(f"{Style.BRIGHT}{Fore.LIGHTYELLOW_EX}GERANDO MASMORRA...".center(largura_terminal))
-            novaMasmorra, seedMasmorra = gerarMasmorra(dadosMasmorra)
+
+            print("Iniciando geração da masmorra...")
+            try:
+                novaMasmorra, seedMasmorra = gerarMasmorra(dadosMasmorra)
+            except Exception as e:
+                print("Erro ao gerar masmorra:", e)
+                import traceback
+                traceback.print_exc()
+
+            print("Masmorra gerada com seed:", seedMasmorra)
+
             try:
                 seedMasmorra = salvarMasmorra(dadosMundo, dadosMasmorra, seedMasmorra, novaMasmorra)
             except Exception as e:
@@ -166,16 +248,15 @@ def mainMasmorra(nickname):
             limpar_terminal()
             print(logo)
             print("\n\n")
-            print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}Você entrou na {dadosMasmorra[0]}!".center(largura_terminal))
-            print("\n")
-            print(f"{Style.BRIGHT}{Fore.YELLOW}════════════════════════════════════════════════════".center(largura_terminal))
-            print(f"{Style.BRIGHT}{Fore.YELLOW}SEED DA MASMORRA".center(largura_terminal))
-            print(f"{Style.BRIGHT}{Fore.YELLOW}{seedMasmorra}".center(largura_terminal))
-            print(f"{Style.BRIGHT}{Fore.YELLOW}════════════════════════════════════════════════════".center(largura_terminal))
-            pygame.mixer.music.fadeout(7000)
-            time.sleep(7)
-            limpar_terminal()
-            print('\033[?25h', end='', flush=True)
+ 
+            salas = carregar_salas(seedMasmorra)
+            matriz = construir_matriz_masmorra(salas)
+            explorar_masmorra(matriz, pos_inicial=(7,7))
+
+            # pygame.mixer.music.fadeout(7000)
+            # time.sleep(7)
+            # limpar_terminal()
+            # print('\033[?25h', end='', flush=True)
         else:
             limpar_terminal()
             print('\033[?25l', end='', flush=True)

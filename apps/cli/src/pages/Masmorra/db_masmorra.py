@@ -95,10 +95,10 @@ def salvarMasmorra(dadosMundo, dadosMasmorra, seedMasmorra, matriz):
 
     cursor = connection.cursor()
 
-    cursor.execute('''INSERT INTO "inst_masmorra"
+    cursor.execute('''INSERT INTO "inst_masmorra" ("seedMundo", "seedMasmorra", "nomeLocal", "ativo")
                     VALUES
-                    (%s, %s, %s, TRUE);
-                  ''', (dadosMundo[0], seedMasmorraCompleta, dadosMasmorra[0],)
+                    (%s, %s, %s, %s);
+                  ''', (dadosMundo[0], seedMasmorraCompleta, dadosMasmorra[0], True)
                   )
     connection.commit()
 
@@ -118,17 +118,17 @@ def salvarMasmorra(dadosMundo, dadosMasmorra, seedMasmorra, matriz):
             seedSalasPercorrida.append(matriz[x][y]["seed"])
             if x == 7 and y == 7:
                 tipoSala = "Entrada"
-            elif matriz[x][y]["boss"] == True:
+            elif matriz[x][y]["boss"]:
                 tipoSala = "Boss"
             else:
                 tipoSala = "Comum"
             
             conexoes = "".join(matriz[x][y]["conexoes"])
             cursor.execute('''
-                            INSERT INTO "sala"
+                            INSERT INTO "sala" ("seedSala", "posicaoX", "posicaoY", "conexão", "categoria", "seedMundo", "seedMasmorra")
                             VALUES 
                             (%s, %s, %s, %s, %s, %s, %s)
-                            ''', (matriz[x][y]["seed"], x, y, conexoes, tipoSala, dadosMundo[0], seedMasmorraCompleta,)
+                            ''', (matriz[x][y]["seed"], x, y, conexoes, tipoSala, dadosMundo[0], seedMasmorraCompleta)
             )
             connection.commit()
             recursaoSalvarSalas(matriz, x, y+1)
@@ -141,3 +141,22 @@ def salvarMasmorra(dadosMundo, dadosMasmorra, seedMasmorra, matriz):
     cursor.close()
     connection.close()
     return seedMasmorraCompleta
+
+def carregar_salas(seed_masmorra):
+    connection = connect_to_db()
+    if connection is None:
+        print("Erro ao conectar ao banco de dados.")
+        return None
+
+    cursor = connection.cursor()
+    cursor.execute('''
+        SELECT "posicaoX", "posicaoY", "conexão", "categoria"
+        FROM "sala"
+        WHERE "seedMasmorra" = %s;
+    ''', (seed_masmorra,))
+    
+    salas = cursor.fetchall()
+    cursor.close()
+    connection.close()
+
+    return salas
