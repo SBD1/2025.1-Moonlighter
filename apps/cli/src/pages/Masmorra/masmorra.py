@@ -3,9 +3,19 @@ from pages.Masmorra.db_masmorra import *
 import pygame
 import pyfiglet
 import os
+import sys
 import shutil
 import time
 from utils.geracaoProceduralMasmorra import gerarMasmorra
+import traceback
+
+if sys.platform.startswith('win'):
+    import msvcrt
+else:
+    try:
+        import getch
+    except ImportError:
+        getch = None
 
 # definição da largura da janela do terminal:
 largura_terminal = shutil.get_terminal_size().columns
@@ -98,7 +108,7 @@ def mostrar_minimapa(matriz, pos_jogador=(7, 7)):
 
 
 
-def explorar_masmorra(matriz, pos_inicial=(7, 7)):
+def explorar_masmorra(matriz, pos_inicial=(7, 7), nickname=None):
     global seedMasmorra
 
     def revelar_salvas_conectadas(matriz, pos):
@@ -122,7 +132,23 @@ def explorar_masmorra(matriz, pos_inicial=(7, 7)):
             if vizinha in matriz:
                 matriz[vizinha]["descoberto"] = True
 
-
+    def ler_tecla():
+        if sys.platform.startswith('win'):
+            # Windows
+            tecla = msvcrt.getch()
+            # Teclas especiais retornam prefixo 224, ignora
+            if tecla in b'\x00\xe0':
+                msvcrt.getch()
+                return ''
+            return tecla.decode('utf-8').lower()
+        else:
+            # Linux/macOS
+            if getch:
+                tecla = getch.getch()
+                return tecla.lower()
+            else:
+                # fallback: input normal (com Enter)
+                return input("\nDigite uma direção ou 'q' para sair: ").lower()
 
     pos = pos_inicial
     matriz[pos]["visitado"] = True
@@ -158,7 +184,7 @@ def explorar_masmorra(matriz, pos_inicial=(7, 7)):
             }[tecla]
             print(Fore.YELLOW + f"  {tecla.upper()} - {direcao}")
 
-        comando = input("\nDigite uma direção ou 'q' para sair: ").lower()
+        comando = ler_tecla()
 
         if comando == 'q':
             print("Saindo da masmorra...")
@@ -169,6 +195,7 @@ def explorar_masmorra(matriz, pos_inicial=(7, 7)):
                 pos = nova_pos
                 matriz[pos]["visitado"] = True
                 revelar_salvas_conectadas(matriz, pos)
+                atualiza_posicao_jogador(nickname, pos[0], pos[1])
             else:
                 print("Movimento inválido. Nenhuma sala nessa direção.")
                 time.sleep(1)
@@ -228,15 +255,7 @@ def mainMasmorra(nickname):
             print("\n\n\n\n")
             print(f"{Style.BRIGHT}{Fore.LIGHTYELLOW_EX}GERANDO MASMORRA...".center(largura_terminal))
 
-            print("Iniciando geração da masmorra...")
-            try:
-                novaMasmorra, seedMasmorra = gerarMasmorra(dadosMasmorra)
-            except Exception as e:
-                print("Erro ao gerar masmorra:", e)
-                import traceback
-                traceback.print_exc()
-
-            print("Masmorra gerada com seed:", seedMasmorra)
+            novaMasmorra, seedMasmorra = gerarMasmorra(dadosMasmorra)
 
             try:
                 seedMasmorra = salvarMasmorra(dadosMundo, dadosMasmorra, seedMasmorra, novaMasmorra)
@@ -248,10 +267,15 @@ def mainMasmorra(nickname):
             limpar_terminal()
             print(logo)
             print("\n\n")
- 
-            salas = carregar_salas(seedMasmorra)
-            matriz = construir_matriz_masmorra(salas)
-            explorar_masmorra(matriz, pos_inicial=(7,7))
+
+            try:
+                salas = carregar_salas(seedMasmorra)
+                matriz = construir_matriz_masmorra(salas)
+                explorar_masmorra(matriz, pos_inicial=(7,7), nickname=nickname)
+            except Exception as e:
+                print("ERRO")
+                traceback.print_exc()
+                input("Pressione enter para continuar...")
 
             # pygame.mixer.music.fadeout(7000)
             # time.sleep(7)

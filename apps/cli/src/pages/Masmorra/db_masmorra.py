@@ -1,5 +1,4 @@
 from setup.database import connect_to_db
-from setup.database import connect_to_db
 from colorama import Fore
 import hashlib
 from utils.geradorSeed import gerarSeed
@@ -160,3 +159,21 @@ def carregar_salas(seed_masmorra):
     connection.close()
 
     return salas
+
+def atualiza_posicao_jogador(nickname, x, y):
+    connection = connect_to_db()
+    if connection is None:
+        print("Erro ao conectar ao banco de dados.")
+        return False
+    
+    cursor = connection.cursor()
+    cursor.execute('''
+            UPDATE "jogador"
+            SET "PosiçãoX_Jogador" = %s, "PosiçãoY_Jogador" = %s
+                   WHERE "nickname" = %s
+                   ''', (x, y, nickname))
+    
+    connection.commit()
+    cursor.close()
+    connection.close()
+    return True
