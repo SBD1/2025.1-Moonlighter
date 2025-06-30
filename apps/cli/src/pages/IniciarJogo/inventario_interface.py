@@ -190,36 +190,40 @@ def dropar_item(nickname, item_info):
     try:
         cursor = connection.cursor()
         
-        if quantidade_dropar == quantidade_atual:
-            # Remover item completamente
-            cursor.execute("""
-                DELETE FROM "inst_item" 
-                WHERE "idInstItem" = %s;
-            """, (id_inst_item,))
+        # Primeiro, dropar o item no chão
+        if dropar_item_no_chao(nickname, id_item, quantidade_dropar):
+            # Em seguida, remover/atualizar do inventário
+            if quantidade_dropar == quantidade_atual:
+                # Remover item completamente
+                cursor.execute("""
+                    DELETE FROM "inst_item" 
+                    WHERE "idInstItem" = %s;
+                """, (id_inst_item,))
+            else:
+                # Reduzir quantidade
+                nova_quantidade = quantidade_atual - quantidade_dropar
+                cursor.execute("""
+                    UPDATE "inst_item" 
+                    SET "quantidade" = %s 
+                    WHERE "idInstItem" = %s;
+                """, (nova_quantidade, id_inst_item))
+            
+            # Atualizar slots ocupados
+            atualizar_slots_ocupados_inventario(nickname, id_inventario, cursor)
+            
+            connection.commit()
+            cursor.close()
+            connection.close()
+            
+            print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}✓ {quantidade_dropar}x {nome} foi dropado com sucesso!")
+            time.sleep(2)
+            return True
         else:
-            # Reduzir quantidade
-            nova_quantidade = quantidade_atual - quantidade_dropar
-            cursor.execute("""
-                UPDATE "inst_item" 
-                SET "quantidade" = %s 
-                WHERE "idInstItem" = %s;
-            """, (nova_quantidade, id_inst_item))
-        
-        # Adicionar item ao chão (na sala atual do jogador)
-        # Primeiro, obter a localização atual do jogador
-        cursor.execute("""
-            SELECT "nomeLocal" FROM "jogador" WHERE "nickname" = %s;
-        """, (nickname,))
-        local_atual = cursor.fetchone()[0]
-        
-        # Por enquanto, simular que o item foi dropado (pode ser expandido futuramente)
-        connection.commit()
-        cursor.close()
-        connection.close()
-        
-        print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}✓ {quantidade_dropar}x {nome} foi dropado com sucesso!")
-        time.sleep(2)
-        return True
+            cursor.close()
+            connection.close()
+            print(f"{Fore.RED}Erro ao dropar item no chão!")
+            time.sleep(2)
+            return False
         
     except Exception as e:
         print(f"{Fore.RED}Erro ao dropar item: {e}")

@@ -160,46 +160,39 @@ def novoJogador():
                 # Criar jogador
                 cursor.execute("INSERT INTO jogador VALUES (%s, 100, 100, 100, -1, -1, 'Vila Rynoka', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, NULL);", (nickname,))
                 
-                # Criar instâncias de inventário
-                cursor.execute("INSERT INTO inst_inventario VALUES (1, %s, 0), (2, %s, 0), (3, %s, 0), (4, %s, 0), (5, %s, 0), (6, %s, 0), (7, %s, 0);", tuple([nickname]*7))
+                # Criar instâncias de inventário apenas para os inventários que existem
+                cursor.execute("""
+                    INSERT INTO inst_inventario ("idInventario", "nickname", "slotOcupado")
+                    SELECT "idInventario", %s, 0
+                    FROM inventario
+                    WHERE "idInventario" IN (1, 2, 3)
+                """, (nickname,))
                 
                 # Criar mundo e loja
                 cursor.execute("INSERT INTO mundo VALUES (%s, %s, 'Manhã', 1, 1);", (seed, nickname,))
                 cursor.execute("INSERT INTO \"loja_jogador\" VALUES (%s, 'Moonlighter', 1, 10, 0)", (seed,))
                 
-                # Adicionar itens iniciais ao inventário
-                # Inserir alguns itens básicos no inventário principal (id 1)
+                # Adicionar itens iniciais ao inventário principal (id 1)
                 cursor.execute("""
                     INSERT INTO inst_item ("idItem", "quantidade", "nickname", "idInventario")
-                    SELECT 1, 1, %s, 1  -- Poção de Vida Pequena
+                    SELECT 1, 1, %s, 1  -- Espada de Madeira
                     WHERE EXISTS (SELECT 1 FROM item WHERE "idItem" = 1)
-                """, (nickname,))
+                    AND EXISTS (SELECT 1 FROM inst_inventario WHERE "nickname" = %s AND "idInventario" = 1)
+                """, (nickname, nickname))
                 
                 cursor.execute("""
                     INSERT INTO inst_item ("idItem", "quantidade", "nickname", "idInventario")
-                    SELECT 2, 1, %s, 1  -- Poção de Vida Média
+                    SELECT 2, 1, %s, 1  -- Armadura de Couro
                     WHERE EXISTS (SELECT 1 FROM item WHERE "idItem" = 2)
-                """, (nickname,))
+                    AND EXISTS (SELECT 1 FROM inst_inventario WHERE "nickname" = %s AND "idInventario" = 1)
+                """, (nickname, nickname))
                 
-                # Adicionar uma arma básica ao inventário de armas (assumindo id 2)
                 cursor.execute("""
                     INSERT INTO inst_item ("idItem", "quantidade", "nickname", "idInventario")
-                    SELECT "idItem", 1, %s, 2
-                    FROM item 
-                    WHERE "tipo" = 'Arma' 
-                    ORDER BY "precoBase" ASC 
-                    LIMIT 1
-                """, (nickname,))
-                
-                # Adicionar uma armadura básica ao inventário de armaduras (assumindo id 3)
-                cursor.execute("""
-                    INSERT INTO inst_item ("idItem", "quantidade", "nickname", "idInventario")
-                    SELECT "idItem", 1, %s, 3
-                    FROM item 
-                    WHERE "tipo" = 'Armadura' 
-                    ORDER BY "precoBase" ASC 
-                    LIMIT 1
-                """, (nickname,))
+                    SELECT 3, 3, %s, 1  -- Poção de Vida Pequena
+                    WHERE EXISTS (SELECT 1 FROM item WHERE "idItem" = 3)
+                    AND EXISTS (SELECT 1 FROM inst_inventario WHERE "nickname" = %s AND "idInventario" = 1)
+                """, (nickname, nickname))
                 
                 connection.commit()
                 cursor.close()

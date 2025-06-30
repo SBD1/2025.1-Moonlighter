@@ -352,3 +352,54 @@ ALTER TABLE "jogador" ADD CONSTRAINT "fk_arma_equipada"
 
 ALTER TABLE "jogador" ADD CONSTRAINT "fk_armadura_equipada" 
     FOREIGN KEY ("armaduraEquipada") REFERENCES "item" ("idItem") ON DELETE SET NULL;
+
+
+
+-- ================================================================
+-- DADOS INICIAIS PARA O SISTEMA DE INVENTÁRIO
+-- Data: 30/06/2025
+-- Descrição: Inserção de inventários básicos e itens iniciais
+-- ================================================================
+
+-- Inserir tipos de inventário padrão
+INSERT INTO "inventario" ("idInventario", "nome", "slotMaximo") VALUES 
+(1, 'Mochila Principal', 20),
+(2, 'Equipamentos', 10),
+(3, 'Baú da Casa', 40);
+
+-- Inserir efeitos básicos para itens iniciais
+INSERT INTO "efeito" ("nome", "descricao", "tipo", "valor", "duracaoTurnos") VALUES 
+('Cura Básica', 'Restaura pontos de vida', 'Cura', 20, 0),
+('Força Básica', 'Aumenta o ataque temporariamente', 'Buff', 5, 3),
+('Proteção Básica', 'Aumenta a defesa', 'Buff', 3, 0);
+
+-- Inserir itens iniciais básicos
+INSERT INTO "item" ("nome", "descricao", "tipo", "precoBase", "cultura", "stackMaximo", "idEfeito") VALUES 
+('Espada de Madeira', 'Uma espada básica feita de madeira', 'Arma', 10, 'Comum', 1, NULL),
+('Armadura de Couro', 'Uma armadura simples de couro', 'Armadura', 15, 'Comum', 1, NULL),
+('Poção de Vida Pequena', 'Restaura uma pequena quantidade de HP', 'Consumível', 5, 'Comum', 10, 1);
+
+-- Inserir dados específicos das armas
+INSERT INTO "arma" ("idItem", "dadoAtaque", "chanceCritico", "multiplicador", "multiplicadorCritico", "tipoArma") VALUES 
+(1, '1d6', 0.05, 1, 2, 'Espada');
+
+-- Inserir dados específicos das armaduras  
+INSERT INTO "armadura" ("idItem", "dadoDefesa", "defesaPassiva", "criticoDefensivo", "bonusDefesa", "tipoArmadura") VALUES 
+(2, '1d4', 2, 1, 0, 'Peito');
+
+-- Inserir dados específicos das poções
+INSERT INTO "pocao" ("idItem", "duracaoTurnos") VALUES 
+(3, 0);
+
+-- ================================================================
+-- DADOS INICIAIS DE LOCAIS
+-- Data: 30/06/2025
+-- Descrição: Inserção de locais básicos do jogo
+-- ================================================================
+
+-- Inserir locais básicos
+INSERT INTO "local" ("nomeLocal", "descricao", "tipoLocal", "acesso") VALUES 
+('Vila Rynoka', 'A vila principal onde os aventureiros começam sua jornada', 'Local', NULL),
+('Moonlighter', 'A loja do jogador onde ele vende seus itens', 'Estabelecimento', 'Vila Rynoka'),
+('Masmorra das Pedras', 'Uma masmorra inicial com monstros básicos', 'Masmorra', 'Vila Rynoka');
+
