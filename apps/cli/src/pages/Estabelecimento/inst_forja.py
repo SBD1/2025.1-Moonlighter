@@ -44,7 +44,7 @@ def menu_forja(jogador):
         seed_mundo = buscar_seed_mundo(jogador)
         if seed_mundo:
             # Criar instância da forja
-            sucesso = criar_instancia_forja_por_jogador_por_jogador(jogador, "Forja Vulcânica", 2)
+            sucesso = criar_instancia_forja_por_jogador(jogador, "Forja Vulcânica", 2)
             if not sucesso:
                 print(f"{Fore.RED}Erro ao inicializar a forja!")
                 enter_continue()
@@ -138,8 +138,8 @@ def ver_itens_disponiveis(jogador, categoria):
     else:
         print(f"{Fore.RED}Nenhum item disponível para fabricar!")
     
-    print("\n")
-    enter_continue()
+    print(f"\n{Fore.WHITE}Digite 0 para voltar ao menu anterior.")
+    input(f"{Style.BRIGHT}{Fore.MAGENTA}>>> ")
 
 def fabricar_item(jogador, categoria):
     """
@@ -163,9 +163,13 @@ def fabricar_item(jogador, categoria):
         id_item, nome, preco_base, descricao = item
         print(f"{Fore.WHITE}{id_item:<5} {nome:<25} {preco_base:<10}")
     
-    print(f"\n{Fore.WHITE}Digite o ID do item que deseja fabricar:")
+    print(f"\n{Fore.WHITE}Digite o ID do item que deseja fabricar (ou 0 para retornar):")
     try:
         item_id = int(input(f"{Style.BRIGHT}{Fore.MAGENTA}>>> "))
+        
+        if item_id == 0:
+            print(f"{Fore.YELLOW}Voltando ao menu anterior...")
+            return  # volta sem fabricar nada
         
         # Verificar se o item existe
         item_encontrado = None
@@ -197,3 +201,4 @@ def fabricar_item(jogador, categoria):
     
     print("\n")
     enter_continue()
+
