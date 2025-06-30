@@ -6,7 +6,12 @@ from pages.Estabelecimento.db_estabelecimento import (
     aplicar_ouro_banco_por_jogador,
     criar_instancia_banco_por_jogador,
     sacar_ouro_banco_por_jogador,
-    sacar_tudo_banco_por_jogador
+    sacar_tudo_banco_por_jogador,
+    exibir_dialogo_saudacao,
+    exibir_dialogo_saldo,
+    exibir_dialogo_aplicar,
+    exibir_dialogo_sacar,
+    exibir_dialogo_despedida
 )
 from utils.limparTerminal import limpar_terminal
 from utils.enterContinue import enter_continue
@@ -28,6 +33,12 @@ def menu_banco(jogador):
     Menu principal do banco
     """
     init(autoreset=True)
+    
+    # Exibir diálogo de saudação do banqueiro
+    limpar_terminal()
+    cabecalho_banco()
+    exibir_dialogo_saudacao("Edward", jogador)
+    enter_continue()
     
     #verifica e cria instancia do banco por precaucao
     if not verificar_instancia_banco_por_jogador(jogador):
@@ -61,7 +72,7 @@ def menu_banco(jogador):
         elif escolha == "4":
             sacar_tudo(jogador)
         elif escolha == "0":
-            print(f"\n{Fore.YELLOW}Obrigado pela visita! Volte sempre!")
+            exibir_dialogo_despedida("Edward", jogador)
             enter_continue()
             break
         else:
@@ -74,6 +85,11 @@ def visualizar_saldo(jogador):
     """
     limpar_terminal()
     cabecalho_banco()
+    
+    # Exibir diálogo de saldo
+    exibir_dialogo_saldo("Edward", jogador)
+    enter_continue()
+    
     print(f"\n{Style.BRIGHT}{Fore.CYAN}=== SALDO BANCÁRIO ===".center(largura_terminal))
     print("\n")
     
@@ -96,6 +112,11 @@ def aplicar_ouro(jogador):
     """
     limpar_terminal()
     cabecalho_banco()
+    
+    # Exibir diálogo de aplicar
+    exibir_dialogo_aplicar("Edward", jogador)
+    enter_continue()
+    
     print(f"\n{Style.BRIGHT}{Fore.CYAN}=== APLICAR OURO NO BANCO ===".center(largura_terminal))
     print("\n")
     
@@ -158,6 +179,11 @@ def sacar_ouro(jogador):
     """
     limpar_terminal()
     cabecalho_banco()
+    
+    # Exibir diálogo de sacar
+    exibir_dialogo_sacar("Edward", jogador)
+    enter_continue()
+    
     print(f"\n{Style.BRIGHT}{Fore.CYAN}=== SACAR OURO DO BANCO ===".center(largura_terminal))
     print("\n")
     saldo_info = visualizar_saldo_banco_por_jogador(jogador)

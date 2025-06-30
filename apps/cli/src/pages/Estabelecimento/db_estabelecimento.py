@@ -1,6 +1,7 @@
 from setup.database import connect_to_db
-from colorama import Fore
+from colorama import Fore, Style
 import psycopg2
+import time
 
 # FUNÇÕES DA FORJA
 
@@ -728,4 +729,110 @@ def forjar_item_jogador(jogador, item_id, materiais):
         if connection:
             connection.rollback()
             connection.close()
-        return False 
+        return False
+
+# FUNÇÕES PARA DIÁLOGOS DOS ESTABELECIMENTOS
+
+def buscar_dialogos_npc(nome_npc, tipo_dialogo):
+    """
+    Busca diálogos de um NPC específico por tipo
+    """
+    connection = connect_to_db()
+    if connection is None:
+        print(Fore.RED + "Erro ao conectar ao banco de dados.")
+        return None
+
+    try:
+        cursor = connection.cursor()
+        cursor.execute("""
+            SELECT d."conteudo", d."ordem", d."tipo"
+            FROM "dialogo" d
+            JOIN "dialogo_npc" dn ON d."idDialogo" = dn."idDialogo"
+            JOIN "npc" n ON dn."idNPC" = n."idNPC"
+            WHERE n."nome" = %s AND d."tipo" = %s
+            ORDER BY d."ordem"
+        """, (nome_npc, tipo_dialogo))
+        
+        dialogos = cursor.fetchall()
+        cursor.close()
+        connection.close()
+        return dialogos
+    except Exception as e:
+        print(Fore.RED + f"Erro ao buscar diálogos: {e}")
+        if connection:
+            connection.close()
+        return None
+
+def exibir_dialogo_npc(nome_npc, tipo_dialogo, nome_jogador=None, delay=1.5):
+    """
+    Exibe diálogos de um NPC com efeito de digitação lenta
+    """
+    dialogos = buscar_dialogos_npc(nome_npc, tipo_dialogo)
+    
+    if not dialogos:
+        print(Fore.YELLOW + f"Diálogos não encontrados para {nome_npc} - {tipo_dialogo}")
+        return False
+    
+    print(f"\n{Fore.CYAN}{Style.BRIGHT}=== {nome_npc} ===")
+    
+    for conteudo, ordem, tipo in dialogos:
+        if nome_jogador:
+            conteudo = conteudo.replace("<NOME_JOGADOR>", nome_jogador)
+        
+        print(f"\n{Fore.WHITE}", end="")
+        for char in conteudo:
+            print(char, end="", flush=True)
+            time.sleep(0.05)  # Delay entre cada caractere
+        print()
+        time.sleep(1.5)
+    
+    print(f"\n{Fore.LIGHTBLACK_EX}{'='*50}")
+    return True
+
+def exibir_dialogo_saudacao(nome_npc, nome_jogador=None):
+    """
+    Exibe diálogo de saudação do NPC
+    """
+    return exibir_dialogo_npc(nome_npc, "Saudacao", nome_jogador)
+
+def exibir_dialogo_catalogo(nome_npc, nome_jogador=None):
+    """
+    Exibe diálogo de catálogo do NPC
+    """
+    return exibir_dialogo_npc(nome_npc, "Catalogo", nome_jogador)
+
+def exibir_dialogo_fabricacao(nome_npc, nome_jogador=None):
+    """
+    Exibe diálogo de fabricação do NPC
+    """
+    return exibir_dialogo_npc(nome_npc, "Fabricacao", nome_jogador)
+
+def exibir_dialogo_compra(nome_npc, nome_jogador=None):
+    """
+    Exibe diálogo de compra do NPC
+    """
+    return exibir_dialogo_npc(nome_npc, "Compra", nome_jogador)
+
+def exibir_dialogo_saldo(nome_npc, nome_jogador=None):
+    """
+    Exibe diálogo de saldo do NPC
+    """
+    return exibir_dialogo_npc(nome_npc, "Saldo", nome_jogador)
+
+def exibir_dialogo_aplicar(nome_npc, nome_jogador=None):
+    """
+    Exibe diálogo de aplicar do NPC
+    """
+    return exibir_dialogo_npc(nome_npc, "Aplicar", nome_jogador)
+
+def exibir_dialogo_sacar(nome_npc, nome_jogador=None):
+    """
+    Exibe diálogo de sacar do NPC
+    """
+    return exibir_dialogo_npc(nome_npc, "Sacar", nome_jogador)
+
+def exibir_dialogo_despedida(nome_npc, nome_jogador=None):
+    """
+    Exibe diálogo de despedida do NPC
+    """
+    return exibir_dialogo_npc(nome_npc, "Despedida", nome_jogador) 

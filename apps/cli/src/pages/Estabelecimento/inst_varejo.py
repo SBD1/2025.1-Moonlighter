@@ -4,7 +4,12 @@ from pages.IniciarJogo.db_iniciarJogo import buscar_seed_mundo
 from pages.Estabelecimento.db_estabelecimento import (
     verificar_instancia_varejo_por_jogador,
     visualizar_itens_varejo_por_jogador,
-    comprar_item_varejo_por_jogador
+    comprar_item_varejo_por_jogador,
+    criar_instancia_varejo_por_jogador,
+    exibir_dialogo_saudacao,
+    exibir_dialogo_catalogo,
+    exibir_dialogo_compra,
+    exibir_dialogo_despedida
 )
 from setup.database import connect_to_db
 from utils.limparTerminal import limpar_terminal
@@ -27,11 +32,17 @@ def menu_varejo(jogador):
     """
     init(autoreset=True)
     
+    # Exibir diálogo de saudação da alquimista
+    limpar_terminal()
+    cabecalho_varejo()
+    exibir_dialogo_saudacao("Eris", jogador)
+    enter_continue()
+    
     # Verificar e criar instância da loja se necessário
     if not verificar_instancia_varejo_por_jogador(jogador):
         seed_mundo = buscar_seed_mundo(jogador)
         if seed_mundo:
-            sucesso = criar_instancia_varejo(seed_mundo, "O Chapéu de Madeira", 3, 15)
+            sucesso = criar_instancia_varejo_por_jogador(jogador, "O Chapéu de Madeira", 3, 15)
             if not sucesso:
                 print(f"{Fore.RED}Erro ao inicializar a loja!")
                 enter_continue()
@@ -59,7 +70,7 @@ def menu_varejo(jogador):
         elif escolha == "2":
             comprar_item(jogador)
         elif escolha == "0":
-            print(f"\n{Fore.YELLOW}Obrigado pela visita! Volte sempre!")
+            exibir_dialogo_despedida("Eris", jogador)
             enter_continue()
             break
         else:
@@ -72,6 +83,11 @@ def ver_itens_disponiveis(jogador):
     """
     limpar_terminal()
     cabecalho_varejo()
+    
+    # Exibir diálogo de catálogo
+    exibir_dialogo_catalogo("Eris", jogador)
+    enter_continue()
+    
     print(f"\n{Style.BRIGHT}{Fore.CYAN}=== ITENS DISPONÍVEIS PARA COMPRA ===".center(largura_terminal))
     print("\n")
     
@@ -106,10 +122,11 @@ def comprar_item(jogador):
         enter_continue()
         return
     
-    print(f"{Fore.WHITE}Itens disponíveis:")
+    print(f"{Fore.WHITE}{'ID':<5} {'Nome':<25} {'Preço':<10}")
+    print(f"{Fore.LIGHTBLACK_EX}{'='*45}")
     for item in itens:
-        id_item, nome, preco, _ = item
-        print(f"{Fore.WHITE}{id_item} - {nome} (Preço: {preco} ouros)")
+        id_item, nome, preco, descricao = item
+        print(f"{Fore.WHITE}{id_item:<5} {nome:<25} {preco:<10}")
     
     print(f"\n{Fore.WHITE}Digite o ID do item que deseja comprar:")
     try:
@@ -134,6 +151,9 @@ def comprar_item(jogador):
             print(f"{Fore.RED}Quantidade deve ser maior que zero!")
             enter_continue()
             return
+        
+        # Exibir diálogo de compra
+        exibir_dialogo_compra("Eris", jogador)
         
         # Comprar o item
         sucesso = comprar_item_varejo_por_jogador(jogador, item_id, quantidade)
