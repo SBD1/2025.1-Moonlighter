@@ -2,6 +2,7 @@ from setup.database import connect_to_db
 from colorama import Fore, Style
 import psycopg2
 import time
+import random
 
 # FUNÇÕES DA FORJA
 
@@ -252,7 +253,6 @@ def aplicar_ouro_banco_por_jogador(nickname, quantidade):
             return False
         ouro_jogador = resultado[0]
         if ouro_jogador < quantidade:
-            print(Fore.RED + f"❌ Ouro insuficiente! Jogador {nickname} tem {ouro_jogador} ouros, mas está tentando aplicar {quantidade} ouros.")
             return False
         # Atualizar saldo do banco
         cursor.execute('''
@@ -494,11 +494,11 @@ def sacar_tudo_banco_por_jogador(nickname):
         return False
 
 
-# FUNÇÕES SIMPLIFICADAS DO VAREJO (usando nickname diretamente)
-# 
-def verificar_instancia_varejo_por_jogador(nickname):
+# FUNÇÕES SIMPLIFICADAS DO CHAPÉU DE MADEIRA (usando nickname diretamente)
+
+def verificar_instancia_chapeu_de_madeira_por_jogador(nickname):
     """
-    Verifica se uma instância de varejo já existe para um jogador
+    Verifica se uma instância do Chapéu de Madeira já existe para um jogador
     """
     connection = connect_to_db()
     if connection is None:
@@ -518,14 +518,14 @@ def verificar_instancia_varejo_por_jogador(nickname):
         connection.close()
         return resultado[0] if resultado else False
     except Exception as e:
-        print(Fore.RED + f"Erro ao verificar instância do varejo: {e}")
+        print(Fore.RED + f"Erro ao verificar instância do Chapéu de Madeira: {e}")
         if connection:
             connection.close()
         return None
 
-def criar_instancia_varejo_por_jogador(nickname, nome_local, id_npc, margem_lucro=15):
+def criar_instancia_chapeu_de_madeira_por_jogador(nickname, nome_local, id_npc, margem_lucro=15):
     """
-    Cria instância do varejo diretamente pelo nickname
+    Cria instância do Chapéu de Madeira diretamente pelo nickname
     """
     connection = connect_to_db()
     if connection is None:
@@ -550,15 +550,15 @@ def criar_instancia_varejo_por_jogador(nickname, nome_local, id_npc, margem_lucr
         connection.close()
         return True
     except Exception as e:
-        print(Fore.RED + f"Erro ao criar instância do varejo: {e}")
+        print(Fore.RED + f"Erro ao criar instância do Chapéu de Madeira: {e}")
         if connection:
             connection.rollback()
             connection.close()
         return False
 
-def visualizar_itens_varejo_por_jogador(nickname):
+def visualizar_itens_chapeu_de_madeira_por_jogador(nickname):
     """
-    Visualiza todos os itens disponíveis para compra no varejo
+    Visualiza poções disponíveis para compra no Chapéu de Madeira (sistema aleatório como Moonlighter original)
     """
     connection = connect_to_db()
     if connection is None:
@@ -568,31 +568,84 @@ def visualizar_itens_varejo_por_jogador(nickname):
     try:
         cursor = connection.cursor()
         
-        #atualmente busca todos os itens disponíveis
-        # TODO:immplementar logica para buscar itens aleatorios
+        # Buscar informações do mundo do jogador
         cursor.execute("""
-            SELECT i."idItem", i."nome", 
-                   ROUND(i."precoBase" * (1 + iv."margemLucro" / 100.0)) as preco_final,
-                   i."descricao"
-            FROM "item" i
-            CROSS JOIN "inst_varejo" iv
-            JOIN "mundo" m ON iv."seedMundo" = m."seedMundo"
+            SELECT m."seedMundo", m."dia", iv."margemLucro"
+            FROM "mundo" m
+            LEFT JOIN "inst_varejo" iv ON iv."seedMundo" = m."seedMundo"
             WHERE m."nickname" = %s
-            ORDER BY i."nome"
         """, (nickname,))
-        resultado = cursor.fetchall()
+        
+        resultado_mundo = cursor.fetchone()
+        if not resultado_mundo:
+            print(Fore.RED + "Mundo do jogador não encontrado!")
+            return None
+            
+        seed_mundo, dia_atual, margem_lucro = resultado_mundo
+        margem_lucro = margem_lucro if margem_lucro else 15  # Margem padrão de 15%
+        
+        # Calcular quantos itens mostrar baseado no dia (progressão)
+        # Dia 1-3: 3-5 poções, Dia 4-7: 4-7 poções, Dia 8+: 5-8 poções
+        if dia_atual <= 3:
+            min_itens, max_itens = 3, 5
+        elif dia_atual <= 7:
+            min_itens, max_itens = 4, 7
+        else:
+            min_itens, max_itens = 5, 8
+        
+        # Usar seed do mundo + dia para gerar itens consistentes por dia
+        # Converter seed_mundo para número usando hash
+        seed_hash = hash(seed_mundo) if seed_mundo else 0
+        random.seed(seed_hash + dia_atual)
+        
+        # Buscar apenas poções
+        cursor.execute("""
+            SELECT i."idItem", i."nome", i."precoBase", i."descricao", i."tipo"
+            FROM "item" i
+            WHERE i."tipo" = 'Pocao'
+            ORDER BY i."idItem"
+        """)
+        
+        todas_pocoes = cursor.fetchall()
+        
+        # Selecionar poções aleatórias
+        num_itens = random.randint(min_itens, max_itens)
+        num_itens = min(num_itens, len(todas_pocoes))
+        
+        if num_itens == 0:
+            cursor.close()
+            connection.close()
+            return []
+        
+        pocoes_selecionadas = random.sample(todas_pocoes, num_itens)
+        
+        # Calcular preços finais
+        resultado_final = []
+        for pocao in pocoes_selecionadas:
+            id_item, nome, preco_base, descricao, tipo = pocao
+            
+            # Converter decimal para float
+            if hasattr(preco_base, '__float__'):
+                preco_base = float(preco_base)
+            
+            # Calcular preço com margem de lucro
+            preco_final = int(preco_base * (1 + margem_lucro / 100.0))
+            
+            resultado_final.append((id_item, nome, preco_final, descricao))
+        
         cursor.close()
         connection.close()
-        return resultado
+        return resultado_final
+        
     except Exception as e:
-        print(Fore.RED + f"Erro ao visualizar itens do varejo: {e}")
+        print(Fore.RED + f"Erro ao visualizar poções do Chapéu de Madeira: {e}")
         if connection:
             connection.close()
         return None
 
-def comprar_item_varejo_por_jogador(nickname, item_id, quantidade):
+def comprar_item_chapeu_de_madeira_por_jogador(nickname, item_id, quantidade):
     """
-    Compra um item no varejo para o jogador
+    Compra uma poção no Chapéu de Madeira para o jogador
     """
     connection = connect_to_db()
     if connection is None:
@@ -602,20 +655,40 @@ def comprar_item_varejo_por_jogador(nickname, item_id, quantidade):
     try:
         cursor = connection.cursor()
         
+        # Verificar se o item é uma poção
+        cursor.execute("""
+            SELECT tipo FROM "item" WHERE "idItem" = %s
+        """, (item_id,))
+        
+        resultado_tipo = cursor.fetchone()
+        if not resultado_tipo or resultado_tipo[0] != 'Pocao':
+            print(Fore.RED + "Este item não é uma poção!")
+            return False
+        
+        # Buscar margem de lucro da instância do Chapéu de Madeira do jogador
+        cursor.execute("""
+            SELECT iv."margemLucro"
+            FROM "inst_varejo" iv
+            JOIN "mundo" m ON iv."seedMundo" = m."seedMundo"
+            WHERE m."nickname" = %s
+            LIMIT 1
+        """, (nickname,))
+        
+        resultado_margem = cursor.fetchone()
+        margem_lucro = resultado_margem[0] if resultado_margem else 15  # Margem padrão de 15%
+        
         # Verificar se o jogador tem ouro suficiente
         cursor.execute("""
             SELECT j."ouro", 
-                   ROUND(i."precoBase" * (1 + iv."margemLucro" / 100.0)) as preco_final
+                   ROUND(i."precoBase" * (1 + %s / 100.0)) as preco_final
             FROM "jogador" j
             CROSS JOIN "item" i
-            CROSS JOIN "inst_varejo" iv
-            JOIN "mundo" m ON iv."seedMundo" = m."seedMundo"
-            WHERE j."nickname" = %s AND i."idItem" = %s AND m."nickname" = %s
-        """, (nickname, item_id, nickname))
+            WHERE j."nickname" = %s AND i."idItem" = %s
+        """, (margem_lucro, nickname, item_id))
         
         resultado = cursor.fetchone()
         if not resultado:
-            print(Fore.RED + "Jogador ou item não encontrado!")
+            print(Fore.RED + "Jogador ou poção não encontrada!")
             return False
             
         ouro_jogador, preco_final = resultado
@@ -632,14 +705,20 @@ def comprar_item_varejo_por_jogador(nickname, item_id, quantidade):
             WHERE "nickname" = %s
         """, (custo_total, nickname))
         
-        # TODO: Adicionar item ao inventário do jogador
+        # Adicionar poção ao inventário do jogador
+        cursor.execute("""
+            INSERT INTO "inst_item" ("idItem", "nickname", "quantidade")
+            VALUES (%s, %s, %s)
+            ON CONFLICT ("idItem", "nickname") 
+            DO UPDATE SET "quantidade" = "inst_item"."quantidade" + %s
+        """, (item_id, nickname, quantidade, quantidade))
         
         connection.commit()
         cursor.close()
         connection.close()
         return True
     except Exception as e:
-        print(Fore.RED + f"Erro ao comprar item: {e}")
+        print(Fore.RED + f"Erro ao comprar poção: {e}")
         if connection:
             connection.rollback()
             connection.close()
@@ -813,23 +892,29 @@ def exibir_dialogo_compra(nome_npc, nome_jogador=None):
     """
     return exibir_dialogo_npc(nome_npc, "Compra", nome_jogador)
 
-def exibir_dialogo_saldo(nome_npc, nome_jogador=None):
+def exibir_dialogo_venda(nome_npc, nome_jogador=None):
     """
-    Exibe diálogo de saldo do NPC
+    Exibe diálogo de venda do NPC
     """
-    return exibir_dialogo_npc(nome_npc, "Saldo", nome_jogador)
+    return exibir_dialogo_npc(nome_npc, "Venda", nome_jogador)
 
 def exibir_dialogo_aplicar(nome_npc, nome_jogador=None):
     """
     Exibe diálogo de aplicar do NPC
     """
-    return exibir_dialogo_npc(nome_npc, "Aplicar", nome_jogador)
+    return exibir_dialogo_npc(nome_npc, "Catalogo", nome_jogador)
+
+def exibir_dialogo_apos_aplicar(nome_npc, nome_jogador=None):
+    """
+    Exibe diálogo de aplicar do NPC
+    """
+    return exibir_dialogo_npc(nome_npc, "Compra", nome_jogador)
 
 def exibir_dialogo_sacar(nome_npc, nome_jogador=None):
     """
     Exibe diálogo de sacar do NPC
     """
-    return exibir_dialogo_npc(nome_npc, "Sacar", nome_jogador)
+    return exibir_dialogo_npc(nome_npc, "Entrega", nome_jogador)
 
 def exibir_dialogo_despedida(nome_npc, nome_jogador=None):
     """

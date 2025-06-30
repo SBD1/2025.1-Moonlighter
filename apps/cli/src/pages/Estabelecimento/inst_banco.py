@@ -8,10 +8,10 @@ from pages.Estabelecimento.db_estabelecimento import (
     sacar_ouro_banco_por_jogador,
     sacar_tudo_banco_por_jogador,
     exibir_dialogo_saudacao,
-    exibir_dialogo_saldo,
     exibir_dialogo_aplicar,
     exibir_dialogo_sacar,
-    exibir_dialogo_despedida
+    exibir_dialogo_despedida,
+    exibir_dialogo_apos_aplicar
 )
 from utils.limparTerminal import limpar_terminal
 from utils.enterContinue import enter_continue
@@ -86,10 +86,6 @@ def visualizar_saldo(jogador):
     limpar_terminal()
     cabecalho_banco()
     
-    # Exibir diálogo de saldo
-    exibir_dialogo_saldo("Edward", jogador)
-    enter_continue()
-    
     print(f"\n{Style.BRIGHT}{Fore.CYAN}=== SALDO BANCÁRIO ===".center(largura_terminal))
     print("\n")
     
@@ -116,6 +112,7 @@ def aplicar_ouro(jogador):
     # Exibir diálogo de aplicar
     exibir_dialogo_aplicar("Edward", jogador)
     enter_continue()
+    limpar_terminal()
     
     print(f"\n{Style.BRIGHT}{Fore.CYAN}=== APLICAR OURO NO BANCO ===".center(largura_terminal))
     print("\n")
@@ -172,6 +169,10 @@ def aplicar_ouro(jogador):
     
     print("\n")
     enter_continue()
+    limpar_terminal()
+    exibir_dialogo_apos_aplicar("Edward", jogador)
+    enter_continue()
+    limpar_terminal()
 
 def sacar_ouro(jogador):
     """
@@ -180,8 +181,7 @@ def sacar_ouro(jogador):
     limpar_terminal()
     cabecalho_banco()
     
-    # Exibir diálogo de sacar
-    exibir_dialogo_sacar("Edward", jogador)
+
     enter_continue()
     
     print(f"\n{Style.BRIGHT}{Fore.CYAN}=== SACAR OURO DO BANCO ===".center(largura_terminal))
@@ -214,6 +214,11 @@ def sacar_ouro(jogador):
         print(f"{Fore.RED}Erro inesperado: {e}")
     print("\n")
     enter_continue()
+    limpar_terminal()
+    # Exibir diálogo de sacar
+    exibir_dialogo_sacar("Edward", jogador)
+    enter_continue()
+    limpar_terminal()
 
 def sacar_tudo(jogador):
     """
@@ -230,4 +235,8 @@ def sacar_tudo(jogador):
             novo_saldo, _, _ = novo_saldo_info
             print(f"{Fore.YELLOW}Novo Saldo no Banco: {novo_saldo} ouros")
     print("\n")
-    enter_continue() 
+    enter_continue()
+    limpar_terminal()
+    exibir_dialogo_sacar("Edward", jogador)
+    enter_continue()
+    limpar_terminal()

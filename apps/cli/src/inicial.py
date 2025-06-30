@@ -11,7 +11,7 @@ import pyfiglet
 import os
 from pages.Estabelecimento.db_estabelecimento import (
     criar_instancia_banco_por_jogador,
-    criar_instancia_varejo_por_jogador,
+    criar_instancia_chapeu_de_madeira_por_jogador,
     criar_instancia_forja_por_jogador
 )
 from pages.IniciarJogo.db_iniciarJogo import (
@@ -176,9 +176,9 @@ def novoJogador():
                 if not sucesso_banco:
                     print(f"{Fore.YELLOW}Aviso: Não foi possível criar instância do banco para {nickname}")
                 
-                sucesso_varejo = criar_instancia_varejo_por_jogador(nickname, "Loja de Varejo", 2, 15)
+                sucesso_varejo = criar_instancia_chapeu_de_madeira_por_jogador(nickname, "O Chapéu de Madeira", 2, 15)
                 if not sucesso_varejo:
-                    print(f"{Fore.YELLOW}Aviso: Não foi possível criar instância do varejo para {nickname}")
+                    print(f"{Fore.YELLOW}Aviso: Não foi possível criar instância do Chapéu de Madeira para {nickname}")
                 
                 sucesso_forja = criar_instancia_forja_por_jogador(nickname, "Forja de Vulcan", 3)
                 if not sucesso_forja:

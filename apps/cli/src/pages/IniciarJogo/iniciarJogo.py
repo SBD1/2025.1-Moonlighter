@@ -1,7 +1,7 @@
 import time
 from pages.IniciarJogo.db_iniciarJogo import *
 from pages.IniciarJogo.db_iniciarJogo import selecionar_jogador
-from pages.Estabelecimento import menu_varejo, menu_forja, menu_banco
+from pages.Estabelecimento import menu_chapeu_de_madeira, menu_forja, menu_banco
 from utils.limparTerminal import limpar_terminal
 from utils.enterContinue import enter_continue
 from colorama import Fore, Back, Style, init
@@ -100,7 +100,7 @@ def iniciar_jogo():
                     menu_forja(jogador_atual)
                 
                 elif (escolhaCC == 2): #O chapeu de madeira
-                    menu_varejo(jogador_atual)
+                    menu_chapeu_de_madeira(jogador_atual)
 
                 elif (escolhaCC == 3): #Banco de rynoka
                     menu_banco(jogador_atual)

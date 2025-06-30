@@ -464,13 +464,35 @@ INSERT INTO "item"
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Raiz Preservada'), 2),
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro II'), 1),
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Magnetita'), 4),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pó Isolante'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro III'), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Wolfram'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Fios de Ouro'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro III"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pó Isolante'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro IV"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro III'), 1),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro IV"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Wolfram'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro IV"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Fios de Ouro'), 2),
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Barra de Ferro'), 6),
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Dente'), 14),
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Restos de Fundição'), 3),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro II"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro'), 1),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro II"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Folhas Fortes'), 4),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro II"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Raiz Preservada'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro III"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro II"), 1),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro III"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Magnetita'), 4),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro III"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pó Isolante'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro IV"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro III'), 1),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro IV"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Wolfram'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro IV"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Fios de Ouro'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Barra de Ferro'), 6),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Dente'), 4),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Restos de Fundição'), 3),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro II"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro'), 1),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro II"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Folhas Fortes'), 4),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro II"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Raiz Preservada'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro III"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro II"), 1),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro III"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Magnetita'), 4),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro III"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pó Isolante'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro IV"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro III"), 1),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro IV"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Wolfram'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro IV"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Fios de Ouro'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Aço'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Aço Endurecido'), 4),
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro'), 1),
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Folhas Fortes'), 4),
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Raiz Preservada'), 2),
@@ -874,8 +896,8 @@ VALUES
     ('Este investimento pode render bons lucros no futuro.', 2, 'Catalogo', NULL),
     ('Excelente decisão! Vou processar seu investimento.', 1, 'Compra', NULL),
     ('Seu dinheiro está seguro conosco, pode confiar.', 2, 'Compra', NULL),
-    ('Aqui está o recibo do seu investimento.', 1, 'Entrega', NULL),
-    ('Espero que os lucros sejam generosos!', 2, 'Entrega', NULL),
+    ('Aqui está o recibo do seu saque.', 1, 'Entrega', NULL),
+    ('Espero que os lucros tenham sido generosos!', 2, 'Entrega', NULL),
     ('Volte sempre que precisar de serviços bancários!', 1, 'Despedida', NULL),
     ('Que a prosperidade te acompanhe!', 2, 'Despedida', NULL);
 
@@ -917,3 +939,38 @@ VALUES
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Espero que os lucros sejam generosos!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward')),
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Volte sempre que precisar de serviços bancários!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward')),
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Que a prosperidade te acompanhe, <NOME_JOGADOR>!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward'));
+
+-- DIÁLOGOS DE VENDA DOS NPCS
+
+-- Diálogos de venda do Andrei (Ferreiro)
+INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+VALUES
+    ('Ah, quer vender alguns materiais, <NOME_JOGADOR>?', 1, 'Venda', NULL),
+    ('Deixe-me ver o que você trouxe...', 2, 'Venda', NULL);
+
+-- Diálogos de venda do Eris (Comerciante)
+INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+VALUES
+    ('Interessante! Que itens você gostaria de vender, <NOME_JOGADOR>?', 1, 'Venda', NULL),
+    ('Vou avaliar cada um com cuidado.', 2, 'Venda', NULL);
+
+-- Diálogos de venda do Edward (Banqueiro)
+INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+VALUES
+    ('Ah, quer vender alguns itens, <NOME_JOGADOR>?', 1, 'Venda', NULL),
+    ('Posso ajudar com isso também.', 2, 'Venda', NULL);
+
+-- Associação dos diálogos de venda com os NPCs
+INSERT INTO "dialogo_npc" ("idDialogo", "idNPC")
+VALUES
+    -- Andrei (Ferreiro)
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Ah, quer vender alguns materiais, <NOME_JOGADOR>?' LIMIT 1), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei' LIMIT 1)),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Deixe-me ver o que você trouxe...' LIMIT 1), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei' LIMIT 1)),
+    
+    -- Eris (Comerciante)
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Interessante! Que itens você gostaria de vender, <NOME_JOGADOR>?' LIMIT 1), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris' LIMIT 1)),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Vou avaliar cada um com cuidado.' LIMIT 1), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris' LIMIT 1)),
+    
+    -- Edward (Banqueiro)
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Ah, quer vender alguns itens, <NOME_JOGADOR>?' LIMIT 1), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward' LIMIT 1)),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Posso ajudar com isso também.' LIMIT 1), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward' LIMIT 1));
