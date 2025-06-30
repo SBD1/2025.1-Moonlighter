@@ -1,5 +1,4 @@
-from colorama import Fore
-
+from colorama import Fore, Style
 
 def enter_continue():
-    input(Fore.LIGHTBLACK_EX + "\nPressione Enter para continuar...")
+    input(Style.BRIGHT + Fore.LIGHTBLACK_EX + "\nPressione Enter para continuar...")
