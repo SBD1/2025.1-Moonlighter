@@ -219,7 +219,6 @@ CREATE TABLE "inventario" (
     "slotMaximo" SMALLINT NOT NULL
 );
 
--- REVISAR ESSA TABELA
 CREATE TABLE "inst_inventario" (
     "idInventario" integer,
     "nickname" character varying(60) NOT NULL,
@@ -283,8 +282,10 @@ CREATE TABLE "inst_banco" (
 );
 
 
+-- Tabela para instâncias de itens - permite o mesmo item estar em múltiplos locais
 CREATE TABLE "inst_item" (
-    "idItem" integer PRIMARY KEY,
+    "idInstItem" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    "idItem" integer NOT NULL,
     "quantidade" SMALLINT NOT NULL,
 
     -- REFERENCIA À TABELA INST_MONSTRO
@@ -309,7 +310,10 @@ CREATE TABLE "inst_item" (
     CONSTRAINT "fk_inst_inventario" FOREIGN KEY ("idInventario", "nickname") REFERENCES "inst_inventario" ("idInventario", "nickname") ON DELETE CASCADE,
     CONSTRAINT "fk_inst_varejo" FOREIGN KEY ("seedMundoInstVarejo") REFERENCES "inst_varejo" ("seedMundo") ON DELETE CASCADE,
     CONSTRAINT "fk_sala" FOREIGN KEY ("seedSala") REFERENCES "sala" ("seedSala") ON DELETE CASCADE,
-    CONSTRAINT "fk_loja_jogador" FOREIGN KEY ("seedMundoLojaJogador") REFERENCES "loja_jogador" ("seedMundo") ON DELETE CASCADE
+    CONSTRAINT "fk_loja_jogador" FOREIGN KEY ("seedMundoLojaJogador") REFERENCES "loja_jogador" ("seedMundo") ON DELETE CASCADE,
+    
+    -- Garantir que um item não seja duplicado no mesmo inventário
+    CONSTRAINT "uk_item_inventario" UNIQUE ("idItem", "idInventario", "nickname")
 );
 
 
@@ -331,3 +335,20 @@ CREATE TABLE "dialogo_npc" (
     CONSTRAINT "fk_dialogo" FOREIGN KEY ("idDialogo") REFERENCES "dialogo" ("idDialogo") ON DELETE CASCADE,
     CONSTRAINT "fk_npc" FOREIGN KEY ("idNPC") REFERENCES "npc" ("idNPC") ON DELETE CASCADE
 );
+
+-- ================================================================
+-- EXTENSÕES PARA O SISTEMA DE INVENTÁRIO
+-- Data: 29/06/2025
+-- Descrição: Extensões e funções para o sistema de inventário
+-- ================================================================
+
+-- Adicionando campos para slots equipados no jogador
+ALTER TABLE "jogador" ADD COLUMN IF NOT EXISTS "armaEquipada" INTEGER;
+ALTER TABLE "jogador" ADD COLUMN IF NOT EXISTS "armaduraEquipada" INTEGER;
+
+-- Adicionando foreign keys para os equipamentos
+ALTER TABLE "jogador" ADD CONSTRAINT "fk_arma_equipada" 
+    FOREIGN KEY ("armaEquipada") REFERENCES "item" ("idItem") ON DELETE SET NULL;
+
+ALTER TABLE "jogador" ADD CONSTRAINT "fk_armadura_equipada" 
+    FOREIGN KEY ("armaduraEquipada") REFERENCES "item" ("idItem") ON DELETE SET NULL;

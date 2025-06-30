@@ -156,19 +156,60 @@ def novoJogador():
                 
                 seed = gerarSeed()
                 cursor = connection.cursor()
-                cursor.execute("INSERT INTO jogador VALUES (%s, 100, 100, 100, -1, -1, 'Vila Rynoka', NULL);", (nickname,))
+                
+                # Criar jogador
+                cursor.execute("INSERT INTO jogador VALUES (%s, 100, 100, 100, -1, -1, 'Vila Rynoka', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, NULL);", (nickname,))
+                
+                # Criar instâncias de inventário
                 cursor.execute("INSERT INTO inst_inventario VALUES (1, %s, 0), (2, %s, 0), (3, %s, 0), (4, %s, 0), (5, %s, 0), (6, %s, 0), (7, %s, 0);", tuple([nickname]*7))
+                
+                # Criar mundo e loja
                 cursor.execute("INSERT INTO mundo VALUES (%s, %s, 'Manhã', 1, 1);", (seed, nickname,))
                 cursor.execute("INSERT INTO \"loja_jogador\" VALUES (%s, 'Moonlighter', 1, 10, 0)", (seed,))
+                
+                # Adicionar itens iniciais ao inventário
+                # Inserir alguns itens básicos no inventário principal (id 1)
+                cursor.execute("""
+                    INSERT INTO inst_item ("idItem", "quantidade", "nickname", "idInventario")
+                    SELECT 1, 1, %s, 1  -- Poção de Vida Pequena
+                    WHERE EXISTS (SELECT 1 FROM item WHERE "idItem" = 1)
+                """, (nickname,))
+                
+                cursor.execute("""
+                    INSERT INTO inst_item ("idItem", "quantidade", "nickname", "idInventario")
+                    SELECT 2, 1, %s, 1  -- Poção de Vida Média
+                    WHERE EXISTS (SELECT 1 FROM item WHERE "idItem" = 2)
+                """, (nickname,))
+                
+                # Adicionar uma arma básica ao inventário de armas (assumindo id 2)
+                cursor.execute("""
+                    INSERT INTO inst_item ("idItem", "quantidade", "nickname", "idInventario")
+                    SELECT "idItem", 1, %s, 2
+                    FROM item 
+                    WHERE "tipo" = 'Arma' 
+                    ORDER BY "precoBase" ASC 
+                    LIMIT 1
+                """, (nickname,))
+                
+                # Adicionar uma armadura básica ao inventário de armaduras (assumindo id 3)
+                cursor.execute("""
+                    INSERT INTO inst_item ("idItem", "quantidade", "nickname", "idInventario")
+                    SELECT "idItem", 1, %s, 3
+                    FROM item 
+                    WHERE "tipo" = 'Armadura' 
+                    ORDER BY "precoBase" ASC 
+                    LIMIT 1
+                """, (nickname,))
+                
                 connection.commit()
                 cursor.close()
                 connection.close()
-            except:
+            except Exception as e:
                 limpar_terminal()
                 print("\n\n\n\n")
                 print(logo)
                 print("\n\n\n")
-                print("Erro ao se conectar com o banco de dados\n")
+                print(f"Erro ao se conectar com o banco de dados: {e}\n")
                 time.sleep(2)
                 print('\033[?25h', end='', flush=True)
                 return novoJogador()
@@ -221,7 +262,17 @@ def continuar_jogo():
 
     print("\n\n")
     print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}Digite o número do jogador que deseja continuar: ")
-    escolha:int = int(input(f"{Style.BRIGHT}{Fore.MAGENTA}>> "))
+    
+    try:
+        escolha_input = input(f"{Style.BRIGHT}{Fore.MAGENTA}>> ")
+        escolha: int = int(escolha_input)
+    except ValueError:
+        limpar_terminal()
+        print(logo)
+        print("\n\n\n")
+        print(f"{Style.BRIGHT}{Fore.RED}Por favor, digite um número válido.".center(largura_terminal))
+        time.sleep(2)
+        return continuar_jogo()
 
     if escolha == 0:
         return tela_inicial(["Continuar", "Novo Jogo", "Sair"], False)
@@ -271,8 +322,12 @@ def continuar_jogo():
                 time.sleep(2)
                 limpar_terminal()
     else:
-        print(Fore.RED + "Opção inválida. Tente novamente.")
-        enter_continue()
+        limpar_terminal()
+        print(logo)
+        print("\n\n\n")
+        print(f"{Style.BRIGHT}{Fore.RED}Opção inválida. Tente novamente.".center(largura_terminal))
+        time.sleep(2)
+        return continuar_jogo()
 
 
 def musicTheme():
