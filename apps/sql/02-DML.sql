@@ -464,34 +464,34 @@ INSERT INTO "item"
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Raiz Preservada'), 2),
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro II'), 1),
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Magnetita'), 4),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro III"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pó Isolante'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro IV"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro III'), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro IV"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Wolfram'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro IV"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Fios de Ouro'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pó Isolante'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro III'), 1),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Wolfram'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Fios de Ouro'), 2),
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Barra de Ferro'), 6),
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Dente'), 14),
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Restos de Fundição'), 3),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro II"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro'), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro II"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Folhas Fortes'), 4),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro II"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Raiz Preservada'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro III"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro II"), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro III"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Magnetita'), 4),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro III"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pó Isolante'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro IV"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro III'), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro IV"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Wolfram'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro IV"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Fios de Ouro'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro'), 1),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Folhas Fortes'), 4),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Raiz Preservada'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro II'), 1),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Magnetita'), 4),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pó Isolante'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro III'), 1),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Wolfram'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Fios de Ouro'), 2),
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Barra de Ferro'), 6),
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Dente'), 4),
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Restos de Fundição'), 3),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro II"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro'), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro II"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Folhas Fortes'), 4),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro II"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Raiz Preservada'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro III"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro II"), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro III"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Magnetita'), 4),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro III"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pó Isolante'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro IV"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro III"), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro IV"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Wolfram'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro IV"), (SELECT "idItem" FROM "item" WHERE "nome" = 'Fios de Ouro'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro'), 1),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Folhas Fortes'), 4),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Raiz Preservada'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro II'), 1),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Magnetita'), 4),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pó Isolante'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro III'), 1),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Wolfram'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Fios de Ouro'), 2),
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Aço'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Aço Endurecido'), 4),
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro'), 1),
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Folhas Fortes'), 4),
@@ -801,9 +801,9 @@ INSERT INTO "npc" ("nome", "tipoNPC", "descricao", "ativo")
     ('Andrei', 'Ferreiro', 'Ferreiro que aprimora armas e armaduras na Forja Vulcânica.', TRUE),
     ('Eris', 'Alquimista', 'Alquimista que vende e aprimora poções no Chapéu de Madeira.', TRUE),
     ('Edward', 'Banqueiro', 'Banqueiro que gerencia investimentos para a cidade de Rynoka.', TRUE),
-    ('Juliette', 'Decoradora', 'Ajuda a melhorar e decorar a loja Moonlighter em "Le Retailer".', FALSE),
+    ('Juliette', 'Decoradora', 'Ajuda a melhorar e decorar a loja Moonlighter em "Le Retailer".', TRUE),
     ('Tom', 'Vendedor Ambulante', 'Vendedor ambulante que oferece itens raros e exóticos.', FALSE),
-    ('Mercador Viajante', 'Comprador Especializado', 'Compra itens específicos por um preço elevado periodicamente.', FALSE),
+    ('Mercador Viajante', 'Comprador Especializado', 'Compra itens específicos por um preço elevado periodicamente.', TRUE),
     ('Pedro Doidão', 'Residente', 'Residente excêntrico da cidade de Rynoka com dicas peculiares.', FALSE),
     ('Bruxa dos Murmúrios', 'Encantadora', 'Bruxa misteriosa que pode encantar equipamentos com efeitos.', FALSE),
     ('Mundo', 'Mundo', 'Interações relacionadas à narração do mundo', FALSE);
@@ -862,44 +862,44 @@ INSERT INTO "inventario"
 -- Diálogos do Andrei (Ferreiro)
 INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
 VALUES
-    ('Bem-vindo à Forja Vulcânica! Sou Andrei, o ferreiro desta cidade.', 1, 'Saudacao', NULL),
-    ('Preciso de uma arma nova ou quer aprimorar alguma existente?', 2, 'Saudacao', NULL),
-    ('Ah, vejo que trouxe alguns materiais interessantes!', 1, 'Catalogo', NULL),
+    ('Bem-vindo à Forja Vulcânica, <NOME_JOGADOR>! Sou Andrei, o ferreiro desta cidade.', 1, 'Saudacao', NULL),
+    ('Precisa de uma arma nova, ou quer aprimorar alguma existente?', 2, 'Saudacao', NULL),
+    ('Olha, vejo que trouxe alguns materiais interessantes!', 1, 'Catalogo', NULL),
     ('Essa arma tem potencial, mas posso torná-la ainda mais poderosa.', 2, 'Catalogo', NULL),
     ('Excelente escolha! Vou trabalhar nisso imediatamente.', 1, 'Fabricacao', NULL),
     ('O fogo da forja está perfeito hoje. Vai ficar incrível!', 2, 'Fabricacao', NULL),
-    ('Aqui está sua arma, mais forte que nunca!', 1, 'Entrega', NULL),
-    ('Espero que ela te sirva bem nas masmorras.', 2, 'Entrega', NULL),
-    ('Volte sempre quando precisar de uma nova arma!', 1, 'Despedida', NULL),
+    ('Aqui está sua arma, <NOME_JOGADOR>, mais forte que nunca!', 1, 'Entrega', NULL),
+    ('Espero que ela te sirva bem nas masmorras, <NOME_JOGADOR>.', 2, 'Entrega', NULL),
+    ('Volte sempre quando precisar de uma nova arma, <NOME_JOGADOR>!', 1, 'Despedida', NULL),
     ('Que os deuses da forja te protejam!', 2, 'Despedida', NULL);
 
 -- Diálogos do Eris (Alquimista)
 INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
 VALUES
-    ('Bem-vindo ao Chapéu de Madeira! Sou Eris, a alquimista.', 1, 'Saudacao', NULL),
+    ('Bem-vindo ao Chapéu de Madeira, <NOME_JOGADOR>! Sou Eris, a alquimista.', 1, 'Saudacao', NULL),
     ('Precisa de poções para suas aventuras?', 2, 'Saudacao', NULL),
     ('Tenho poções para todos os tipos de situações!', 1, 'Catalogo', NULL),
     ('Essa mistura vai te dar a força que precisa.', 2, 'Catalogo', NULL),
     ('Deixe-me preparar essa poção com ingredientes especiais.', 1, 'Fabricacao', NULL),
     ('A alquimia é uma arte que requer paciência e precisão.', 2, 'Fabricacao', NULL),
-    ('Aqui está sua poção, feita com os melhores ingredientes!', 1, 'Entrega', NULL),
+    ('Aqui está sua poção, <NOME_JOGADOR>, feita com os melhores ingredientes!', 1, 'Entrega', NULL),
     ('Use com sabedoria, elas são poderosas!', 2, 'Entrega', NULL),
-    ('Volte quando precisar de mais poções!', 1, 'Despedida', NULL),
-    ('Que a magia te acompanhe em suas jornadas!', 2, 'Despedida', NULL);
+    ('Volte quando precisar de mais poções, <NOME_JOGADOR>!', 1, 'Despedida', NULL),
+    ('Que a magia te acompanhe em suas jornadas, <NOME_JOGADOR>!', 2, 'Despedida', NULL);
 
 -- Diálogos do Edward (Banqueiro)
 INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
 VALUES
-    ('Bem-vindo ao Banco de Rynoka! Sou Edward, seu banqueiro.', 1, 'Saudacao', NULL),
+    ('Bem-vindo ao Banco de Rynoka, <NOME_JOGADOR>! Sou Edward, seu banqueiro.', 1, 'Saudacao', NULL),
     ('Como posso ajudá-lo com seus investimentos hoje?', 2, 'Saudacao', NULL),
     ('Temos várias opções de investimento para você!', 1, 'Catalogo', NULL),
     ('Este investimento pode render bons lucros no futuro.', 2, 'Catalogo', NULL),
     ('Excelente decisão! Vou processar seu investimento.', 1, 'Compra', NULL),
     ('Seu dinheiro está seguro conosco, pode confiar.', 2, 'Compra', NULL),
-    ('Aqui está o recibo do seu saque.', 1, 'Entrega', NULL),
+    ('Aqui está o recibo do seu saque, <NOME_JOGADOR>.', 1, 'Entrega', NULL),
     ('Espero que os lucros tenham sido generosos!', 2, 'Entrega', NULL),
-    ('Volte sempre que precisar de serviços bancários!', 1, 'Despedida', NULL),
-    ('Que a prosperidade te acompanhe!', 2, 'Despedida', NULL);
+    ('Volte sempre que precisar de serviços bancários, <NOME_JOGADOR>!', 1, 'Despedida', NULL),
+    ('Que a prosperidade te acompanhe, <NOME_JOGADOR>!', 2, 'Despedida', NULL);
 
 -- Associação dos diálogos com os NPCs
 INSERT INTO "dialogo_npc" ("idDialogo", "idNPC")
@@ -911,9 +911,9 @@ VALUES
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Essa arma tem potencial, mas posso torná-la ainda mais poderosa.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei')),
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Excelente escolha! Vou trabalhar nisso imediatamente.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei')),
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'O fogo da forja está perfeito hoje. Vai ficar incrível!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei')),
-    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Aqui está sua arma, mais forte do que nunca!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Aqui está sua arma, <NOME_JOGADOR>, mais forte que nunca!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei')),
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Espero que ela te sirva bem nas masmorras, <NOME_JOGADOR>.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei')),
-    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Volte sempre quando precisar de uma nova arma!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Volte sempre quando precisar de uma nova arma, <NOME_JOGADOR>!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei')),
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Que os deuses da forja te protejam!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei')),
     
     -- Eris (Alquimista)
@@ -923,9 +923,9 @@ VALUES
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Essa mistura vai te dar a força que precisa.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Deixe-me preparar essa poção com ingredientes especiais.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'A alquimia é uma arte que requer paciência e precisão.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
-    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Aqui está sua poção, feita com os melhores ingredientes!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Aqui está sua poção, <NOME_JOGADOR>, feita com os melhores ingredientes!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Use com sabedoria, elas são poderosas!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
-    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Volte quando precisar de mais poções!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Volte quando precisar de mais poções, <NOME_JOGADOR>!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Que a magia te acompanhe em suas jornadas, <NOME_JOGADOR>!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
     
     -- Edward (Banqueiro)
@@ -935,9 +935,9 @@ VALUES
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Este investimento pode render bons lucros no futuro.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward')),
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Excelente decisão! Vou processar seu investimento.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward')),
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Seu dinheiro está seguro conosco, pode confiar.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward')),
-    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Aqui está o recibo do seu investimento.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward')),
-    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Espero que os lucros sejam generosos!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward')),
-    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Volte sempre que precisar de serviços bancários!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Aqui está o recibo do seu saque, <NOME_JOGADOR>.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Espero que os lucros tenham sido generosos!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Volte sempre que precisar de serviços bancários, <NOME_JOGADOR>!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward')),
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Que a prosperidade te acompanhe, <NOME_JOGADOR>!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward'));
 
 -- DIÁLOGOS DE VENDA DOS NPCS
