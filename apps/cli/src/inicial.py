@@ -9,15 +9,13 @@ import shutil
 import pygame
 import pyfiglet
 import os
+from zoneinfo import ZoneInfo
 from pages.Estabelecimento.db_estabelecimento import (
     criar_instancia_banco_por_jogador,
     criar_instancia_chapeu_de_madeira_por_jogador,
     criar_instancia_forja_por_jogador
 )
-from pages.IniciarJogo.db_iniciarJogo import (
-    buscar_nome_jogador,
-    selecionar_jogador
-)
+
 
 # definicoes e funcoes iniciais
 init(autoreset=True) #terminal colorido
@@ -33,12 +31,12 @@ logo = f"{Style.BRIGHT + Fore.LIGHTGREEN_EX}\n\n{centralizacao}\n\n\n"
 def introducao():
     limpar_terminal()
     time.sleep(2)
-    print("\n\n\n\n\n\n\n\n\n\n\n\n\n")
+    print("\n\n\n\n\n\n\n\n\n\n")
     print(f"{Fore.YELLOW}{Style.BRIGHT}Desenvolvido durante o curso de".center(largura_terminal))
     print(f"{Fore.YELLOW}{Style.BRIGHT}Sistema de Banco de Dados 1 - UnB".center(largura_terminal))
     time.sleep(2)
     limpar_terminal()
-    print("\n\n\n\n\n\n\n\n\n\n\n")
+    print("\n\n\n\n\n\n\n")
     print(f"{Fore.LIGHTGREEN_EX}{Style.BRIGHT}Desenvolvedores:".center(largura_terminal))
     print(f"{Fore.YELLOW}{Style.BRIGHT}Arthur Evangelista".center(largura_terminal))
     print(f"{Fore.YELLOW}{Style.BRIGHT}Daniel Rodrigues".center(largura_terminal))
@@ -47,11 +45,11 @@ def introducao():
     print(f"{Fore.YELLOW}{Style.BRIGHT}Yan Matheus".center(largura_terminal))
     time.sleep(2)
     limpar_terminal()
-    print("\n\n\n\n\n\n\n\n\n\n\n\n\n")
+    print("\n\n\n\n\n\n\n\n\n\n")
     print(f"{Fore.YELLOW}{Style.BRIGHT}Jogo inspirado em Moonlighter, por Digital Sun Games".center(largura_terminal))
     time.sleep(3)
     limpar_terminal()
-    print("\n\n\n\n\n\n\n\n\n")
+    print("\n\n\n\n\n\n")
     print(logo)
     time.sleep(3)
     return
@@ -64,11 +62,11 @@ def buscaTodosJogadores():
 
     cursor = connection.cursor()
     cursor.execute("SELECT * FROM jogador;")
-    jogador = cursor.fetchall()
+    jogadores = cursor.fetchall()
     cursor.close()
     connection.close()
 
-    return jogador
+    return jogadores
 
 def buscarJogador(nomeJogador):
     connection = connect_to_db()
@@ -99,14 +97,18 @@ def sairDoJogo():
 
 def novoJogador():
     limpar_terminal()
-    print("\n\n\n\n")
     print(logo)
 
     print(f"{Style.BRIGHT}{Fore.YELLOW}Criação de Jogador".center(largura_terminal))
+    print(f"{Style.BRIGHT}{Fore.RED}>> DIGITE '0' PARA VOLTAR <<".center(largura_terminal))
 
-    print("\n\n\n\n\n\n\n\n\n")
+
+    print("\n\n\n\n\n\n\n")
     print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}Insira o nome do novo jogador:")
     nickname = input(f"{Style.BRIGHT}{Fore.MAGENTA}>>> ")
+
+    if nickname == '0':
+        return
 
     if len(nickname) >= 60:
         limpar_terminal()
@@ -130,7 +132,6 @@ def novoJogador():
 
     while confirmacao != "s" and confirmacao != "S" and confirmacao != "n" and confirmacao != "N":
         limpar_terminal()
-        print("\n\n\n\n")
         print(logo)
 
         print(f"{Style.BRIGHT}{Fore.YELLOW}Este será o seu nome?".center(largura_terminal))
@@ -138,12 +139,11 @@ def novoJogador():
         print("\n")
         print(f"{Fore.WHITE}Digite 's' para confirmar ou 'n' para escolher outro nome.".center(largura_terminal))
 
-        print("\n\n\n\n\n\n")
+        print("\n\n\n\n\n")
         confirmacao = input(f"{Style.BRIGHT}{Fore.MAGENTA}>>> ").strip().lower()
 
         if confirmacao == 's' or confirmacao == 'S':
             limpar_terminal()
-            print("\n\n\n\n")
             print(logo)
             print("\n\n\n")
 
@@ -161,9 +161,7 @@ def novoJogador():
                 
                 seed = gerarSeed()
                 cursor = connection.cursor()
-                
-                # Criar jogador e mundo
-                cursor.execute("INSERT INTO jogador VALUES (%s, 100, 100, 0, 0, 0, 'Vila Rynoka', NULL);", (nickname,))
+                cursor.execute("INSERT INTO jogador VALUES (%s, 100, 100, 100, -1, -1, 'Vila Rynoka', NULL);", (nickname,))
                 cursor.execute("INSERT INTO inst_inventario VALUES (1, %s, 0), (2, %s, 0), (3, %s, 0), (4, %s, 0), (5, %s, 0), (6, %s, 0), (7, %s, 0);", tuple([nickname]*7))
                 cursor.execute("INSERT INTO mundo VALUES (%s, %s, 'Manhã', 1, 1);", (seed, nickname,))
                 cursor.execute("INSERT INTO \"loja_jogador\" VALUES (%s, 'Moonlighter', 1, 10, 0)", (seed,))
@@ -213,12 +211,98 @@ def novoJogador():
             return novoJogador()
         else:
             limpar_terminal()
-            print("\n\n\n\n")
             print(logo)
             print("\n\n\n")
             print(f"{Style.BRIGHT}{Fore.RED}Opção inválida. Tente novamente.".center(largura_terminal))
             time.sleep(2)
             limpar_terminal()
+
+def continuar_jogo():
+    limpar_terminal()
+    print(logo)
+
+    print(f"{Style.BRIGHT}{Fore.YELLOW}Jogos Existentes".center(largura_terminal))
+    print(f"{Style.BRIGHT}{Fore.RED}>> DIGITE '0' PARA VOLTAR <<".center(largura_terminal))
+    print("\n")
+
+    jogadores = buscaTodosJogadores()
+    print(f"{Style.BRIGHT}{Fore.YELLOW}═════════════════════════════════════════════════════".center(largura_terminal + 2))
+    for i, jogador in enumerate(jogadores):
+        nome_jogador = jogador[0]
+        ultimoUpdate = jogador[9]
+        ourosJogador = jogador[3]
+        localizacaoJogador = jogador[6]
+        ultimoUpdate = ultimoUpdate.replace(tzinfo=ZoneInfo("UTC"))
+        ultimoUpdate_br = ultimoUpdate.astimezone(ZoneInfo("America/Sao_Paulo"))
+        data_formatada = ultimoUpdate_br.strftime('%d/%m/%Y às %H:%M:%S')
+        print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}{nome_jogador}".center(largura_terminal))
+        print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}Ouros: {Fore.MAGENTA}{ourosJogador}".center(largura_terminal + 3))
+        print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}Localização: {Fore.MAGENTA}{localizacaoJogador}".center(largura_terminal + 5))
+        print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}Último Salvamento: {Fore.MAGENTA}{data_formatada}".center(largura_terminal + 5))
+        print(f"{Style.BRIGHT}{Fore.YELLOW}═════════════════════════[{Fore.LIGHTGREEN_EX}{i+1}{Fore.YELLOW}]═════════════════════════".center(largura_terminal + 12))
+
+    print("\n\n")
+    print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}Digite o número do jogador que deseja continuar: ")
+    escolha = input(f"{Style.BRIGHT}{Fore.MAGENTA}>> ")
+
+    if not escolha.isdigit():
+        limpar_terminal()
+        print(logo)
+        print("\n\n\n")
+        print(f"{Style.BRIGHT}{Fore.RED}Por favor, digite um número válido.".center(largura_terminal))
+        time.sleep(2)
+        return continuar_jogo()
+    elif int(escolha) == 0:
+        return tela_inicial(False)
+    elif 1 <= int(escolha) <= len(jogadores):
+        jogador_selecionado = jogadores[escolha - 1]
+        
+        confirmacao = ""
+        while confirmacao != "s" and confirmacao != "S" and confirmacao != "n" and confirmacao != "N":
+            limpar_terminal()
+            print(logo)
+            
+            print(f"{Style.BRIGHT}{Fore.YELLOW}Você deseja continuar com o jogador abaixo?".center(largura_terminal))
+            print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}{jogador_selecionado[0]}".center(largura_terminal))
+            print("\n")
+            print(f"{Fore.WHITE}Digite 's' para confirmar ou 'n' para escolher outro nome.".center(largura_terminal))
+
+            print("\n\n\n\n\n")
+            confirmacao = input(f"{Style.BRIGHT}{Fore.MAGENTA}>>> ").strip().lower()
+
+            if confirmacao == 's' or confirmacao == 'S':
+                limpar_terminal()
+                print(logo)
+                print("\n\n\n")
+
+                # COMANDO PARA ESCONDER O CURSOR:
+                print('\033[?25l', end='', flush=True)
+
+                print(f"{Style.BRIGHT}{Fore.YELLOW}CARREGANDO JOGO...".center(largura_terminal))
+                time.sleep(2)
+                pygame.mixer.music.fadeout(7000)
+                time.sleep(2)
+                limpar_terminal()
+                print("\n\n\n\n\n\n\n\n\n\n")
+                print(logo)
+                time.sleep(5)
+                print('\033[?25h', end='', flush=True)
+                iniciar_jogo(jogador_selecionado[0])
+            elif confirmacao == 'n' or confirmacao == 'N':
+                limpar_terminal()
+                print(logo)
+                return continuar_jogo()
+            else:
+                limpar_terminal()
+                print(logo)
+                print("\n\n\n")
+                print(f"{Style.BRIGHT}{Fore.RED}Opção inválida. Tente novamente.".center(largura_terminal))
+                time.sleep(2)
+                limpar_terminal()
+    else:
+        print(Fore.RED + "Opção inválida. Tente novamente.")
+        enter_continue()
+
 
 def musicTheme():
     pygame.mixer.init() #musica
@@ -229,16 +313,20 @@ def enter_continue():
     input(Fore.LIGHTBLACK_EX + "\nPressione Enter para continuar...")
 
 #funcao principal
-def tela_inicial(opcoes):
+def tela_inicial(introduction = False):
     while True:
-        print('\033[?25l', end='', flush=True)
+        jogadores = buscaTodosJogadores()
+        opcoes = ["Continuar", "Novo Jogo", "Sair"] if len(jogadores) > 0 else ["Novo Jogo", "Sair"]
+
         musicTheme()
-        limpar_terminal()
-        introducao()
+
+        if introduction:
+            print('\033[?25l', end='', flush=True)
+            introducao()
+        
         limpar_terminal()
         print('\033[?25h', end='', flush=True)
 
-        print("\n\n\n\n")
         print(logo)
 
         for i, opcao in enumerate(opcoes):
@@ -247,7 +335,7 @@ def tela_inicial(opcoes):
             print(opcao_centralizada)
 
         try:
-            print("\n\n\n\n\n\n\n\n\n" + f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}Digite o número da opção desejada:")
+            print("\n\n\n\n\n\n\n" + f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}Digite o número da opção desejada:")
             escolha:int = int(input(f"{Style.BRIGHT}{Fore.MAGENTA}>> "))
         except ValueError:
             print("Por favor, digite um número válido.")
@@ -266,7 +354,7 @@ def tela_inicial(opcoes):
         else:
             match escolha:
                 case 1:
-                    iniciar_jogo()
+                    continuar_jogo()
                 case 2:
                     novoJogador()
                 case 3:
@@ -277,9 +365,4 @@ def tela_inicial(opcoes):
 
 # Executa a tela inicial
 if __name__ == '__main__':
-    jogadores = buscaTodosJogadores()
-
-    if len(jogadores) == 0:
-        tela_inicial(["Novo Jogo", "Sair"])
-    else:
-        tela_inicial(["Continuar", "Novo Jogo", "Sair"])
+    tela_inicial()

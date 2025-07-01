@@ -1,6 +1,6 @@
 import time
 from pages.Estabelecimento.db_estabelecimento import *
-from pages.IniciarJogo.db_iniciarJogo import buscar_seed_mundo
+# from pages.IniciarJogo.db_iniciarJogo import buscar_seed_mundo
 from pages.Estabelecimento.db_estabelecimento import (
     verificar_instancia_chapeu_de_madeira_por_jogador,
     visualizar_itens_chapeu_de_madeira_por_jogador,
@@ -172,7 +172,7 @@ def vender_item_para_loja(jogador, item_id, quantidade):
     
     return False, "Erro de conexão com o banco"
 
-def menu_chapeu_de_madeira(jogador):
+def menu_chapeu_de_madeira(jogador, seedMundo):
     """
     Menu principal da loja de poções
     """
@@ -186,8 +186,7 @@ def menu_chapeu_de_madeira(jogador):
     
     # Verificar e criar instância da loja se necessário
     if not verificar_instancia_chapeu_de_madeira_por_jogador(jogador):
-        seed_mundo = buscar_seed_mundo(jogador)
-        if seed_mundo:
+        if seedMundo:
             sucesso = criar_instancia_chapeu_de_madeira_por_jogador(jogador, "O Chapéu de Madeira", 3, 15)
             if not sucesso:
                 print(f"{Fore.RED}Erro ao inicializar a loja!")

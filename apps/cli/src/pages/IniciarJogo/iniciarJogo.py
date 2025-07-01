@@ -1,196 +1,206 @@
 import time
+import pyfiglet
 from pages.IniciarJogo.db_iniciarJogo import *
-from pages.IniciarJogo.db_iniciarJogo import selecionar_jogador
-from pages.Estabelecimento import menu_chapeu_de_madeira, menu_forja, menu_banco
+# from pages.Estabelecimento import menu_chapeu_de_madeira, menu_forja, menu_banco
 from utils.limparTerminal import limpar_terminal
-from utils.enterContinue import enter_continue
+from pages.Masmorra.masmorra import mainMasmorra
 from colorama import Fore, Back, Style, init
 import pygame
+import subprocess
+import platform
+import os
 import shutil
+import textwrap
 
 # definição da largura da janela do terminal:
 largura_terminal = shutil.get_terminal_size().columns
+
+# definição da Logo do Jogo centralizada:
+ascii = pyfiglet.figlet_format("MOONLIGHTER")
+centralizacao = "\n".join([linha.center(largura_terminal) for linha in ascii.splitlines()])
+logo = f"{Style.BRIGHT + Fore.LIGHTGREEN_EX}\n\n{centralizacao}\n\n\n"
 
 def musicCity(): #musica da cidade
     pygame.mixer.init() 
     pygame.mixer.music.load("apps/cli/assets/musics/MoonlighterOST_02_Cidade.mp3")
     pygame.mixer.music.play(-1, fade_ms=3000)
 
-def cabecalho():
-        local_jogador: str = buscar_local_jogador()
-        print(f"{Fore.LIGHTGREEN_EX}{Style.BRIGHT}=================== MOONLIGHTER GAME ===================".center(largura_terminal))
-        print(Fore.YELLOW + f"dia: XX, periodo: XX, local: {local_jogador}".center(largura_terminal))
-        print(f"{Fore.LIGHTGREEN_EX}{Style.BRIGHT}========================================================".center(largura_terminal))
+def print_in_centered(text):
+    largura_terminal = shutil.get_terminal_size().columns
+    # Quebra o texto em linhas que caibam no terminal
+    linhas = textwrap.wrap(text, width=largura_terminal - 4)  # margem para centralizar
+    for linha in linhas:
+        linha_centralizada = linha.center(largura_terminal)
+        print(Style.BRIGHT + Fore.WHITE + linha_centralizada)
 
+def cabecalho(nickname):
+        
+    dadosJogador = buscar_dadosJogador(nickname)
 
-def cabecalho_completo():
-        local_jogador: str = buscar_local_jogador()
-        print(f"{Fore.LIGHTGREEN_EX}{Style.BRIGHT}=================== MOONLIGHTER GAME ===================".center(largura_terminal))
-        print(Fore.YELLOW + f"dia: XX, periodo: XX, local: {local_jogador}".center(largura_terminal))
-        print(Style.BRIGHT + Fore.CYAN + "Para onde deseja ir?".center(largura_terminal))
-        print(f"{Fore.LIGHTGREEN_EX}{Style.BRIGHT}========================================================".center(largura_terminal))
-        print("\n\n")
+    print(f"{Fore.LIGHTGREEN_EX}{Style.BRIGHT}╔════════════════════[ MOONLIGHTER GAME ]════════════════════╗".center(largura_terminal))
+    print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}{dadosJogador[0]}".center(largura_terminal))
+    print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}HP: {dadosJogador[1]} / {dadosJogador[2]} | OURO: {dadosJogador[3]}".center(largura_terminal))
+    print("\n")
+    if dadosJogador[4] == -1:
+        print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}{dadosJogador[6]}".center(largura_terminal))
+        print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}DIA: XX | PERÍODO: XX".center(largura_terminal))
+    else:
+        print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}MASMORRA: {dadosJogador[6]} | SEED: XXX".center(largura_terminal))
+        print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}SALA [Posição Horizontal][Posição Vertical]: [{dadosJogador[3]}][{dadosJogador[4]}]".center(largura_terminal))
+    print(f"{Fore.LIGHTGREEN_EX}{Style.BRIGHT}╚════════════════════════════════════════════════════════════╝".center(largura_terminal))
+    
+    print("\n")
 
+    print_in_centered(buscarDescricaoLocal(dadosJogador[6]))
+    print("\n")
 
-        locais = exibir_locais(local_jogador)
+def locomocao(nickname):
+    while True:
+        dadosJogador = buscar_dadosJogador(nickname)
+        limpar_terminal()
+        cabecalho(nickname)
+        print(f"{Style.BRIGHT}{Fore.YELLOW}Escolha um local para se mover:".center(largura_terminal))
+        print("\n")
+
+        locais = exibir_locais(dadosJogador[6])
+        if (dadosJogador[6] != 'Vila Rynoka'): locais.append(('Voltar ao Local Anterior',))
+        locais.append(('Encerrar Locomoção',))
 
         for i, local in enumerate(locais, start=1):
-            print(f"{i}- {local[0]}")
+            if local[0] == "Encerrar Locomoção":
+                print(f"{Fore.RED}{Style.BRIGHT}{i} - {local[0]}")
+            elif local[0] == "Voltar ao Local Anterior":
+                print(f"{Fore.LIGHTYELLOW_EX}{Style.BRIGHT}{i} - {local[0]}")
+            else:
+                print(f"{Fore.YELLOW}{Style.BRIGHT}{i} - {local[0]}")
+
+        print("\n\n\n\n" + f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}Digite o número da opção desejada:")
+        entrada = input(f"{Style.BRIGHT}{Fore.MAGENTA}>> ")
         
-        if (local_jogador == 'Vila Rynoka'): print(Fore.LIGHTBLACK_EX + "0- sair do jogo")
-        else: print(Fore.LIGHTBLACK_EX + "0- voltar")
+        if entrada == '':
+            limpar_terminal()
+            print('\033[?25l', end='', flush=True)
+            print("\n\n\n\n\n\n\n\n")
+            print(f"{Style.BRIGHT}{Fore.RED}Por favor, digite um número.".center(largura_terminal))
+            time.sleep(2)
+            print('\033[?25h', end='', flush=True)
+            continue
 
-        while True:
-            entrada = input("\nDigite: ").strip()
-            if entrada == '':
-                print("Por favor, digite um número.")
-                continue
+        if entrada < '1' or entrada > str(len(locais)):
+            limpar_terminal()
+            print('\033[?25l', end='', flush=True)
+            print("\n\n\n\n\n\n\n\n")
+            print(f"{Style.BRIGHT}{Fore.RED}Opção inválida. Por favor, escolha um número válido.".center(largura_terminal))
+            time.sleep(2)
+            print('\033[?25h', end='', flush=True)
+            continue
+
+        try:
+            escolha = int(entrada)
             
-            try:
-                escolha = int(entrada)
-                return escolha, local_jogador
-            except ValueError:
-                print("Por favor, digite um número válido.")
+            if locais[escolha - 1][0] == 'Encerrar Locomoção':
+                return
+            elif locais[escolha - 1][0] == 'Voltar ao Local Anterior':
+                atualizarParaLocalAnterior(dadosJogador)
                 continue
+            else:
+                atualizar_local_jogador(locais[escolha - 1][0], nickname)
+                if locais[escolha - 1][0].startswith('Masmorra'):
+                    mainMasmorra(nickname)
 
+        except ValueError:
+            limpar_terminal()
+            print('\033[?25l', end='', flush=True)
+            print("\n\n\n\n\n\n\n\n")
+            print(f"{Style.BRIGHT}{Fore.RED}Por favor, digite um número válido.".center(largura_terminal))
+            time.sleep(2)
+            print('\033[?25h', end='', flush=True)
+            continue
+
+def exibirOpcoes():
+
+    print(f"{Style.BRIGHT}{Fore.YELLOW}Ações disponíveis:".center(largura_terminal))
+    print("\n")
+    print(f"{Style.BRIGHT}{Fore.YELLOW}1 - Visualizar mapa de Rynoka")
+    print(f"{Style.BRIGHT}{Fore.YELLOW}2 - Mover-se para outro local")
+    print(f"{Style.BRIGHT}{Fore.YELLOW}3 - Ver Inventário")
+    print(f"{Style.BRIGHT}{Fore.YELLOW}4 - Ver Status do Jogador")
+    print(f"{Style.BRIGHT}{Fore.RED}5 - Voltar ao Menu Principal")
+
+    print("\n\n\n\n" + f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}Digite o número da opção desejada:")
+    escolha = input(f"{Style.BRIGHT}{Fore.MAGENTA}>> ")
+    
+    return escolha
+
+def sairDoJogo():
+    limpar_terminal()
+    print(logo)
+
+    print(f"{Style.BRIGHT}{Fore.YELLOW}Você tem certeza que deseja voltar ao Menu Principal?".center(largura_terminal))
+    print("\n")
+    print(f"{Fore.WHITE}Digite 's' para sair ou 'n' para cancelar.".center(largura_terminal))
+
+    print("\n\n\n\n\n")
+    confirmacao = input(f"{Style.BRIGHT}{Fore.MAGENTA}>>> ").strip().lower()
+
+    if confirmacao == 's' or confirmacao == 'S':
+        print('\033[?25l', end='', flush=True)
+        limpar_terminal()
+        print(logo)
+        print("\n\n\n")
+        print(f"{Style.BRIGHT}{Fore.RED}Voltando ao Menu Principal...".center(largura_terminal))
+        pygame.mixer.music.fadeout(7000)
+        time.sleep(2)
+        limpar_terminal()
+        print("\n\n\n\n\n\n\n\n\n\n")
+        print(logo)
+        time.sleep(7)
+        return True
+    elif confirmacao == 'n' or confirmacao == 'N':
+        return False
+
+def exibirMapa():
+    script_path = os.path.abspath("apps/cli/src/actions/mapa.py")
+    sistema = platform.system()
+
+    if sistema == "Windows":
+        subprocess.Popen(f'start cmd /k python "{script_path}"', shell=True)
+    elif sistema == "Linux":
+        subprocess.Popen(['gnome-terminal', '--', 'python3', script_path])
+    else:
+        print("Sistema operacional não suportado para abrir nova janela de terminal.")
 
 #funcao principal
-def iniciar_jogo():
+def iniciar_jogo(nickname):
     init(autoreset=True) #terminal colorido
     
-    # Selecionar jogador uma vez no início
-    jogador_atual = selecionar_jogador()
-    if not jogador_atual:
-        print(f"{Fore.RED}Erro ao selecionar jogador!")
-        enter_continue()
-        return
-    
     musicCity()
-    local_inicial("Vila Rynoka")
-
     # loop dos locais no terminal
     while True:
 
         limpar_terminal()
-        escolha, local_jogador = cabecalho_completo()
-        local_anterior = local_jogador
+        cabecalho(nickname)
+        escolha = exibirOpcoes()
 
-        if (escolha == 0): #sair do jogo
-            pygame.mixer.music.stop()
-            print("Salvando seu progresso...")
-            time.sleep(2)
-            print("Jogo salvo!")
-            enter_continue()
-            break;
-
-        elif (escolha == 1): #Centro comercial
-            novo_local: str = "Centro Comercial"
-            atualizar_local_jogador(novo_local)
-
-            while True:
-
-                limpar_terminal()
-                escolhaCC, local_jogador = cabecalho_completo()
-
-                if (escolhaCC == 0): #voltar
-                    atualizar_local_jogador(local_anterior)
+        try:
+            if int(escolha) == 1:
+                exibirMapa()
+            elif int(escolha) == 2:
+                locomocao(nickname)
+            elif int(escolha) == 5:
+                if sairDoJogo():
                     break
-
-                elif (escolhaCC == 1): #Forja vulcanica
-                    menu_forja(jogador_atual)
-                
-                elif (escolhaCC == 2): #O chapeu de madeira
-                    menu_chapeu_de_madeira(jogador_atual)
-
-                elif (escolhaCC == 3): #Banco de rynoka
-                    menu_banco(jogador_atual)
-
-                elif (escolhaCC == 4): #Tenda da bruxa
-                    print(f"\nBem-vindo! Ainda estão nos desenvolvendo, volte mais tarde!")
-                    enter_continue()
-
-                elif (escolhaCC == 5): #Barraca do tom
-                    print(f"\nBem-vindo! Ainda estão nos desenvolvendo, volte mais tarde!")
-                    enter_continue()
-
-                else:
-                    print("\nDigite um numero válido")
-                    enter_continue()
-
-
-        elif (escolha == 2): #Praca
-            novo_local: str = "Centro Comercial"
-            atualizar_local_jogador(novo_local)
-
+            else:
+                limpar_terminal()
+                print('\033[?25l', end='', flush=True)
+                print("\n\n\n\n\n\n\n\n")
+                print(f"{Style.BRIGHT}{Fore.RED}Opção inválida!".center(largura_terminal))
+                time.sleep(2)
+                print('\033[?25h', end='', flush=True)
+        except ValueError:
             limpar_terminal()
-            novo_local: str = "Praça"
-            atualizar_local_jogador(novo_local)
-            cabecalho()
-            print("\nAinda não há nada aqui, volte mais tarde\n")
-            enter_continue()
-            atualizar_local_jogador(local_anterior)
-
-            
-        elif (escolha == 3): #Moonlighter    
-            novo_local: str = "Moonlighter"
-            atualizar_local_jogador(novo_local)
-
-            while True:
-
-                limpar_terminal()
-                escolhaML, local_jogador = cabecalho_completo()
-
-                if (escolhaML == 0): #voltar
-                    atualizar_local_jogador(local_anterior)
-                    break
-
-                elif (escolhaML == 1): #Quarto
-                    print(f"\nBem-vindo! Ainda estão nos desenvolvendo, volte mais tarde!")
-                    enter_continue()
-                
-                elif (escolhaML == 2): #Salao de exposicao
-                    print(f"\nBem-vindo! Ainda estão nos desenvolvendo, volte mais tarde!")
-                    enter_continue()
-                
-                else:
-                    print("\nDigite um numero válido")
-                    enter_continue()
-        
-
-        elif (escolha == 4): #Area das masmorras
-            novo_local: str = "Área das Masmorras"
-            atualizar_local_jogador(novo_local)
-
-            while True:
-
-                limpar_terminal()
-                escolhaM, local_jogador = cabecalho_completo()
-
-                if (escolhaM == 0): #voltar
-                    atualizar_local_jogador(local_anterior)
-                    break
-
-                elif (escolhaM == 1): #Golem
-                    print(f"\nBem-vindo! Ainda estão nos desenvolvendo, volte mais tarde!")
-                    enter_continue()
-                
-                elif (escolhaM == 2): #Floresta
-                    print(f"\nBem-vindo! Ainda estão nos desenvolvendo, volte mais tarde!")
-                    enter_continue()
-
-                elif (escolhaM == 3): #Deserto
-                    print(f"\nBem-vindo! Ainda estão nos desenvolvendo, volte mais tarde!")
-                    enter_continue()
-
-                elif (escolhaM == 4): #Recnologia
-                    print(f"\nBem-vindo! Ainda estão nos desenvolvendo, volte mais tarde!")
-                    enter_continue()
-
-                else:
-                    print("\nDigite um numero válido")
-                    enter_continue()
-        
-
-        else:
-            print("\nDigite um numero válido")
-            enter_continue()
+            print('\033[?25l', end='', flush=True)
+            print("\n\n\n\n\n\n\n\n")
+            print(f"{Style.BRIGHT}{Fore.RED}Opção inválida!".center(largura_terminal))
+            time.sleep(2)
+            print('\033[?25h', end='', flush=True)

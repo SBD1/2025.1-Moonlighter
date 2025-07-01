@@ -1,6 +1,6 @@
 import time
 from pages.Estabelecimento.db_estabelecimento import *
-from pages.IniciarJogo.db_iniciarJogo import buscar_seed_mundo
+# from pages.IniciarJogo.db_iniciarJogo import buscar_seed_mundo
 from pages.Estabelecimento.db_estabelecimento import (
     verificar_instancia_forja_por_jogador,
     visualizar_itens_forja_por_jogador,
@@ -25,7 +25,7 @@ def cabecalho_forja():
     print(f"{Fore.YELLOW}Forja Vulcânica - Fabricação de Itens".center(largura_terminal))
     print(f"{Fore.LIGHTGREEN_EX}========================================================".center(largura_terminal))
 
-def menu_forja(jogador):
+def menu_forja(jogador, seedMundo):
     """
     Menu principal da forja
     """
@@ -39,9 +39,7 @@ def menu_forja(jogador):
     
     # Verificar e criar instância da forja se necessário
     if not verificar_instancia_forja_por_jogador(jogador):
-        # Buscar seed_mundo para criar instância
-        seed_mundo = buscar_seed_mundo(jogador)
-        if seed_mundo:
+        if seedMundo:
             # Criar instância da forja
             sucesso = criar_instancia_forja_por_jogador(jogador, "Forja Vulcânica", 2)
             if not sucesso:
