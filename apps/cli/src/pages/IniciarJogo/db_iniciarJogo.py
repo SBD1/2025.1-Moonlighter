@@ -1,6 +1,7 @@
 from colorama import Fore
 from setup.database import connect_to_db
 from utils.enterContinue import enter_continue
+from pages.IniciarJogo.inventario_funcoes import *
 
 def local_inicial(local_inicial):
     connection = connect_to_db()
@@ -278,7 +279,7 @@ def coletar_item_do_chao(nickname, id_item_chao):
         """, (id_item_chao,))
         
         # Atualizar slots ocupados
-        atualizar_slots_ocupados_inventario(nickname, 1, cursor)
+        atualizar_slots_ocupados(nickname, 1)
         
         connection.commit()
         cursor.close()
@@ -292,24 +293,6 @@ def coletar_item_do_chao(nickname, id_item_chao):
         connection.close()
         return False
 
-def atualizar_slots_ocupados_inventario(nickname, id_inventario, cursor):
-    """
-    Atualiza o número de slots ocupados em um inventário
-    """
-    cursor.execute("""
-        SELECT COUNT(DISTINCT "idItem") as slots_ocupados
-        FROM "inst_item"
-        WHERE "nickname" = %s AND "idInventario" = %s
-    """, (nickname, id_inventario))
-    
-    slots_ocupados = cursor.fetchone()[0]
-    
-    cursor.execute("""
-        UPDATE "inst_inventario"
-        SET "slotOcupado" = %s
-        WHERE "nickname" = %s AND "idInventario" = %s
-    """, (slots_ocupados, nickname, id_inventario))
-
 def listar_itens_no_chao(nickname):
     """
     Lista todos os itens no chão na localização atual do jogador
@@ -318,23 +301,220 @@ def listar_itens_no_chao(nickname):
     if connection is None:
         return []
 
+    try:
+        cursor = connection.cursor()
+        
+        # Tentar usar a função SQL primeiro
+        try:
+            cursor.execute("""
+                SELECT * FROM obter_itens_chao_local(%s);
+            """, (nickname,))
+            itens = cursor.fetchall()
+        except:
+            # Se a função não existir, usar query direta
+            cursor.execute("""
+                SELECT 
+                    ic."idItemChao",
+                    ic."idItem",
+                    i."nome",
+                    ic."quantidade",
+                    ic."posicaoX",
+                    ic."posicaoY",
+                    i."descricao"
+                FROM "item_chao" ic
+                JOIN "item" i ON ic."idItem" = i."idItem"
+                JOIN "jogador" j ON j."nickname" = %s
+                JOIN "mundo" m ON j."nickname" = m."nickname"
+                WHERE ic."seedMundo" = m."seedMundo" 
+                AND ic."nomeLocal" = j."nomeLocal"
+                ORDER BY ic."tempoDropado" DESC
+            """, (nickname,))
+            itens = cursor.fetchall()
+        
+        cursor.close()
+        connection.close()
+        return itens
+        
+    except Exception as e:
+        print(f"Erro ao listar itens no chão: {e}")
+        if 'cursor' in locals():
+            cursor.close()
+        if 'connection' in locals():
+            connection.close()
+        return []
+
+def verificar_pode_pegar_item(nickname, id_item_chao):
+    """
+    Verifica se o jogador pode pegar um item do chão
+    """
+    connection = connect_to_db()
+    if connection is None:
+        return False
+
+    try:
+        cursor = connection.cursor()
+        cursor.execute("""
+            SELECT pode_pegar_item(%s, %s);
+        """, (nickname, id_item_chao))
+        
+        resultado = cursor.fetchone()
+        cursor.close()
+        connection.close()
+        return resultado[0] if resultado else False
+    except Exception:
+        # Fallback para verificação manual se função não existir
+        try:
+            cursor.execute("""
+                SELECT ic."idItem", ic."quantidade", i."stackMaximo"
+                FROM "item_chao" ic
+                JOIN "item" i ON ic."idItem" = i."idItem"
+                WHERE ic."idItemChao" = %s
+            """, (id_item_chao,))
+            
+            item_info = cursor.fetchone()
+            if not item_info:
+                return False
+                
+            cursor.close()
+            connection.close()
+            return True  # Simplificado para sempre permitir
+        except Exception:
+            if 'cursor' in locals():
+                cursor.close()
+            if 'connection' in locals():
+                connection.close()
+            return False
+
+def verificar_pode_dropar_item(nickname, id_item, quantidade):
+    """
+    Verifica se o jogador pode dropar um item
+    """
+    connection = connect_to_db()
+    if connection is None:
+        return False
+
+    try:
+        cursor = connection.cursor()
+        cursor.execute("""
+            SELECT pode_dropar_item(%s, %s, %s);
+        """, (nickname, id_item, quantidade))
+        
+        resultado = cursor.fetchone()
+        cursor.close()
+        connection.close()
+        return resultado[0] if resultado else False
+    except Exception:
+        # Fallback para verificação manual
+        try:
+            cursor.execute("""
+                SELECT COALESCE(ii."quantidade", 0)
+                FROM "inst_item" ii
+                WHERE ii."nickname" = %s AND ii."idItem" = %s
+            """, (nickname, id_item))
+            
+            resultado = cursor.fetchone()
+            quantidade_atual = resultado[0] if resultado else 0
+            
+            cursor.close()
+            connection.close()
+            return quantidade_atual >= quantidade
+        except Exception:
+            if 'cursor' in locals():
+                cursor.close()
+            if 'connection' in locals():
+                connection.close()
+            return False
+
+def obter_inventario_completo(nickname):
+    """
+    Obtém o inventário completo do jogador
+    """
+    connection = connect_to_db()
+    if connection is None:
+        return []
+
+    try:
+        cursor = connection.cursor()
+        cursor.execute("""
+            SELECT * FROM obter_inventario_jogador(%s);
+        """, (nickname,))
+        
+        inventario = cursor.fetchall()
+        cursor.close()
+        connection.close()
+        return inventario
+    except Exception:
+        # Fallback para query manual se função não existir
+        try:
+            cursor.execute("""
+                SELECT 
+                    j."nickname",
+                    inv."nome" AS "tipo_inventario",
+                    i."nome" AS "nome_item",
+                    ii."quantidade",
+                    i."tipo" AS "categoria_item",
+                    i."precoBase",
+                    i."descricao",
+                    ii."idInstItem"
+                FROM "jogador" j
+                JOIN "inst_inventario" iinv ON j."nickname" = iinv."nickname"
+                JOIN "inventario" inv ON iinv."idInventario" = inv."idInventario"
+                LEFT JOIN "inst_item" ii ON iinv."idInventario" = ii."idInventario" 
+                    AND iinv."nickname" = ii."nickname"
+                LEFT JOIN "item" i ON ii."idItem" = i."idItem"
+                WHERE j."nickname" = %s AND i."nome" IS NOT NULL
+                ORDER BY inv."nome", i."nome"
+            """, (nickname,))
+            
+            inventario = cursor.fetchall()
+            cursor.close()
+            connection.close()
+            return inventario
+        except Exception:
+            if 'cursor' in locals():
+                cursor.close()
+            if 'connection' in locals():
+                connection.close()
+            return []
+
+def executar_limpeza_automatica():
+    """
+    Executa limpeza automática de itens
+    """
+    return executar_limpeza_completa()
+
+def obter_inventario_usando_view(nickname):
+    """
+    Obtém inventário do jogador usando a view otimizada
+    """
+    connection = connect_to_db()
+    if connection is None:
+        return []
+
     cursor = connection.cursor()
     cursor.execute("""
-        SELECT 
-            ic."idItemChao",
-            ic."idItem",
-            i."nome",
-            ic."quantidade",
-            ic."posicaoX",
-            ic."posicaoY",
-            i."descricao"
-        FROM "item_chao" ic
-        JOIN "item" i ON ic."idItem" = i."idItem"
-        JOIN "jogador" j ON ic."nomeLocal" = j."nomeLocal"
-        JOIN "mundo" m ON ic."seedMundo" = m."seedMundo" AND j."nickname" = m."nickname"
-        WHERE j."nickname" = %s
-        ORDER BY i."nome"
+        SELECT * FROM view_inventario_jogador 
+        WHERE "nickname" = %s AND "nome_item" IS NOT NULL
     """, (nickname,))
+    
+    inventario = cursor.fetchall()
+    cursor.close()
+    connection.close()
+    return inventario
+
+def obter_itens_chao_usando_view(seed_mundo, nome_local):
+    """
+    Obtém itens no chão usando a view otimizada
+    """
+    connection = connect_to_db()
+    if connection is None:
+        return []
+
+    cursor = connection.cursor()
+    cursor.execute("""
+        SELECT * FROM view_itens_chao 
+        WHERE "seedMundo" = %s AND "nomeLocal" = %s
+    """, (seed_mundo, nome_local))
     
     itens = cursor.fetchall()
     cursor.close()

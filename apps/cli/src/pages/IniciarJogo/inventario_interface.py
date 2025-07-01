@@ -4,6 +4,10 @@ Data: 29/06/2025
 Descrição: Interface principal para gerenciamento do inventário do jogador
 """
 
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '../../'))
+
 import time
 import shutil
 from colorama import Fore, Style, init
@@ -209,7 +213,7 @@ def dropar_item(nickname, item_info):
                 """, (nova_quantidade, id_inst_item))
             
             # Atualizar slots ocupados
-            atualizar_slots_ocupados_inventario(nickname, id_inventario, cursor)
+            atualizar_slots_ocupados(nickname, id_inventario)
             
             connection.commit()
             cursor.close()

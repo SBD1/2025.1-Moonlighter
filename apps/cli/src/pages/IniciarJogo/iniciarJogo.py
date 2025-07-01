@@ -117,6 +117,28 @@ def locomocao(nickname):
             print('\033[?25h', end='', flush=True)
             continue
 
+def executar_limpeza_sistema(nickname):
+    """
+    Executa limpeza automática do sistema
+    """
+    limpar_terminal()
+    print(logo)
+    
+    print(f"{Style.BRIGHT}{Fore.YELLOW}{'═' * largura_terminal}")
+    print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}LIMPEZA DO SISTEMA".center(largura_terminal))
+    print(f"{Style.BRIGHT}{Fore.YELLOW}{'═' * largura_terminal}")
+    
+    print(f"\n{Style.BRIGHT}{Fore.LIGHTCYAN_EX}Executando limpeza automática...")
+    
+    # Executar limpeza de itens expirados
+    itens_removidos = executar_limpeza_automatica()
+    
+    print(f"\n{Style.BRIGHT}{Fore.LIGHTGREEN_EX}✓ Limpeza concluída!")
+    print(f"{Fore.LIGHTBLUE_EX}Itens expirados removidos: {Fore.YELLOW}{itens_removidos}")
+    
+    print(f"{Fore.LIGHTBLACK_EX}\nPressione Enter para continuar...")
+    input()
+
 def exibirOpcoes():
 
     print(f"{Style.BRIGHT}{Fore.YELLOW}Ações disponíveis:".center(largura_terminal))
@@ -126,7 +148,8 @@ def exibirOpcoes():
     print(f"{Style.BRIGHT}{Fore.YELLOW}3 - Ver Inventário")
     print(f"{Style.BRIGHT}{Fore.YELLOW}4 - Ver Status do Jogador")
     print(f"{Style.BRIGHT}{Fore.YELLOW}5 - Ver Itens no Chão")
-    print(f"{Style.BRIGHT}{Fore.RED}6 - Voltar ao Menu Principal")
+    print(f"{Style.BRIGHT}{Fore.YELLOW}6 - Executar Limpeza do Sistema")
+    print(f"{Style.BRIGHT}{Fore.RED}7 - Voltar ao Menu Principal")
 
     print("\n\n\n\n" + f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}Digite o número da opção desejada:")
     escolha = input(f"{Style.BRIGHT}{Fore.MAGENTA}>> ")
@@ -341,22 +364,41 @@ def listar_itens_no_chao(nickname):
     """
     connection = connect_to_db()
     if connection is None:
-        return None
+        return []
 
     cursor = connection.cursor()
+    
+    # Buscar informações do jogador para obter seedMundo e nomeLocal
+    cursor.execute("""
+        SELECT j."nomeLocal", m."seedMundo"
+        FROM "jogador" j
+        JOIN "mundo" m ON j."nickname" = m."nickname"
+        WHERE j."nickname" = %s
+    """, (nickname,))
+    
+    jogador_info = cursor.fetchone()
+    if not jogador_info:
+        cursor.close()
+        connection.close()
+        return []
+    
+    nome_local, seed_mundo = jogador_info
+    
+    # Buscar itens no chão na localização atual
     cursor.execute("""
         SELECT 
-            IC."idItemChao",
-            IC."idItem",
-            I."nome",
-            IC."quantidade",
-            IC."posX",
-            IC."posY",
-            I."descricao"
-        FROM "itemchao" IC
-        JOIN "item" I ON IC."idItem" = I."idItem"
-        WHERE IC."nickname" = %s;
-    """, (nickname,))
+            ic."idItemChao",
+            ic."idItem",
+            i."nome",
+            ic."quantidade",
+            ic."posicaoX",
+            ic."posicaoY",
+            i."descricao"
+        FROM "item_chao" ic
+        JOIN "item" i ON ic."idItem" = i."idItem"
+        WHERE ic."seedMundo" = %s AND ic."nomeLocal" = %s
+        ORDER BY ic."tempoDropado" DESC
+    """, (seed_mundo, nome_local))
 
     resultados = cursor.fetchall()
     cursor.close()
@@ -368,65 +410,8 @@ def coletar_item_do_chao(nickname, id_item_chao):
     """
     Coleta um item do chão e adiciona ao inventário do jogador
     """
-    connection = connect_to_db()
-    if connection is None:
-        return False
-
-    try:
-        # Iniciar uma transação
-        connection.autocommit = False
-
-        cursor = connection.cursor()
-
-        # Obter informações do item
-        cursor.execute("""
-            SELECT "idItem", "quantidade"
-            FROM "itemchao"
-            WHERE "idItemChao" = %s;
-        """, (id_item_chao,))
-        item_info = cursor.fetchone()
-
-        if not item_info:
-            return False
-
-        id_item, quantidade = item_info
-
-        # Verificar espaço no inventário (supondo que a capacidade máxima seja 100)
-        cursor.execute("""
-            SELECT COALESCE(SUM("quantidade"), 0)
-            FROM "itens_inventario"
-            WHERE "nickname" = %s;
-        """, (nickname,))
-        espaco_ocupado = cursor.fetchone()[0]
-
-        if espaco_ocupado + quantidade > 100:
-            return False
-
-        # Adicionar item ao inventário
-        cursor.execute("""
-            INSERT INTO "itens_inventario" ("nickname", "idItem", "quantidade")
-            VALUES (%s, %s, %s)
-            ON CONFLICT ("nickname", "idItem") 
-            DO UPDATE SET "quantidade" = "quantidade" + EXCLUDED."quantidade";
-        """, (nickname, id_item, quantidade))
-
-        # Remover item do chão
-        cursor.execute("""
-            DELETE FROM "itemchao"
-            WHERE "idItemChao" = %s;
-        """, (id_item_chao,))
-
-        # Commit da transação
-        connection.commit()
-
-        return True
-    except Exception as e:
-        print(f"Erro: {e}")
-        connection.rollback()
-        return False
-    finally:
-        cursor.close()
-        connection.close()
+    from pages.IniciarJogo.db_iniciarJogo import coletar_item_do_chao as coletar_item_db
+    return coletar_item_db(nickname, id_item_chao)
 
 #funcao principal
 def iniciar_jogo(nickname):
@@ -451,6 +436,8 @@ def iniciar_jogo(nickname):
             elif int(escolha) == 5:
                 ver_itens_no_chao(nickname)
             elif int(escolha) == 6:
+                executar_limpeza_sistema(nickname)
+            elif int(escolha) == 7:
                 if sairDoJogo():
                     break
             else:

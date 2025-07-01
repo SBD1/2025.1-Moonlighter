@@ -128,7 +128,7 @@ CREATE TABLE "inst_monstro" (
 
     CONSTRAINT "pk_inst_monstro" PRIMARY KEY ("seedMundo", "idMonstro"),
     CONSTRAINT "fk_mundo" FOREIGN KEY ("seedMundo") REFERENCES "mundo" ("seedMundo") ON DELETE CASCADE,
-    CONSTRAINT "fk_monstro" FOREIGN KEY ("idMonstro") REFERENCES "monstro" ("idMonstro") ON DELETE CASCADE,
+    CONSTRAINT "fk_monstro" FOREIGN KEY ("idMonstro" ) REFERENCES "monstro" ("idMonstro") ON DELETE CASCADE,
     CONSTRAINT "fk_sala" FOREIGN KEY ("seedSala") REFERENCES "sala" ("seedSala") ON DELETE CASCADE
 );
 
@@ -339,7 +339,7 @@ CREATE TABLE "dialogo_npc" (
 -- ================================================================
 -- EXTENSÕES PARA O SISTEMA DE INVENTÁRIO
 -- Data: 29/06/2025
--- Descrição: Extensões e funções para o sistema de inventário
+-- Descrição: Extensões para o sistema de inventário
 -- ================================================================
 
 -- Adicionando campos para slots equipados no jogador
@@ -353,53 +353,268 @@ ALTER TABLE "jogador" ADD CONSTRAINT "fk_arma_equipada"
 ALTER TABLE "jogador" ADD CONSTRAINT "fk_armadura_equipada" 
     FOREIGN KEY ("armaduraEquipada") REFERENCES "item" ("idItem") ON DELETE SET NULL;
 
-
-
 -- ================================================================
--- DADOS INICIAIS PARA O SISTEMA DE INVENTÁRIO
+-- TABELA DE ITENS NO CHÃO (MUNDO)
 -- Data: 30/06/2025
--- Descrição: Inserção de inventários básicos e itens iniciais
+-- Descrição: Tabela para armazenar itens dropados no mundo
 -- ================================================================
 
--- Inserir tipos de inventário padrão
-INSERT INTO "inventario" ("idInventario", "nome", "slotMaximo") VALUES 
-(1, 'Mochila Principal', 20),
-(2, 'Equipamentos', 10),
-(3, 'Baú da Casa', 40);
+CREATE TABLE "item_chao" (
+    "idItemChao" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    "idItem" integer NOT NULL,
+    "quantidade" SMALLINT NOT NULL DEFAULT 1,
+    "posicaoX" integer NOT NULL,
+    "posicaoY" integer NOT NULL,
+    "seedMundo" character varying(30) NOT NULL,
+    "nomeLocal" character varying(60) NOT NULL,
+    "tempoDropado" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "tempoExpiracao" TIMESTAMP, -- NULL = não expira
+    
+    CONSTRAINT "fk_item_chao_item" FOREIGN KEY ("idItem") REFERENCES "item" ("idItem") ON DELETE CASCADE,
+    CONSTRAINT "fk_item_chao_mundo" FOREIGN KEY ("seedMundo") REFERENCES "mundo" ("seedMundo") ON DELETE CASCADE,
+    CONSTRAINT "fk_item_chao_local" FOREIGN KEY ("nomeLocal") REFERENCES "local" ("nomeLocal") ON DELETE CASCADE,
+    CONSTRAINT "ck_quantidade_positiva" CHECK ("quantidade" > 0)
+);
 
--- Inserir efeitos básicos para itens iniciais
-INSERT INTO "efeito" ("nome", "descricao", "tipo", "valor", "duracaoTurnos") VALUES 
-('Cura Básica', 'Restaura pontos de vida', 'Cura', 20, 0),
-('Força Básica', 'Aumenta o ataque temporariamente', 'Buff', 5, 3),
-('Proteção Básica', 'Aumenta a defesa', 'Buff', 3, 0);
-
--- Inserir itens iniciais básicos
-INSERT INTO "item" ("nome", "descricao", "tipo", "precoBase", "cultura", "stackMaximo", "idEfeito") VALUES 
-('Espada de Madeira', 'Uma espada básica feita de madeira', 'Arma', 10, 'Comum', 1, NULL),
-('Armadura de Couro', 'Uma armadura simples de couro', 'Armadura', 15, 'Comum', 1, NULL),
-('Poção de Vida Pequena', 'Restaura uma pequena quantidade de HP', 'Consumível', 5, 'Comum', 10, 1);
-
--- Inserir dados específicos das armas
-INSERT INTO "arma" ("idItem", "dadoAtaque", "chanceCritico", "multiplicador", "multiplicadorCritico", "tipoArma") VALUES 
-(1, '1d6', 0.05, 1, 2, 'Espada');
-
--- Inserir dados específicos das armaduras  
-INSERT INTO "armadura" ("idItem", "dadoDefesa", "defesaPassiva", "criticoDefensivo", "bonusDefesa", "tipoArmadura") VALUES 
-(2, '1d4', 2, 1, 0, 'Peito');
-
--- Inserir dados específicos das poções
-INSERT INTO "pocao" ("idItem", "duracaoTurnos") VALUES 
-(3, 0);
+-- Índices para melhorar performance
+CREATE INDEX "idx_item_chao_localizacao" ON "item_chao" ("seedMundo", "nomeLocal", "posicaoX", "posicaoY");
+CREATE INDEX "idx_item_chao_expiracao" ON "item_chao" ("tempoExpiracao") WHERE "tempoExpiracao" IS NOT NULL;
 
 -- ================================================================
--- DADOS INICIAIS DE LOCAIS
+-- TRIGGERS PARA MANTER INTEGRIDADE DAS ESPECIALIZAÇÕES
 -- Data: 30/06/2025
--- Descrição: Inserção de locais básicos do jogo
+-- Descrição: Triggers para validar especialização única e cascata
 -- ================================================================
 
--- Inserir locais básicos
-INSERT INTO "local" ("nomeLocal", "descricao", "tipoLocal", "acesso") VALUES 
-('Vila Rynoka', 'A vila principal onde os aventureiros começam sua jornada', 'Local', NULL),
-('Moonlighter', 'A loja do jogador onde ele vende seus itens', 'Estabelecimento', 'Vila Rynoka'),
-('Masmorra das Pedras', 'Uma masmorra inicial com monstros básicos', 'Masmorra', 'Vila Rynoka');
+-- Função para validar especialização única de itens
+CREATE OR REPLACE FUNCTION validar_especializacao_item()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Verificar se item já existe em outra especialização
+    IF TG_TABLE_NAME = 'arma' THEN
+        IF EXISTS (SELECT 1 FROM "armadura" WHERE "idItem" = NEW."idItem") THEN
+            RAISE EXCEPTION 'Item já classificado como Armadura. Não pode ser salvo como Arma.';
+        END IF;
+        IF EXISTS (SELECT 1 FROM "pocao" WHERE "idItem" = NEW."idItem") THEN
+            RAISE EXCEPTION 'Item já classificado como Poção. Não pode ser salvo como Arma.';
+        END IF;
+        -- Atualizar tipo na tabela item
+        UPDATE "item" SET "tipo" = 'Arma' WHERE "idItem" = NEW."idItem";
+        
+    ELSIF TG_TABLE_NAME = 'armadura' THEN
+        IF EXISTS (SELECT 1 FROM "arma" WHERE "idItem" = NEW."idItem") THEN
+            RAISE EXCEPTION 'Item já classificado como Arma. Não pode ser salvo como Armadura.';
+        END IF;
+        IF EXISTS (SELECT 1 FROM "pocao" WHERE "idItem" = NEW."idItem") THEN
+            RAISE EXCEPTION 'Item já classificado como Poção. Não pode ser salvo como Armadura.';
+        END IF;
+        -- Atualizar tipo na tabela item
+        UPDATE "item" SET "tipo" = 'Armadura' WHERE "idItem" = NEW."idItem";
+        
+    ELSIF TG_TABLE_NAME = 'pocao' THEN
+        IF EXISTS (SELECT 1 FROM "arma" WHERE "idItem" = NEW."idItem") THEN
+            RAISE EXCEPTION 'Item já classificado como Arma. Não pode ser salvo como Poção.';
+        END IF;
+        IF EXISTS (SELECT 1 FROM "armadura" WHERE "idItem" = NEW."idItem") THEN
+            RAISE EXCEPTION 'Item já classificado como Armadura. Não pode ser salvo como Poção.';
+        END IF;
+        -- Atualizar tipo na tabela item
+        UPDATE "item" SET "tipo" = 'Consumível' WHERE "idItem" = NEW."idItem";
+    END IF;
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Função para validar especialização única de locais
+CREATE OR REPLACE FUNCTION validar_especializacao_local()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Verificar se local já existe em outra especialização
+    IF TG_TABLE_NAME = 'masmorra' THEN
+        IF EXISTS (SELECT 1 FROM "estabelecimento" WHERE "nomeLocal" = NEW."nomeLocal") THEN
+            RAISE EXCEPTION 'Local já classificado como Estabelecimento. Não pode ser salvo como Masmorra.';
+        END IF;
+        -- Atualizar tipo na tabela local
+        UPDATE "local" SET "tipoLocal" = 'Masmorra' WHERE "nomeLocal" = NEW."nomeLocal";
+        
+    ELSIF TG_TABLE_NAME = 'estabelecimento' THEN
+        IF EXISTS (SELECT 1 FROM "masmorra" WHERE "nomeLocal" = NEW."nomeLocal") THEN
+            RAISE EXCEPTION 'Local já classificado como Masmorra. Não pode ser salvo como Estabelecimento.';
+        END IF;
+        -- Atualizar tipo na tabela local
+        UPDATE "local" SET "tipoLocal" = 'Estabelecimento' WHERE "nomeLocal" = NEW."nomeLocal";
+    END IF;
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Função para atualizar tipo quando especialização é deletada (itens)
+CREATE OR REPLACE FUNCTION atualizar_tipo_item_apos_delete()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Atualizar tipo para NULL quando especialização é deletada
+    UPDATE "item" SET "tipo" = NULL WHERE "idItem" = OLD."idItem";
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Função para atualizar tipo quando especialização é deletada (locais)
+CREATE OR REPLACE FUNCTION atualizar_tipo_local_apos_delete()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Atualizar tipo para 'Local' quando especialização é deletada
+    UPDATE "local" SET "tipoLocal" = 'Local' WHERE "nomeLocal" = OLD."nomeLocal";
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Triggers para validação de especialização única (itens)
+DROP TRIGGER IF EXISTS trig_validar_arma ON "arma";
+CREATE TRIGGER trig_validar_arma
+    BEFORE INSERT ON "arma"
+    FOR EACH ROW EXECUTE FUNCTION validar_especializacao_item();
+
+DROP TRIGGER IF EXISTS trig_validar_armadura ON "armadura";
+CREATE TRIGGER trig_validar_armadura
+    BEFORE INSERT ON "armadura"
+    FOR EACH ROW EXECUTE FUNCTION validar_especializacao_item();
+
+DROP TRIGGER IF EXISTS trig_validar_pocao ON "pocao";
+CREATE TRIGGER trig_validar_pocao
+    BEFORE INSERT ON "pocao"
+    FOR EACH ROW EXECUTE FUNCTION validar_especializacao_item();
+
+-- Triggers para validação de especialização única (locais)
+DROP TRIGGER IF EXISTS trig_validar_masmorra ON "masmorra";
+CREATE TRIGGER trig_validar_masmorra
+    BEFORE INSERT ON "masmorra"
+    FOR EACH ROW EXECUTE FUNCTION validar_especializacao_local();
+
+DROP TRIGGER IF EXISTS trig_validar_estabelecimento ON "estabelecimento";
+CREATE TRIGGER trig_validar_estabelecimento
+    BEFORE INSERT ON "estabelecimento"
+    FOR EACH ROW EXECUTE FUNCTION validar_especializacao_local();
+
+-- Triggers para atualizar tipo quando especialização é deletada (itens)
+DROP TRIGGER IF EXISTS trig_atualizar_tipo_arma ON "arma";
+CREATE TRIGGER trig_atualizar_tipo_arma
+    AFTER DELETE ON "arma"
+    FOR EACH ROW EXECUTE FUNCTION atualizar_tipo_item_apos_delete();
+
+DROP TRIGGER IF EXISTS trig_atualizar_tipo_armadura ON "armadura";
+CREATE TRIGGER trig_atualizar_tipo_armadura
+    AFTER DELETE ON "armadura"
+    FOR EACH ROW EXECUTE FUNCTION atualizar_tipo_item_apos_delete();
+
+DROP TRIGGER IF EXISTS trig_atualizar_tipo_pocao ON "pocao";
+CREATE TRIGGER trig_atualizar_tipo_pocao
+    AFTER DELETE ON "pocao"
+    FOR EACH ROW EXECUTE FUNCTION atualizar_tipo_item_apos_delete();
+
+-- Triggers para atualizar tipo quando especialização é deletada (locais)
+DROP TRIGGER IF EXISTS trig_atualizar_tipo_masmorra ON "masmorra";
+CREATE TRIGGER trig_atualizar_tipo_masmorra
+    AFTER DELETE ON "masmorra"
+    FOR EACH ROW EXECUTE FUNCTION atualizar_tipo_local_apos_delete();
+
+DROP TRIGGER IF EXISTS trig_atualizar_tipo_estabelecimento ON "estabelecimento";
+CREATE TRIGGER trig_atualizar_tipo_estabelecimento
+    AFTER DELETE ON "estabelecimento"
+    FOR EACH ROW EXECUTE FUNCTION atualizar_tipo_local_apos_delete();
+
+-- ================================================================
+-- VIEWS ESSENCIAIS
+-- ================================================================
+
+-- View para inventário do jogador
+CREATE OR REPLACE VIEW view_inventario_jogador AS
+SELECT 
+    j."nickname",
+    inv."nome" AS "tipo_inventario",
+    i."nome" AS "nome_item",
+    ii."quantidade",
+    i."tipo" AS "categoria_item",
+    i."precoBase",
+    i."descricao",
+    ii."idInstItem"
+FROM "jogador" j
+JOIN "inst_inventario" iinv ON j."nickname" = iinv."nickname"
+JOIN "inventario" inv ON iinv."idInventario" = inv."idInventario"
+LEFT JOIN "inst_item" ii ON iinv."idInventario" = ii."idInventario" 
+    AND iinv."nickname" = ii."nickname"
+LEFT JOIN "item" i ON ii."idItem" = i."idItem";
+
+-- View para itens no chão
+CREATE OR REPLACE VIEW view_itens_chao AS
+SELECT 
+    ic."idItemChao",
+    ic."idItem",
+    i."nome",
+    ic."quantidade",
+    ic."posicaoX",
+    ic."posicaoY",
+    i."descricao",
+    ic."seedMundo",
+    ic."nomeLocal",
+    ic."tempoDropado"
+FROM "item_chao" ic
+JOIN "item" i ON ic."idItem" = i."idItem"
+ORDER BY ic."tempoDropado" DESC;
+
+-- ================================================================
+-- FUNÇÕES AUXILIARES
+-- ================================================================
+
+-- Função para obter itens no chão por localização do jogador
+CREATE OR REPLACE FUNCTION obter_itens_chao_local(p_nickname VARCHAR)
+RETURNS TABLE(
+    "idItemChao" INTEGER,
+    "idItem" INTEGER,
+    "nome" VARCHAR,
+    "quantidade" SMALLINT,
+    "posicaoX" INTEGER,
+    "posicaoY" INTEGER,
+    "descricao" VARCHAR
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        ic."idItemChao",
+        ic."idItem",
+        i."nome",
+        ic."quantidade",
+        ic."posicaoX",
+        ic."posicaoY",
+        i."descricao"
+    FROM "item_chao" ic
+    JOIN "item" i ON ic."idItem" = i."idItem"
+    JOIN "jogador" j ON j."nickname" = p_nickname
+    JOIN "mundo" m ON j."nickname" = m."nickname"
+    WHERE ic."seedMundo" = m."seedMundo" 
+    AND ic."nomeLocal" = j."nomeLocal"
+    ORDER BY ic."tempoDropado" DESC;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Função para obter inventário completo do jogador
+CREATE OR REPLACE FUNCTION obter_inventario_jogador(p_nickname VARCHAR)
+RETURNS TABLE(
+    "nickname" VARCHAR,
+    "tipo_inventario" VARCHAR,
+    "nome_item" VARCHAR,
+    "quantidade" SMALLINT,
+    "categoria_item" VARCHAR,
+    "precoBase" INTEGER,
+    "descricao" VARCHAR,
+    "idInstItem" INTEGER
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT * FROM view_inventario_jogador 
+    WHERE "nickname" = p_nickname AND "nome_item" IS NOT NULL
+    ORDER BY "tipo_inventario", "nome_item";
+END;
+$$ LANGUAGE plpgsql;
 

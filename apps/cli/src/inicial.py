@@ -1,5 +1,6 @@
 from setup.database import connect_to_db
 from pages.IniciarJogo.iniciarJogo import iniciar_jogo
+from pages.IniciarJogo.inventario_funcoes import inicializar_dados_inventario, criar_inventarios_jogador
 from utils.limparTerminal import limpar_terminal
 from utils.geradorSeed import gerarSeed
 from pages.Tutorial.tutorial import exibirHistoria
@@ -152,60 +153,86 @@ def novoJogador():
                 connection = connect_to_db()
                 if connection is None:
                     print(Fore.RED + "Erro ao conectar ao banco de dados.")
+                    print('\033[?25h', end='', flush=True)
+                    time.sleep(3)
                     return
                 
+                # Inicializar dados básicos do sistema se necessário
+                print(f"{Style.BRIGHT}{Fore.YELLOW}INICIALIZANDO SISTEMA...".center(largura_terminal))
+                if not inicializar_dados_inventario():
+                    print(Fore.RED + "Erro ao inicializar dados do inventário.")
+                    print('\033[?25h', end='', flush=True)
+                    time.sleep(3)
+                    return
+                
+                print(f"{Style.BRIGHT}{Fore.YELLOW}CRIANDO MUNDO...".center(largura_terminal))
                 seed = gerarSeed()
                 cursor = connection.cursor()
                 
                 # Criar jogador
                 cursor.execute("INSERT INTO jogador VALUES (%s, 100, 100, 100, -1, -1, 'Vila Rynoka', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, NULL);", (nickname,))
                 
-                # Criar instâncias de inventário apenas para os inventários que existem
-                cursor.execute("""
-                    INSERT INTO inst_inventario ("idInventario", "nickname", "slotOcupado")
-                    SELECT "idInventario", %s, 0
-                    FROM inventario
-                    WHERE "idInventario" IN (1, 2, 3)
-                """, (nickname,))
-                
                 # Criar mundo e loja
                 cursor.execute("INSERT INTO mundo VALUES (%s, %s, 'Manhã', 1, 1);", (seed, nickname,))
                 cursor.execute("INSERT INTO \"loja_jogador\" VALUES (%s, 'Moonlighter', 1, 10, 0)", (seed,))
                 
-                # Adicionar itens iniciais ao inventário principal (id 1)
-                cursor.execute("""
-                    INSERT INTO inst_item ("idItem", "quantidade", "nickname", "idInventario")
-                    SELECT 1, 1, %s, 1  -- Espada de Madeira
-                    WHERE EXISTS (SELECT 1 FROM item WHERE "idItem" = 1)
-                    AND EXISTS (SELECT 1 FROM inst_inventario WHERE "nickname" = %s AND "idInventario" = 1)
-                """, (nickname, nickname))
+                connection.commit()
+                cursor.close()
+                connection.close()
                 
-                cursor.execute("""
-                    INSERT INTO inst_item ("idItem", "quantidade", "nickname", "idInventario")
-                    SELECT 2, 1, %s, 1  -- Armadura de Couro
-                    WHERE EXISTS (SELECT 1 FROM item WHERE "idItem" = 2)
-                    AND EXISTS (SELECT 1 FROM inst_inventario WHERE "nickname" = %s AND "idInventario" = 1)
-                """, (nickname, nickname))
+                # Criar inventários do jogador
+                print(f"{Style.BRIGHT}{Fore.YELLOW}CRIANDO INVENTÁRIOS...".center(largura_terminal))
+                if not criar_inventarios_jogador(nickname):
+                    print(Fore.RED + "Erro ao criar inventários do jogador.")
+                    print('\033[?25h', end='', flush=True)
+                    time.sleep(3)
+                    return
                 
+                # Adicionar itens iniciais
+                print(f"{Style.BRIGHT}{Fore.YELLOW}ADICIONANDO ITENS INICIAIS...".center(largura_terminal))
+                connection = connect_to_db()
+                cursor = connection.cursor()
+                
+                # Buscar ID do inventário principal (Mochila Principal)
                 cursor.execute("""
-                    INSERT INTO inst_item ("idItem", "quantidade", "nickname", "idInventario")
-                    SELECT 3, 3, %s, 1  -- Poção de Vida Pequena
-                    WHERE EXISTS (SELECT 1 FROM item WHERE "idItem" = 3)
-                    AND EXISTS (SELECT 1 FROM inst_inventario WHERE "nickname" = %s AND "idInventario" = 1)
-                """, (nickname, nickname))
+                    SELECT inv."idInventario" 
+                    FROM "inventario" inv 
+                    WHERE inv."nome" = 'Mochila Principal'
+                """)
+                inventario_principal = cursor.fetchone()
+                
+                if inventario_principal:
+                    id_inventario_principal = inventario_principal[0]
+                    
+                    # Buscar IDs dos itens iniciais
+                    cursor.execute("""
+                        SELECT "idItem", "nome" FROM "item" 
+                        WHERE "nome" IN ('Espada de Madeira', 'Armadura de Couro', 'Poção de Vida Pequena')
+                    """)
+                    itens_iniciais = cursor.fetchall()
+                    
+                    # Adicionar cada item inicial
+                    for id_item, nome_item in itens_iniciais:
+                        quantidade = 3 if nome_item == 'Poção de Vida Pequena' else 1
+                        
+                        cursor.execute("""
+                            INSERT INTO "inst_item" ("idItem", "quantidade", "nickname", "idInventario")
+                            VALUES (%s, %s, %s, %s)
+                        """, (id_item, quantidade, nickname, id_inventario_principal))
                 
                 connection.commit()
                 cursor.close()
                 connection.close()
+                
             except Exception as e:
                 limpar_terminal()
                 print("\n\n\n\n")
                 print(logo)
                 print("\n\n\n")
-                print(f"Erro ao se conectar com o banco de dados: {e}\n")
-                time.sleep(2)
+                print(f"Erro ao criar jogador: {e}\n")
                 print('\033[?25h', end='', flush=True)
-                return novoJogador()
+                time.sleep(5)
+                return
             
             limpar_terminal()
             print(logo)
