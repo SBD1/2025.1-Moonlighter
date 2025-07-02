@@ -12,6 +12,7 @@ from pages.Estabelecimento.db_estabelecimento import (
     exibir_dialogo_venda,
     exibir_dialogo_despedida
 )
+from pages.IniciarJogo.db_iniciarJogo import *
 from setup.database import connect_to_db
 from utils.limparTerminal import limpar_terminal
 from utils.enterContinue import enter_continue
@@ -22,10 +23,26 @@ import shutil
 # definição da largura da janela do terminal:
 largura_terminal = shutil.get_terminal_size().columns
 
-def cabecalho_chapeu_de_madeira():
-    print(f"{Fore.LIGHTGREEN_EX}{Style.BRIGHT}=================== O CHAPÉU DE MADEIRA ===================".center(largura_terminal))
-    print(f"{Fore.YELLOW}Loja de Poções - Especializada em Poções".center(largura_terminal))
-    print(f"{Fore.LIGHTGREEN_EX}========================================================".center(largura_terminal))
+def print_in_centered(text):
+    largura_terminal = shutil.get_terminal_size().columns
+    # Quebra o texto em linhas que caibam no terminal
+    linhas = textwrap.wrap(text, width=largura_terminal - 4)  # margem para centralizar
+    for linha in linhas:
+        linha_centralizada = linha.center(largura_terminal)
+        print(Style.BRIGHT + Fore.WHITE + linha_centralizada)
+
+def cabecalho_chapeu_de_madeira(nickname):
+    dadosJogador = buscar_dadosJogador(nickname)
+    print(f"{Fore.LIGHTGREEN_EX}{Style.BRIGHT}╔══════════════════════════════════ CHAPÉU DE MADEIRA ══════════════════════════════════╗".center(largura_terminal))
+    print(f"{Fore.YELLOW}{Style.BRIGHT}Loja de Poções - Especializada em Poções".center(largura_terminal))
+    print(f"{Fore.LIGHTGREEN_EX}════════════════════════════════════════════════════════════════════════════".center(largura_terminal))
+    print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}{dadosJogador[0]}".center(largura_terminal))
+    print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}OURO: {dadosJogador[3]}".center(largura_terminal))
+    print(f"{Fore.LIGHTGREEN_EX}{Style.BRIGHT}╚═════════════════════════════════════════════════════════════════════════════════════╝".center(largura_terminal))
+
+    print("\n")
+    print_in_centered(buscarDescricaoLocal(dadosJogador[6]))
+    print("\n")
 
 def calcular_preco_dinamico(preco_base, tipo_item, vendas_jogador=0):
     """
@@ -180,7 +197,7 @@ def menu_chapeu_de_madeira(jogador, seedMundo):
     
     # Exibir diálogo de saudação da comerciante
     limpar_terminal()
-    cabecalho_chapeu_de_madeira()
+    cabecalho_chapeu_de_madeira(jogador)
     exibir_dialogo_saudacao("Eris", jogador)
     enter_continue()
     
@@ -199,15 +216,15 @@ def menu_chapeu_de_madeira(jogador, seedMundo):
     
     while True:
         limpar_terminal()
-        cabecalho_chapeu_de_madeira()
+        cabecalho_chapeu_de_madeira(jogador)
         print("\n")
         print(f"{Style.BRIGHT}{Fore.CYAN}O que você gostaria de fazer?".center(largura_terminal))
         print("\n")
-        print(f"{Fore.WHITE}1 - Ver poções disponíveis para compra")
-        print(f"{Fore.WHITE}2 - Comprar uma poção")
-        print(f"{Fore.WHITE}3 - Ver itens do seu inventário")
-        print(f"{Fore.WHITE}4 - Vender um item")
-        print(f"{Fore.WHITE}0 - Sair da Loja")
+        print(f"{Fore.YELLOW}{Style.BRIGHT}1 - Ver poções disponíveis para compra")
+        print(f"{Fore.YELLOW}{Style.BRIGHT}2 - Comprar uma poção")
+        print(f"{Fore.YELLOW}{Style.BRIGHT}3 - Ver itens do seu inventário")
+        print(f"{Fore.YELLOW}{Style.BRIGHT}4 - Vender um item")
+        print(f"{Fore.RED}{Style.BRIGHT}5 - Sair da Loja")
         print("\n")
         
         escolha = input(f"{Style.BRIGHT}{Fore.MAGENTA}>>> ").strip()
@@ -220,12 +237,18 @@ def menu_chapeu_de_madeira(jogador, seedMundo):
             ver_inventario_jogador(jogador)
         elif escolha == "4":
             vender_item(jogador)
-        elif escolha == "0":
+        elif escolha == "5":
+            limpar_terminal()
+            cabecalho_chapeu_de_madeira(jogador)
             exibir_dialogo_despedida("Eris", jogador)
+            atualizarParaLocalAnterior(buscar_dadosJogador(jogador))
             enter_continue()
             break
         else:
-            print(f"\n{Fore.RED}Opção inválida. Tente novamente.")
+            limpar_terminal()
+            cabecalho_chapeu_de_madeira(jogador)
+            print("\n\n\n\n\n\n")
+            print(f"{Fore.RED}{Style.BRIGHT}Opção inválida. Tente novamente.".center(largura_terminal))
             enter_continue()
 
 def ver_itens_disponiveis(jogador):
@@ -233,20 +256,20 @@ def ver_itens_disponiveis(jogador):
     Função para ver poções disponíveis para compra
     """
     limpar_terminal()
-    cabecalho_chapeu_de_madeira()
+    cabecalho_chapeu_de_madeira(jogador)
     
     # Exibir diálogo de catálogo
     exibir_dialogo_catalogo("Eris", jogador)
     enter_continue()
     
-    print(f"\n{Style.BRIGHT}{Fore.CYAN}=== POÇÕES DISPONÍVEIS PARA COMPRA ===".center(largura_terminal))
+    print(f"{Style.BRIGHT}{Fore.CYAN}══════════ POÇÕES DISPONÍVEIS PARA COMPRA ══════════".center(largura_terminal))
     print(f"{Fore.YELLOW}💡 Dica: O estoque muda a cada dia!".center(largura_terminal))
     print("\n")
     
     itens = visualizar_itens_chapeu_de_madeira_por_jogador(jogador)
     if itens:
-        print(f"{Fore.WHITE}{'ID':<5} {'Nome':<25} {'Preço':<10} {'Tipo':<12}")
-        print(f"{Fore.LIGHTBLACK_EX}{'='*55}")
+        print(f"{Fore.WHITE}{'ID':<5} {'Nome':<25} {'Preço':<10} {'Tipo':<12}".center(largura_terminal))
+        print(f"{Fore.LIGHTBLACK_EX}{'='*55}".center(largura_terminal))
         for item in itens:
             id_item, nome, preco, descricao = item
             
@@ -270,13 +293,16 @@ def ver_itens_disponiveis(jogador):
             vendas_jogador = buscar_vendas_jogador(jogador, id_item)
             preco_dinamico = calcular_preco_dinamico(preco, tipo_item, vendas_jogador)
             
-            print(f"{Fore.WHITE}{id_item:<5} {nome:<25} {preco_dinamico:<10} {tipo_item:<12}")
-            print(f"{Fore.LIGHTBLACK_EX}     {descricao}")
+            print(f"{Fore.WHITE}{id_item:<5} {nome:<25} {preco_dinamico:<10} {tipo_item:<12}".center(largura_terminal))
+            print(f"{Fore.LIGHTBLACK_EX}{descricao}".center(largura_terminal))
             if vendas_jogador > 0:
-                print(f"{Fore.YELLOW}     ⚠️  Você já vendeu {vendas_jogador}x deste item (preço reduzido)")
+                print(f"{Fore.YELLOW}     ⚠️  Você já vendeu {vendas_jogador}x deste item (preço reduzido)".center(largura_terminal))
             print()
     else:
-        print(f"{Fore.RED}Nenhuma poção disponível para compra!")
+        limpar_terminal()
+        cabecalho_chapeu_de_madeira(jogador)
+        print("\n\n\n\n")
+        print(f"{Fore.RED}{Style.BRIGHT}Nenhuma poção disponível para compra!".center(largura_terminal))
     
     print("\n")
     enter_continue()
@@ -286,9 +312,9 @@ def ver_inventario_jogador(jogador):
     Função para ver itens do inventário do jogador
     """
     limpar_terminal()
-    cabecalho_chapeu_de_madeira()
+    cabecalho_chapeu_de_madeira(jogador)
     
-    print(f"\n{Style.BRIGHT}{Fore.CYAN}=== SEU INVENTÁRIO ===".center(largura_terminal))
+    print(f"\n{Style.BRIGHT}{Fore.CYAN}══════════ SEU INVENTÁRIO ══════════".center(largura_terminal))
     print("\n")
     
     itens = buscar_inventario_jogador(jogador)
@@ -317,24 +343,24 @@ def vender_item(jogador):
     Função para vender um item
     """
     limpar_terminal()
-    cabecalho_chapeu_de_madeira()
+    cabecalho_chapeu_de_madeira(jogador)
     
     # Exibir diálogo de venda
     exibir_dialogo_venda("Eris", jogador)
     enter_continue()
     
-    print(f"\n{Style.BRIGHT}{Fore.CYAN}=== VENDER ITEM ===".center(largura_terminal))
+    print(f"\n{Style.BRIGHT}{Fore.CYAN}══════════ VENDER ITEM ══════════".center(largura_terminal))
     print("\n")
     
     # Mostrar itens do inventário
     itens = buscar_inventario_jogador(jogador)
     if not itens:
-        print(f"{Fore.RED}Você não tem itens para vender!")
+        print(f"{Fore.RED}{Style.BRIGHT}Você não tem itens para vender!".center(largura_terminal))
         enter_continue()
         return
     
-    print(f"{Fore.WHITE}{'ID':<5} {'Nome':<25} {'Qtd':<5} {'Preço Venda':<12}")
-    print(f"{Fore.LIGHTBLACK_EX}{'='*50}")
+    print(f"{Fore.WHITE}{'ID':<5} {'Nome':<25} {'Qtd':<5} {'Preço Venda':<12}".center(largura_terminal))
+    print(f"{Fore.LIGHTBLACK_EX}{'='*50}".center(largura_terminal))
     for item in itens:
         id_item, nome, descricao, tipo, preco_base, quantidade = item
         
@@ -357,7 +383,10 @@ def vender_item(jogador):
                 break
         
         if not item_encontrado:
-            print(f"{Fore.RED}Item não encontrado no seu inventário!")
+            limpar_terminal()
+            cabecalho_chapeu_de_madeira(jogador)
+            print("\n\n\n\n\n\n")
+            print(f"{Fore.RED}Item não encontrado no seu inventário!".center(largura_terminal))
             enter_continue()
             return
         
@@ -365,12 +394,18 @@ def vender_item(jogador):
         quantidade = int(input(f"{Style.BRIGHT}{Fore.MAGENTA}>>> "))
         
         if quantidade <= 0:
-            print(f"{Fore.RED}Quantidade deve ser maior que zero!")
+            limpar_terminal()
+            cabecalho_chapeu_de_madeira(jogador)
+            print("\n\n\n\n\n\n")
+            print(f"{Fore.RED}{Style.BRIGHT}Quantidade deve ser maior que zero!".center(largura_terminal))
             enter_continue()
             return
         
         if quantidade > item_encontrado[5]:  # quantidade no inventário
-            print(f"{Fore.RED}Você não tem essa quantidade no inventário!")
+            limpar_terminal()
+            cabecalho_chapeu_de_madeira(jogador)
+            print("\n\n\n\n\n\n")
+            print(f"{Fore.RED}{Style.BRIGHT}Você não tem essa quantidade no inventário!".center(largura_terminal))
             enter_continue()
             return
         
@@ -383,9 +418,15 @@ def vender_item(jogador):
             print(f"\n{Fore.RED}❌ {mensagem}")
             
     except ValueError:
-        print(f"{Fore.RED}Por favor, digite um número válido!")
+        limpar_terminal()
+        cabecalho_chapeu_de_madeira(jogador)
+        print("\n\n\n\n\n\n")
+        print(f"{Fore.RED}{Style.BRIGHT}Por favor, digite um número válido!".center(largura_terminal))
     except Exception as e:
-        print(f"{Fore.RED}Erro inesperado: {e}")
+        limpar_terminal()
+        cabecalho_chapeu_de_madeira(jogador)
+        print("\n\n\n\n\n\n")
+        print(f"{Fore.RED}{Style.BRIGHT}Erro inesperado: {e}".center(largura_terminal))
     
     print("\n")
     enter_continue()
@@ -395,19 +436,19 @@ def comprar_item(jogador):
     Função para comprar uma poção
     """
     limpar_terminal()
-    cabecalho_chapeu_de_madeira()
-    print(f"\n{Style.BRIGHT}{Fore.CYAN}=== COMPRAR POÇÃO ===".center(largura_terminal))
+    cabecalho_chapeu_de_madeira(jogador)
+    print(f"\n{Style.BRIGHT}{Fore.CYAN}══════════ COMPRAR POÇÃO ══════════".center(largura_terminal))
     print("\n")
     
     # Mostrar poções disponíveis
     itens = visualizar_itens_chapeu_de_madeira_por_jogador(jogador)
     if not itens:
-        print(f"{Fore.RED}Nenhuma poção disponível para compra!")
+        print(f"{Fore.RED}{Style.BRIGHT}Nenhuma poção disponível para compra!".center(largura_terminal))
         enter_continue()
         return
     
-    print(f"{Fore.WHITE}{'ID':<5} {'Nome':<25} {'Preço':<10} {'Tipo':<12}")
-    print(f"{Fore.LIGHTBLACK_EX}{'='*55}")
+    print(f"{Fore.WHITE}{'ID':<5} {'Nome':<25} {'Preço':<10} {'Tipo':<12}".center(largura_terminal))
+    print(f"{Fore.LIGHTBLACK_EX}{'='*55}".center(largura_terminal))
     for item in itens:
         id_item, nome, preco, descricao = item
         
@@ -434,7 +475,7 @@ def comprar_item(jogador):
         print(f"{Fore.WHITE}{id_item:<5} {nome:<25} {preco_dinamico:<10} {tipo_item:<12}")
         print(f"{Fore.LIGHTBLACK_EX}     {descricao}")
         if vendas_jogador > 0:
-            print(f"{Fore.YELLOW}     ⚠️  Você já vendeu {vendas_jogador}x deste item (preço reduzido)")
+            print(f"{Fore.YELLOW}⚠️  Você já vendeu {vendas_jogador}x deste item (preço reduzido)".center(largura_terminal))
         print()
     
     print(f"\n{Fore.WHITE}Digite o ID da poção que deseja comprar:")
@@ -457,7 +498,10 @@ def comprar_item(jogador):
         quantidade = int(input(f"{Style.BRIGHT}{Fore.MAGENTA}>>> "))
         
         if quantidade <= 0:
-            print(f"{Fore.RED}Quantidade deve ser maior que zero!")
+            limpar_terminal()
+            cabecalho_chapeu_de_madeira(jogador)
+            print("\n\n\n\n\n\n")
+            print(f"{Fore.RED}{Style.BRIGHT}Quantidade deve ser maior que zero!".center(largura_terminal))
             enter_continue()
             return
         
@@ -468,14 +512,26 @@ def comprar_item(jogador):
         sucesso = comprar_item_chapeu_de_madeira_por_jogador(jogador, item_id, quantidade)
         
         if sucesso:
-            print(f"\n{Fore.GREEN}✅ {quantidade}x '{item_encontrado[1]}' comprado(s) com sucesso!")
+            limpar_terminal()
+            cabecalho_chapeu_de_madeira(jogador)
+            print("\n\n\n\n\n\n")
+            print(f"\n{Fore.GREEN}✅ {quantidade}x '{item_encontrado[1]}' comprado(s) com sucesso!".center(largura_terminal))
         else:
-            print(f"\n{Fore.RED}❌ Erro ao comprar poção!")
-            
+            limpar_terminal()
+            cabecalho_chapeu_de_madeira(jogador)
+            print("\n\n\n\n\n\n")
+            print(f"{Fore.RED}{Style.BRIGHT}❌ Erro ao comprar poção!".center(largura_terminal))
+
     except ValueError:
-        print(f"{Fore.RED}Por favor, digite um número válido!")
+        limpar_terminal()
+        cabecalho_chapeu_de_madeira(jogador)
+        print("\n\n\n\n\n\n")
+        print(f"{Fore.RED}{Style.BRIGHT}Por favor, digite um número válido!".center(largura_terminal))
     except Exception as e:
-        print(f"{Fore.RED}Erro inesperado: {e}")
-    
+        limpar_terminal()
+        cabecalho_chapeu_de_madeira(jogador)
+        print("\n\n\n\n\n\n")
+        print(f"{Fore.RED}{Style.BRIGHT}Erro inesperado: {e}".center(largura_terminal))
+
     print("\n")
     enter_continue() 

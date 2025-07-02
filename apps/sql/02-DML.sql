@@ -23,7 +23,7 @@ INSERT INTO "local" VALUES
     ('Masmorra Desconhecida', 'A última masmorra', 'Masmorra', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Área das Masmorras')),
     ('Forja Vulcânica', 'Um calor abrasador e faíscas constantes preenchem o ar da Forja Vulcânica. Cada martelada ecoa como um trovão, moldando armas e armaduras com precisão quase cerimonial. Paredes de pedra escura emolduram fornos incandescentes e bigornas robustas. O ferreiro, de músculos rígidos e olhar concentrado, domina o ambiente com mãos calejadas e alma forjada no mesmo fogo. Aqui, não se vende metal — se entrega confiança em lâmina.', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Centro Comercial')),
     ('Banco de Rynoka', 'Silencioso, organizado e impenetrável como um cofre. O Banco de Rynoka é o bastião da riqueza da vila. Pilares altos sustentam o teto abobadado, e mesas de carvalho robusto sustentam cálculos, registros e contratos. O banqueiro, sempre de luvas e expressão inalterada, calcula os juros com mais frieza que um golem de pedra. Investidores vêm, sonhadores vão, e o ouro nunca dorme.', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Centro Comercial')),
-    ('Tenda da Bruxa', 'Cortinas de veludo púrpura escondem um interior envolto em penumbra. Frascos borbulhantes, velas acesas ao contrário e plantas que se movem por conta própria ocupam cada centímetro da Tenda da Bruxa. Um aroma doce e apimentado invade as narinas, enquanto olhos curiosos sentem-se observados por feitiços antigos. A bruxa — encapuzada, de fala suave e olhar profundo — oferece poções e encantamentos que mexem mais com a mente do que com o corpo.', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Centro Comercial')),
+    ('O Chapéu de Madeira', 'Pequena por fora, encantadora por dentro, a loja exala o cheiro de madeira polida e tecidos delicados. Bonecos de treino, armas estilizadas e acessórios decorativos repousam em estantes esculpidas com primor. Um artesão excêntrico — com um chapéu igualmente peculiar — recepciona os clientes com entusiasmo. Ele não apenas vende acessórios; vende identidade. Cada peça parece contar uma história... ou esconder um feitiço.', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Centro Comercial')),
     ('Quarto', 'Seu refúgio pessoal. Pequeno, mas acolhedor, o quarto é iluminado por uma janela que filtra os primeiros raios do sol pela manhã e pelo brilho da lua à noite. Livros empilhados, rascunhos de planos e uma cama de lençóis amarrotados contam histórias de noites mal dormidas e sonhos ambiciosos. É aqui que você descansa, pensa e, às vezes, simplesmente observa a vida passar pela janela enquanto se prepara para o próximo dia de batalhas e negociações.', 'Local', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Moonlighter')),
     ('Salão de Exposição', 'O coração da loja. Prateleiras bem organizadas, vitrines reluzentes e uma bancada de vendas que já presenciou incontáveis barganhas compõem o ambiente. É aqui que sua coragem vira lucro, onde cada item carrega o suor das masmorras e a esperança de prosperar. Clientes entram, observam com olhares calculistas, e você — como bom comerciante — sabe exatamente como precificar o desconhecido. Entre ouro, elogios e pechinchas, a reputação da loja é forjada todos os dias.', 'Local', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Moonlighter'));
 
@@ -42,8 +42,8 @@ INSERT INTO "estabelecimento"
     VALUES
     ('Moonlighter'),
     ('Forja Vulcânica'),
-    ('Banco de Rynoka'),
-    ('Tenda da Bruxa');
+    ('O Chapéu de Madeira'),
+    ('Banco de Rynoka');
 
 -- INSERÇÃO NA TABELA EFEITOS:
 INSERT INTO "efeito"

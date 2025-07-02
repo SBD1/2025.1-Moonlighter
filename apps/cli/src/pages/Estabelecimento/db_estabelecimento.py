@@ -3,6 +3,12 @@ from colorama import Fore, Style
 import psycopg2
 import time
 import random
+import shutil
+import sys
+import textwrap
+
+# definição da largura da janela do terminal:
+largura_terminal = shutil.get_terminal_size().columns
 
 # FUNÇÕES DA FORJA
 
@@ -842,7 +848,7 @@ def buscar_dialogos_npc(nome_npc, tipo_dialogo):
             connection.close()
         return None
 
-def exibir_dialogo_npc(nome_npc, tipo_dialogo, nome_jogador=None, delay=1.5):
+def exibir_dialogo_npc(nome_npc, tipo_dialogo, nome_jogador=None, delay=0.01):
     """
     Exibe diálogos de um NPC com efeito de digitação lenta
     """
@@ -852,20 +858,24 @@ def exibir_dialogo_npc(nome_npc, tipo_dialogo, nome_jogador=None, delay=1.5):
         print(Fore.YELLOW + f"Diálogos não encontrados para {nome_npc} - {tipo_dialogo}")
         return False
     
-    print(f"\n{Fore.CYAN}{Style.BRIGHT}=== {nome_npc} ===")
-    
+    print(f"{Fore.CYAN}{Style.BRIGHT}<<════════[ {nome_npc} ]═══════>>".center(largura_terminal))
+    print('\033[?25l', end='', flush=True)
+
     for conteudo, ordem, tipo in dialogos:
         if nome_jogador:
             conteudo = conteudo.replace("<NOME_JOGADOR>", nome_jogador)
         
-        print(f"\n{Fore.WHITE}", end="")
-        for char in conteudo:
-            print(char, end="", flush=True)
-            time.sleep(0.05)  # Delay entre cada caractere
-        print()
-        time.sleep(1.5)
+        linhas = textwrap.wrap(conteudo, width=largura_terminal - 4)  # margem para centralizar
+        for linha in linhas:
+            linha_centralizada = linha.center(largura_terminal)
+            for i in range(1, len(linha_centralizada) + 1):
+                sys.stdout.write('\r' + Style.BRIGHT + Fore.YELLOW + linha_centralizada[:i])
+                sys.stdout.flush()
+                time.sleep(delay)
+            print(Style.RESET_ALL)  # Pula para a próxima linha e reseta o estilo
     
-    print(f"\n{Fore.LIGHTBLACK_EX}{'='*50}")
+    print(f"{Fore.LIGHTBLACK_EX}{'═'*50}".center(largura_terminal))
+    print('\033[?25h', end='', flush=True)
     return True
 
 def exibir_dialogo_saudacao(nome_npc, nome_jogador=None):

@@ -1,6 +1,7 @@
 from setup.database import connect_to_db
 from pages.IniciarJogo.iniciarJogo import iniciar_jogo
 from utils.limparTerminal import limpar_terminal
+from utils.enterContinue import enter_continue
 from utils.geradorSeed import gerarSeed
 from pages.Tutorial.tutorial import exibirHistoria
 from colorama import Fore, Style, init
@@ -255,7 +256,7 @@ def continuar_jogo():
     elif int(escolha) == 0:
         return tela_inicial(False)
     elif 1 <= int(escolha) <= len(jogadores):
-        jogador_selecionado = jogadores[escolha - 1]
+        jogador_selecionado = jogadores[int(escolha) - 1]
         
         confirmacao = ""
         while confirmacao != "s" and confirmacao != "S" and confirmacao != "n" and confirmacao != "N":
@@ -309,9 +310,6 @@ def musicTheme():
     pygame.mixer.music.load("apps/cli/assets/musics/MoonlighterOST_01_TitleScreen.mp3")
     pygame.mixer.music.play(-1, fade_ms=7000)
 
-def enter_continue():
-    input(Fore.LIGHTBLACK_EX + "\nPressione Enter para continuar...")
-
 #funcao principal
 def tela_inicial(introduction = False):
     while True:
@@ -338,7 +336,10 @@ def tela_inicial(introduction = False):
             print("\n\n\n\n\n\n\n" + f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}Digite o número da opção desejada:")
             escolha:int = int(input(f"{Style.BRIGHT}{Fore.MAGENTA}>> "))
         except ValueError:
-            print("Por favor, digite um número válido.")
+            limpar_terminal()
+            print(logo)
+            print("\n\n\n")
+            print(f"{Style.BRIGHT}{Fore.RED}Por favor, digite um número válido.".center(largura_terminal))
             enter_continue()
             continue
 
