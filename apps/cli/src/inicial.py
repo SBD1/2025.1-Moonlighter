@@ -1,6 +1,7 @@
 from setup.database import connect_to_db
 from pages.IniciarJogo.iniciarJogo import iniciar_jogo
 from utils.limparTerminal import limpar_terminal
+from utils.enterContinue import enter_continue
 from utils.geradorSeed import gerarSeed
 from pages.Tutorial.tutorial import exibirHistoria
 from colorama import Fore, Style, init
@@ -10,6 +11,11 @@ import pygame
 import pyfiglet
 import os
 from zoneinfo import ZoneInfo
+from pages.Estabelecimento.db_estabelecimento import (
+    criar_instancia_banco_por_jogador,
+    criar_instancia_chapeu_de_madeira_por_jogador,
+    criar_instancia_forja_por_jogador
+)
 
 
 # definicoes e funcoes iniciais
@@ -160,9 +166,39 @@ def novoJogador():
                 cursor.execute("INSERT INTO inst_inventario VALUES (1, %s, 0), (2, %s, 0), (3, %s, 0), (4, %s, 0), (5, %s, 0), (6, %s, 0), (7, %s, 0);", tuple([nickname]*7))
                 cursor.execute("INSERT INTO mundo VALUES (%s, %s, 'Manhã', 1, 1);", (seed, nickname,))
                 cursor.execute("INSERT INTO \"loja_jogador\" VALUES (%s, 'Moonlighter', 1, 10, 0)", (seed,))
+                
+                # Fazer commit das inserções principais
                 connection.commit()
+                
+                # Criar instâncias dos estabelecimentos para o novo jogador
+                sucesso_banco = criar_instancia_banco_por_jogador(nickname, "Banco de Rynoka", 1, 0)
+                if not sucesso_banco:
+                    print(f"{Fore.YELLOW}Aviso: Não foi possível criar instância do banco para {nickname}")
+                
+                sucesso_varejo = criar_instancia_chapeu_de_madeira_por_jogador(nickname, "O Chapéu de Madeira", 2, 15)
+                if not sucesso_varejo:
+                    print(f"{Fore.YELLOW}Aviso: Não foi possível criar instância do Chapéu de Madeira para {nickname}")
+                
+                sucesso_forja = criar_instancia_forja_por_jogador(nickname, "Forja de Vulcan", 3)
+                if not sucesso_forja:
+                    print(f"{Fore.YELLOW}Aviso: Não foi possível criar instância da forja para {nickname}")
+                
                 cursor.close()
                 connection.close()
+                
+                limpar_terminal()
+                print("\n\n\n\n")
+                print(logo)
+                print("\n\n\n")
+                print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}JOGADOR CRIADO COM SUCESSO!".center(largura_terminal))
+                pygame.mixer.music.fadeout(7000)
+                time.sleep(2)
+                limpar_terminal()
+                print("\n\n\n\n\n\n\n\n\n")
+                print(logo)
+                time.sleep(5)
+                print('\033[?25h', end='', flush=True)
+                return exibirHistoria(buscarJogador(nickname))
             except:
                 limpar_terminal()
                 print("\n\n\n\n")
@@ -172,19 +208,6 @@ def novoJogador():
                 time.sleep(2)
                 print('\033[?25h', end='', flush=True)
                 return novoJogador()
-            
-            limpar_terminal()
-            print(logo)
-            print("\n\n\n")
-            print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}JOGADOR CRIADO COM SUCESSO!".center(largura_terminal))
-            pygame.mixer.music.fadeout(7000)
-            time.sleep(2)
-            limpar_terminal()
-            print("\n\n\n\n\n\n\n\n\n\n")
-            print(logo)
-            time.sleep(5)
-            print('\033[?25h', end='', flush=True)
-            return exibirHistoria(buscarJogador(nickname))
         elif confirmacao == 'n' or confirmacao == 'N':
             return novoJogador()
         else:
@@ -221,12 +244,19 @@ def continuar_jogo():
 
     print("\n\n")
     print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}Digite o número do jogador que deseja continuar: ")
-    escolha:int = int(input(f"{Style.BRIGHT}{Fore.MAGENTA}>> "))
+    escolha = input(f"{Style.BRIGHT}{Fore.MAGENTA}>> ")
 
-    if escolha == 0:
-        return tela_inicial(["Continuar", "Novo Jogo", "Sair"], False)
-    elif 1 <= escolha <= len(jogadores):
-        jogador_selecionado = jogadores[escolha - 1]
+    if not escolha.isdigit():
+        limpar_terminal()
+        print(logo)
+        print("\n\n\n")
+        print(f"{Style.BRIGHT}{Fore.RED}Por favor, digite um número válido.".center(largura_terminal))
+        time.sleep(2)
+        return continuar_jogo()
+    elif int(escolha) == 0:
+        return tela_inicial(False)
+    elif 1 <= int(escolha) <= len(jogadores):
+        jogador_selecionado = jogadores[int(escolha) - 1]
         
         confirmacao = ""
         while confirmacao != "s" and confirmacao != "S" and confirmacao != "n" and confirmacao != "N":
@@ -280,9 +310,6 @@ def musicTheme():
     pygame.mixer.music.load("apps/cli/assets/musics/MoonlighterOST_01_TitleScreen.mp3")
     pygame.mixer.music.play(-1, fade_ms=7000)
 
-def enter_continue():
-    input(Fore.LIGHTBLACK_EX + "\nPressione Enter para continuar...")
-
 #funcao principal
 def tela_inicial(introduction = False):
     while True:
@@ -309,7 +336,10 @@ def tela_inicial(introduction = False):
             print("\n\n\n\n\n\n\n" + f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}Digite o número da opção desejada:")
             escolha:int = int(input(f"{Style.BRIGHT}{Fore.MAGENTA}>> "))
         except ValueError:
-            print("Por favor, digite um número válido.")
+            limpar_terminal()
+            print(logo)
+            print("\n\n\n")
+            print(f"{Style.BRIGHT}{Fore.RED}Por favor, digite um número válido.".center(largura_terminal))
             enter_continue()
             continue
 

@@ -2,32 +2,6 @@ from colorama import Fore
 from setup.database import connect_to_db
 from utils.enterContinue import enter_continue
 
-def local_inicial(local_inicial):
-    connection = connect_to_db()
-
-    if connection is None:
-        print(Fore.RED + "Erro ao conectar ao banco de dados.")
-        enter_continue()
-        return None
-    
-    cursorupdate = connection.cursor()
-    cursorselect = connection.cursor()
-
-    cursorselect.execute("""SELECT "nomeLocal"
-                         FROM "local"
-                         WHERE "nomeLocal" = %s;
-                         """, (local_inicial,))
-    
-    resultadoselect: str = cursorselect.fetchone()
-    
-    cursorupdate.execute("""UPDATE "jogador"
-                   SET "nomeLocal" = %s;
-                    """, (resultadoselect[0],))
-    connection.commit()
-    cursorselect.close()
-    cursorupdate.close()
-    connection.close()
-
 def buscarDescricaoLocal(nome_local):
     connection = connect_to_db()
 
@@ -134,3 +108,23 @@ def atualizarParaLocalAnterior(dadosJogador):
     connection.commit()
     cursor.close()
     connection.close()
+
+def buscarSeedMapa(nickname):
+    connection = connect_to_db()
+
+    if connection is None:
+        print(Fore.RED + "Erro ao conectar ao banco de dados.")
+        enter_continue()
+        return None
+
+    cursor = connection.cursor()
+    cursor.execute("""SELECT "seedMundo"
+                    FROM "mundo"
+                    WHERE "nickname" = %s;
+                    """, (nickname,))
+
+    resultado = cursor.fetchone()
+    cursor.close()
+    connection.close()
+
+    return resultado[0] if resultado else None

@@ -1,6 +1,7 @@
 import time
 import pyfiglet
 from pages.IniciarJogo.db_iniciarJogo import *
+from pages.Estabelecimento import menu_chapeu_de_madeira, menu_forja, menu_banco
 from utils.limparTerminal import limpar_terminal
 from pages.Masmorra.masmorra import mainMasmorra
 from colorama import Fore, Back, Style, init
@@ -44,8 +45,8 @@ def cabecalho(nickname):
         print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}{dadosJogador[6]}".center(largura_terminal))
         print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}DIA: XX | PERÍODO: XX".center(largura_terminal))
     else:
-        print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}MASMORRA: {dadosJogador[6]} | SEED: XXX".center(largura_terminal))
-        print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}SALA [Posição Horizontal][Posição Vertical]: [{dadosJogador[3]}][{dadosJogador[4]}]".center(largura_terminal))
+        print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}MASMORRA: {dadosJogador[6]}".center(largura_terminal))
+        print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}SALA [X][Y]: [{dadosJogador[3]}][{dadosJogador[4]}]".center(largura_terminal))
     print(f"{Fore.LIGHTGREEN_EX}{Style.BRIGHT}╚════════════════════════════════════════════════════════════╝".center(largura_terminal))
     
     print("\n")
@@ -106,7 +107,12 @@ def locomocao(nickname):
                 atualizar_local_jogador(locais[escolha - 1][0], nickname)
                 if locais[escolha - 1][0].startswith('Masmorra'):
                     mainMasmorra(nickname)
-
+                if locais[escolha - 1][0] == 'Forja Vulcânica':
+                    menu_forja(nickname, buscarSeedMapa(nickname))
+                if locais[escolha - 1][0] == 'Banco de Rynoka':
+                    menu_banco(nickname)
+                if locais[escolha - 1][0] == 'O Chapéu de Madeira':
+                    menu_chapeu_de_madeira(nickname, buscarSeedMapa(nickname))
         except ValueError:
             limpar_terminal()
             print('\033[?25l', end='', flush=True)
@@ -172,6 +178,7 @@ def exibirMapa():
 #funcao principal
 def iniciar_jogo(nickname):
     init(autoreset=True) #terminal colorido
+    
     musicCity()
     # loop dos locais no terminal
     while True:
@@ -185,8 +192,6 @@ def iniciar_jogo(nickname):
                 exibirMapa()
             elif int(escolha) == 2:
                 locomocao(nickname)
-            elif int(escolha) == 3:
-                ver_inventario(nickname)
             elif int(escolha) == 5:
                 if sairDoJogo():
                     break
