@@ -110,11 +110,13 @@ def menu_categoria_itens(jogador, modo):
     
     while True:
         limpar_terminal()
+        cabecalho_forja(jogador)
+        print("\n")
         print(f"{Style.BRIGHT}{Fore.CYAN}Escolha uma categoria de item:".center(largura_terminal))
         print("\n")
         for idx, cat in enumerate(categorias, start=1):
-            print(f"{Fore.WHITE}{idx} - {cat}")
-        print(f"{Fore.WHITE}0 - Voltar")
+            print(f"{Fore.YELLOW}{Style.BRIGHT}{idx} - {cat}")
+        print(f"{Fore.RED}{Style.BRIGHT}0 - Voltar")
         print("\n")
         
         escolha = input(f"{Style.BRIGHT}{Fore.MAGENTA}>>> ").strip()
@@ -169,7 +171,7 @@ def fabricar_item(jogador, categoria):
     Função para fabricar um item de uma categoria específica
     """
     limpar_terminal()
-    cabecalho_forja()
+    cabecalho_forja(jogador)
     print(f"\n{Style.BRIGHT}{Fore.CYAN}=== FABRICAR ITEM ({categoria}) ===".center(largura_terminal))
     print("\n")
     
