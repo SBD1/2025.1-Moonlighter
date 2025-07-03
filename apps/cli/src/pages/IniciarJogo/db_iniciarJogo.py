@@ -494,6 +494,7 @@ def obter_itens_chao_usando_view(seed_mundo, nome_local):
     cursor.close()
     connection.close()
     return itens
+
 def buscarSeedMapa(nickname):
     connection = connect_to_db()
 
@@ -513,3 +514,23 @@ def buscarSeedMapa(nickname):
     connection.close()
 
     return resultado[0] if resultado else None
+
+def buscarInfoMundo(nickname):
+    connection = connect_to_db()
+
+    if connection is None:
+        print(Fore.RED + "Erro ao conectar ao banco de dados.")
+        enter_continue()
+        return None
+
+    cursor = connection.cursor()
+    cursor.execute("""SELECT *
+                    FROM "mundo"
+                    WHERE "nickname" = %s;
+                    """, (nickname,))
+
+    resultado = cursor.fetchone()
+    cursor.close()
+    connection.close()
+
+    return resultado if resultado else None
