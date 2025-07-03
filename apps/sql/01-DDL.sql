@@ -17,7 +17,7 @@ CREATE SCHEMA public;
 -- CRIACAO DE TABELAS
 CREATE TABLE "local" (
     "nomeLocal" CHARACTER varying(60) PRIMARY KEY,
-    "descricao" CHARACTER varying(200) NOT NULL,
+    "descricao" CHARACTER varying(800) NOT NULL,
     "tipoLocal" CHARACTER varying(20) NOT NULL,
     "acesso" CHARACTER varying(60),
 
@@ -45,6 +45,8 @@ CREATE TABLE "jogador" (
     "PosiçãoY_Jogador" SMALLINT NOT NULL,
     "nomeLocal" CHARACTER varying(60) NOT NULL,
     "idEfeito" integer,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "fk_efeito" FOREIGN KEY ("idEfeito") REFERENCES "efeito" ("idEfeito") ON DELETE CASCADE,
     CONSTRAINT "fk_local" FOREIGN KEY ("nomeLocal") REFERENCES "local" ("nomeLocal") ON DELETE CASCADE
@@ -63,7 +65,7 @@ CREATE TABLE "mundo" (
 CREATE TABLE "masmorra" (
     "nomeLocal" character varying(60) PRIMARY KEY,
     "nivelDesbloqueio" SMALLINT NOT NULL,
-    "qtdAndar" SMALLINT NOT NULL,
+    "dificuldade" character varying(7) NOT NULL,
 
     CONSTRAINT "fk_local" FOREIGN KEY ("nomeLocal") REFERENCES "local" ("nomeLocal") ON DELETE CASCADE
 );
@@ -76,7 +78,7 @@ CREATE TABLE "estabelecimento" (
 
 CREATE TABLE "inst_masmorra" (
     "seedMundo" CHARACTER varying(30) NOT NULL,
-    "seedMasmorra" character varying(30) NOT NULL,
+    "seedMasmorra" character varying(36) NOT NULL,
     "nomeLocal" character varying(60) NOT NULL,
     "ativo" BOOLEAN NOT NULL,
 
@@ -89,13 +91,12 @@ CREATE TABLE "sala" (
     "seedSala" character varying(30) PRIMARY KEY,
     "posicaoX" integer NOT NULL,
     "posicaoY" integer NOT NULL,
+    "conexão" CHARACTER varying(4) NOT NULL,
     "categoria" character varying(60) NOT NULL,
     "seedMundo" character varying(30) NOT NULL,
-    "seedMasmorra" character varying(30) NOT NULL,
-    "nomeLocal" character varying(60) NOT NULL,
+    "seedMasmorra" character varying(36) NOT NULL,
 
-    CONSTRAINT "fk_inst_masmorra" FOREIGN KEY ("seedMasmorra", "seedMundo") REFERENCES "inst_masmorra" ("seedMasmorra", "seedMundo") ON DELETE CASCADE,
-    CONSTRAINT "fk_masmorra" FOREIGN KEY ("nomeLocal") REFERENCES "masmorra" ("nomeLocal") ON DELETE CASCADE
+    CONSTRAINT "fk_inst_masmorra" FOREIGN KEY ("seedMasmorra", "seedMundo") REFERENCES "inst_masmorra" ("seedMasmorra", "seedMundo") ON DELETE CASCADE
 );
 
 CREATE TABLE "monstro" (

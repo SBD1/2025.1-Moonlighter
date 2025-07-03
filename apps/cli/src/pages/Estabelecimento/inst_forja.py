@@ -1,6 +1,6 @@
 import time
 from pages.Estabelecimento.db_estabelecimento import *
-from pages.IniciarJogo.db_iniciarJogo import buscar_seed_mundo
+# from pages.IniciarJogo.db_iniciarJogo import buscar_seed_mundo
 from pages.Estabelecimento.db_estabelecimento import (
     verificar_instancia_forja_por_jogador,
     visualizar_itens_forja_por_jogador,
@@ -17,16 +17,35 @@ from utils.enterContinue import enter_continue
 from colorama import Fore, Back, Style, init
 import pygame
 import shutil
+from pages.IniciarJogo.db_iniciarJogo import *
+import textwrap
 
 # definição da largura da janela do terminal:
 largura_terminal = shutil.get_terminal_size().columns
 
-def cabecalho_forja():
-    print(f"{Fore.LIGHTGREEN_EX}{Style.BRIGHT}=================== FORJA VULCÂNICA ===================".center(largura_terminal))
-    print(f"{Fore.YELLOW}Forja Vulcânica - Fabricação de Itens".center(largura_terminal))
-    print(f"{Fore.LIGHTGREEN_EX}========================================================".center(largura_terminal))
+def print_in_centered(text):
+    largura_terminal = shutil.get_terminal_size().columns
+    # Quebra o texto em linhas que caibam no terminal
+    linhas = textwrap.wrap(text, width=largura_terminal - 4)  # margem para centralizar
+    for linha in linhas:
+        linha_centralizada = linha.center(largura_terminal)
+        print(Style.BRIGHT + Fore.WHITE + linha_centralizada)
 
-def menu_forja(jogador):
+def cabecalho_forja(nickname):
+    dadosJogador = buscar_dadosJogador(nickname)
+    print(f"{Fore.LIGHTGREEN_EX}{Style.BRIGHT}╔═════════════════════════════════════ FORJA VULCÂNICA ═════════════════════════════════════╗".center(largura_terminal))
+    print(f"{Fore.YELLOW}{Style.BRIGHT}Forja Vulcânica - Fabricação de Itens".center(largura_terminal))
+    print(f"{Fore.LIGHTGREEN_EX}════════════════════════════════════════════════════════════════════════════".center(largura_terminal))
+    print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}{dadosJogador[0]}".center(largura_terminal))
+    print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}OURO: {dadosJogador[3]}".center(largura_terminal))
+    print(f"{Fore.LIGHTGREEN_EX}{Style.BRIGHT}╚═══════════════════════════════════════════════════════════════════════════════════════════╝".center(largura_terminal))
+
+    print("\n")
+    print_in_centered(buscarDescricaoLocal(dadosJogador[6]))
+    print("\n")
+
+
+def menu_forja(jogador, seedMundo):
     """
     Menu principal da forja
     """
@@ -34,15 +53,13 @@ def menu_forja(jogador):
     
     # Exibir diálogo de saudação do ferreiro
     limpar_terminal()
-    cabecalho_forja()
+    cabecalho_forja(jogador)
     exibir_dialogo_saudacao("Andrei", jogador)
     enter_continue()
     
     # Verificar e criar instância da forja se necessário
     if not verificar_instancia_forja_por_jogador(jogador):
-        # Buscar seed_mundo para criar instância
-        seed_mundo = buscar_seed_mundo(jogador)
-        if seed_mundo:
+        if seedMundo:
             # Criar instância da forja
             sucesso = criar_instancia_forja_por_jogador(jogador, "Forja Vulcânica", 2)
             if not sucesso:
@@ -56,27 +73,33 @@ def menu_forja(jogador):
     
     while True:
         limpar_terminal()
-        cabecalho_forja()
+        cabecalho_forja(jogador)
         print("\n")
         print(f"{Style.BRIGHT}{Fore.CYAN}Qual ação você gostaria de realizar?".center(largura_terminal))
         print("\n")
-        print(f"{Fore.WHITE}1 - Ver itens disponíveis para fabricar")
-        print(f"{Fore.WHITE}2 - Fabricar um item")
-        print(f"{Fore.WHITE}0 - Sair da Forja")
+        print(f"{Fore.YELLOW}{Style.BRIGHT}1 - Ver itens disponíveis para fabricar")
+        print(f"{Fore.YELLOW}{Style.BRIGHT}2 - Fabricar um item")
+        print(f"{Fore.RED}{Style.BRIGHT}3 - Sair da Forja")
         print("\n")
-        
+
         escolha = input(f"{Style.BRIGHT}{Fore.MAGENTA}>>> ").strip()
         
         if escolha == "1":
             menu_categoria_itens(jogador, modo="ver")
         elif escolha == "2":
             menu_categoria_itens(jogador, modo="fabricar")
-        elif escolha == "0":
+        elif escolha == "3":
+            limpar_terminal()
+            cabecalho_forja(jogador)
             exibir_dialogo_despedida("Andrei", jogador)
             enter_continue()
+            atualizarParaLocalAnterior(buscar_dadosJogador(jogador))
             break
         else:
-            print(f"\n{Fore.RED}Opção inválida. Tente novamente.")
+            limpar_terminal()
+            cabecalho_forja(jogador)
+            print("\n\n\n\n\n\n")
+            print(f"\n{Fore.RED}Opção inválida. Tente novamente.".center(largura_terminal))
             enter_continue()
 
 def menu_categoria_itens(jogador, modo):
@@ -115,25 +138,25 @@ def ver_itens_disponiveis(jogador, categoria):
     Função para ver itens disponíveis para fabricar por categoria
     """
     limpar_terminal()
-    cabecalho_forja()
+    cabecalho_forja(jogador)
     
     # Exibir diálogo de catálogo
     exibir_dialogo_catalogo("Andrei", jogador)
     enter_continue()
     
-    print(f"\n{Style.BRIGHT}{Fore.CYAN}=== ITENS DISPONÍVEIS PARA FABRICAR ({categoria}) ===".center(largura_terminal))
+    print(f"{Style.BRIGHT}{Fore.YELLOW}╔════════════ ITENS DISPONÍVEIS PARA FABRICAR ({categoria}) ════════════╗".center(largura_terminal))
     print("\n")
     
     # Buscar itens filtrados pela categoria
     itens = visualizar_itens_forja_por_jogador(jogador, categoria)
     
     if itens:
-        print(f"{Fore.WHITE}{'ID':<5} {'Nome':<25} {'Preço':<10}")
-        print(f"{Fore.LIGHTBLACK_EX}{'='*45}")
+        print(f"{Fore.WHITE}{'N. Item':<5} {'Nome':<25} {'Preço':<10}".center(largura_terminal))
+        print(f"{Fore.LIGHTBLACK_EX}{'═'*100}".center(largura_terminal))
         for item in itens:
             id_item, nome, preco_base, descricao = item
-            print(f"{Fore.WHITE}{id_item:<5} {nome:<25} {preco_base:<10}")
-            print(f"{Fore.LIGHTBLACK_EX}     {descricao}")
+            print(f"{Fore.WHITE}{id_item:<5} {nome:<25} {preco_base:<10}".center(largura_terminal))
+            print(f"{Fore.LIGHTBLACK_EX}{descricao}".center(largura_terminal))
             print()  # Linha em branco entre itens
     else:
         print(f"{Fore.RED}Nenhum item disponível para fabricar!")
@@ -157,7 +180,7 @@ def fabricar_item(jogador, categoria):
         enter_continue()
         return
     
-    print(f"{Fore.WHITE}{'ID':<5} {'Nome':<25} {'Preço':<10}")
+    print(f"{Fore.WHITE}{'N. Item':<5} {'Nome':<25} {'Preço':<10}")
     print(f"{Fore.LIGHTBLACK_EX}{'='*45}")
     for item in itens:
         id_item, nome, preco_base, descricao = item
@@ -179,24 +202,39 @@ def fabricar_item(jogador, categoria):
                 break
         
         if not item_encontrado:
-            print(f"{Fore.RED}Item não encontrado!")
+            limpar_terminal()
+            cabecalho_forja(jogador)
+            print("\n\n\n\n\n\n")
+            print(f"{Fore.RED}{Style.BRIGHT}Item não encontrado!")
             enter_continue()
             return
-        
-        # Exibir diálogo de fabricação
-        exibir_dialogo_fabricacao("Andrei", jogador)
         
         # Fabricar o item
         sucesso = forjar_item_por_jogador(jogador, item_id)
         
         if sucesso:
+            # Exibir diálogo de fabricação
+            limpar_terminal()
+            cabecalho_forja(jogador)
+            exibir_dialogo_fabricacao("Andrei", jogador)
+            print("\n")
             print(f"\n{Fore.GREEN}✅ Item fabricado com sucesso!")
         else:
+            limpar_terminal()
+            cabecalho_forja(jogador)
             print(f"\n{Fore.RED}❌ Erro ao fabricar item!")
+            enter_continue()
+        
             
     except ValueError:
-        print(f"{Fore.RED}Por favor, digite um número válido!")
+        limpar_terminal()
+        cabecalho_forja(jogador)
+        print("\n\n\n\n\n\n")
+        print(f"{Fore.RED}{Style.BRIGHT}Por favor, digite um número válido!")
     except Exception as e:
+        limpar_terminal()
+        cabecalho_forja(jogador)
+        print("\n\n\n\n\n\n")
         print(f"{Fore.RED}Erro inesperado: {e}")
     
     print("\n")

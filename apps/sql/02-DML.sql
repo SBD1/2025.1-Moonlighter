@@ -8,33 +8,34 @@
 
 -- INSERÇÃO NA TABELA LOCAL:
 INSERT INTO "local" VALUES
-    ('Vila Rynoka', '', 'Local', NULL);
+    ('Vila Rynoka', 'O som suave de pássaros e o rangido da madeira sob seus pés anunciam sua chegada à pacata Vila de Rynoka. As ruas de pedra irregular serpenteiam entre casinhas acolhedoras, com chaminés que soltam espirais preguiçosas de fumaça perfumada. Uma brisa fresca carrega o aroma de pão recém-assado e ferro forjado. Você ouve risos e passos apressados vindo da praça central, onde moradores se reúnem para conversar e negociar. Ao longe, o badalar de um sino marca o ritmo calmo da vila. Tudo parece pulsar em harmonia — do tilintar de moedas nas barracas ao eco distante das masmorras que sussurram histórias perigosas sob os pés de quem ousa explorar. Aqui, o cotidiano e o extraordinário convivem lado a lado, e cada canto guarda segredos esperando para serem descobertos.', 'Local', NULL);
 -- INSERÇÃO DE FILHOS NA TABELA LOCAL:
 INSERT INTO "local" VALUES
-    ('Centro Comercial', '', 'Local', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Vila Rynoka')),
-    ('Praça', '', 'Local', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Vila Rynoka')),
-    ('Moonlighter', '', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Vila Rynoka')),
-    ('Área das Masmorras', '', 'Local', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Vila Rynoka'));
+    ('Centro Comercial', 'O burburinho do comércio ecoa entre as lojas e barracas alinhadas com precisão caótica. O cheiro de couro novo, poções misteriosas e ferro quente se mistura ao ar, enquanto moradores e viajantes barganham com entusiasmo. Cada estabelecimento tem sua própria identidade: a Forja Vulcânica ressoa com marteladas e brasas incandescentes; a Tenda da Bruxa exala aromas enigmáticos e sussurros místicos; a Barraca do Tom vibra com energia e gritaria amigável. Aqui, o ouro gira rápido e segredos ainda mais depressa.', 'Local', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Vila Rynoka')),
+    ('Praça', 'O coração pulsante de Rynoka é sua praça central. Cercada por árvores bem cuidadas e bancos de madeira, é o ponto de encontro natural para todos. Crianças correm entre as barracas, velhos contam histórias sob a sombra e músicos improvisam canções suaves ao pôr do sol. Um chafariz antigo borbulha calmamente no centro, enquanto a movimentação ao redor nunca parece caótica — apenas viva. É o ponto de respiro entre aventuras e o melhor lugar para ouvir os boatos do dia.', 'Local', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Vila Rynoka')),
+    ('Moonlighter', 'Uma loja modesta por fora, mas cheia de personalidade por dentro. O sino sobre a porta anuncia cada visitante com um tilintar familiar. Prateleiras organizadas com esmero exibem relíquias coletadas das profundezas das masmorras. Ao fundo, o salão de exposição brilha sob a luz de lamparinas penduradas, convidando os clientes a valorizar cada item raro. Subindo uma escada de madeira rangente, o quarto do lojista revela o verdadeiro lar de um explorador — mapas rabiscados, cadernos abertos e uma janela que dá para o céu estrelado.', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Vila Rynoka')),
+    ('Área das Masmorras', 'Ao sul da vila, um terreno irregular revela cinco portais enigmáticos encravados em pedras antigas. Cada um pulsa com uma energia diferente — do calor opressor da Masmorra do Deserto ao brilho etéreo da Masmorra da Tecnologia. O vento que sopra ali carrega mistério e perigo. Moradores evitam a área ao anoitecer, mas para aventureiros, é o limiar entre a rotina pacata da vila e os horrores — e tesouros — que aguardam nas profundezas. As pedras gastas no chão mostram quantos vieram... e quantos não voltaram.', 'Local', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Vila Rynoka'));
 INSERT INTO "local" VALUES
     ('Masmorra do Golem', 'Primeira masmorra acessível, repleta de sentinelas golem e criaturas de pedra. Enfrente o Rei Golem no 3º andar.', 'Masmorra', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Área das Masmorras')),
     ('Masmorra da Floresta', 'Masmorra florestal estreita, infestada de plantas mutantes e a Mutae Carnívora como chefe no último andar.', 'Masmorra', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Área das Masmorras')),
     ('Masmorra do Deserto', 'Antigas ruínas desérticas com tempestades de areia e o Guardião do Deserto aguardando no 3º andar.', 'Masmorra', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Área das Masmorras')),
     ('Masmorra da Tecnologia', 'Instalações tecnológicas abandonadas, protegidas por robôs, com o Guardião da Tecnologia aguardando no último andar.', 'Masmorra', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Área das Masmorras')),
-    ('Forja Vulcânica', '', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Centro Comercial')),
-    ('O Chapéu de Madeira', '', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Centro Comercial')),
-    ('Banco de Rynoka', '', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Centro Comercial')),
-    ('Tenda da Bruxa', '', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Centro Comercial')),
-    ('Barraca do Tom', '', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Centro Comercial')),
-    ('Quarto', '', 'Local', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Moonlighter')),
-    ('Salão de Exposição', '', 'Local', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Moonlighter'));
+    ('Masmorra Desconhecida', 'A última masmorra', 'Masmorra', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Área das Masmorras')),
+    ('Forja Vulcânica', 'Um calor abrasador e faíscas constantes preenchem o ar da Forja Vulcânica. Cada martelada ecoa como um trovão, moldando armas e armaduras com precisão quase cerimonial. Paredes de pedra escura emolduram fornos incandescentes e bigornas robustas. O ferreiro, de músculos rígidos e olhar concentrado, domina o ambiente com mãos calejadas e alma forjada no mesmo fogo. Aqui, não se vende metal — se entrega confiança em lâmina.', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Centro Comercial')),
+    ('Banco de Rynoka', 'Silencioso, organizado e impenetrável como um cofre. O Banco de Rynoka é o bastião da riqueza da vila. Pilares altos sustentam o teto abobadado, e mesas de carvalho robusto sustentam cálculos, registros e contratos. O banqueiro, sempre de luvas e expressão inalterada, calcula os juros com mais frieza que um golem de pedra. Investidores vêm, sonhadores vão, e o ouro nunca dorme.', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Centro Comercial')),
+    ('O Chapéu de Madeira', 'Pequena por fora, encantadora por dentro, a loja exala o cheiro de madeira polida e tecidos delicados. Bonecos de treino, armas estilizadas e acessórios decorativos repousam em estantes esculpidas com primor. Um artesão excêntrico — com um chapéu igualmente peculiar — recepciona os clientes com entusiasmo. Ele não apenas vende acessórios; vende identidade. Cada peça parece contar uma história... ou esconder um feitiço.', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Centro Comercial')),
+    ('Quarto', 'Seu refúgio pessoal. Pequeno, mas acolhedor, o quarto é iluminado por uma janela que filtra os primeiros raios do sol pela manhã e pelo brilho da lua à noite. Livros empilhados, rascunhos de planos e uma cama de lençóis amarrotados contam histórias de noites mal dormidas e sonhos ambiciosos. É aqui que você descansa, pensa e, às vezes, simplesmente observa a vida passar pela janela enquanto se prepara para o próximo dia de batalhas e negociações.', 'Local', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Moonlighter')),
+    ('Salão de Exposição', 'O coração da loja. Prateleiras bem organizadas, vitrines reluzentes e uma bancada de vendas que já presenciou incontáveis barganhas compõem o ambiente. É aqui que sua coragem vira lucro, onde cada item carrega o suor das masmorras e a esperança de prosperar. Clientes entram, observam com olhares calculistas, e você — como bom comerciante — sabe exatamente como precificar o desconhecido. Entre ouro, elogios e pechinchas, a reputação da loja é forjada todos os dias.', 'Local', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Moonlighter'));
 
 -- INSERÇÃO NA TABELA MASMORRA:
 INSERT INTO "masmorra"
     VALUES
-    ('Masmorra do Golem', 1, 3),
-    ('Masmorra da Floresta', 2, 3),
-    ('Masmorra do Deserto', 3, 3),
-    ('Masmorra da Tecnologia', 4, 3);
+    ('Masmorra do Golem', 1, 'Fácil'),
+    ('Masmorra da Floresta', 2, 'Fácil'),
+    ('Masmorra do Deserto', 3, 'Médio'),
+    ('Masmorra da Tecnologia', 4, 'Médio'),
+    ('Masmorra Desconhecida', 5, 'Difícil');
+
 
 -- INSERÇÃO NA TABELA ESTABELECIMENTO:
 INSERT INTO "estabelecimento" 
@@ -42,9 +43,7 @@ INSERT INTO "estabelecimento"
     ('Moonlighter'),
     ('Forja Vulcânica'),
     ('O Chapéu de Madeira'),
-    ('Banco de Rynoka'),
-    ('Tenda da Bruxa'),
-    ('Barraca do Tom');
+    ('Banco de Rynoka');
 
 -- INSERÇÃO NA TABELA EFEITOS:
 INSERT INTO "efeito"
@@ -493,6 +492,28 @@ INSERT INTO "item"
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Wolfram'), 2),
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Fios de Ouro'), 2),
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Aço'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Aço Endurecido'), 4),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro'), 1),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Folhas Fortes'), 4),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Raiz Preservada'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro II'), 1),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Magnetita'), 4),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pó Isolante'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro III'), 1),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Wolfram'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Fios de Ouro'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Barra de Ferro'), 6),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Dente'), 4),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Restos de Fundição'), 3),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro'), 1),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Folhas Fortes'), 4),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Raiz Preservada'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro II'), 1),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Magnetita'), 4),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pó Isolante'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro III'), 1),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Wolfram'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Fios de Ouro'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Aço'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Aço Endurecido'), 4),
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Aço'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Barra de Ferro'), 12),
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Aço'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Restos de Fundição'), 3),
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Aço II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Aço'), 1),
@@ -779,9 +800,9 @@ INSERT INTO "npc" ("nome", "tipoNPC", "descricao", "ativo")
     ('Andrei', 'Ferreiro', 'Ferreiro que aprimora armas e armaduras na Forja Vulcânica.', TRUE),
     ('Eris', 'Alquimista', 'Alquimista que vende e aprimora poções no Chapéu de Madeira.', TRUE),
     ('Edward', 'Banqueiro', 'Banqueiro que gerencia investimentos para a cidade de Rynoka.', TRUE),
-    ('Juliette', 'Decoradora', 'Ajuda a melhorar e decorar a loja Moonlighter em "Le Retailer".', FALSE),
+    ('Juliette', 'Decoradora', 'Ajuda a melhorar e decorar a loja Moonlighter em "Le Retailer".', TRUE),
     ('Tom', 'Vendedor Ambulante', 'Vendedor ambulante que oferece itens raros e exóticos.', FALSE),
-    ('Mercador Viajante', 'Comprador Especializado', 'Compra itens específicos por um preço elevado periodicamente.', FALSE),
+    ('Mercador Viajante', 'Comprador Especializado', 'Compra itens específicos por um preço elevado periodicamente.', TRUE),
     ('Pedro Doidão', 'Residente', 'Residente excêntrico da cidade de Rynoka com dicas peculiares.', FALSE),
     ('Bruxa dos Murmúrios', 'Encantadora', 'Bruxa misteriosa que pode encantar equipamentos com efeitos.', FALSE),
     ('Mundo', 'Mundo', 'Interações relacionadas à narração do mundo', FALSE);
@@ -840,44 +861,44 @@ INSERT INTO "inventario"
 -- Diálogos do Andrei (Ferreiro)
 INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
 VALUES
-    ('Bem-vindo à Forja Vulcânica! Sou Andrei, o ferreiro desta cidade.', 1, 'Saudacao', NULL),
-    ('Preciso de uma arma nova ou quer aprimorar alguma existente?', 2, 'Saudacao', NULL),
-    ('Ah, vejo que trouxe alguns materiais interessantes!', 1, 'Catalogo', NULL),
+    ('Bem-vindo à Forja Vulcânica, <NOME_JOGADOR>! Sou Andrei, o ferreiro desta cidade.', 1, 'Saudacao', NULL),
+    ('Precisa de uma arma nova, ou quer aprimorar alguma existente?', 2, 'Saudacao', NULL),
+    ('Olha, vejo que trouxe alguns materiais interessantes!', 1, 'Catalogo', NULL),
     ('Essa arma tem potencial, mas posso torná-la ainda mais poderosa.', 2, 'Catalogo', NULL),
     ('Excelente escolha! Vou trabalhar nisso imediatamente.', 1, 'Fabricacao', NULL),
     ('O fogo da forja está perfeito hoje. Vai ficar incrível!', 2, 'Fabricacao', NULL),
-    ('Aqui está sua arma, mais forte que nunca!', 1, 'Entrega', NULL),
-    ('Espero que ela te sirva bem nas masmorras.', 2, 'Entrega', NULL),
-    ('Volte sempre quando precisar de uma nova arma!', 1, 'Despedida', NULL),
+    ('Aqui está sua arma, <NOME_JOGADOR>, mais forte que nunca!', 1, 'Entrega', NULL),
+    ('Espero que ela te sirva bem nas masmorras, <NOME_JOGADOR>.', 2, 'Entrega', NULL),
+    ('Volte sempre quando precisar de uma nova arma, <NOME_JOGADOR>!', 1, 'Despedida', NULL),
     ('Que os deuses da forja te protejam!', 2, 'Despedida', NULL);
 
 -- Diálogos do Eris (Alquimista)
 INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
 VALUES
-    ('Bem-vindo ao Chapéu de Madeira! Sou Eris, a alquimista.', 1, 'Saudacao', NULL),
+    ('Bem-vindo ao Chapéu de Madeira, <NOME_JOGADOR>! Sou Eris, a alquimista.', 1, 'Saudacao', NULL),
     ('Precisa de poções para suas aventuras?', 2, 'Saudacao', NULL),
     ('Tenho poções para todos os tipos de situações!', 1, 'Catalogo', NULL),
     ('Essa mistura vai te dar a força que precisa.', 2, 'Catalogo', NULL),
     ('Deixe-me preparar essa poção com ingredientes especiais.', 1, 'Fabricacao', NULL),
     ('A alquimia é uma arte que requer paciência e precisão.', 2, 'Fabricacao', NULL),
-    ('Aqui está sua poção, feita com os melhores ingredientes!', 1, 'Entrega', NULL),
+    ('Aqui está sua poção, <NOME_JOGADOR>, feita com os melhores ingredientes!', 1, 'Entrega', NULL),
     ('Use com sabedoria, elas são poderosas!', 2, 'Entrega', NULL),
-    ('Volte quando precisar de mais poções!', 1, 'Despedida', NULL),
-    ('Que a magia te acompanhe em suas jornadas!', 2, 'Despedida', NULL);
+    ('Volte quando precisar de mais poções, <NOME_JOGADOR>!', 1, 'Despedida', NULL),
+    ('Que a magia te acompanhe em suas jornadas, <NOME_JOGADOR>!', 2, 'Despedida', NULL);
 
 -- Diálogos do Edward (Banqueiro)
 INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
 VALUES
-    ('Bem-vindo ao Banco de Rynoka! Sou Edward, seu banqueiro.', 1, 'Saudacao', NULL),
+    ('Bem-vindo ao Banco de Rynoka, <NOME_JOGADOR>! Sou Edward, seu banqueiro.', 1, 'Saudacao', NULL),
     ('Como posso ajudá-lo com seus investimentos hoje?', 2, 'Saudacao', NULL),
     ('Temos várias opções de investimento para você!', 1, 'Catalogo', NULL),
     ('Este investimento pode render bons lucros no futuro.', 2, 'Catalogo', NULL),
     ('Excelente decisão! Vou processar seu investimento.', 1, 'Compra', NULL),
     ('Seu dinheiro está seguro conosco, pode confiar.', 2, 'Compra', NULL),
-    ('Aqui está o recibo do seu investimento.', 1, 'Entrega', NULL),
-    ('Espero que os lucros sejam generosos!', 2, 'Entrega', NULL),
-    ('Volte sempre que precisar de serviços bancários!', 1, 'Despedida', NULL),
-    ('Que a prosperidade te acompanhe!', 2, 'Despedida', NULL);
+    ('Aqui está o recibo do seu saque, <NOME_JOGADOR>.', 1, 'Entrega', NULL),
+    ('Espero que os lucros tenham sido generosos!', 2, 'Entrega', NULL),
+    ('Volte sempre que precisar de serviços bancários, <NOME_JOGADOR>!', 1, 'Despedida', NULL),
+    ('Que a prosperidade te acompanhe, <NOME_JOGADOR>!', 2, 'Despedida', NULL);
 
 -- Associação dos diálogos com os NPCs
 INSERT INTO "dialogo_npc" ("idDialogo", "idNPC")
@@ -889,9 +910,9 @@ VALUES
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Essa arma tem potencial, mas posso torná-la ainda mais poderosa.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei')),
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Excelente escolha! Vou trabalhar nisso imediatamente.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei')),
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'O fogo da forja está perfeito hoje. Vai ficar incrível!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei')),
-    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Aqui está sua arma, mais forte do que nunca!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Aqui está sua arma, <NOME_JOGADOR>, mais forte que nunca!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei')),
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Espero que ela te sirva bem nas masmorras, <NOME_JOGADOR>.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei')),
-    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Volte sempre quando precisar de uma nova arma!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Volte sempre quando precisar de uma nova arma, <NOME_JOGADOR>!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei')),
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Que os deuses da forja te protejam!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei')),
     
     -- Eris (Alquimista)
@@ -901,9 +922,9 @@ VALUES
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Essa mistura vai te dar a força que precisa.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Deixe-me preparar essa poção com ingredientes especiais.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'A alquimia é uma arte que requer paciência e precisão.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
-    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Aqui está sua poção, feita com os melhores ingredientes!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Aqui está sua poção, <NOME_JOGADOR>, feita com os melhores ingredientes!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Use com sabedoria, elas são poderosas!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
-    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Volte quando precisar de mais poções!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Volte quando precisar de mais poções, <NOME_JOGADOR>!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Que a magia te acompanhe em suas jornadas, <NOME_JOGADOR>!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
     
     -- Edward (Banqueiro)
@@ -913,7 +934,42 @@ VALUES
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Este investimento pode render bons lucros no futuro.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward')),
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Excelente decisão! Vou processar seu investimento.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward')),
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Seu dinheiro está seguro conosco, pode confiar.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward')),
-    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Aqui está o recibo do seu investimento.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward')),
-    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Espero que os lucros sejam generosos!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward')),
-    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Volte sempre que precisar de serviços bancários!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Aqui está o recibo do seu saque, <NOME_JOGADOR>.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Espero que os lucros tenham sido generosos!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Volte sempre que precisar de serviços bancários, <NOME_JOGADOR>!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward')),
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Que a prosperidade te acompanhe, <NOME_JOGADOR>!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward'));
+
+-- DIÁLOGOS DE VENDA DOS NPCS
+
+-- Diálogos de venda do Andrei (Ferreiro)
+INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+VALUES
+    ('Ah, quer vender alguns materiais, <NOME_JOGADOR>?', 1, 'Venda', NULL),
+    ('Deixe-me ver o que você trouxe...', 2, 'Venda', NULL);
+
+-- Diálogos de venda do Eris (Comerciante)
+INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+VALUES
+    ('Interessante! Que itens você gostaria de vender, <NOME_JOGADOR>?', 1, 'Venda', NULL),
+    ('Vou avaliar cada um com cuidado.', 2, 'Venda', NULL);
+
+-- Diálogos de venda do Edward (Banqueiro)
+INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+VALUES
+    ('Ah, quer vender alguns itens, <NOME_JOGADOR>?', 1, 'Venda', NULL),
+    ('Posso ajudar com isso também.', 2, 'Venda', NULL);
+
+-- Associação dos diálogos de venda com os NPCs
+INSERT INTO "dialogo_npc" ("idDialogo", "idNPC")
+VALUES
+    -- Andrei (Ferreiro)
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Ah, quer vender alguns materiais, <NOME_JOGADOR>?' LIMIT 1), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei' LIMIT 1)),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Deixe-me ver o que você trouxe...' LIMIT 1), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei' LIMIT 1)),
+    
+    -- Eris (Comerciante)
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Interessante! Que itens você gostaria de vender, <NOME_JOGADOR>?' LIMIT 1), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris' LIMIT 1)),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Vou avaliar cada um com cuidado.' LIMIT 1), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris' LIMIT 1)),
+    
+    -- Edward (Banqueiro)
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Ah, quer vender alguns itens, <NOME_JOGADOR>?' LIMIT 1), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward' LIMIT 1)),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Posso ajudar com isso também.' LIMIT 1), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward' LIMIT 1));
