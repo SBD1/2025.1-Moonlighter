@@ -451,12 +451,6 @@ def obter_inventario_completo(nickname):
                 connection.close()
             return []
 
-def executar_limpeza_automatica():
-    """
-    Executa limpeza automática de itens
-    """
-    return executar_limpeza_completa()
-
 def obter_inventario_usando_view(nickname):
     """
     Obtém inventário do jogador usando a view otimizada

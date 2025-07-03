@@ -393,30 +393,30 @@ BEGIN
     -- Verificar se item já existe em outra especialização
     IF TG_TABLE_NAME = 'arma' THEN
         IF EXISTS (SELECT 1 FROM "armadura" WHERE "idItem" = NEW."idItem") THEN
-            RAISE EXCEPTION 'Item já classificado como Armadura. Não pode ser salvo como Arma.';
+            RAISE EXCEPTION 'Item ID % já classificado como Armadura. Não pode ser salvo como Arma.', NEW."idItem";
         END IF;
         IF EXISTS (SELECT 1 FROM "pocao" WHERE "idItem" = NEW."idItem") THEN
-            RAISE EXCEPTION 'Item já classificado como Poção. Não pode ser salvo como Arma.';
+            RAISE EXCEPTION 'Item ID % já classificado como Poção. Não pode ser salvo como Arma.', NEW."idItem";
         END IF;
         -- Atualizar tipo na tabela item
         UPDATE "item" SET "tipo" = 'Arma' WHERE "idItem" = NEW."idItem";
         
     ELSIF TG_TABLE_NAME = 'armadura' THEN
         IF EXISTS (SELECT 1 FROM "arma" WHERE "idItem" = NEW."idItem") THEN
-            RAISE EXCEPTION 'Item já classificado como Arma. Não pode ser salvo como Armadura.';
+            RAISE EXCEPTION 'Item ID % já classificado como Arma. Não pode ser salvo como Armadura.', NEW."idItem";
         END IF;
         IF EXISTS (SELECT 1 FROM "pocao" WHERE "idItem" = NEW."idItem") THEN
-            RAISE EXCEPTION 'Item já classificado como Poção. Não pode ser salvo como Armadura.';
+            RAISE EXCEPTION 'Item ID % já classificado como Poção. Não pode ser salvo como Armadura.', NEW."idItem";
         END IF;
         -- Atualizar tipo na tabela item
         UPDATE "item" SET "tipo" = 'Armadura' WHERE "idItem" = NEW."idItem";
         
     ELSIF TG_TABLE_NAME = 'pocao' THEN
         IF EXISTS (SELECT 1 FROM "arma" WHERE "idItem" = NEW."idItem") THEN
-            RAISE EXCEPTION 'Item já classificado como Arma. Não pode ser salvo como Poção.';
+            RAISE EXCEPTION 'Item ID % já classificado como Arma. Não pode ser salvo como Poção.', NEW."idItem";
         END IF;
         IF EXISTS (SELECT 1 FROM "armadura" WHERE "idItem" = NEW."idItem") THEN
-            RAISE EXCEPTION 'Item já classificado como Armadura. Não pode ser salvo como Poção.';
+            RAISE EXCEPTION 'Item ID % já classificado como Armadura. Não pode ser salvo como Poção.', NEW."idItem";
         END IF;
         -- Atualizar tipo na tabela item
         UPDATE "item" SET "tipo" = 'Consumível' WHERE "idItem" = NEW."idItem";
@@ -433,14 +433,14 @@ BEGIN
     -- Verificar se local já existe em outra especialização
     IF TG_TABLE_NAME = 'masmorra' THEN
         IF EXISTS (SELECT 1 FROM "estabelecimento" WHERE "nomeLocal" = NEW."nomeLocal") THEN
-            RAISE EXCEPTION 'Local já classificado como Estabelecimento. Não pode ser salvo como Masmorra.';
+            RAISE EXCEPTION 'Local % já classificado como Estabelecimento. Não pode ser salvo como Masmorra.', NEW."nomeLocal";
         END IF;
         -- Atualizar tipo na tabela local
         UPDATE "local" SET "tipoLocal" = 'Masmorra' WHERE "nomeLocal" = NEW."nomeLocal";
         
     ELSIF TG_TABLE_NAME = 'estabelecimento' THEN
         IF EXISTS (SELECT 1 FROM "masmorra" WHERE "nomeLocal" = NEW."nomeLocal") THEN
-            RAISE EXCEPTION 'Local já classificado como Masmorra. Não pode ser salvo como Estabelecimento.';
+            RAISE EXCEPTION 'Local % já classificado como Masmorra. Não pode ser salvo como Estabelecimento.', NEW."nomeLocal";
         END IF;
         -- Atualizar tipo na tabela local
         UPDATE "local" SET "tipoLocal" = 'Estabelecimento' WHERE "nomeLocal" = NEW."nomeLocal";
@@ -454,8 +454,18 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION atualizar_tipo_item_apos_delete()
 RETURNS TRIGGER AS $$
 BEGIN
-    -- Atualizar tipo para NULL quando especialização é deletada
-    UPDATE "item" SET "tipo" = NULL WHERE "idItem" = OLD."idItem";
+    -- Verificar se o item ainda existe em outras especializações
+    IF NOT EXISTS (
+        SELECT 1 FROM "arma" WHERE "idItem" = OLD."idItem"
+        UNION ALL
+        SELECT 1 FROM "armadura" WHERE "idItem" = OLD."idItem"
+        UNION ALL  
+        SELECT 1 FROM "pocao" WHERE "idItem" = OLD."idItem"
+    ) THEN
+        -- Se não existe em nenhuma especialização, definir tipo como NULL
+        UPDATE "item" SET "tipo" = NULL WHERE "idItem" = OLD."idItem";
+    END IF;
+    
     RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
@@ -464,65 +474,97 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION atualizar_tipo_local_apos_delete()
 RETURNS TRIGGER AS $$
 BEGIN
-    -- Atualizar tipo para 'Local' quando especialização é deletada
-    UPDATE "local" SET "tipoLocal" = 'Local' WHERE "nomeLocal" = OLD."nomeLocal";
+    -- Verificar se o local ainda existe em outras especializações
+    IF NOT EXISTS (
+        SELECT 1 FROM "masmorra" WHERE "nomeLocal" = OLD."nomeLocal"
+        UNION ALL
+        SELECT 1 FROM "estabelecimento" WHERE "nomeLocal" = OLD."nomeLocal"
+    ) THEN
+        -- Se não existe em nenhuma especialização, definir tipo como 'Local'
+        UPDATE "local" SET "tipoLocal" = 'Local' WHERE "nomeLocal" = OLD."nomeLocal";
+    END IF;
+    
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Função para deletar especialização quando item generalizado é deletado
+CREATE OR REPLACE FUNCTION deletar_especializacao_item()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Deletar das tabelas especializadas quando item é deletado
+    DELETE FROM "arma" WHERE "idItem" = OLD."idItem";
+    DELETE FROM "armadura" WHERE "idItem" = OLD."idItem";
+    DELETE FROM "pocao" WHERE "idItem" = OLD."idItem";
+    
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Função para deletar especialização quando local generalizado é deletado
+CREATE OR REPLACE FUNCTION deletar_especializacao_local()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Deletar das tabelas especializadas quando local é deletado
+    DELETE FROM "masmorra" WHERE "nomeLocal" = OLD."nomeLocal";
+    DELETE FROM "estabelecimento" WHERE "nomeLocal" = OLD."nomeLocal";
+    
     RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
 
 -- Triggers para validação de especialização única (itens)
-DROP TRIGGER IF EXISTS trig_validar_arma ON "arma";
 CREATE TRIGGER trig_validar_arma
     BEFORE INSERT ON "arma"
     FOR EACH ROW EXECUTE FUNCTION validar_especializacao_item();
 
-DROP TRIGGER IF EXISTS trig_validar_armadura ON "armadura";
 CREATE TRIGGER trig_validar_armadura
     BEFORE INSERT ON "armadura"
     FOR EACH ROW EXECUTE FUNCTION validar_especializacao_item();
 
-DROP TRIGGER IF EXISTS trig_validar_pocao ON "pocao";
 CREATE TRIGGER trig_validar_pocao
     BEFORE INSERT ON "pocao"
     FOR EACH ROW EXECUTE FUNCTION validar_especializacao_item();
 
 -- Triggers para validação de especialização única (locais)
-DROP TRIGGER IF EXISTS trig_validar_masmorra ON "masmorra";
 CREATE TRIGGER trig_validar_masmorra
     BEFORE INSERT ON "masmorra"
     FOR EACH ROW EXECUTE FUNCTION validar_especializacao_local();
 
-DROP TRIGGER IF EXISTS trig_validar_estabelecimento ON "estabelecimento";
 CREATE TRIGGER trig_validar_estabelecimento
     BEFORE INSERT ON "estabelecimento"
     FOR EACH ROW EXECUTE FUNCTION validar_especializacao_local();
 
 -- Triggers para atualizar tipo quando especialização é deletada (itens)
-DROP TRIGGER IF EXISTS trig_atualizar_tipo_arma ON "arma";
 CREATE TRIGGER trig_atualizar_tipo_arma
     AFTER DELETE ON "arma"
     FOR EACH ROW EXECUTE FUNCTION atualizar_tipo_item_apos_delete();
 
-DROP TRIGGER IF EXISTS trig_atualizar_tipo_armadura ON "armadura";
 CREATE TRIGGER trig_atualizar_tipo_armadura
     AFTER DELETE ON "armadura"
     FOR EACH ROW EXECUTE FUNCTION atualizar_tipo_item_apos_delete();
 
-DROP TRIGGER IF EXISTS trig_atualizar_tipo_pocao ON "pocao";
 CREATE TRIGGER trig_atualizar_tipo_pocao
     AFTER DELETE ON "pocao"
     FOR EACH ROW EXECUTE FUNCTION atualizar_tipo_item_apos_delete();
 
 -- Triggers para atualizar tipo quando especialização é deletada (locais)
-DROP TRIGGER IF EXISTS trig_atualizar_tipo_masmorra ON "masmorra";
 CREATE TRIGGER trig_atualizar_tipo_masmorra
     AFTER DELETE ON "masmorra"
     FOR EACH ROW EXECUTE FUNCTION atualizar_tipo_local_apos_delete();
 
-DROP TRIGGER IF EXISTS trig_atualizar_tipo_estabelecimento ON "estabelecimento";
 CREATE TRIGGER trig_atualizar_tipo_estabelecimento
     AFTER DELETE ON "estabelecimento"
     FOR EACH ROW EXECUTE FUNCTION atualizar_tipo_local_apos_delete();
+
+-- Triggers para deletar especializações quando generalização é deletada
+CREATE TRIGGER trig_deletar_item_especializacao
+    BEFORE DELETE ON "item"
+    FOR EACH ROW EXECUTE FUNCTION deletar_especializacao_item();
+
+CREATE TRIGGER trig_deletar_local_especializacao
+    BEFORE DELETE ON "local"
+    FOR EACH ROW EXECUTE FUNCTION deletar_especializacao_local();
 
 -- ================================================================
 -- VIEWS ESSENCIAIS

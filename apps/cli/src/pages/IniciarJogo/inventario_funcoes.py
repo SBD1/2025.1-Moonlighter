@@ -365,76 +365,6 @@ def criar_views_inventario():
         connection.close()
         return False
 
-def executar_limpeza_completa():
-    """
-    Executa uma limpeza completa do sistema
-    """
-    itens_zero = limpar_itens_quantidade_zero()
-    itens_expirados = limpar_itens_expirados()
-    
-    return itens_zero + itens_expirados
-
-def limpar_itens_quantidade_zero():
-    """
-    Remove itens com quantidade zero do inventário
-    """
-    connection = connect_to_db()
-    if connection is None:
-        return 0
-
-    try:
-        cursor = connection.cursor()
-        
-        # Remover itens com quantidade zero
-        cursor.execute("""
-            DELETE FROM "inst_item" 
-            WHERE "quantidade" <= 0
-        """)
-        
-        itens_removidos = cursor.rowcount
-        connection.commit()
-        cursor.close()
-        connection.close()
-        return itens_removidos
-        
-    except Exception as e:
-        print(f"Erro ao limpar itens com quantidade zero: {e}")
-        connection.rollback()
-        cursor.close()
-        connection.close()
-        return 0
-
-def limpar_itens_expirados():
-    """
-    Remove itens expirados do chão
-    """
-    connection = connect_to_db()
-    if connection is None:
-        return 0
-
-    try:
-        cursor = connection.cursor()
-        
-        # Remover itens expirados do chão
-        cursor.execute("""
-            DELETE FROM "item_chao" 
-            WHERE "tempoExpiracao" IS NOT NULL 
-            AND "tempoExpiracao" < CURRENT_TIMESTAMP
-        """)
-        
-        itens_removidos = cursor.rowcount
-        connection.commit()
-        cursor.close()
-        connection.close()
-        return itens_removidos
-        
-    except Exception as e:
-        print(f"Erro ao limpar itens expirados: {e}")
-        connection.rollback()
-        cursor.close()
-        connection.close()
-        return 0
-
 def criar_triggers_especializacao():
     """
     Cria triggers para manter integridade entre tabelas generalizadas e especializadas
@@ -815,29 +745,6 @@ def criar_funcoes_sql_inventario():
                 AND ii."idItem" = p_id_item;
                 
                 RETURN v_quantidade_atual >= p_quantidade;
-            END;
-            $$ LANGUAGE plpgsql;
-        """)
-        
-        # Função para limpeza automática
-        cursor.execute("""
-            CREATE OR REPLACE FUNCTION limpar_itens_expirados()
-            RETURNS INTEGER AS $$
-            DECLARE
-                v_itens_removidos INTEGER := 0;
-            BEGIN
-                -- Remover itens expirados
-                DELETE FROM "item_chao" 
-                WHERE "tempoExpiracao" IS NOT NULL 
-                AND "tempoExpiracao" < CURRENT_TIMESTAMP;
-                
-                GET DIAGNOSTICS v_itens_removidos = ROW_COUNT;
-                
-                -- Remover itens com quantidade zero
-                DELETE FROM "inst_item" WHERE "quantidade" <= 0;
-                DELETE FROM "item_chao" WHERE "quantidade" <= 0;
-                
-                RETURN v_itens_removidos;
             END;
             $$ LANGUAGE plpgsql;
         """)

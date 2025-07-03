@@ -124,27 +124,7 @@ def locomocao(nickname):
             print('\033[?25h', end='', flush=True)
             continue
 
-def executar_limpeza_sistema(nickname):
-    """
-    Executa limpeza automática do sistema
-    """
-    limpar_terminal()
-    print(logo)
-    
-    print(f"{Style.BRIGHT}{Fore.YELLOW}{'═' * largura_terminal}")
-    print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}LIMPEZA DO SISTEMA".center(largura_terminal))
-    print(f"{Style.BRIGHT}{Fore.YELLOW}{'═' * largura_terminal}")
-    
-    print(f"\n{Style.BRIGHT}{Fore.LIGHTCYAN_EX}Executando limpeza automática...")
-    
-    # Executar limpeza de itens expirados
-    itens_removidos = executar_limpeza_automatica()
-    
-    print(f"\n{Style.BRIGHT}{Fore.LIGHTGREEN_EX}✓ Limpeza concluída!")
-    print(f"{Fore.LIGHTBLUE_EX}Itens expirados removidos: {Fore.YELLOW}{itens_removidos}")
-    
-    print(f"{Fore.LIGHTBLACK_EX}\nPressione Enter para continuar...")
-    input()
+
 
 def exibirOpcoes():
 
@@ -155,8 +135,7 @@ def exibirOpcoes():
     print(f"{Style.BRIGHT}{Fore.YELLOW}3 - Ver Inventário")
     print(f"{Style.BRIGHT}{Fore.YELLOW}4 - Ver Status do Jogador")
     print(f"{Style.BRIGHT}{Fore.YELLOW}5 - Ver Itens no Chão")
-    print(f"{Style.BRIGHT}{Fore.YELLOW}6 - Executar Limpeza do Sistema")
-    print(f"{Style.BRIGHT}{Fore.RED}7 - Voltar ao Menu Principal")
+    print(f"{Style.BRIGHT}{Fore.RED}6 - Voltar ao Menu Principal")
 
     print("\n\n\n\n" + f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}Digite o número da opção desejada:")
     escolha = input(f"{Style.BRIGHT}{Fore.MAGENTA}>> ")
@@ -254,10 +233,6 @@ def ver_status_jogador(nickname):
         print(f"\n{Style.BRIGHT}{Fore.LIGHTCYAN_EX}EQUIPAMENTOS:")
         print(f"{Fore.LIGHTBLUE_EX}  Arma Equipada: {Fore.YELLOW}{equipamentos['arma_nome']}")
         print(f"{Fore.LIGHTBLUE_EX}  Armadura Equipada: {Fore.YELLOW}{equipamentos['armadura_nome']}")
-    
-    print(f"\n{Style.BRIGHT}{Fore.LIGHTCYAN_EX}TIMESTAMPS:")
-    print(f"{Fore.LIGHTBLUE_EX}  Criado em: {Fore.YELLOW}{dadosJogador[8]}")
-    print(f"{Fore.LIGHTBLUE_EX}  Última atualização: {Fore.YELLOW}{dadosJogador[9]}")
     
     print(f"{Fore.LIGHTBLACK_EX}\nPressione Enter para voltar...")
     input()
@@ -444,8 +419,6 @@ def iniciar_jogo(nickname):
             elif int(escolha) == 5:
                 ver_itens_no_chao(nickname)
             elif int(escolha) == 6:
-                executar_limpeza_sistema(nickname)
-            elif int(escolha) == 7:
                 if sairDoJogo():
                     break
             else:

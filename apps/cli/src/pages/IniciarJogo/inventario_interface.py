@@ -142,7 +142,6 @@ def exibir_inventario_completo(nickname):
             print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}{contador_item:2d}. {Fore.YELLOW}{nome}")
             print(f"     {Fore.LIGHTBLUE_EX}Quantidade: {Fore.WHITE}{quantidade}")
             print(f"     {Fore.LIGHTBLUE_EX}Tipo: {Fore.WHITE}{tipo_item or 'N/A'}")
-            print(f"     {Fore.LIGHTBLUE_EX}Valor Base: {Fore.WHITE}{preco} ouros")
             if descricao:
                 desc_limitada = descricao[:60] + "..." if len(descricao) > 60 else descricao
                 print(f"     {Fore.LIGHTBLACK_EX}{desc_limitada}")
@@ -337,7 +336,6 @@ def menu_item_individual(nickname, item_info):
         print(f"{Fore.LIGHTCYAN_EX}Quantidade: {Fore.YELLOW}{quantidade}")
         print(f"{Fore.LIGHTCYAN_EX}Tipo: {Fore.YELLOW}{tipo_item or 'N/A'}")
         print(f"{Fore.LIGHTCYAN_EX}Local: {Fore.YELLOW}{tipo_inventario}")
-        print(f"{Fore.LIGHTCYAN_EX}Valor Base: {Fore.YELLOW}{preco} ouros")
         if descricao:
             print(f"{Fore.LIGHTCYAN_EX}Descrição: {Fore.WHITE}{descricao}")
         

@@ -33,7 +33,6 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Criar o trigger
-DROP TRIGGER IF EXISTS trigger_aplicar_juros_dia ON "mundo";
 CREATE TRIGGER trigger_aplicar_juros_dia
     AFTER UPDATE ON "mundo"
     FOR EACH ROW
