@@ -6,6 +6,7 @@ from pages.Estabelecimento.db_estabelecimento import (
     visualizar_itens_forja_por_jogador,
     forjar_item_por_jogador,
     criar_instancia_forja_por_jogador,
+    criar_instancia_forja_por_jogador,
     exibir_dialogo_saudacao,
     exibir_dialogo_catalogo,
     exibir_dialogo_fabricacao,
@@ -74,7 +75,7 @@ def menu_forja(jogador, seedMundo):
         limpar_terminal()
         cabecalho_forja(jogador)
         print("\n")
-        print(f"{Style.BRIGHT}{Fore.CYAN}O que você gostaria de fazer?".center(largura_terminal))
+        print(f"{Style.BRIGHT}{Fore.CYAN}Qual ação você gostaria de realizar?".center(largura_terminal))
         print("\n")
         print(f"{Fore.YELLOW}{Style.BRIGHT}1 - Ver itens disponíveis para fabricar")
         print(f"{Fore.YELLOW}{Style.BRIGHT}2 - Fabricar um item")
@@ -84,9 +85,9 @@ def menu_forja(jogador, seedMundo):
         escolha = input(f"{Style.BRIGHT}{Fore.MAGENTA}>>> ").strip()
         
         if escolha == "1":
-            ver_itens_disponiveis(jogador)
+            menu_categoria_itens(jogador, modo="ver")
         elif escolha == "2":
-            fabricar_item(jogador)
+            menu_categoria_itens(jogador, modo="fabricar")
         elif escolha == "3":
             limpar_terminal()
             cabecalho_forja(jogador)
@@ -101,9 +102,42 @@ def menu_forja(jogador, seedMundo):
             print(f"\n{Fore.RED}Opção inválida. Tente novamente.".center(largura_terminal))
             enter_continue()
 
-def ver_itens_disponiveis(jogador):
+def menu_categoria_itens(jogador, modo):
     """
-    Função para ver itens disponíveis para fabricar
+    Menu de escolha por categoria de item
+    """
+    categorias = ["Arco", "Bandana", "Botas", "Capacete", "Espada", "Peitoral"]
+    
+    while True:
+        limpar_terminal()
+        cabecalho_forja(jogador)
+        print("\n")
+        print(f"{Style.BRIGHT}{Fore.CYAN}Escolha uma categoria de item:".center(largura_terminal))
+        print("\n")
+        for idx, cat in enumerate(categorias, start=1):
+            print(f"{Fore.YELLOW}{Style.BRIGHT}{idx} - {cat}")
+        print(f"{Fore.RED}{Style.BRIGHT}0 - Voltar")
+        print("\n")
+        
+        escolha = input(f"{Style.BRIGHT}{Fore.MAGENTA}>>> ").strip()
+        
+        if escolha == "0":
+            break
+        elif escolha.isdigit() and 1 <= int(escolha) <= len(categorias):
+            categoria = categorias[int(escolha) - 1]
+            if modo == "ver":
+                ver_itens_disponiveis(jogador, categoria)
+            elif modo == "fabricar":
+                fabricar_item(jogador, categoria)
+            enter_continue()
+        else:
+            print(f"\n{Fore.RED}Opção inválida. Tente novamente.")
+            enter_continue()
+           
+
+def ver_itens_disponiveis(jogador, categoria):
+    """
+    Função para ver itens disponíveis para fabricar por categoria
     """
     limpar_terminal()
     cabecalho_forja(jogador)
@@ -112,10 +146,12 @@ def ver_itens_disponiveis(jogador):
     exibir_dialogo_catalogo("Andrei", jogador)
     enter_continue()
     
-    print(f"{Style.BRIGHT}{Fore.YELLOW}╔════════════ ITENS DISPONÍVEIS PARA FABRICAR ════════════╗".center(largura_terminal))
+    print(f"{Style.BRIGHT}{Fore.YELLOW}╔════════════ ITENS DISPONÍVEIS PARA FABRICAR ({categoria}) ════════════╗".center(largura_terminal))
     print("\n")
     
-    itens = visualizar_itens_forja_por_jogador(jogador)
+    # Buscar itens filtrados pela categoria
+    itens = visualizar_itens_forja_por_jogador(jogador, categoria)
+    
     if itens:
         print(f"{Fore.WHITE}{'N. Item':<5} {'Nome':<25} {'Preço':<10}".center(largura_terminal))
         print(f"{Fore.LIGHTBLACK_EX}{'═'*100}".center(largura_terminal))
@@ -127,22 +163,22 @@ def ver_itens_disponiveis(jogador):
     else:
         print(f"{Fore.RED}Nenhum item disponível para fabricar!")
     
-    print("\n")
-    enter_continue()
+    print(f"\n{Fore.WHITE}Digite 0 para voltar ao menu anterior.")
+    input(f"{Style.BRIGHT}{Fore.MAGENTA}>>> ")
 
-def fabricar_item(jogador):
+def fabricar_item(jogador, categoria):
     """
-    Função para fabricar um item
+    Função para fabricar um item de uma categoria específica
     """
     limpar_terminal()
     cabecalho_forja(jogador)
-    print(f"\n{Style.BRIGHT}{Fore.CYAN}=== FABRICAR ITEM ===".center(largura_terminal))
+    print(f"\n{Style.BRIGHT}{Fore.CYAN}=== FABRICAR ITEM ({categoria}) ===".center(largura_terminal))
     print("\n")
     
-    # Mostrar itens disponíveis
-    itens = visualizar_itens_forja_por_jogador(jogador)
+    # Mostrar itens disponíveis da categoria escolhida
+    itens = visualizar_itens_forja_por_jogador(jogador, categoria)
     if not itens:
-        print(f"{Fore.RED}Nenhum item disponível para fabricar!")
+        print(f"{Fore.RED}Nenhum item disponível para fabricar na categoria {categoria.lower()}!")
         enter_continue()
         return
     
@@ -152,9 +188,13 @@ def fabricar_item(jogador):
         id_item, nome, preco_base, descricao = item
         print(f"{Fore.WHITE}{id_item:<5} {nome:<25} {preco_base:<10}")
     
-    print(f"\n{Fore.WHITE}Digite o Número do item que deseja fabricar:")
+    print(f"\n{Fore.WHITE}Digite o ID do item que deseja fabricar (ou 0 para retornar):")
     try:
         item_id = int(input(f"{Style.BRIGHT}{Fore.MAGENTA}>>> "))
+        
+        if item_id == 0:
+            print(f"{Fore.YELLOW}Voltando ao menu anterior...")
+            return  # volta sem fabricar nada
         
         # Verificar se o item existe
         item_encontrado = None
@@ -200,4 +240,5 @@ def fabricar_item(jogador):
         print(f"{Fore.RED}Erro inesperado: {e}")
     
     print("\n")
-    enter_continue() 
+    enter_continue()
+

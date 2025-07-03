@@ -72,9 +72,9 @@ def criar_instancia_forja_por_jogador(nickname, nome_local, id_npc):
             connection.close()
         return False
 
-def visualizar_itens_forja_por_jogador(nickname):
+def visualizar_itens_forja_por_jogador(nickname, categoria):
     """
-    Visualiza itens disponíveis para fabricar na forja
+    Visualiza itens disponíveis para fabricar na forja, filtrando por nome contendo a categoria
     """
     connection = connect_to_db()
     if connection is None:
@@ -87,8 +87,10 @@ def visualizar_itens_forja_por_jogador(nickname):
             SELECT i."idItem", i."nome", i."precoBase", i."descricao"
             FROM "item" i
             JOIN "receita" r ON i."idItem" = r."idItemFabricado"
+            WHERE i."nome" ILIKE %s
             ORDER BY i."nome"
-        """)
+        """, (f'%{categoria}%',))
+        
         resultado = cursor.fetchall()
         cursor.close()
         connection.close()
