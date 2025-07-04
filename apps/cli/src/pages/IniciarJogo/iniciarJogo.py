@@ -1,6 +1,7 @@
 import time
 import pyfiglet
 from pages.IniciarJogo.db_iniciarJogo import *
+from pages.IniciarJogo.inventario_interface import ver_inventario
 from pages.Estabelecimento import menu_chapeu_de_madeira, menu_forja, menu_banco
 from utils.limparTerminal import limpar_terminal
 from pages.Masmorra.masmorra import mainMasmorra
@@ -36,6 +37,7 @@ def print_in_centered(text):
 def cabecalho(nickname):
         
     dadosJogador = buscar_dadosJogador(nickname)
+    dadosMundo = buscarInfoMundo(nickname)
 
     print(f"{Fore.LIGHTGREEN_EX}{Style.BRIGHT}╔════════════════════[ MOONLIGHTER GAME ]════════════════════╗".center(largura_terminal))
     print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}{dadosJogador[0]}".center(largura_terminal))
@@ -43,7 +45,7 @@ def cabecalho(nickname):
     print("\n")
     if dadosJogador[4] == -1:
         print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}{dadosJogador[6]}".center(largura_terminal))
-        print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}DIA: XX | PERÍODO: XX".center(largura_terminal))
+        print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}DIA: {dadosMundo[3]} | PERÍODO: {dadosMundo[2]}".center(largura_terminal))
     else:
         print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}MASMORRA: {dadosJogador[6]}".center(largura_terminal))
         print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}SALA [X][Y]: [{dadosJogador[3]}][{dadosJogador[4]}]".center(largura_terminal))
@@ -122,6 +124,8 @@ def locomocao(nickname):
             print('\033[?25h', end='', flush=True)
             continue
 
+
+
 def exibirOpcoes():
 
     print(f"{Style.BRIGHT}{Fore.YELLOW}Ações disponíveis:".center(largura_terminal))
@@ -130,7 +134,8 @@ def exibirOpcoes():
     print(f"{Style.BRIGHT}{Fore.YELLOW}2 - Mover-se para outro local")
     print(f"{Style.BRIGHT}{Fore.YELLOW}3 - Ver Inventário")
     print(f"{Style.BRIGHT}{Fore.YELLOW}4 - Ver Status do Jogador")
-    print(f"{Style.BRIGHT}{Fore.RED}5 - Voltar ao Menu Principal")
+    print(f"{Style.BRIGHT}{Fore.YELLOW}5 - Ver Itens no Chão")
+    print(f"{Style.BRIGHT}{Fore.RED}6 - Voltar ao Menu Principal")
 
     print("\n\n\n\n" + f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}Digite o número da opção desejada:")
     escolha = input(f"{Style.BRIGHT}{Fore.MAGENTA}>> ")
@@ -175,6 +180,221 @@ def exibirMapa():
     else:
         print("Sistema operacional não suportado para abrir nova janela de terminal.")
 
+def ver_status_jogador(nickname):
+    """
+    Exibe informações detalhadas do status do jogador
+    """
+    limpar_terminal()
+    print(logo)
+    
+    dadosJogador = buscar_dadosJogador(nickname)
+    if not dadosJogador:
+        print(f"{Fore.RED}Erro ao buscar dados do jogador.")
+        input(f"{Fore.LIGHTBLACK_EX}\nPressione Enter para continuar...")
+        return
+    
+    # Buscar equipamentos
+    equipamentos = obter_equipamentos_jogador(nickname)
+    
+    # Buscar informações do mundo
+    connection = connect_to_db()
+    if connection:
+        cursor = connection.cursor()
+        cursor.execute("""
+            SELECT "seedMundo", "periodo", "dia", "nivelMundo"
+            FROM "mundo" 
+            WHERE "nickname" = %s
+        """, (nickname,))
+        mundo_info = cursor.fetchone()
+        cursor.close()
+        connection.close()
+    else:
+        mundo_info = None
+    
+    print(f"{Style.BRIGHT}{Fore.YELLOW}{'═' * largura_terminal}")
+    print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}STATUS DO JOGADOR: {nickname.upper()}".center(largura_terminal))
+    print(f"{Style.BRIGHT}{Fore.YELLOW}{'═' * largura_terminal}")
+    
+    print(f"\n{Style.BRIGHT}{Fore.LIGHTCYAN_EX}INFORMAÇÕES BÁSICAS:")
+    print(f"{Fore.LIGHTBLUE_EX}  Nome: {Fore.YELLOW}{dadosJogador[0]}")
+    print(f"{Fore.LIGHTBLUE_EX}  HP Atual: {Fore.YELLOW}{dadosJogador[2]}")
+    print(f"{Fore.LIGHTBLUE_EX}  HP Máximo: {Fore.YELLOW}{dadosJogador[1]}")
+    print(f"{Fore.LIGHTBLUE_EX}  Ouro: {Fore.YELLOW}{dadosJogador[3]}")
+    print(f"{Fore.LIGHTBLUE_EX}  Localização: {Fore.YELLOW}{dadosJogador[6]}")
+    
+    if mundo_info:
+        print(f"\n{Style.BRIGHT}{Fore.LIGHTCYAN_EX}INFORMAÇÕES DO MUNDO:")
+        print(f"{Fore.LIGHTBLUE_EX}  Seed do Mundo: {Fore.YELLOW}{mundo_info[0]}")
+        print(f"{Fore.LIGHTBLUE_EX}  Período: {Fore.YELLOW}{mundo_info[1]}")
+        print(f"{Fore.LIGHTBLUE_EX}  Dia: {Fore.YELLOW}{mundo_info[2]}")
+        print(f"{Fore.LIGHTBLUE_EX}  Nível do Mundo: {Fore.YELLOW}{mundo_info[3]}")
+    
+    if equipamentos:
+        print(f"\n{Style.BRIGHT}{Fore.LIGHTCYAN_EX}EQUIPAMENTOS:")
+        print(f"{Fore.LIGHTBLUE_EX}  Arma Equipada: {Fore.YELLOW}{equipamentos['arma_nome']}")
+        print(f"{Fore.LIGHTBLUE_EX}  Armadura Equipada: {Fore.YELLOW}{equipamentos['armadura_nome']}")
+    
+    print(f"{Fore.LIGHTBLACK_EX}\nPressione Enter para voltar...")
+    input()
+
+def obter_equipamentos_jogador(nickname):
+    """
+    Função helper para obter equipamentos do jogador
+    """
+    connection = connect_to_db()
+    if connection is None:
+        return None
+
+    cursor = connection.cursor()
+    cursor.execute("""
+        SELECT 
+            J."armaEquipada",
+            J."armaduraEquipada",
+            IA."nome" AS "nome_arma",
+            IAR."nome" AS "nome_armadura"
+        FROM "jogador" J
+        LEFT JOIN "item" IA ON J."armaEquipada" = IA."idItem"
+        LEFT JOIN "item" IAR ON J."armaduraEquipada" = IAR."idItem"
+        WHERE J."nickname" = %s;
+    """, (nickname,))
+
+    resultado = cursor.fetchone()
+    cursor.close()
+    connection.close()
+    
+    if resultado:
+        return {
+            'arma_id': resultado[0],
+            'armadura_id': resultado[1],
+            'arma_nome': resultado[2] or "Nenhuma",
+            'armadura_nome': resultado[3] or "Nenhuma"
+        }
+    return None
+
+def ver_itens_no_chao(nickname):
+    """
+    Exibe itens no chão e permite coletar
+    """
+    while True:
+        limpar_terminal()
+        print(logo)
+        
+        print(f"{Style.BRIGHT}{Fore.YELLOW}{'═' * largura_terminal}")
+        print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}ITENS NO CHÃO".center(largura_terminal))
+        print(f"{Style.BRIGHT}{Fore.YELLOW}{'═' * largura_terminal}")
+        
+        itens_chao = listar_itens_no_chao(nickname)
+        
+        if not itens_chao:
+            print(f"\n{Fore.YELLOW}Não há itens no chão neste local.")
+            print(f"{Fore.LIGHTBLACK_EX}\nPressione Enter para voltar...")
+            input()
+            return
+        
+        print(f"\n{Style.BRIGHT}{Fore.LIGHTCYAN_EX}ITENS DISPONÍVEIS:")
+        print(f"{Style.BRIGHT}{Fore.YELLOW}{'─' * 60}")
+        
+        for i, item in enumerate(itens_chao, start=1):
+            id_item_chao, id_item, nome, quantidade, pos_x, pos_y, descricao = item
+            print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}{i:2d}. {Fore.YELLOW}{nome}")
+            print(f"     {Fore.LIGHTBLUE_EX}Quantidade: {Fore.WHITE}{quantidade}")
+            print(f"     {Fore.LIGHTBLUE_EX}Posição: {Fore.WHITE}({pos_x}, {pos_y})")
+            if descricao:
+                desc_limitada = descricao[:50] + "..." if len(descricao) > 50 else descricao
+                print(f"     {Fore.LIGHTBLACK_EX}{desc_limitada}")
+            print()
+        
+        print(f"\n{Style.BRIGHT}{Fore.YELLOW}OPÇÕES:")
+        print(f"{Fore.LIGHTGREEN_EX}• Digite o número do item para coletar")
+        print(f"{Fore.LIGHTGREEN_EX}• Digite '0' para voltar")
+        
+        escolha = input(f"\n{Style.BRIGHT}{Fore.MAGENTA}>> ").strip()
+        
+        if escolha == '0':
+            return
+        
+        try:
+            num_item = int(escolha)
+            if 1 <= num_item <= len(itens_chao):
+                item_selecionado = itens_chao[num_item - 1]
+                id_item_chao, id_item, nome, quantidade, pos_x, pos_y, descricao = item_selecionado
+                
+                print(f"\n{Style.BRIGHT}{Fore.YELLOW}Coletar: {Fore.LIGHTGREEN_EX}{quantidade}x {nome}?")
+                print(f"{Fore.WHITE}Digite 's' para confirmar ou 'n' para cancelar.")
+                confirmacao = input(f"{Style.BRIGHT}{Fore.MAGENTA}>>> ").strip().lower()
+                
+                if confirmacao == 's':
+                    if coletar_item_do_chao(nickname, id_item_chao):
+                        print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}✓ {quantidade}x {nome} coletado com sucesso!")
+                        time.sleep(2)
+                    else:
+                        print(f"{Fore.RED}Erro ao coletar item! Verifique se há espaço no inventário.")
+                        time.sleep(2)
+                else:
+                    print(f"{Fore.YELLOW}Ação cancelada.")
+                    time.sleep(1)
+            else:
+                print(f"{Fore.RED}Número de item inválido!")
+                time.sleep(1)
+        except ValueError:
+            print(f"{Fore.RED}Por favor, digite um número válido!")
+            time.sleep(1)
+
+def listar_itens_no_chao(nickname):
+    """
+    Lista os itens disponíveis no chão para o jogador
+    """
+    connection = connect_to_db()
+    if connection is None:
+        return []
+
+    cursor = connection.cursor()
+    
+    # Buscar informações do jogador para obter seedMundo e nomeLocal
+    cursor.execute("""
+        SELECT j."nomeLocal", m."seedMundo"
+        FROM "jogador" j
+        JOIN "mundo" m ON j."nickname" = m."nickname"
+        WHERE j."nickname" = %s
+    """, (nickname,))
+    
+    jogador_info = cursor.fetchone()
+    if not jogador_info:
+        cursor.close()
+        connection.close()
+        return []
+    
+    nome_local, seed_mundo = jogador_info
+    
+    # Buscar itens no chão na localização atual
+    cursor.execute("""
+        SELECT 
+            ic."idItemChao",
+            ic."idItem",
+            i."nome",
+            ic."quantidade",
+            ic."posicaoX",
+            ic."posicaoY",
+            i."descricao"
+        FROM "item_chao" ic
+        JOIN "item" i ON ic."idItem" = i."idItem"
+        WHERE ic."seedMundo" = %s AND ic."nomeLocal" = %s
+        ORDER BY ic."tempoDropado" DESC
+    """, (seed_mundo, nome_local))
+
+    resultados = cursor.fetchall()
+    cursor.close()
+    connection.close()
+    
+    return resultados
+
+def coletar_item_do_chao(nickname, id_item_chao):
+    """
+    Coleta um item do chão e adiciona ao inventário do jogador
+    """
+    from pages.IniciarJogo.db_iniciarJogo import coletar_item_do_chao as coletar_item_db
+    return coletar_item_db(nickname, id_item_chao)
+
 #funcao principal
 def iniciar_jogo(nickname):
     init(autoreset=True) #terminal colorido
@@ -192,7 +412,13 @@ def iniciar_jogo(nickname):
                 exibirMapa()
             elif int(escolha) == 2:
                 locomocao(nickname)
+            elif int(escolha) == 3:
+                ver_inventario(nickname)
+            elif int(escolha) == 4:
+                ver_status_jogador(nickname)
             elif int(escolha) == 5:
+                ver_itens_no_chao(nickname)
+            elif int(escolha) == 6:
                 if sairDoJogo():
                     break
             else:

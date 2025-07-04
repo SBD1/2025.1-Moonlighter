@@ -1,5 +1,6 @@
 from setup.database import connect_to_db
 from pages.IniciarJogo.iniciarJogo import iniciar_jogo
+from pages.IniciarJogo.inventario_funcoes import inicializar_dados_inventario, criar_inventarios_jogador
 from utils.limparTerminal import limpar_terminal
 from utils.enterContinue import enter_continue
 from utils.geradorSeed import gerarSeed
@@ -158,12 +159,26 @@ def novoJogador():
                 connection = connect_to_db()
                 if connection is None:
                     print(Fore.RED + "Erro ao conectar ao banco de dados.")
+                    print('\033[?25h', end='', flush=True)
+                    time.sleep(3)
                     return
                 
+                # Inicializar dados básicos do sistema se necessário
+                print(f"{Style.BRIGHT}{Fore.YELLOW}INICIALIZANDO SISTEMA...".center(largura_terminal))
+                if not inicializar_dados_inventario():
+                    print(Fore.RED + "Erro ao inicializar dados do inventário.")
+                    print('\033[?25h', end='', flush=True)
+                    time.sleep(3)
+                    return
+                
+                print(f"{Style.BRIGHT}{Fore.YELLOW}CRIANDO MUNDO...".center(largura_terminal))
                 seed = gerarSeed()
                 cursor = connection.cursor()
-                cursor.execute("INSERT INTO jogador VALUES (%s, 100, 100, 100, -1, -1, 'Vila Rynoka', NULL);", (nickname,))
-                cursor.execute("INSERT INTO inst_inventario VALUES (1, %s, 0), (2, %s, 0), (3, %s, 0), (4, %s, 0), (5, %s, 0), (6, %s, 0), (7, %s, 0);", tuple([nickname]*7))
+                
+                # Criar jogador
+                cursor.execute("INSERT INTO jogador VALUES (%s, 100, 100, 100, -1, -1, 'Vila Rynoka', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, NULL);", (nickname,))
+                
+                # Criar mundo e loja
                 cursor.execute("INSERT INTO mundo VALUES (%s, %s, 'Manhã', 1, 1);", (seed, nickname,))
                 cursor.execute("INSERT INTO \"loja_jogador\" VALUES (%s, 'Moonlighter', 1, 10, 0)", (seed,))
                 
@@ -186,28 +201,72 @@ def novoJogador():
                 cursor.close()
                 connection.close()
                 
+                # Criar inventários do jogador
+                print(f"{Style.BRIGHT}{Fore.YELLOW}CRIANDO INVENTÁRIOS...".center(largura_terminal))
+                if not criar_inventarios_jogador(nickname):
+                    print(Fore.RED + "Erro ao criar inventários do jogador.")
+                    print('\033[?25h', end='', flush=True)
+                    time.sleep(3)
+                    return
+                
+                # Adicionar itens iniciais
+                print(f"{Style.BRIGHT}{Fore.YELLOW}ADICIONANDO ITENS INICIAIS...".center(largura_terminal))
+                connection = connect_to_db()
+                cursor = connection.cursor()
+                
+                # Buscar ID do inventário principal (Mochila Principal)
+                cursor.execute("""
+                    SELECT inv."idInventario" 
+                    FROM "inventario" inv 
+                    WHERE inv."nome" = 'Mochila Principal'
+                """)
+                inventario_principal = cursor.fetchone()
+                
+                if inventario_principal:
+                    id_inventario_principal = inventario_principal[0]
+                    
+                    # Buscar IDs dos itens iniciais
+                    cursor.execute("""
+                        SELECT "idItem", "nome" FROM "item" 
+                        WHERE "nome" IN ('Espada de Madeira', 'Armadura de Couro', 'Poção de Vida Pequena')
+                    """)
+                    itens_iniciais = cursor.fetchall()
+                    
+                    # Adicionar cada item inicial
+                    for id_item, nome_item in itens_iniciais:
+                        quantidade = 3 if nome_item == 'Poção de Vida Pequena' else 1
+                        
+                        cursor.execute("""
+                            INSERT INTO "inst_item" ("idItem", "quantidade", "nickname", "idInventario")
+                            VALUES (%s, %s, %s, %s)
+                        """, (id_item, quantidade, nickname, id_inventario_principal))
+                
+                connection.commit()
+                cursor.close()
+                connection.close()
+                
+            except Exception as e:
                 limpar_terminal()
                 print("\n\n\n\n")
                 print(logo)
                 print("\n\n\n")
-                print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}JOGADOR CRIADO COM SUCESSO!".center(largura_terminal))
-                pygame.mixer.music.fadeout(7000)
-                time.sleep(2)
-                limpar_terminal()
-                print("\n\n\n\n\n\n\n\n\n")
-                print(logo)
+                print(f"Erro ao criar jogador: {e}\n")
+                print('\033[?25h', end='', flush=True)
                 time.sleep(5)
-                print('\033[?25h', end='', flush=True)
-                return exibirHistoria(buscarJogador(nickname))
-            except:
-                limpar_terminal()
-                print("\n\n\n\n")
-                print(logo)
-                print("\n\n\n")
-                print("Erro ao se conectar com o banco de dados\n")
-                time.sleep(2)
-                print('\033[?25h', end='', flush=True)
-                return novoJogador()
+                return
+            
+            limpar_terminal()
+            print(logo)
+            print("\n\n\n")
+            print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}JOGADOR CRIADO COM SUCESSO!".center(largura_terminal))
+            pygame.mixer.music.fadeout(7000)
+            time.sleep(2)
+            limpar_terminal()
+            print("\n\n\n\n\n\n\n\n\n\n")
+            print(logo)
+            time.sleep(5)
+            print('\033[?25h', end='', flush=True)
+            return exibirHistoria(buscarJogador(nickname))
         elif confirmacao == 'n' or confirmacao == 'N':
             return novoJogador()
         else:
@@ -301,8 +360,12 @@ def continuar_jogo():
                 time.sleep(2)
                 limpar_terminal()
     else:
-        print(Fore.RED + "Opção inválida. Tente novamente.")
-        enter_continue()
+        limpar_terminal()
+        print(logo)
+        print("\n\n\n")
+        print(f"{Style.BRIGHT}{Fore.RED}Opção inválida. Tente novamente.".center(largura_terminal))
+        time.sleep(2)
+        return continuar_jogo()
 
 
 def musicTheme():
