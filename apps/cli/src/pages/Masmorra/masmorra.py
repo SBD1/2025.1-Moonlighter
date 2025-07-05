@@ -19,6 +19,7 @@ else:
         getch = None
 
 # definição da largura da janela do terminal:
+musica_atual = None
 largura_terminal = shutil.get_terminal_size().columns
 
 # definição da Logo do Jogo centralizada:
@@ -27,25 +28,30 @@ centralizacao = "\n".join([linha.center(largura_terminal) for linha in ascii.spl
 logo = f"{Style.BRIGHT + Fore.LIGHTGREEN_EX}\n\n{centralizacao}\n\n\n"
 
 # definicoes e funcoes iniciais
-def musicMasmorraGolem(): #musica da masmorra
-    pygame.mixer.init() 
-    pygame.mixer.music.load("apps/cli/assets/musics/MoonlighterOST_07_MasmorraGolem.mp3")
-    pygame.mixer.music.play(-1, fade_ms=3000)
-
-def musicMasmorraEntrance():
+def trocar_musica(caminho_musica, fadeout_ms=1000, fadein_ms=3000):
+    global musica_atual
     pygame.mixer.init()
-    pygame.mixer.music.load("apps/cli/assets/musics/MoonlighterOST_06_SentientStone.mp3")
-    pygame.mixer.music.play(-1, fade_ms=3000)
+    pygame.mixer.music.fadeout(fadeout_ms)
+    time.sleep(fadeout_ms / 1000)  
+    pygame.mixer.music.load(caminho_musica)
+    pygame.mixer.music.play(-1, fade_ms=fadein_ms)
+
+    musica_atual = caminho_musica
 
 def musicCity(): #musica da cidade
-    pygame.mixer.init() 
-    pygame.mixer.music.load("apps/cli/assets/musics/MoonlighterOST_02_Cidade.mp3")
-    pygame.mixer.music.play(-1, fade_ms=3000)
+    trocar_musica("apps/cli/assets/musics/MoonlighterOST_02_Cidade.mp3")
 
-def musicGolemKing(): #musica da chefe da masmorra
-    pygame.mixer.init() 
-    pygame.mixer.music.load("apps/cli/assets/musics/MoonlighterOST_08_GolemKing.mp3")
-    pygame.mixer.music.play(-1, fade_ms=3000)
+def musicMasmorraEntrance():
+    trocar_musica("apps/cli/assets/musics/MoonlighterOST_06_SentientStone.mp3")
+
+def musicbattle():
+    trocar_musica("apps/cli/assets/musics/MoonlighterOST_22_Battle.mp3")
+
+def musicMasmorraGolem(): #musica da masmorra do golem
+    trocar_musica("apps/cli/assets/musics/MoonlighterOST_07_MasmorraGolem.mp3")
+
+def musicGolemKing(): #musica da chefe da masmorra do golem
+    trocar_musica("apps/cli/assets/musics/MoonlighterOST_08_GolemKing.mp3")
 
 def limpar_terminal():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -108,11 +114,22 @@ def mostrar_minimapa(matriz, pos_jogador=(7, 7)):
                 linha += f"{Fore.LIGHTBLACK_EX} ■ {Style.RESET_ALL}"
         print(linha)
 
-def sortear_monstro(seed_sala, lista_monstro):
-    random.seed(seed_sala)
-    return random.choice(lista_monstro)
+def sortear_monstro(seed_sala, lista_monstros):
+    digitos = ''.join(filter(str.isdigit, seed_sala))
+    if not digitos:
+        digitos = '1'
 
-def verificar_inimigo(seed_sala):
+    seed = int(digitos)
+    random.seed(seed)
+
+    monstro_id, monstro_nome = random.choice(lista_monstros)
+    return {"id": monstro_id, "nome": monstro_nome}
+
+
+def verificar_inimigo(seed_sala, sala):
+    if sala["visitado"]:
+        return False #se a sala ja foi visitada, nao ha inimigos
+
     digitos = ''.join(filter(str.isdigit, seed_sala))
 
     if not digitos:
@@ -123,6 +140,54 @@ def verificar_inimigo(seed_sala):
 
     return num < 80  #chance de inimigo
 
+def menu_batalha(monstro):
+    global musica_atual
+    musica_atual_anterior = musica_atual
+    musicbattle()
+
+    while True:
+        limpar_terminal()
+
+        print(f"{Style.BRIGHT}{Fore.YELLOW}════════════════════════════════════════════════════".center(largura_terminal))
+        print(f"{Style.BRIGHT}{Fore.YELLOW}{dadosMasmorra[0]}".center(largura_terminal))
+        print(f"{Style.BRIGHT}{Fore.YELLOW}════════════════════════════════════════════════════".center(largura_terminal))
+        print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}Seed: {seedMasmorra}".center(largura_terminal))
+        print("\n")
+
+        print(f"{Fore.RED + Style.BRIGHT}Você encontrou um {monstro}!")
+        print(f"\n{Fore.LIGHTYELLOW_EX}O que deseja fazer?\n")
+        print(f"{Fore.GREEN}1- Batalhar")
+        print(f"{Fore.CYAN}2- Usar item")
+        print(f"{Fore.MAGENTA}3- Fugir")
+
+        escolha = input(f"{Fore.LIGHTWHITE_EX}\n>>> ").strip()
+
+        #comandos da batalha
+        if escolha == '1':
+            print(Fore.GREEN + "Você se prepara para a batalha!")
+            trocar_musica(musica_atual_anterior)
+            return "batalhar"
+        
+        elif escolha == '2':
+            print(Fore.CYAN + "Você abre sua mochila para usar um item.")
+            return "usar_item"
+        
+        elif escolha == '3':
+            print(Fore.MAGENTA + "Você joga um dado de 20 lados para fugir da batalha...")
+            time.sleep(2)
+            chance_fuga = random.randint(1, 20)
+            if (chance_fuga < 18):
+                print(Fore.MAGENTA + f"Dado: {chance_fuga} - Você não conseguiu fugir.")
+                time.sleep(1)
+                
+            else:
+                print(Fore.MAGENTA + f"Dado {chance_fuga} - Você fugiu com segurança")
+                time.sleep(1)
+                trocar_musica(musica_atual_anterior)
+                return "fugir"
+        else:
+            print(Fore.RED + "Opção inválida. Escolha 1, 2 ou 3.")
+            time.sleep(1)
 
 
 def explorar_masmorra(matriz, pos_inicial=(7, 7), nickname=None):
@@ -168,8 +233,8 @@ def explorar_masmorra(matriz, pos_inicial=(7, 7), nickname=None):
                 return input("\nDigite uma direção ou 'q' para sair: ").lower()
 
     pos = pos_inicial
-    matriz[pos]["visitado"] = True
     matriz[pos]["descoberto"] = True
+    matriz[pos]["visitado"] = True
     revelar_salvas_conectadas(matriz, pos)
     lista_monstros = obter_monstros()
 
@@ -212,18 +277,32 @@ def explorar_masmorra(matriz, pos_inicial=(7, 7), nickname=None):
             nova_pos = opcoes[comando]
             if nova_pos in matriz:
                 pos = nova_pos
-                matriz[pos]["visitado"] = True
+                sala_atual = matriz[pos]
                 revelar_salvas_conectadas(matriz, pos)
                 atualiza_posicao_jogador(nickname, pos[0], pos[1])
 
                 #verifica se tem inimigo na sala
                 seed_sala = matriz[pos].get("seedSala")
-                if verificar_inimigo(seed_sala):
+
+                if verificar_inimigo(seed_sala, sala_atual):
                     monstro = sortear_monstro(seed_sala, lista_monstros)
-                    print(Fore.RED + f"Um {monstro[1]} surgiu na sala {pos}!")
+                    acao = menu_batalha(monstro['nome'])
+
+                    if acao == "batalhar":
+                        matriz[pos]["visitado"] = True
+                        trocar_musica(musica_atual)
+                        
+                    elif acao == "usar_item":
+                        pass
+                    elif acao == "fugir":
+                        trocar_musica(musica_atual)
+
+                    time.sleep(2)
+
                 else:
                     print(Fore.GREEN + "A sala esta vazia...")
-                time.sleep(2)
+                    matriz[pos]["visitado"] = True
+                    time.sleep(1)
 
             else:
                 print("Movimento inválido. Nenhuma sala nessa direção.")
