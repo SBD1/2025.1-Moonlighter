@@ -1,3 +1,4 @@
+import random
 from colorama import Fore, Back, Style, init
 from pages.Masmorra.db_masmorra import *
 import pygame
@@ -107,6 +108,10 @@ def mostrar_minimapa(matriz, pos_jogador=(7, 7)):
                 linha += f"{Fore.LIGHTBLACK_EX} ■ {Style.RESET_ALL}"
         print(linha)
 
+def sortear_monstro(seed_sala, lista_monstro):
+    random.seed(seed_sala)
+    return random.choice(lista_monstro)
+
 def verificar_inimigo(seed_sala):
     digitos = ''.join(filter(str.isdigit, seed_sala))
 
@@ -116,7 +121,7 @@ def verificar_inimigo(seed_sala):
     hash_val = hashlib.sha256(seed_sala.encode()).hexdigest()
     num = int(hash_val[:8], 16) % 100 
 
-    return num < 30  #chance de inimigo
+    return num < 80  #chance de inimigo
 
 
 
@@ -166,6 +171,7 @@ def explorar_masmorra(matriz, pos_inicial=(7, 7), nickname=None):
     matriz[pos]["visitado"] = True
     matriz[pos]["descoberto"] = True
     revelar_salvas_conectadas(matriz, pos)
+    lista_monstros = obter_monstros()
 
     while True:
         limpar_terminal()
@@ -213,7 +219,8 @@ def explorar_masmorra(matriz, pos_inicial=(7, 7), nickname=None):
                 #verifica se tem inimigo na sala
                 seed_sala = matriz[pos].get("seedSala")
                 if verificar_inimigo(seed_sala):
-                    print(Fore.RED + f"Um inimigo surgiu na sala {pos}")
+                    monstro = sortear_monstro(seed_sala, lista_monstros)
+                    print(Fore.RED + f"Um {monstro[1]} surgiu na sala {pos}!")
                 else:
                     print(Fore.GREEN + "A sala esta vazia...")
                 time.sleep(2)

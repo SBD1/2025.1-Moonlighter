@@ -177,3 +177,18 @@ def atualiza_posicao_jogador(nickname, x, y):
     cursor.close()
     connection.close()
     return True
+
+def obter_monstros():
+    connection = connect_to_db()
+    if connection is None:
+        print("Erro ao conectar ao banco de dados.")
+        return False
+    
+    cursor = connection.cursor()
+    cursor.execute('''
+            SELECT "idMonstro", "nome" FROM "monstro"
+                   ''')
+    monstros = cursor.fetchall()
+    cursor.close()
+    connection.close()
+    return monstros
