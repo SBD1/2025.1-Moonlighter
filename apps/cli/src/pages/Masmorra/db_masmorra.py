@@ -115,7 +115,7 @@ def salvarMasmorra(dadosMundo, dadosMasmorra, seedMasmorra, matriz):
             return
         else:
             seedSalasPercorrida.append(matriz[x][y]["seed"])
-            if x == 7 and y == 7:
+            if x == 12 and y == 12:
                 tipoSala = "Entrada"
             elif matriz[x][y]["boss"]:
                 tipoSala = "Boss"
@@ -135,7 +135,7 @@ def salvarMasmorra(dadosMundo, dadosMasmorra, seedMasmorra, matriz):
             recursaoSalvarSalas(matriz, x+1, y)
             recursaoSalvarSalas(matriz, x-1, y)
 
-    recursaoSalvarSalas(matriz, 7, 7)
+    recursaoSalvarSalas(matriz, 12, 12)
 
     cursor.close()
     connection.close()
@@ -149,7 +149,7 @@ def carregar_salas(seed_masmorra):
 
     cursor = connection.cursor()
     cursor.execute('''
-        SELECT "posicaoX", "posicaoY", "conexão", "categoria"
+        SELECT "posicaoX", "posicaoY", "conexão", "categoria", "seedSala"
         FROM "sala"
         WHERE "seedMasmorra" = %s;
     ''', (seed_masmorra,))

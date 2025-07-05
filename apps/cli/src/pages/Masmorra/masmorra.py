@@ -55,12 +55,13 @@ def enter_continue():
 def construir_matriz_masmorra(salas):
     matriz = {}
 
-    for x, y, conexoes, tipoSala in salas:
+    for x, y, conexoes, tipoSala, seedSala in salas:
         matriz[(x, y)] = {
             "conexoes": conexoes,
             "tipo": tipoSala,
             "visitado": False,
-            "descoberto": False
+            "descoberto": False,
+            "seedSala": seedSala
         }
 
     return matriz
@@ -105,6 +106,17 @@ def mostrar_minimapa(matriz, pos_jogador=(7, 7)):
             else:
                 linha += f"{Fore.LIGHTBLACK_EX} ■ {Style.RESET_ALL}"
         print(linha)
+
+def verificar_inimigo(seed_sala):
+    digitos = ''.join(filter(str.isdigit, seed_sala))
+
+    if not digitos:
+        return False
+    
+    hash_val = hashlib.sha256(seed_sala.encode()).hexdigest()
+    num = int(hash_val[:8], 16) % 100 
+
+    return num < 30  #chance de inimigo
 
 
 
@@ -183,6 +195,7 @@ def explorar_masmorra(matriz, pos_inicial=(7, 7), nickname=None):
                 'd': "→ Direita"
             }[tecla]
             print(Fore.YELLOW + f"  {tecla.upper()} - {direcao}")
+        print("\n" + Fore.RED + "  Q - sair")
 
         comando = ler_tecla()
 
@@ -196,6 +209,15 @@ def explorar_masmorra(matriz, pos_inicial=(7, 7), nickname=None):
                 matriz[pos]["visitado"] = True
                 revelar_salvas_conectadas(matriz, pos)
                 atualiza_posicao_jogador(nickname, pos[0], pos[1])
+
+                #verifica se tem inimigo na sala
+                seed_sala = matriz[pos].get("seedSala")
+                if verificar_inimigo(seed_sala):
+                    print(Fore.RED + f"Um inimigo surgiu na sala {pos}")
+                else:
+                    print(Fore.GREEN + "A sala esta vazia...")
+                time.sleep(2)
+
             else:
                 print("Movimento inválido. Nenhuma sala nessa direção.")
                 time.sleep(1)
@@ -271,7 +293,7 @@ def mainMasmorra(nickname):
             try:
                 salas = carregar_salas(seedMasmorra)
                 matriz = construir_matriz_masmorra(salas)
-                explorar_masmorra(matriz, pos_inicial=(7,7), nickname=nickname)
+                explorar_masmorra(matriz, pos_inicial=(12,12), nickname=nickname)
             except Exception as e:
                 print("ERRO")
                 traceback.print_exc()
