@@ -214,15 +214,13 @@ def obter_arma(nickname):
     
     cursor = connection.cursor()
     cursor.execute('''
-            SELECT 
-                a."dadoAtaque",
-                a."chanceCritico",
-                a."multiplicador",
-                a."multiplicadorCritico"
-            FROM jogador j
-            JOIN item i ON j."armaEquipada" = i."idItem"
-            JOIN arma a ON i."idItem" = a."idItem"
-            WHERE j."nickname" = %s;
+            SELECT a.*
+            FROM "inst_inventario" ii
+            JOIN "inst_item" ii2 ON ii."idInventario" = ii2."idInventario" AND ii."nickname" = ii2."nickname"
+            JOIN "item" i ON ii2."idItem" = i."idItem"
+            JOIN "arma" a ON i."idItem" = a."idItem"
+            WHERE ii."nickname" = %s
+            LIMIT 1;
         ''', (nickname,))
     arma = cursor.fetchone()
     cursor.close()
@@ -237,14 +235,13 @@ def obter_armadura(nickname):
 
     cursor = connection.cursor()
     cursor.execute('''
-        SELECT 
-            ar."dadoDefesa",
-            ar."criticoDefensivo",
-            ar."defesaPassiva",
-            ar."bonusDefesa"
-        FROM jogador j
-        JOIN armadura ar ON j."armaduraEquipada" = ar."idItem"
-        WHERE j."nickname" = %s;
+            SELECT ar.*
+            FROM "inst_inventario" ii
+            JOIN "inst_item" ii2 ON ii."idInventario" = ii2."idInventario" AND ii."nickname" = ii2."nickname"
+            JOIN "item" i ON ii2."idItem" = i."idItem"
+            JOIN "armadura" ar ON i."idItem" = ar."idItem"
+            WHERE ii."nickname" = %s
+            LIMIT 1;
     ''', (nickname,))
     
     armadura = cursor.fetchone()

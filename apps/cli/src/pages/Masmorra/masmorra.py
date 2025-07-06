@@ -291,7 +291,20 @@ def calcular_defesa(armadura):
 def menu_batalha(monstro, arma, armadura, vida_jogador, nickname):
     global musica_atual
     musica_atual_anterior = musica_atual
-    musicbattle()
+    if monstro["chefe"]:
+        if monstro["nome"] == "Rei Golem":
+            musicGolemKing()
+        elif monstro["nome"] == "Mutae Carnívora":
+            musicCarnivorousMutae()
+        elif monstro["nome"] == "Naja":
+            musicNaja()
+        elif monstro["nome"] == "Fluxo de Energia":
+            musicFluxEnergy()
+        else:
+            musicbattle()  # fallback
+    else:
+        musicbattle()
+
 
     while True:
         limpar_terminal()
@@ -453,6 +466,12 @@ def explorar_masmorra(matriz, pos_inicial=(7, 7), nickname=None, vida_jogador=No
     musicaLocal = musica_masmorra(nickname)
     if musicaLocal == "Masmorra do Golem":
         musicMasmorraGolem()
+    elif musicaLocal == "Masmorra da Floresta":
+        musicMasmorraFloresta()
+    elif musicaLocal == "Masmorra do Deserto":
+        musicMasmorraDeserto()
+    elif musicaLocal == "Masmorra da Tecnologia":
+        musicMasmorraTecnologia()
 
     if vida_jogador is None:
         vida_jogador = obter_vida_jogador(nickname)
@@ -515,9 +534,9 @@ def explorar_masmorra(matriz, pos_inicial=(7, 7), nickname=None, vida_jogador=No
         dados_arma = [("d50", 200, 3.0, 15.0)] #arma e armadura para testes
         armadura = {
             "dadoDefesa": "d1",
-            "criticoDefensivo": 0,
-            "defesaPassiva": 0,
-            "bonusDefesa": 0
+            "criticoDefensivo": 12,
+            "defesaPassiva": 20,
+            "bonusDefesa": 5
         }
 
     if isinstance(dados_arma, list) and len(dados_arma) > 0:
