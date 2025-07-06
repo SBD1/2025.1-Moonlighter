@@ -1,4 +1,5 @@
 import random
+import re
 from colorama import Fore, Back, Style, init
 from pages.Masmorra.db_masmorra import *
 import pygame
@@ -122,8 +123,8 @@ def sortear_monstro(seed_sala, lista_monstros):
     seed = int(digitos)
     random.seed(seed)
 
-    monstro_id, monstro_nome = random.choice(lista_monstros)
-    return {"id": monstro_id, "nome": monstro_nome}
+    monstro_id, monstro_nome, monstro_vida, monstro_nivel = random.choice(lista_monstros)
+    return {"id": monstro_id, "nome": monstro_nome, "vidaMaxima": monstro_vida, "nivel": monstro_nivel}
 
 
 def verificar_inimigo(seed_sala, sala):
@@ -140,7 +141,35 @@ def verificar_inimigo(seed_sala, sala):
 
     return num < 80  #chance de inimigo
 
-def menu_batalha(monstro):
+def calcular_dano(arma):
+    chance_critico = arma["chanceCritico"]
+    dado_ataque_str = arma["dadoAtaque"]
+    multiplicador = arma["multiplicador"]  
+    multiplicador_critico = arma["multiplicadorCritico"]
+
+    #extrair numero do dado
+    match = re.match(r'd(\d+)', dado_ataque_str.lower())
+    if not match:
+        print("Erro: formato de dado inválido.")
+        return 0
+    dado_ataque = int(match.group(1))
+
+    # Sorteio se é crítico
+    chance = random.randint(1, 100)
+    critico = chance <= chance_critico
+
+    resultado_dado = random.randint(1, dado_ataque)
+
+    if critico:
+        dano = int(resultado_dado * multiplicador_critico)
+        print(Fore.RED + f"!! CRÍTICO! Dano: {dano}")
+    else:
+        dano = int(resultado_dado * multiplicador)
+        print(f"Dano: {dano}")
+
+    return dano
+
+def menu_batalha(monstro, arma):
     global musica_atual
     musica_atual_anterior = musica_atual
     musicbattle()
@@ -154,7 +183,10 @@ def menu_batalha(monstro):
         print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}Seed: {seedMasmorra}".center(largura_terminal))
         print("\n")
 
-        print(f"{Fore.RED + Style.BRIGHT}Você encontrou um {monstro}!")
+        print(f"{Fore.RED + Style.BRIGHT}Você encontrou um {monstro['nome']}!")
+        print(f"{Fore.RED}Vida: {monstro['vidaMaxima']} HP")
+        print(f"{Fore.RED}Nivel: {monstro['nivel']}\n")
+
         print(f"\n{Fore.LIGHTYELLOW_EX}O que deseja fazer?\n")
         print(f"{Fore.GREEN}1- Batalhar")
         print(f"{Fore.CYAN}2- Usar item")
@@ -164,9 +196,17 @@ def menu_batalha(monstro):
 
         #comandos da batalha
         if escolha == '1':
-            print(Fore.GREEN + "Você se prepara para a batalha!")
-            trocar_musica(musica_atual_anterior)
-            return "batalhar"
+            print("Você ataca o monstro!")
+            dano = calcular_dano(arma)
+            monstro["vidaMaxima"] -= dano
+
+            if monstro["vidaMaxima"] <= 0:
+                print(f"monstro['nome'] derrotado!")
+                trocar_musica(musica_atual_anterior)
+                time.sleep(2)
+                return "batalhar"
+            else:
+                time.sleep(2)
         
         elif escolha == '2':
             print(Fore.CYAN + "Você abre sua mochila para usar um item.")
@@ -237,6 +277,19 @@ def explorar_masmorra(matriz, pos_inicial=(7, 7), nickname=None):
     matriz[pos]["visitado"] = True
     revelar_salvas_conectadas(matriz, pos)
     lista_monstros = obter_monstros()
+    dados_arma = obter_arma(nickname)
+
+    if not dados_arma:
+        #print(Fore.RED + "Você não tem uma arma equipada. Fuja enquanto pode!")
+        #time.sleep(2)
+        dados_arma = [("d20", 50, 1.5, 3.0)] #arma para testes
+    
+    arma = {
+    "dadoAtaque": dados_arma[0][0],
+    "chanceCritico": dados_arma[0][1],
+    "multiplicador": dados_arma[0][2],
+    "multiplicadorCritico": dados_arma[0][3]
+}
 
     while True:
         limpar_terminal()
@@ -286,7 +339,7 @@ def explorar_masmorra(matriz, pos_inicial=(7, 7), nickname=None):
 
                 if verificar_inimigo(seed_sala, sala_atual):
                     monstro = sortear_monstro(seed_sala, lista_monstros)
-                    acao = menu_batalha(monstro['nome'])
+                    acao = menu_batalha(monstro, arma)
 
                     if acao == "batalhar":
                         matriz[pos]["visitado"] = True

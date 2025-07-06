@@ -186,9 +186,31 @@ def obter_monstros():
     
     cursor = connection.cursor()
     cursor.execute('''
-            SELECT "idMonstro", "nome" FROM "monstro"
+            SELECT "idMonstro", "nome", "vidaMaxima", "nivel" FROM "monstro"
                    ''')
     monstros = cursor.fetchall()
     cursor.close()
     connection.close()
     return monstros
+
+def obter_arma(nickname):
+    connection = connect_to_db()
+    if connection is None:
+        print("Erro ao conectar ao banco de dados.")
+        return False
+    
+    cursor = connection.cursor()
+    cursor.execute('''
+            SELECT 
+                a."dadoAtaque",
+                a."chanceCritico",
+                a."multiplicador",
+                a."multiplicadorCritico"
+            FROM jogador j
+            JOIN arma a ON j."armaEquipada" = a."idItem"
+            WHERE j."nickname" = %s;
+                   ''', (nickname,))
+    arma = cursor.fetchone()
+    cursor.close()
+    connection.close()
+    return arma   
