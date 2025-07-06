@@ -798,7 +798,7 @@ INSERT INTO "npc" ("nome", "tipoNPC", "descricao", "ativo")
     VALUES
     ('Zenon', 'Guia', 'Sábio ancião que oferece conselhos e conhecimento.', FALSE),
     ('Andrei', 'Ferreiro', 'Ferreiro que aprimora armas e armaduras na Forja Vulcânica.', TRUE),
-    ('Eris', 'Alquimista', 'Alquimista que vende e aprimora poções no Chapéu de Madeira.', TRUE),
+    ('Eris', 'Alquimista', 'Alquimista que vende e compra itens no Chapéu de Madeira.', TRUE),
     ('Edward', 'Banqueiro', 'Banqueiro que gerencia investimentos para a cidade de Rynoka.', TRUE),
     ('Juliette', 'Decoradora', 'Ajuda a melhorar e decorar a loja Moonlighter em "Le Retailer".', TRUE),
     ('Tom', 'Vendedor Ambulante', 'Vendedor ambulante que oferece itens raros e exóticos.', FALSE),
@@ -876,14 +876,14 @@ VALUES
 INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
 VALUES
     ('Bem-vindo ao Chapéu de Madeira, <NOME_JOGADOR>! Sou Eris, a alquimista.', 1, 'Saudacao', NULL),
-    ('Precisa de poções para suas aventuras?', 2, 'Saudacao', NULL),
-    ('Tenho poções para todos os tipos de situações!', 1, 'Catalogo', NULL),
-    ('Essa mistura vai te dar a força que precisa.', 2, 'Catalogo', NULL),
-    ('Deixe-me preparar essa poção com ingredientes especiais.', 1, 'Fabricacao', NULL),
+    ('Precisando de itens para sua aventura?', 2, 'Saudacao', NULL),
+    ('Tenho itens para todas as situações!', 1, 'Catalogo', NULL),
+    ('Essas belezuras vão te dar a força que precisa.', 2, 'Catalogo', NULL),
+    ('Deixe-me preparar esse item com ingredientes especiais.', 1, 'Fabricacao', NULL),
     ('A alquimia é uma arte que requer paciência e precisão.', 2, 'Fabricacao', NULL),
-    ('Aqui está sua poção, <NOME_JOGADOR>, feita com os melhores ingredientes!', 1, 'Entrega', NULL),
-    ('Use com sabedoria, elas são poderosas!', 2, 'Entrega', NULL),
-    ('Volte quando precisar de mais poções, <NOME_JOGADOR>!', 1, 'Despedida', NULL),
+    ('Aqui está seu item, <NOME_JOGADOR>, feito com os melhores materiais!', 1, 'Entrega', NULL),
+    ('Use com sabedoria, são itens poderosos!', 2, 'Entrega', NULL),
+    ('Volte quando precisar de mais itens, <NOME_JOGADOR>!', 1, 'Despedida', NULL),
     ('Que a magia te acompanhe em suas jornadas, <NOME_JOGADOR>!', 2, 'Despedida', NULL);
 
 -- Diálogos do Edward (Banqueiro)
@@ -917,14 +917,14 @@ VALUES
     
     -- Eris (Alquimista)
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Bem-vindo ao Chapéu de Madeira, <NOME_JOGADOR>! Sou Eris, a alquimista.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
-    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Precisa de poções para suas aventuras?'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
-    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Tenho poções para todos os tipos de situações!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
-    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Essa mistura vai te dar a força que precisa.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
-    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Deixe-me preparar essa poção com ingredientes especiais.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Precisando de itens para sua aventura?'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Tenho itens para todas as situações!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Essas belezuras vão te dar a força que precisa.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Deixe-me preparar esse item com ingredientes especiais.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'A alquimia é uma arte que requer paciência e precisão.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
-    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Aqui está sua poção, <NOME_JOGADOR>, feita com os melhores ingredientes!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
-    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Use com sabedoria, elas são poderosas!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
-    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Volte quando precisar de mais poções, <NOME_JOGADOR>!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Aqui está seu item, <NOME_JOGADOR>, feito com os melhores materiais!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Use com sabedoria, são itens poderosos!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Volte quando precisar de mais itens, <NOME_JOGADOR>!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Que a magia te acompanhe em suas jornadas, <NOME_JOGADOR>!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
     
     -- Edward (Banqueiro)
