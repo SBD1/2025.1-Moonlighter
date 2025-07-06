@@ -593,39 +593,39 @@ def visualizar_itens_chapeu_de_madeira_por_jogador(nickname):
         margem_lucro = margem_lucro if margem_lucro else 15  # Margem padrão de 15%
         
         # Calcular quantos itens mostrar baseado no dia (progressão)
-        # Dia 1-3: 3-5 poções, Dia 4-7: 4-7 poções, Dia 8+: 5-8 poções
+        # Dia 1-3: 5-5 poções, Dia 4-7: 5-8 poções, Dia 8+: 7-10 itens
         if dia_atual <= 3:
-            min_itens, max_itens = 3, 5
+            min_itens, max_itens = 5, 6
         elif dia_atual <= 7:
-            min_itens, max_itens = 4, 7
-        else:
             min_itens, max_itens = 5, 8
+        else:
+            min_itens, max_itens = 7, 9
         
         # Usar seed do mundo + dia para gerar itens consistentes por dia
         # Converter seed_mundo para número usando hash
         seed_hash = hash(seed_mundo) if seed_mundo else 0
         random.seed(seed_hash + dia_atual)
         
-        # Buscar apenas poções
+        # Buscar itens utilizaveis
         cursor.execute("""
             SELECT i."idItem", i."nome", i."precoBase", i."descricao", i."tipo"
             FROM "item" i
-            WHERE i."tipo" = 'Pocao'
+            WHERE i."tipo" = 'Pocao' OR i."tipo" = 'Arma' OR i."tipo" = 'Armadura'
             ORDER BY i."idItem"
         """)
         
-        todas_pocoes = cursor.fetchall()
+        todos_itens = cursor.fetchall()
         
-        # Selecionar poções aleatórias
+        # Selecionar itens aleatóriss
         num_itens = random.randint(min_itens, max_itens)
-        num_itens = min(num_itens, len(todas_pocoes))
+        num_itens = min(num_itens, len(todos_itens))
         
         if num_itens == 0:
             cursor.close()
             connection.close()
             return []
         
-        pocoes_selecionadas = random.sample(todas_pocoes, num_itens)
+        pocoes_selecionadas = random.sample(todos_itens, num_itens)
         
         # Calcular preços finais
         resultado_final = []
@@ -646,14 +646,14 @@ def visualizar_itens_chapeu_de_madeira_por_jogador(nickname):
         return resultado_final
         
     except Exception as e:
-        print(Fore.RED + f"Erro ao visualizar poções do Chapéu de Madeira: {e}")
+        print(Fore.RED + f"Erro ao visualizar itens do Chapéu de Madeira: {e}")
         if connection:
             connection.close()
         return None
 
 def comprar_item_chapeu_de_madeira_por_jogador(nickname, item_id, quantidade):
     """
-    Compra uma poção no Chapéu de Madeira para o jogador
+    Compra um item no Chapéu de Madeira para o jogador
     """
     connection = connect_to_db()
     if connection is None:
@@ -662,16 +662,9 @@ def comprar_item_chapeu_de_madeira_por_jogador(nickname, item_id, quantidade):
 
     try:
         cursor = connection.cursor()
-        
-        # Verificar se o item é uma poção
         cursor.execute("""
             SELECT tipo FROM "item" WHERE "idItem" = %s
         """, (item_id,))
-        
-        resultado_tipo = cursor.fetchone()
-        if not resultado_tipo or resultado_tipo[0] != 'Pocao':
-            print(Fore.RED + "Este item não é uma poção!")
-            return False
         
         # Buscar margem de lucro da instância do Chapéu de Madeira do jogador
         cursor.execute("""
@@ -696,7 +689,7 @@ def comprar_item_chapeu_de_madeira_por_jogador(nickname, item_id, quantidade):
         
         resultado = cursor.fetchone()
         if not resultado:
-            print(Fore.RED + "Jogador ou poção não encontrada!")
+            print(Fore.RED + "Jogador ou item não encontrado!")
             return False
             
         ouro_jogador, preco_final = resultado
@@ -714,12 +707,8 @@ def comprar_item_chapeu_de_madeira_por_jogador(nickname, item_id, quantidade):
         """, (custo_total, nickname))
         
         # Adicionar poção ao inventário do jogador
-        cursor.execute("""
-            INSERT INTO "inst_item" ("idItem", "nickname", "quantidade")
-            VALUES (%s, %s, %s)
-            ON CONFLICT ("idItem", "nickname") 
-            DO UPDATE SET "quantidade" = "inst_item"."quantidade" + %s
-        """, (item_id, nickname, quantidade, quantidade))
+        # TODO: ADICIONAR ITEM AO INVENTARIO DO JOGADOR
+        
         
         connection.commit()
         cursor.close()

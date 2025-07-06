@@ -34,7 +34,7 @@ def print_in_centered(text):
 def cabecalho_chapeu_de_madeira(nickname):
     dadosJogador = buscar_dadosJogador(nickname)
     print(f"{Fore.LIGHTGREEN_EX}{Style.BRIGHT}╔══════════════════════════════════ CHAPÉU DE MADEIRA ══════════════════════════════════╗".center(largura_terminal))
-    print(f"{Fore.YELLOW}{Style.BRIGHT}Loja de Poções - Especializada em Poções".center(largura_terminal))
+    print(f"{Fore.YELLOW}{Style.BRIGHT}Loja Oficial da Vila Rynoka".center(largura_terminal))
     print(f"{Fore.LIGHTGREEN_EX}════════════════════════════════════════════════════════════════════════════".center(largura_terminal))
     print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}{dadosJogador[0]}".center(largura_terminal))
     print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}OURO: {dadosJogador[3]}".center(largura_terminal))
@@ -191,7 +191,7 @@ def vender_item_para_loja(jogador, item_id, quantidade):
 
 def menu_chapeu_de_madeira(jogador, seedMundo):
     """
-    Menu principal da loja de poções
+    Menu principal da loja
     """
     init(autoreset=True)
     
@@ -220,8 +220,8 @@ def menu_chapeu_de_madeira(jogador, seedMundo):
         print("\n")
         print(f"{Style.BRIGHT}{Fore.CYAN}O que você gostaria de fazer?".center(largura_terminal))
         print("\n")
-        print(f"{Fore.YELLOW}{Style.BRIGHT}1 - Ver poções disponíveis para compra")
-        print(f"{Fore.YELLOW}{Style.BRIGHT}2 - Comprar uma poção")
+        print(f"{Fore.YELLOW}{Style.BRIGHT}1 - Ver itens disponíveis para compra")
+        print(f"{Fore.YELLOW}{Style.BRIGHT}2 - Comprar itens")
         print(f"{Fore.YELLOW}{Style.BRIGHT}3 - Ver itens do seu inventário")
         print(f"{Fore.YELLOW}{Style.BRIGHT}4 - Vender um item")
         print(f"{Fore.RED}{Style.BRIGHT}5 - Sair da Loja")
@@ -253,7 +253,7 @@ def menu_chapeu_de_madeira(jogador, seedMundo):
 
 def ver_itens_disponiveis(jogador):
     """
-    Função para ver poções disponíveis para compra
+    Função para ver itens disponíveis para compra
     """
     limpar_terminal()
     cabecalho_chapeu_de_madeira(jogador)
@@ -262,7 +262,7 @@ def ver_itens_disponiveis(jogador):
     exibir_dialogo_catalogo("Eris", jogador)
     enter_continue()
     
-    print(f"{Style.BRIGHT}{Fore.CYAN}══════════ POÇÕES DISPONÍVEIS PARA COMPRA ══════════".center(largura_terminal))
+    print(f"{Style.BRIGHT}{Fore.CYAN}══════════ ITENS DISPONÍVEIS PARA COMPRA ══════════".center(largura_terminal))
     print(f"{Fore.YELLOW}💡 Dica: O estoque muda a cada dia!".center(largura_terminal))
     print("\n")
     
@@ -302,7 +302,7 @@ def ver_itens_disponiveis(jogador):
         limpar_terminal()
         cabecalho_chapeu_de_madeira(jogador)
         print("\n\n\n\n")
-        print(f"{Fore.RED}{Style.BRIGHT}Nenhuma poção disponível para compra!".center(largura_terminal))
+        print(f"{Fore.RED}{Style.BRIGHT}Nenhum item disponível para compra!".center(largura_terminal))
     
     print("\n")
     enter_continue()

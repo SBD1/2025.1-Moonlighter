@@ -7,7 +7,7 @@ def abrir_terminal(script_rel_path):
     sistema = platform.system()
 
     if sistema == "Windows":
-        subprocess.Popen(f'start /max cmd /c python "{main_path}"', shell=True)
+        subprocess.Popen(f'start /max cmd /k python "{main_path}"', shell=True)
     elif sistema == "Linux":
         subprocess.Popen(['gnome-terminal', '--maximize', '--', 'python3', main_path])
 
