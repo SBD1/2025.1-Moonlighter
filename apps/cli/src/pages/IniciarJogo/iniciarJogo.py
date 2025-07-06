@@ -253,28 +253,40 @@ def obter_equipamentos_jogador(nickname):
 
     cursor = connection.cursor()
     cursor.execute("""
-        SELECT 
-            J."armaEquipada",
-            J."armaduraEquipada",
-            IA."nome" AS "nome_arma",
-            IAR."nome" AS "nome_armadura"
+        SELECT I_arma."idItem", I_arma."nome", I_arma."tipo"
         FROM "jogador" J
-        LEFT JOIN "item" IA ON J."armaEquipada" = IA."idItem"
-        LEFT JOIN "item" IAR ON J."armaduraEquipada" = IAR."idItem"
-        WHERE J."nickname" = %s;
-    """, (nickname,))
+            JOIN "inst_item" II_arma ON J."nickname" = II_arma."nickname"
+            JOIN "item" I_arma ON II_arma."idItem" = I_arma."idItem"
+        WHERE J."nickname" = %s AND II_arma."idInventario" = 4
+        UNION
+        SELECT I_armadura."idItem", I_armadura."nome", I_armadura."tipo"
+        FROM "jogador" J
+            JOIN "inst_item" II_armadura ON J."nickname" = II_armadura."nickname"
+            JOIN "item" I_armadura ON II_armadura."idItem" = I_armadura."idItem"
+        WHERE J."nickname" = %s AND II_armadura."idInventario" = 3;
+    """, (nickname, nickname,))
 
-    resultado = cursor.fetchone()
+    resultado = cursor.fetchall()
     cursor.close()
     connection.close()
-    
+
+    equipamento = {
+        'id_arma': None,
+        'id_armadura': None,
+        'arma_nome': "Nenhum",
+        'armadura_nome': "Nenhum"
+    }
+
     if resultado:
-        return {
-            'arma_id': resultado[0],
-            'armadura_id': resultado[1],
-            'arma_nome': resultado[2] or "Nenhuma",
-            'armadura_nome': resultado[3] or "Nenhuma"
-        }
+        for linha in resultado:
+            if linha[2] == 'Arma':
+                equipamento['id_arma'] = linha[0]
+                equipamento['arma_nome'] = linha[1]
+            elif linha[2] == 'Armadura':
+                equipamento['id_armadura'] = linha[0]
+                equipamento['armadura_nome'] = linha[1]
+
+        return equipamento
     return None
 
 def ver_itens_no_chao(nickname):

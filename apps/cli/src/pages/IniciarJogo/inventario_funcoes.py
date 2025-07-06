@@ -164,14 +164,13 @@ def criar_inventarios_jogador(nickname):
         
         # Buscar IDs dos inventários padrão
         cursor.execute("""
-            SELECT "idInventario" FROM "inventario" 
-            WHERE "nome" IN ('Mochila Principal', 'Equipamentos', 'Baú da Casa')
+            SELECT "idInventario" FROM "inventario"
             ORDER BY "nome"
         """)
         
         inventarios_ids = cursor.fetchall()
         
-        if len(inventarios_ids) < 3:
+        if len(inventarios_ids) < 5:
             print("Erro: Nem todos os inventários padrão foram encontrados")
             return False
         
