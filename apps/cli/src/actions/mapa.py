@@ -15,11 +15,8 @@ print(Style.BRIGHT + Fore.LIGHTYELLOW_EX + '''
         ║  | Masmorra da Floresta   |                          ║
         ║  | Masmorra da Tecnologia |    CENTRO COMERCIAL      ║
         ║  | Masmorra Desconhecida  | ┌─────────────────────┐  ║
-        ║  └────────────────────────┘ | Forja Vulcânica     |  ║
+        ║  └────────────────────────┘ | Forja de Vulcan     |  ║
         ║                             | O chapéu de Madeira |  ║
-        ║                ┌───────┐    | Banco de Rynoka     |  ║
-        ║                | Praça |    | Tenda da Bruxa      |  ║
-        ║                └───────┘    | Barraca do Tom      |  ║
         ║                             └─────────────────────┘  ║
         ║        MOONLIGHTER                                   ║
         ║   ┌────────────────────┐                             ║
