@@ -186,7 +186,7 @@ def obter_monstros():
     
     cursor = connection.cursor()
     cursor.execute('''
-            SELECT "idMonstro", "nome", "vidaMaxima", "nivel" FROM "monstro"
+            SELECT "idMonstro", "nome", "vidaMaxima", "nivel", "chanceCritico", "dadoAtaque", "multiplicador", "multiplicadorCritico" FROM "monstro"
                    ''')
     monstros = cursor.fetchall()
     cursor.close()
@@ -207,10 +207,65 @@ def obter_arma(nickname):
                 a."multiplicador",
                 a."multiplicadorCritico"
             FROM jogador j
-            JOIN arma a ON j."armaEquipada" = a."idItem"
+            JOIN item i ON j."armaEquipada" = i."idItem"
+            JOIN arma a ON i."idItem" = a."idItem"
             WHERE j."nickname" = %s;
-                   ''', (nickname,))
+        ''', (nickname,))
     arma = cursor.fetchone()
     cursor.close()
     connection.close()
     return arma   
+
+def obter_armadura(nickname):
+    connection = connect_to_db()
+    if connection is None:
+        print("Erro ao conectar ao banco de dados.")
+        return None
+
+    cursor = connection.cursor()
+    cursor.execute('''
+        SELECT 
+            ar."dadoDefesa",
+            ar."criticoDefensivo",
+            ar."defesaPassiva",
+            ar."bonusDefesa"
+        FROM jogador j
+        JOIN armadura ar ON j."armaduraEquipada" = ar."idItem"
+        WHERE j."nickname" = %s;
+    ''', (nickname,))
+    
+    armadura = cursor.fetchone()
+    cursor.close()
+    connection.close()
+    return armadura
+
+def obter_vida_jogador(nickname):
+    connection = connect_to_db()
+    if connection is None:
+        print("Erro ao conectar ao banco de dados.")
+        return None
+
+    cursor = connection.cursor()
+    cursor.execute('''
+        SELECT "atualHP" FROM "jogador" WHERE "nickname" = %s;
+    ''', (nickname,))
+    
+    vida = cursor.fetchone()
+    cursor.close()
+    connection.close()
+    return vida[0] if vida else None
+
+def atualizar_vida_jogador(nickname, nova_vida):
+    connection = connect_to_db()
+    if connection is None:
+        print("Erro ao conectar ao banco de dados.")
+        return None
+
+    cursor = connection.cursor()
+    cursor.execute('''
+        UPDATE "jogador" SET "atualHP" = %s WHERE "nickname" = %s;
+    ''', (nova_vida, nickname))
+
+    connection.commit()
+    cursor.close()
+    connection.close()

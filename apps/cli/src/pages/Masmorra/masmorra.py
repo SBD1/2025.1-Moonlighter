@@ -74,7 +74,7 @@ def construir_matriz_masmorra(salas):
 
     return matriz
 
-def mostrar_minimapa(matriz, pos_jogador=(7, 7)):
+def mostrar_minimapa(matriz, pos_jogador=(7, 7), nickname=None, vida_jogador=None):
     if not matriz:
         print("Nenhuma sala para mostrar.")
         return
@@ -93,6 +93,9 @@ def mostrar_minimapa(matriz, pos_jogador=(7, 7)):
     print(f"{Style.BRIGHT}{Fore.YELLOW}════════════════════════════════════════════════════".center(largura_terminal))
     print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}Seed: {seedMasmorra}".center(largura_terminal))
     print("\n")
+    dadosJogador = ObterDadosJogador(nickname)
+    print(f"{Fore.LIGHTBLUE_EX}  HP: {Fore.YELLOW}{vida_jogador} {Fore.LIGHTWHITE_EX}/{dadosJogador[1]}")
+    print(f"{Fore.LIGHTBLUE_EX}  Ouro: {Fore.YELLOW}{dadosJogador[3]}\n")
 
     for x in range(min_x, max_x + 1):
         linha = ""
@@ -123,8 +126,18 @@ def sortear_monstro(seed_sala, lista_monstros):
     seed = int(digitos)
     random.seed(seed)
 
-    monstro_id, monstro_nome, monstro_vida, monstro_nivel = random.choice(lista_monstros)
-    return {"id": monstro_id, "nome": monstro_nome, "vidaMaxima": monstro_vida, "nivel": monstro_nivel}
+    (monstro_id, monstro_nome, monstro_vida, monstro_nivel, chance_critico, dado_ataque, multiplicador, multiplicador_critico) = random.choice(lista_monstros)
+
+    return {
+        "id": monstro_id,
+        "nome": monstro_nome,
+        "vidaMaxima": monstro_vida,
+        "nivel": monstro_nivel,
+        "chanceCritico": chance_critico,
+        "dadoAtaque": dado_ataque,
+        "multiplicador": multiplicador,
+        "multiplicadorCritico": multiplicador_critico
+    }
 
 
 def verificar_inimigo(seed_sala, sala):
@@ -160,16 +173,84 @@ def calcular_dano(arma):
 
     resultado_dado = random.randint(1, dado_ataque)
 
+    print(f"  Você rolou um d{dado_ataque} e tirou: {resultado_dado}")
+
     if critico:
         dano = int(resultado_dado * multiplicador_critico)
-        print(Fore.RED + f"!! CRÍTICO! Dano: {dano}")
+        print(Fore.RED + f"  !! CRÍTICO! Dano(x{multiplicador_critico}): {dano}")
     else:
         dano = int(resultado_dado * multiplicador)
-        print(f"Dano: {dano}")
+        print(f"  Dano: {dano}")
 
     return dano
 
-def menu_batalha(monstro, arma):
+def calcular_dano_monstro(monstro):
+    dado_ataque_str = monstro.get("dadoAtaque", "")
+
+    if not dado_ataque_str:
+        print("Erro: dado de ataque do monstro está vazio.")
+        return 0
+    
+    chance_critico = monstro.get("chanceCritico", 0)
+    multiplicador = monstro.get("multiplicador", 1)
+    multiplicador_critico = monstro.get("multiplicadorCritico", 2)
+
+    match = re.match(r'(\d*)d(\d+)', dado_ataque_str.lower())
+    if not match:
+        print("Erro: formato de dado do monstro inválido.")
+        return 0
+    
+    qtd_dados = int(match.group(1)) if match.group(1) else 1
+    dado_ataque = int(match.group(2))
+
+    chance = random.randint(1, 100)
+    critico = chance <= chance_critico
+
+    resultados = [random.randint(1, dado_ataque) for _ in range(qtd_dados)]
+    resultado_total = sum(resultados)
+    resultados_str = ' e '.join(map(str, resultados))
+    print(f"  O {monstro['nome']} rolou {qtd_dados}d{dado_ataque} e tirou: {resultados_str}")
+
+    if critico:
+        dano = int(resultado_total * multiplicador_critico)
+        print(Fore.RED + f"  O {monstro['nome']} acertou um CRÍTICO! Dano: {dano}")
+    else:
+        dano = int(resultado_total * multiplicador)
+        print(f"  O {monstro['nome']} atacou! Dano: {dano}")
+
+    return dano
+
+def calcular_defesa(armadura):
+    if not armadura:
+        return 0
+    
+    dado_defesa_str = armadura["dadoDefesa"]
+    critico_defensivo = armadura["criticoDefensivo"]
+    defesa_passiva = armadura["defesaPassiva"]
+    bonus_defesa = armadura["bonusDefesa"]
+
+    match = re.match(r'd(\d+)', dado_defesa_str.lower())
+    if not match:
+        print("Erro: formato de dado de defesa inválido.")
+        return 0
+    dado_defesa = int(match.group(1))
+
+    chance = random.randint(1, 100)
+    critico = chance <= critico_defensivo
+
+    resultado_dado = random.randint(1, dado_defesa)
+    print(f"  Você rolou um d{dado_defesa} para defesa e tirou: {resultado_dado}")
+
+    if critico:
+        defesa_total = resultado_dado + defesa_passiva + bonus_defesa
+        print(Fore.GREEN + f"  Defesa EFICIENTE! Defesa total: {defesa_total}")
+    else:
+        defesa_total = resultado_dado + defesa_passiva
+        print(Fore.LIGHTBLUE_EX + f"  Defesa: {defesa_total}")
+
+    return defesa_total
+
+def menu_batalha(monstro, arma, armadura, vida_jogador, nickname):
     global musica_atual
     musica_atual_anterior = musica_atual
     musicbattle()
@@ -183,55 +264,104 @@ def menu_batalha(monstro, arma):
         print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}Seed: {seedMasmorra}".center(largura_terminal))
         print("\n")
 
-        print(f"{Fore.RED + Style.BRIGHT}Você encontrou um {monstro['nome']}!")
-        print(f"{Fore.RED}Vida: {monstro['vidaMaxima']} HP")
-        print(f"{Fore.RED}Nivel: {monstro['nivel']}\n")
+        dadosJogador = ObterDadosJogador(nickname)
+        print(f"{Fore.LIGHTBLUE_EX}  HP: {Fore.YELLOW}{vida_jogador} {Fore.LIGHTWHITE_EX}/{dadosJogador[1]}")
+        print(f"{Fore.LIGHTBLUE_EX}  Ouro: {Fore.YELLOW}{dadosJogador[3]}\n")
 
-        print(f"\n{Fore.LIGHTYELLOW_EX}O que deseja fazer?\n")
-        print(f"{Fore.GREEN}1- Batalhar")
-        print(f"{Fore.CYAN}2- Usar item")
-        print(f"{Fore.MAGENTA}3- Fugir")
+        print(f"{Fore.RED + Style.BRIGHT}  Você encontrou um {monstro['nome']}!")
+        print(f"{Fore.RED}  Vida: {monstro['vidaMaxima']} HP")
+        print(f"{Fore.RED}  Nivel: {monstro['nivel']}\n")
+
+        print(f"\n{Fore.LIGHTYELLOW_EX}  O que deseja fazer?\n")
+        print(f"{Fore.GREEN}  1- Batalhar")
+        print(f"{Fore.CYAN}  2- Usar item")
+        print(f"{Fore.MAGENTA}  3- Fugir")
 
         escolha = input(f"{Fore.LIGHTWHITE_EX}\n>>> ").strip()
 
         #comandos da batalha
         if escolha == '1':
-            print("Você ataca o monstro!")
+            print("  Você ataca o monstro!")
+            time.sleep(1.5)
             dano = calcular_dano(arma)
+            time.sleep(1.5)
             monstro["vidaMaxima"] -= dano
 
             if monstro["vidaMaxima"] <= 0:
-                print(f"monstro['nome'] derrotado!")
+                print(f"  {monstro['nome']} derrotado!")
                 trocar_musica(musica_atual_anterior)
                 time.sleep(2)
-                return "batalhar"
+                return "batalhar", vida_jogador
             else:
+                time.sleep(1.5)
+                dano_monstro = calcular_dano_monstro(monstro)
+                time.sleep(1.5)
+                defesa_total = calcular_defesa(armadura) if armadura else 0
+                time.sleep(1.5)
+                dano_final = max(dano_monstro - defesa_total, 0)
+
+                print(Fore.RED + f"  Dano final recebido: {dano_final}")
+                vida_jogador -= dano_final
+                atualizar_vida_jogador(nickname, vida_jogador)
+                time.sleep(1.5)
+
+                if vida_jogador <= 0:
+                    print(Fore.RED + "  Você foi derrotado! Alguém te socorreu e te levou novamente para a cidade...")
+                    time.sleep(3)
+                    musicCity()
+                    return "morte", vida_jogador
+                
                 time.sleep(2)
         
         elif escolha == '2':
-            print(Fore.CYAN + "Você abre sua mochila para usar um item.")
-            return "usar_item"
+            print(Fore.CYAN + "  Você abre sua mochila para usar um item.")
+            return "usar_item", vida_jogador
         
         elif escolha == '3':
-            print(Fore.MAGENTA + "Você joga um dado de 20 lados para fugir da batalha...")
+            print(Fore.MAGENTA + "  Você joga um dado de 20 lados para fugir da batalha...")
             time.sleep(2)
             chance_fuga = random.randint(1, 20)
             if (chance_fuga < 18):
-                print(Fore.MAGENTA + f"Dado: {chance_fuga} - Você não conseguiu fugir.")
+                print(Fore.MAGENTA + f"  Dado: {chance_fuga} - Você não conseguiu fugir.")
                 time.sleep(1)
-                
+
+                #monstro ataca após falha na fuga
+                print(Fore.RED + f"  O {monstro['nome']} aproveita e ataca!")
+                time.sleep(1.5)
+
+                dano_monstro = calcular_dano_monstro(monstro)
+                time.sleep(1.5)
+                defesa_total = calcular_defesa(armadura) if armadura else 0
+                time.sleep(1)
+
+                dano_final = max(dano_monstro - defesa_total, 0)
+                print(Fore.RED + f"  Dano final recebido: {dano_final}")
+                vida_jogador -= dano_final
+                atualizar_vida_jogador(nickname, vida_jogador)
+                time.sleep(1.5)
+
+                if vida_jogador <= 0:
+                    print(Fore.RED + "  Você foi derrotado! Alguém te socorreu e te levou novamente para a cidade...")
+                    time.sleep(3)
+                    trocar_musica(musicCity)
+                    return "morte", vida_jogador
+            
+            #continua a batalha
             else:
-                print(Fore.MAGENTA + f"Dado {chance_fuga} - Você fugiu com segurança")
+                print(Fore.MAGENTA + f"  Dado {chance_fuga} - Você fugiu com segurança")
                 time.sleep(1)
                 trocar_musica(musica_atual_anterior)
-                return "fugir"
+                return "fugir", vida_jogador
         else:
-            print(Fore.RED + "Opção inválida. Escolha 1, 2 ou 3.")
+            print(Fore.RED + "  Opção inválida. Escolha 1, 2 ou 3.")
             time.sleep(1)
 
 
-def explorar_masmorra(matriz, pos_inicial=(7, 7), nickname=None):
+def explorar_masmorra(matriz, pos_inicial=(7, 7), nickname=None, vida_jogador=None):
     global seedMasmorra
+
+    if vida_jogador is None:
+        vida_jogador = obter_vida_jogador(nickname)
 
     def revelar_salvas_conectadas(matriz, pos):
         sala = matriz.get(pos)
@@ -278,11 +408,33 @@ def explorar_masmorra(matriz, pos_inicial=(7, 7), nickname=None):
     revelar_salvas_conectadas(matriz, pos)
     lista_monstros = obter_monstros()
     dados_arma = obter_arma(nickname)
+    dados_armadura = obter_armadura(nickname)
 
     if not dados_arma:
-        #print(Fore.RED + "Você não tem uma arma equipada. Fuja enquanto pode!")
-        #time.sleep(2)
-        dados_arma = [("d20", 50, 1.5, 3.0)] #arma para testes
+        # print(Fore.RED + "Você não tem uma arma equipada. Fuja enquanto pode!")
+        # time.sleep(2)
+        # print(Fore.RED + "Equipe uma arma pelo seu inventário")
+        # time.sleep(2)
+        # atualizarParaLocalAnterior(dadosJogador)
+        # musicCity()
+        dados_arma = [("d20", 50, 1.5, 3.0)] #arma e armadura para testes
+        armadura = {
+            "dadoDefesa": "d1",
+            "criticoDefensivo": 0,
+            "defesaPassiva": 0,
+            "bonusDefesa": 0
+        }
+    
+    if not dados_armadura:
+        armadura = None
+    
+    else:
+        armadura = {
+        "dadoDefesa": dados_armadura[0],
+        "criticoDefensivo": dados_armadura[1],
+        "defesaPassiva": dados_armadura[2],
+        "bonusDefesa": dados_armadura[3]
+    }  # armadura padrão para teste, exemplo simples
     
     arma = {
     "dadoAtaque": dados_arma[0][0],
@@ -293,7 +445,7 @@ def explorar_masmorra(matriz, pos_inicial=(7, 7), nickname=None):
 
     while True:
         limpar_terminal()
-        mostrar_minimapa(matriz, pos)
+        mostrar_minimapa(matriz, pos, nickname=nickname, vida_jogador=vida_jogador)
         sala_atual = matriz.get(pos)
 
         if not sala_atual:
@@ -310,7 +462,7 @@ def explorar_masmorra(matriz, pos_inicial=(7, 7), nickname=None):
         if 'O' in sala_atual["conexoes"]:
             opcoes['a'] = (pos[0], pos[1] - 1)
 
-        print(Fore.CYAN + "\nMovimentos possíveis:")
+        print(Fore.CYAN + "\n  Movimentos possíveis:")
         for tecla in opcoes:
             direcao = {
                 'w': "↑ Cima",
@@ -324,7 +476,7 @@ def explorar_masmorra(matriz, pos_inicial=(7, 7), nickname=None):
         comando = ler_tecla()
 
         if comando == 'q':
-            print("Saindo da masmorra...")
+            print("  Saindo da masmorra...")
             break
         elif comando in opcoes:
             nova_pos = opcoes[comando]
@@ -339,7 +491,7 @@ def explorar_masmorra(matriz, pos_inicial=(7, 7), nickname=None):
 
                 if verificar_inimigo(seed_sala, sala_atual):
                     monstro = sortear_monstro(seed_sala, lista_monstros)
-                    acao = menu_batalha(monstro, arma)
+                    acao, vida_jogador = menu_batalha(monstro, arma, armadura, vida_jogador, nickname)
 
                     if acao == "batalhar":
                         matriz[pos]["visitado"] = True
@@ -349,6 +501,11 @@ def explorar_masmorra(matriz, pos_inicial=(7, 7), nickname=None):
                         pass
                     elif acao == "fugir":
                         trocar_musica(musica_atual)
+                    elif acao == "morte":
+                        matriz[pos]["visitado"] = True
+                        atualizar_vida_jogador(nickname, 0)
+                        atualizarParaLocalAnterior(ObterDadosJogador(nickname))
+                        return
 
                     time.sleep(2)
 
@@ -368,6 +525,7 @@ def mainMasmorra(nickname):
     global seedMasmorra, dadosMasmorra, dadosMundo
 
     dadosJogador = ObterDadosJogador(nickname)
+    vida_jogador = dadosJogador[2]
     dadosMasmorra = ObterDadosMasmorra(dadosJogador[6])
     dadosMundo = ObterDadosMundo(nickname)
 
@@ -432,7 +590,7 @@ def mainMasmorra(nickname):
             try:
                 salas = carregar_salas(seedMasmorra)
                 matriz = construir_matriz_masmorra(salas)
-                explorar_masmorra(matriz, pos_inicial=(12,12), nickname=nickname)
+                explorar_masmorra(matriz, pos_inicial=(12,12), nickname=nickname, vida_jogador=vida_jogador)
             except Exception as e:
                 print("ERRO")
                 traceback.print_exc()

@@ -1,4 +1,5 @@
 import time
+import traceback
 import pyfiglet
 from pages.IniciarJogo.db_iniciarJogo import *
 from pages.IniciarJogo.inventario_interface import ver_inventario
@@ -41,7 +42,7 @@ def cabecalho(nickname):
 
     print(f"{Fore.LIGHTGREEN_EX}{Style.BRIGHT}╔════════════════════[ MOONLIGHTER GAME ]════════════════════╗".center(largura_terminal))
     print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}{dadosJogador[0]}".center(largura_terminal))
-    print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}HP: {dadosJogador[1]} / {dadosJogador[2]} | OURO: {dadosJogador[3]}".center(largura_terminal))
+    print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}HP: {dadosJogador[2]} / {dadosJogador[1]} | OURO: {dadosJogador[3]}".center(largura_terminal))
     print("\n")
     if dadosJogador[4] == -1:
         print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}{dadosJogador[6]}".center(largura_terminal))
@@ -107,8 +108,13 @@ def locomocao(nickname):
                 continue
             else:
                 atualizar_local_jogador(locais[escolha - 1][0], nickname)
-                if locais[escolha - 1][0].startswith('Masmorra'):
-                    mainMasmorra(nickname)
+                try:
+                    if locais[escolha - 1][0].startswith('Masmorra'):
+                        mainMasmorra(nickname)
+                except Exception as e:
+                    print(Fore.RED + "Erro ao executar a masmorra:", e)
+                    traceback.print_exc()
+                    input("Pressione Enter para continuar...")
                 if locais[escolha - 1][0] == 'Forja Vulcânica':
                     menu_forja(nickname, buscarSeedMapa(nickname))
                 if locais[escolha - 1][0] == 'Banco de Rynoka':
