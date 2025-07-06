@@ -163,24 +163,19 @@ def novoJogador():
                     time.sleep(3)
                     return
                 
-                # Inicializar dados básicos do sistema se necessário
-                print(f"{Style.BRIGHT}{Fore.YELLOW}INICIALIZANDO SISTEMA...".center(largura_terminal))
-                if not inicializar_dados_inventario():
-                    print(Fore.RED + "Erro ao inicializar dados do inventário.")
-                    print('\033[?25h', end='', flush=True)
-                    time.sleep(3)
-                    return
-                
+                limpar_terminal()
+                print(logo)
+                print("\n\n\n")
                 print(f"{Style.BRIGHT}{Fore.YELLOW}CRIANDO MUNDO...".center(largura_terminal))
+                time.sleep(2)
                 seed = gerarSeed()
                 cursor = connection.cursor()
                 
                 # Criar jogador
-                cursor.execute("INSERT INTO jogador VALUES (%s, 100, 100, 100, -1, -1, 'Vila Rynoka', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, NULL);", (nickname,))
-                
+                cursor.execute("INSERT INTO jogador VALUES (%s, 100, 100, 100, -1, -1, 'Vila Rynoka', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);", (nickname,))
                 # Criar mundo e loja
                 cursor.execute("INSERT INTO mundo VALUES (%s, %s, 'Manhã', 1, 1);", (seed, nickname,))
-                cursor.execute("INSERT INTO \"loja_jogador\" VALUES (%s, 'Moonlighter', 1, 10, 0)", (seed,))
+                cursor.execute("INSERT INTO loja_jogador VALUES (%s, 'Moonlighter', 1, 10, 0)", (seed,))
                 
                 # Fazer commit das inserções principais
                 connection.commit()
@@ -188,71 +183,86 @@ def novoJogador():
                 # Criar instâncias dos estabelecimentos para o novo jogador
                 sucesso_banco = criar_instancia_banco_por_jogador(nickname, "Banco de Rynoka", 1, 0)
                 if not sucesso_banco:
-                    print(f"{Fore.YELLOW}Aviso: Não foi possível criar instância do banco para {nickname}")
+                    print(f"{Fore.YELLOW}Aviso: Não foi possível criar instância do banco para {nickname}".center(largura_terminal))
+                    time.sleep(2)
                 
                 sucesso_varejo = criar_instancia_chapeu_de_madeira_por_jogador(nickname, "O Chapéu de Madeira", 2, 15)
                 if not sucesso_varejo:
-                    print(f"{Fore.YELLOW}Aviso: Não foi possível criar instância do Chapéu de Madeira para {nickname}")
-                
+                    print(f"{Fore.YELLOW}Aviso: Não foi possível criar instância do Chapéu de Madeira para {nickname}".center(largura_terminal))
+                    time.sleep(2)
+
                 sucesso_forja = criar_instancia_forja_por_jogador(nickname, "Forja de Vulcan", 3)
                 if not sucesso_forja:
-                    print(f"{Fore.YELLOW}Aviso: Não foi possível criar instância da forja para {nickname}")
-                
+                    print(f"{Fore.YELLOW}Aviso: Não foi possível criar instância da forja para {nickname}".center(largura_terminal))
+                    time.sleep(2)
+
                 cursor.close()
                 connection.close()
                 
+                limpar_terminal()
+                print(logo)
+                print("\n\n\n")
                 # Criar inventários do jogador
                 print(f"{Style.BRIGHT}{Fore.YELLOW}CRIANDO INVENTÁRIOS...".center(largura_terminal))
+                time.sleep(2)
                 if not criar_inventarios_jogador(nickname):
-                    print(Fore.RED + "Erro ao criar inventários do jogador.")
+                    print(f"{Fore.RED}Erro ao criar inventários do jogador.".center(largura_terminal))
                     print('\033[?25h', end='', flush=True)
                     time.sleep(3)
                     return
                 
+                limpar_terminal()
+                print(logo)
+                print("\n\n\n")
                 # Adicionar itens iniciais
                 print(f"{Style.BRIGHT}{Fore.YELLOW}ADICIONANDO ITENS INICIAIS...".center(largura_terminal))
+                time.sleep(2)
                 connection = connect_to_db()
                 cursor = connection.cursor()
                 
                 # Buscar ID do inventário principal (Mochila Principal)
                 cursor.execute("""
-                    SELECT inv."idInventario" 
-                    FROM "inventario" inv 
-                    WHERE inv."nome" = 'Mochila Principal'
+                    SELECT "idInventario" 
+                    FROM "inventario" 
+                    WHERE "nome" = 'Mochila'
                 """)
-                inventario_principal = cursor.fetchone()
-                
-                if inventario_principal:
-                    id_inventario_principal = inventario_principal[0]
+
+                id_inventario_principal = cursor.fetchone()
                     
-                    # Buscar IDs dos itens iniciais
+                # Buscar IDs dos itens iniciais
+                cursor.execute("""
+                    SELECT "idItem", "nome" FROM "item" 
+                    WHERE "nome" IN ('Espada Curta de Treinamento', 'Armadura de Tecido I', 'Poção de Cura I')
+                """)
+                itens_iniciais = cursor.fetchall()
+                
+                # Adicionar cada item inicial
+                for id_item, nome_item in itens_iniciais:
+                    quantidade = 3 if nome_item == 'Poção de Cura I' else 1
+
                     cursor.execute("""
-                        SELECT "idItem", "nome" FROM "item" 
-                        WHERE "nome" IN ('Espada de Madeira', 'Armadura de Couro', 'Poção de Vida Pequena')
-                    """)
-                    itens_iniciais = cursor.fetchall()
-                    
-                    # Adicionar cada item inicial
-                    for id_item, nome_item in itens_iniciais:
-                        quantidade = 3 if nome_item == 'Poção de Vida Pequena' else 1
-                        
-                        cursor.execute("""
-                            INSERT INTO "inst_item" ("idItem", "quantidade", "nickname", "idInventario")
-                            VALUES (%s, %s, %s, %s)
-                        """, (id_item, quantidade, nickname, id_inventario_principal))
-                
+                        INSERT INTO "inst_item" ("idItem", "quantidade", "nickname", "idInventario")
+                        VALUES (%s, %s, %s, %s)
+                    """, (id_item, quantidade, nickname, id_inventario_principal))
+                    cursor.execute("""
+                        UPDATE "inst_inventario"
+                        SET "slotOcupado" = "slotOcupado" + 1
+                        WHERE "nickname" = %s AND "idInventario" = 1
+                    """, (nickname,))
+
                 connection.commit()
                 cursor.close()
                 connection.close()
                 
             except Exception as e:
+                connection.rollback()
                 limpar_terminal()
                 print("\n\n\n\n")
                 print(logo)
                 print("\n\n\n")
                 print(f"Erro ao criar jogador: {e}\n")
                 print('\033[?25h', end='', flush=True)
-                time.sleep(5)
+                time.sleep(70)
                 return
             
             limpar_terminal()

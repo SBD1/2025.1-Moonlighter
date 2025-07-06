@@ -173,7 +173,7 @@ CREATE TABLE "armadura" (
 
 CREATE TABLE "pocao" (
     "idItem" integer PRIMARY KEY,
-    "duracaoTurnos" SMALLINT NOT NULL,
+    "quantidade" SMALLINT NOT NULL,
 
     CONSTRAINT "fk_item" FOREIGN KEY ("idItem") REFERENCES "item" ("idItem") ON DELETE CASCADE
 );
@@ -335,23 +335,6 @@ CREATE TABLE "dialogo_npc" (
     CONSTRAINT "fk_dialogo" FOREIGN KEY ("idDialogo") REFERENCES "dialogo" ("idDialogo") ON DELETE CASCADE,
     CONSTRAINT "fk_npc" FOREIGN KEY ("idNPC") REFERENCES "npc" ("idNPC") ON DELETE CASCADE
 );
-
--- ================================================================
--- EXTENSÕES PARA O SISTEMA DE INVENTÁRIO
--- Data: 29/06/2025
--- Descrição: Extensões para o sistema de inventário
--- ================================================================
-
--- Adicionando campos para slots equipados no jogador
-ALTER TABLE "jogador" ADD COLUMN IF NOT EXISTS "armaEquipada" INTEGER;
-ALTER TABLE "jogador" ADD COLUMN IF NOT EXISTS "armaduraEquipada" INTEGER;
-
--- Adicionando foreign keys para os equipamentos
-ALTER TABLE "jogador" ADD CONSTRAINT "fk_arma_equipada" 
-    FOREIGN KEY ("armaEquipada") REFERENCES "item" ("idItem") ON DELETE SET NULL;
-
-ALTER TABLE "jogador" ADD CONSTRAINT "fk_armadura_equipada" 
-    FOREIGN KEY ("armaduraEquipada") REFERENCES "item" ("idItem") ON DELETE SET NULL;
 
 -- ================================================================
 -- TABELA DE ITENS NO CHÃO (MUNDO)
