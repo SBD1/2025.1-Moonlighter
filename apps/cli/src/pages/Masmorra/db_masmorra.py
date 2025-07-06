@@ -1,3 +1,4 @@
+import random
 from setup.database import connect_to_db
 from colorama import Fore
 import hashlib
@@ -178,16 +179,28 @@ def atualiza_posicao_jogador(nickname, x, y):
     connection.close()
     return True
 
-def obter_monstros():
+def obter_monstros(nickname):
     connection = connect_to_db()
     if connection is None:
         print("Erro ao conectar ao banco de dados.")
         return False
     
+    # Primeiro, obtém o nomeLocal do jogador
     cursor = connection.cursor()
+    cursor.execute("""
+        SELECT "nomeLocal" FROM "jogador" WHERE "nickname" = %s
+        """, (nickname,))
+    resultado = cursor.fetchone()
+    if not resultado:
+        print("Jogador não encontrado.")
+        return []
+
+    nome_local = resultado[0]
+
+    # Busca monstros associados a esse local
     cursor.execute('''
-            SELECT "idMonstro", "nome", "vidaMaxima", "nivel", "chanceCritico", "dadoAtaque", "multiplicador", "multiplicadorCritico" FROM "monstro"
-                   ''')
+            SELECT "idMonstro", "nome", "vidaMaxima", "nivel", "chanceCritico", "dadoAtaque", "multiplicador", "multiplicadorCritico", "chefe" FROM "monstro" WHERE "nomeLocal" = %s
+                   ''', (nome_local,))
     monstros = cursor.fetchall()
     cursor.close()
     connection.close()
@@ -269,3 +282,74 @@ def atualizar_vida_jogador(nickname, nova_vida):
     connection.commit()
     cursor.close()
     connection.close()
+
+def desbloquear_masmorra(nickname, nome_masmorra):
+    conn = connect_to_db()
+    if conn is None:
+        print("Erro ao conectar ao banco de dados.")
+        return
+    
+    cursor = conn.cursor()
+
+    try:
+        # Obter nível de desbloqueio da masmorra informada
+        cursor.execute("""
+            SELECT "nivelDesbloqueio"
+            FROM "masmorra"
+            WHERE "nomeLocal" = %s
+        """, (nome_masmorra,))
+        resultado = cursor.fetchone()
+
+        if resultado is None:
+            print(f"Masmorra '{nome_masmorra}' não encontrada no banco de dados.")
+            return
+
+        nivel_desejado = resultado[0]
+
+        # Obter o nível atual do mundo do jogador
+        cursor.execute("""
+            SELECT "nivelMundo"
+            FROM "mundo"
+            WHERE "nickname" = %s
+        """, (nickname,))
+        nivel_atual = cursor.fetchone()[0]
+
+        # Só atualiza se o nível da masmorra for maior que o atual
+        if nivel_desejado > nivel_atual:
+            cursor.execute("""
+                UPDATE "mundo"
+                SET "nivelMundo" = %s
+                WHERE "nickname" = %s
+            """, (nivel_desejado, nickname))
+            conn.commit()
+            print(f"{Fore.LIGHTBLUE_EX}  Novo nível do mundo: {nivel_desejado}")
+        else:
+            print(f"{Fore.LIGHTBLACK_EX}  Masmorra já estava desbloqueada.")
+
+    except Exception as e:
+        conn.rollback()
+        print(f"Erro ao desbloquear masmorra: {e}")
+
+    finally:
+        cursor.close()
+        conn.close()
+
+def musica_masmorra(nickname):
+    connection = connect_to_db()
+    if connection is None:
+        print("Erro ao conectar ao banco de dados.")
+        return None
+
+    cursor = connection.cursor()
+    cursor.execute('''
+        SELECT "nomeLocal" FROM "jogador" WHERE "nickname" = %s;
+    ''', (nickname,))
+
+    resultado = cursor.fetchone()
+    cursor.close()
+    connection.close()
+
+    if resultado:
+        return resultado[0]  # Pega só o nomeLocal, que está na tupla
+    else:
+        return None

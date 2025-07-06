@@ -236,6 +236,59 @@ def dropar_item(nickname, item_info):
         time.sleep(2)
         return False
 
+def cadastrar_arma(id_item, dado_ataque, chance_critico, multiplicador, multiplicador_critico, tipo_arma='arma'):
+    connection = connect_to_db()
+    if connection is None:
+        print("Erro ao conectar ao banco de dados.")
+        return False
+
+    try:
+        cursor = connection.cursor()
+        cursor.execute('''
+            INSERT INTO "arma" (
+                "idItem", "dadoAtaque", "chanceCritico", "multiplicador", "multiplicadorCritico", "tipoArma"
+            ) VALUES (%s, %s, %s, %s, %s, %s)
+        ''', (id_item, dado_ataque, chance_critico, multiplicador, multiplicador_critico, tipo_arma))
+
+        connection.commit()
+        cursor.close()
+        connection.close()
+        return True
+
+    except Exception as e:
+        print(f"Erro ao cadastrar arma: {e}")
+        connection.rollback()
+        cursor.close()
+        connection.close()
+        return False
+
+def cadastrar_armadura(id_item, dado_defesa, defesa_passiva, critico_defensivo, bonus_defesa, tipo_armadura='armadura'):
+    connection = connect_to_db()
+    if connection is None:
+        print("Erro ao conectar ao banco de dados.")
+        return False
+
+    try:
+        cursor = connection.cursor()
+        cursor.execute('''
+            INSERT INTO "armadura" (
+                "idItem", "dadoDefesa", "defesaPassiva", "criticoDefensivo", "bonusDefesa", "tipoArmadura"
+            ) VALUES (%s, %s, %s, %s, %s, %s)
+        ''', (id_item, dado_defesa, defesa_passiva, critico_defensivo, bonus_defesa, tipo_armadura))
+
+        connection.commit()
+        cursor.close()
+        connection.close()
+        return True
+
+    except Exception as e:
+        print(f"Erro ao cadastrar armadura: {e}")
+        connection.rollback()
+        cursor.close()
+        connection.close()
+        return False
+
+
 def equipar_item(nickname, item_info):
     """
     Permite equipar armas ou armaduras
@@ -257,6 +310,15 @@ def equipar_item(nickname, item_info):
         cursor = connection.cursor()
         
         if tipo_item == 'Arma':
+             # Verifica se a arma já está na tabela 'arma'
+            cursor.execute('''
+                SELECT 1 FROM "arma" WHERE "idItem" = %s;
+            ''', (id_item,))
+            existe = cursor.fetchone()
+
+            if not existe:
+                cadastrar_arma(id_item, 'd6', 10, 1.0, 1.5)
+
             cursor.execute("""
                 UPDATE "jogador" 
                 SET "armaEquipada" = %s 
@@ -264,6 +326,16 @@ def equipar_item(nickname, item_info):
             """, (id_item, nickname))
             tipo_equipamento = "arma"
         else:  # Armadura
+            # Verifica se a armadura já está na tabela 'armadura'
+            cursor.execute('''
+                SELECT 1 FROM "armadura" WHERE "idItem" = %s;
+            ''', (id_item,))
+            existe = cursor.fetchone()
+
+            if not existe:
+                # Cadastra com atributos padrão
+                cadastrar_armadura(id_item, 'd4', 2, 10, 1, 'leve')
+
             cursor.execute("""
                 UPDATE "jogador" 
                 SET "armaduraEquipada" = %s 
@@ -275,7 +347,7 @@ def equipar_item(nickname, item_info):
         cursor.close()
         connection.close()
         
-        print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}✓ {nome} foi equipado como {tipo_equipamento}!")
+        print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX} {nome} foi equipado como {tipo_equipamento}!")
         time.sleep(2)
         return True
         
