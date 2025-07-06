@@ -452,14 +452,14 @@ def vender_item(jogador):
 
 def comprar_item(jogador):
     """
-    Função para comprar uma poção
+    Função para comprar ITEM
     """
     limpar_terminal()
     cabecalho_chapeu_de_madeira(jogador)
-    print(f"\n{Style.BRIGHT}{Fore.CYAN}══════════ COMPRAR POÇÃO ══════════".center(largura_terminal))
+    print(f"\n{Style.BRIGHT}{Fore.CYAN}══════════ COMPRAR iTENS ══════════".center(largura_terminal))
     print("\n")
     
-    # Mostrar poções disponíveis
+    # Mostrar ITENS disponíveis
     itens = visualizar_itens_chapeu_de_madeira_por_jogador(jogador)
     if not itens:
         print(f"{Fore.RED}{Style.BRIGHT}Nenhuma poção disponível para compra!".center(largura_terminal))
