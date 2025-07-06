@@ -296,7 +296,7 @@ def ver_itens_disponiveis(jogador):
             print(f"{Fore.WHITE}{id_item:<5} {nome:<25} {preco_dinamico:<10} {tipo_item:<12}".center(largura_terminal))
             print(f"{Fore.LIGHTBLACK_EX}{descricao}".center(largura_terminal))
             if vendas_jogador > 0:
-                print(f"{Fore.YELLOW}     ⚠️  Você já vendeu {vendas_jogador}x deste item (preço reduzido)".center(largura_terminal))
+                print(f"{Fore.YELLOW}      Você já vendeu {vendas_jogador}x deste item (preço reduzido)".center(largura_terminal))
             print()
     else:
         limpar_terminal()
@@ -515,12 +515,12 @@ def comprar_item(jogador):
             limpar_terminal()
             cabecalho_chapeu_de_madeira(jogador)
             print("\n\n\n\n\n\n")
-            print(f"\n{Fore.GREEN}✅ {quantidade}x '{item_encontrado[1]}' comprado(s) com sucesso!".center(largura_terminal))
+            print(f"\n{Fore.GREEN} {quantidade}x '{item_encontrado[1]}' comprado(s) com sucesso!".center(largura_terminal))
         else:
             limpar_terminal()
             cabecalho_chapeu_de_madeira(jogador)
             print("\n\n\n\n\n\n")
-            print(f"{Fore.RED}{Style.BRIGHT}❌ Erro ao comprar poção!".center(largura_terminal))
+            print(f"{Fore.RED}{Style.BRIGHT}Erro ao comprar item!".center(largura_terminal))
 
     except ValueError:
         limpar_terminal()
