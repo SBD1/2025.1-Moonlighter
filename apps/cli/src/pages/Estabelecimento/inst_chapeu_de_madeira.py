@@ -103,18 +103,37 @@ def buscar_inventario_jogador(jogador):
     if connection:
         try:
             cursor = connection.cursor()
+            
+            # Primeiro, buscar o id do inventário principal do jogador
             cursor.execute("""
-                SELECT ii.idItem, i.nome, i.descricao, i.tipo, i.precoBase, ii.quantidade
-                FROM inst_item ii
-                JOIN item i ON ii.idItem = i.idItem
-                WHERE ii.nickname = %s AND ii.quantidade > 0
-                ORDER BY i.nome
+                SELECT inst."idInventario"
+                FROM "inst_inventario" inst
+                JOIN "inventario" inv ON inst."idInventario" = inv."idInventario"
+                WHERE inst."nickname" = %s AND inv."nome" = 'Mochila Principal'
             """, (jogador,))
+            resultado_inv = cursor.fetchone()
+            
+            if not resultado_inv:
+                cursor.close()
+                connection.close()
+                return []
+            
+            id_inventario = resultado_inv[0]
+            
+            # Buscar itens no inventário principal
+            cursor.execute("""
+                SELECT ii."idItem", i."nome", i."descricao", i."tipo", i."precoBase", ii."quantidade"
+                FROM "inst_item" ii
+                JOIN "item" i ON ii."idItem" = i."idItem"
+                WHERE ii."nickname" = %s AND ii."idInventario" = %s AND ii."quantidade" > 0
+                ORDER BY i."nome"
+            """, (jogador, id_inventario))
             resultado = cursor.fetchall()
             cursor.close()
             connection.close()
             return resultado
-        except:
+        except Exception as e:
+            print(f"Erro ao buscar inventário: {e}")
             if connection:
                 connection.close()
     return []
@@ -461,7 +480,7 @@ def comprar_item(jogador):
                 cursor.execute("SELECT tipo FROM item WHERE idItem = %s", (id_item,))
                 resultado = cursor.fetchone()
                 if resultado:
-                    tipo_item = resultado[0] or "Outro"
+                    tipo_item = resultado[0] #or "Outro"
                 cursor.close()
                 connection.close()
             except:
@@ -490,7 +509,7 @@ def comprar_item(jogador):
                 break
         
         if not item_encontrado:
-            print(f"{Fore.RED}Poção não encontrada!")
+            print(f"{Fore.RED}Item não encontrado!")
             enter_continue()
             return
         

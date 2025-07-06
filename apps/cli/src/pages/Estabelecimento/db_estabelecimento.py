@@ -575,6 +575,10 @@ def visualizar_itens_chapeu_de_madeira_por_jogador(nickname):
     """
     Visualiza poções disponíveis para compra no Chapéu de Madeira (sistema aleatório como Moonlighter original)
     """
+    # Verificar se a instância do Chapéu de Madeira existe, se não, criar
+    if not verificar_instancia_chapeu_de_madeira_por_jogador(nickname):
+        criar_instancia_chapeu_de_madeira_por_jogador(nickname, "O Chapéu de Madeira", 2, 15)
+    
     # Verificar se o dia mudou para forçar atualização da loja
     verificar_dia_mudou_e_atualizar_loja(nickname)
     
@@ -672,42 +676,44 @@ def comprar_item_chapeu_de_madeira_por_jogador(nickname, item_id, quantidade):
 
     try:
         cursor = connection.cursor()
+        
+        # Verificar se o item existe
         cursor.execute("""
-            SELECT tipo FROM "item" WHERE "idItem" = %s
+            SELECT "nome", "precoBase", "tipo" FROM "item" WHERE "idItem" = %s
         """, (item_id,))
         
-        # Buscar margem de lucro da instância do Chapéu de Madeira do jogador
-        cursor.execute("""
-            SELECT iv."margemLucro"
-            FROM "inst_varejo" iv
-            JOIN "mundo" m ON iv."seedMundo" = m."seedMundo"
-            WHERE m."nickname" = %s
-            LIMIT 1
-        """, (nickname,))
-        
-        resultado_margem = cursor.fetchone()
-        margem_lucro = resultado_margem[0] if resultado_margem else 15  # Margem padrão de 15%
-        
-        # Verificar se o jogador tem ouro suficiente
-        cursor.execute("""
-            SELECT j."ouro", 
-                   ROUND(i."precoBase" * (1 + %s / 100.0)) as preco_final,
-                   i."nome"
-            FROM "jogador" j
-            CROSS JOIN "item" i
-            WHERE j."nickname" = %s AND i."idItem" = %s
-        """, (margem_lucro, nickname, item_id))
-        
-        resultado = cursor.fetchone()
-        if not resultado:
-            print(Fore.RED + "Jogador ou item não encontrado!")
+        item_info = cursor.fetchone()
+        if not item_info:
+            print(Fore.RED + f"Item com ID {item_id} não encontrado!")
+            cursor.close()
+            connection.close()
             return False
             
-        ouro_jogador, preco_final, nome_item = resultado
+        nome_item, preco_base, tipo_item = item_info
+        
+        # Verificar se o jogador existe
+        cursor.execute("""
+            SELECT "ouro" FROM "jogador" WHERE "nickname" = %s
+        """, (nickname,))
+        
+        jogador_info = cursor.fetchone()
+        if not jogador_info:
+            print(Fore.RED + f"Jogador {nickname} não encontrado!")
+            cursor.close()
+            connection.close()
+            return False
+            
+        ouro_jogador = jogador_info[0]
+        
+        # Calcular preço final
+        margem_lucro = 15  # Margem padrão de 15%
+        preco_final = int(preco_base * (1 + margem_lucro / 100.0))
         custo_total = preco_final * quantidade
         
         if ouro_jogador < custo_total:
             print(Fore.RED + f"Ouro insuficiente! Você tem {ouro_jogador} ouros, mas precisa de {custo_total} ouros.")
+            cursor.close()
+            connection.close()
             return False
         
         # Deduzir ouro do jogador
@@ -732,9 +738,10 @@ def comprar_item_chapeu_de_madeira_por_jogador(nickname, item_id, quantidade):
         connection.close()
         return True
     except Exception as e:
-        print(Fore.RED + f"Erro ao comprar poção: {e}")
+        print(Fore.RED + f"Erro ao comprar item: {e}")
         if connection:
             connection.rollback()
+            cursor.close()
             connection.close()
         return False
 
@@ -951,64 +958,83 @@ def adicionar_item_ao_inventario(nickname, item_id, quantidade):
 
     try:
         cursor = connection.cursor()
-        
-        # Verificar se o item já existe no inventário principal (idInventario = 1)
-        cursor.execute("""
+
+        # Buscar id do inventário principal do jogador
+        cursor.execute('''
+            SELECT inst."idInventario"
+            FROM "inst_inventario" inst
+            JOIN "inventario" inv ON inst."idInventario" = inv."idInventario"
+            WHERE inst."nickname" = %s AND inv."nome" = 'Mochila Principal'
+        ''', (nickname,))
+        resultado = cursor.fetchone()
+        if not resultado:
+            print(Fore.RED + "Inventário principal não encontrado!")
+            cursor.close()
+            connection.close()
+            return False
+        id_inventario = resultado[0]
+
+        # Verificar se o item já existe no inventário principal
+        cursor.execute('''
             SELECT "idInstItem", "quantidade", i."stackMaximo"
             FROM "inst_item" ii
             JOIN "item" i ON ii."idItem" = i."idItem"
             WHERE ii."nickname" = %s 
             AND ii."idItem" = %s 
-            AND ii."idInventario" = 1
-        """, (nickname, item_id))
-        
+            AND ii."idInventario" = %s
+        ''', (nickname, item_id, id_inventario))
         item_existente = cursor.fetchone()
-        
+
         if item_existente:
             # Atualizar quantidade existente (respeitando stack máximo)
             id_inst_item, quantidade_atual, stack_maximo = item_existente
             nova_quantidade = min(quantidade_atual + quantidade, stack_maximo)
-            
-            cursor.execute("""
+            cursor.execute('''
                 UPDATE "inst_item"
                 SET "quantidade" = %s
                 WHERE "idInstItem" = %s
-            """, (nova_quantidade, id_inst_item))
+            ''', (nova_quantidade, id_inst_item))
         else:
             # Verificar se há espaço no inventário
-            cursor.execute("""
+            cursor.execute('''
                 SELECT (inv."slotMaximo" - inst."slotOcupado") as slots_livres
                 FROM "inst_inventario" inst
                 JOIN "inventario" inv ON inst."idInventario" = inv."idInventario"
-                WHERE inst."nickname" = %s AND inst."idInventario" = 1
-            """, (nickname,))
-            
+                WHERE inst."nickname" = %s AND inst."idInventario" = %s
+            ''', (nickname, id_inventario))
             slots_info = cursor.fetchone()
             if not slots_info or slots_info[0] <= 0:
                 print(Fore.RED + "Inventário cheio! Não é possível adicionar mais itens.")
                 cursor.close()
                 connection.close()
                 return False
-            
             # Inserir novo item no inventário
-            cursor.execute("""
+            cursor.execute('''
                 INSERT INTO "inst_item" ("idItem", "quantidade", "nickname", "idInventario")
-                VALUES (%s, %s, %s, 1)
-            """, (item_id, quantidade, nickname))
-        
+                VALUES (%s, %s, %s, %s)
+            ''', (item_id, quantidade, nickname, id_inventario))
+
         # Atualizar slots ocupados
-        from pages.IniciarJogo.inventario_funcoes import atualizar_slots_ocupados
-        atualizar_slots_ocupados(nickname, 1)
-        
+        cursor.execute('''
+            UPDATE "inst_inventario" 
+            SET "slotOcupado" = (
+                SELECT COUNT(*) 
+                FROM "inst_item" 
+                WHERE "nickname" = %s AND "idInventario" = %s
+            )
+            WHERE "nickname" = %s AND "idInventario" = %s
+        ''', (nickname, id_inventario, nickname, id_inventario))
+
         connection.commit()
         cursor.close()
         connection.close()
         return True
-        
+
     except Exception as e:
         print(Fore.RED + f"Erro ao adicionar item ao inventário: {e}")
         if connection:
             connection.rollback()
+            cursor.close()
             connection.close()
         return False
 
