@@ -798,12 +798,12 @@ def usar_pocao_batalha(nickname, vida_atual):
     
     cursor = connection.cursor()
     cursor.execute("""
-        SELECT ii."idInstItem", i."idItem", i."nome", ii."quantidade", p."duracaoTurnos", i."descricao"
+        SELECT ii."idInstItem", i."idItem", i."nome", ii."quantidade", p."quantidade" as cura
         FROM "inst_item" ii
         JOIN "item" i ON ii."idItem" = i."idItem"
         JOIN "pocao" p ON i."idItem" = p."idItem"
-        WHERE ii."nickname" = %s AND i."tipo" = 'Pocao'
-        ORDER BY p."duracaoTurnos" DESC
+        WHERE ii."nickname" = %s
+        ORDER BY p."quantidade" DESC
     """, (nickname,))
     
     pocoes = cursor.fetchall()
@@ -817,13 +817,13 @@ def usar_pocao_batalha(nickname, vida_atual):
         return vida_atual
     
     print(f"\n{Style.BRIGHT}{Fore.LIGHTCYAN_EX}POÇÕES DISPONÍVEIS:")
-    print(f"{Fore.LIGHTBLUE_EX}{'Nº':<3} {'Nome':<25} {'Cura':<8} {'Qtd':<5} {'Descrição'}")
-    print(f"{Fore.LIGHTBLACK_EX}{'─' * 70}")
+    print(f"{Fore.LIGHTBLUE_EX}{'Nº':<3} {'Nome':<25} {'Cura':<8} {'Qtd':<5}")
+    print(f"{Fore.LIGHTBLACK_EX}{'─' * 55}")
     
     pocoes_numeradas = []
     for i, pocao in enumerate(pocoes, 1):
-        id_inst, id_item, nome, qtd, cura, desc = pocao
-        print(f"{Fore.WHITE}{i:<3} {nome:<25} {cura:<8} {qtd:<5} {desc}")
+        id_inst, id_item, nome, qtd, cura = pocao
+        print(f"{Fore.WHITE}{i:<3} {nome:<25} {cura:<8} {qtd:<5}")
         pocoes_numeradas.append(pocao)
     
     print(f"\n{Style.BRIGHT}{Fore.YELLOW}INSTRUÇÕES:")
@@ -840,74 +840,39 @@ def usar_pocao_batalha(nickname, vida_atual):
             num_pocao = int(escolha)
             if 1 <= num_pocao <= len(pocoes_numeradas):
                 pocao_selecionada = pocoes_numeradas[num_pocao - 1]
-                return aplicar_pocao(nickname, pocao_selecionada, vida_atual, vida_maxima)
+                id_inst, id_item, nome, qtd, cura = pocao_selecionada
+                print(f"\n{Fore.LIGHTYELLOW_EX}Você selecionou: {nome} (Cura: {cura}, Quantidade: {qtd})")
+                confirm = input(f"{Fore.LIGHTGREEN_EX}Deseja usar esta poção? (s/n): ").strip().lower()
+                if confirm != 's':
+                    print(f"{Fore.YELLOW}Ação cancelada.")
+                    time.sleep(1)
+                    return vida_atual
+                if vida_atual >= vida_maxima:
+                    print(f"{Fore.YELLOW}Sua vida já está cheia! Não é possível usar poção agora.")
+                    time.sleep(2)
+                    return vida_atual
+                # Usar apenas UMA poção
+                nova_vida = min(vida_atual + cura, vida_maxima)
+                vida_restaurada = nova_vida - vida_atual
+                # Atualizar/remover poção do inventário
+                connection = connect_to_db()
+                cursor = connection.cursor()
+                if qtd > 1:
+                    cursor.execute("""
+                        UPDATE "inst_item" SET "quantidade" = "quantidade" - 1 WHERE "idInstItem" = %s
+                    """, (id_inst,))
+                else:
+                    cursor.execute("""
+                        DELETE FROM "inst_item" WHERE "idInstItem" = %s
+                    """, (id_inst,))
+                connection.commit()
+                cursor.close()
+                connection.close()
+                print(f"\n{Fore.LIGHTGREEN_EX}Você usou {nome}! {Fore.GREEN}+{vida_restaurada} HP")
+                print(f"{Fore.LIGHTBLUE_EX}HP: {vida_atual} → {nova_vida}{Style.RESET_ALL}")
+                time.sleep(2)
+                return nova_vida
             else:
                 print(f"{Fore.RED}Número inválido! Escolha entre 1 e {len(pocoes_numeradas)}")
         except ValueError:
             print(f"{Fore.RED}Por favor, digite um número válido!")
-
-def aplicar_pocao(nickname, pocao_info, vida_atual, vida_maxima):
-    """
-    Aplica o efeito de uma poção e remove do inventário
-    """
-    from setup.database import connect_to_db
-    from pages.IniciarJogo.db_iniciarJogo import atualizar_vida_jogador
-    from colorama import Fore, Style
-    import time
-    
-    id_inst, id_item, nome, qtd, cura, desc = pocao_info
-    
-    # Calcular nova vida
-    nova_vida = min(vida_atual + cura, vida_maxima)
-    vida_restaurada = nova_vida - vida_atual
-    
-    print(f"\n{Style.BRIGHT}{Fore.LIGHTGREEN_EX}Usando {nome}...")
-    time.sleep(1)
-    
-    if vida_restaurada > 0:
-        print(f"{Fore.GREEN}✓ Restaurou {vida_restaurada} pontos de vida!")
-        print(f"{Fore.LIGHTBLUE_EX}HP: {vida_atual} → {nova_vida}")
-    else:
-        print(f"{Fore.YELLOW}Você já está com vida máxima!")
-    
-    # Remover poção do inventário
-    connection = connect_to_db()
-    if connection is None:
-        print(f"{Fore.RED}Erro ao conectar ao banco de dados.")
-        return vida_atual
-    
-    try:
-        cursor = connection.cursor()
-        
-        if qtd == 1:
-            # Remover item completamente
-            cursor.execute("""
-                DELETE FROM "inst_item" 
-                WHERE "idInstItem" = %s
-            """, (id_inst,))
-        else:
-            # Reduzir quantidade
-            cursor.execute("""
-                UPDATE "inst_item" 
-                SET "quantidade" = "quantidade" - 1
-                WHERE "idInstItem" = %s
-            """, (id_inst,))
-        
-        # Atualizar vida do jogador
-        atualizar_vida_jogador(nickname, nova_vida)
-        
-        connection.commit()
-        cursor.close()
-        connection.close()
-        
-        print(f"{Fore.LIGHTGREEN_EX}✓ {nome} foi consumida!")
-        time.sleep(2)
-        return nova_vida
-        
-    except Exception as e:
-        print(f"{Fore.RED}Erro ao usar poção: {e}")
-        connection.rollback()
-        cursor.close()
-        connection.close()
-        time.sleep(2)
-        return vida_atual
