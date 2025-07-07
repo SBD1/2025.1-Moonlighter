@@ -648,8 +648,18 @@ def explorar_masmorra(matriz, pos_inicial=(7, 7), nickname=None, vida_jogador=No
                         trocar_musica(musica_atual)
                     elif acao == "morte":
                         matriz[pos]["visitado"] = True
-                        atualizar_vida_jogador(nickname, 0)
-                        atualizarParaLocalAnterior(ObterDadosJogador(nickname))
+                        # Recupera vida máxima
+                        dados_jogador = ObterDadosJogador(nickname)
+                        if dados_jogador and len(dados_jogador) > 1:
+                            vida_maxima = dados_jogador[1]
+                        else:
+                            vida_maxima = 100  # valor padrão caso haja erro
+                        atualizar_vida_jogador(nickname, vida_maxima)
+                        atualizarParaLocalAnterior(dados_jogador)
+                        print(Fore.LIGHTGREEN_EX + "\nVocê foi socorrido e sua vida foi restaurada!")
+                        time.sleep(2)
+                        from pages.IniciarJogo.iniciarJogo import iniciar_jogo
+                        iniciar_jogo(nickname)
                         return
                     elif acao == "sair":
                         atualizarParaLocalAnterior(ObterDadosJogador(nickname))
@@ -764,7 +774,7 @@ def usar_pocao_batalha(nickname, vida_atual):
     """
     Permite usar poções durante a batalha
     """
-    from pages.IniciarJogo.db_iniciarJogo import ObterDadosJogador
+    from pages.Masmorra.db_masmorra import ObterDadosJogador
     from setup.database import connect_to_db
     from colorama import Fore, Style
     import time
