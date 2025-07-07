@@ -27,6 +27,4 @@ print(Style.BRIGHT + Fore.LIGHTYELLOW_EX + '''
         ╚══════════════════════════════════════════════════════╝
         '''.center(shutil.get_terminal_size().columns))
 print("\n")
-print(Style.BRIGHT + Fore.YELLOW + "Feche a janela".center(shutil.get_terminal_size().columns))
-print(Style.BRIGHT + Fore.YELLOW + "ou digite qualquer tecla para sair".center(shutil.get_terminal_size().columns))
-input("")
+print(Style.BRIGHT + Fore.YELLOW + "Feche a janela para sair".center(shutil.get_terminal_size().columns))

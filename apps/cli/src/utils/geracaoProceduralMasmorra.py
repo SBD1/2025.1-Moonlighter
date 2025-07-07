@@ -4,11 +4,11 @@ init(autoreset=True)
 
 def gerar_numero_salas(dificuldade):
     if (dificuldade == 'Fácil'):
-        qtd_salas: int = (seedMasmorra % 5) + 5 #de 5 a 10 salas
+        qtd_salas: int = (seedMasmorra % 3) + 7 #de 7 a 10 salas
     elif (dificuldade == 'Médio'):
-        qtd_salas: int = (seedMasmorra % 7) + 8 #de 7 a 15 salas
+        qtd_salas: int = (seedMasmorra % 7) + 10 #de 10 a 17 salas
     elif (dificuldade == 'Difícil'):
-        qtd_salas: int = (seedMasmorra % 10) + 10 #de 10 a 20 salas
+        qtd_salas: int = (seedMasmorra % 8) + 17 #de 17 a 25 salas
     else:
         print("Erro ao gerar o numero de salas")
 
@@ -32,8 +32,8 @@ def gerar_seed(seedMasmorra): #gerar seed da sala
     return seedSala
 
 def criar_matriz():
-    linhas: int = 15
-    colunas: int = 15
+    linhas: int = 25
+    colunas: int = 25
     matriz = [[0 for _ in range(colunas)] for _ in range(linhas)]
 
     return matriz
@@ -42,7 +42,7 @@ def pode_criar_sala(x, y, matriz, limite):
     global index 
 
     #verificacao se a sala criada sai do espaco da matriz
-    if ((x >= 15) or (x < 0) or (y >= 15) or (y < 0)):
+    if ((x >= 25) or (x < 0) or (y >= 25) or (y < 0)):
         return False
     
     #se a sala ainda nao existe verifica o limmite de salas
@@ -246,7 +246,7 @@ def imprimir_mapa_detalhado(matriz):
                 cor = Style.RESET_ALL
                 char = "."
             
-            if x == 7 and y == 7:
+            if x == 12 and y == 12:
                 cor = Fore.YELLOW
                 char = "0"
             
@@ -256,7 +256,6 @@ def imprimir_mapa_detalhado(matriz):
 
 
 def gerarMasmorra(dadosMasmorra):
-    # seedMasmorra = 6267
     global seedMasmorra
     seedMasmorra = random.randint(1000, 9999)
 
@@ -268,8 +267,8 @@ def gerarMasmorra(dadosMasmorra):
         matriz = criar_matriz()
 
         #centro da matriz
-        posicaoX = 7 
-        posicaoY = 7
+        posicaoX = 12 
+        posicaoY = 12
 
         criar_sala(posicaoX, posicaoY, matriz, qtd_salas)
 
