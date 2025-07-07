@@ -8,6 +8,7 @@ import os
 import sys
 import shutil
 import time
+import hashlib  # Adicionado para a função de verificação de inimigo
 from utils.geracaoProceduralMasmorra import gerarMasmorra
 import traceback
 
@@ -27,6 +28,14 @@ largura_terminal = shutil.get_terminal_size().columns
 ascii = pyfiglet.figlet_format("MOONLIGHTER")
 centralizacao = "\n".join([linha.center(largura_terminal) for linha in ascii.splitlines()])
 logo = f"{Style.BRIGHT + Fore.LIGHTGREEN_EX}\n\n{centralizacao}\n\n\n"
+
+# FATORES DE BALANCEAMENTO GLOBAL
+FATOR_DANO_JOGADOR = 3.0       # Multiplicador para o dano do jogador (ex: 1.0 = 100%, 1.5 = 150%)
+FATOR_DEFESA_JOGADOR = 1.0  # Multiplicador para a defesa do jogador (ex: 1.0 = 100%)
+FATOR_DANO_MONSTRO = 1.0  # Multiplicador para o dano dos monstros (ex: 1.0 = 100%)
+FATOR_CHANCE_ENCONTRO = 80  # Chance (em %) de encontrar um monstro em uma sala.
+FATOR_CHANCE_FUGA = 15  # O jogador precisa tirar um valor maior que este em um d20 para fugir.
+FATOR_CHANCE_DROP = 1.0  # Multiplicador para a chance de drop de itens (ex: 1.2 = 20% a mais de chance)
 
 # definicoes e funcoes iniciais
 musicas = {
@@ -62,11 +71,6 @@ def trocar_musica(caminho_musica, fadeout_ms=1000, fadein_ms=3000):
     pygame.mixer.music.play(-1, fade_ms=fadein_ms)
 
     musica_atual = caminho_musica
-
-
-def tocar_musica(nome):
-    caminho = f"apps/cli/assets/musics/{musicas.get(nome)}"
-    trocar_musica(caminho)
 
 
 def limpar_terminal():
@@ -147,8 +151,7 @@ def sortear_monstro(seed_sala, lista_monstros, tipo_sala):
 
     # Filtra a lista de monstros conforme o tipo de sala:
     if tipo_sala == "Boss":
-        # Só monstros que são chefes
-        monstros_filtrados = [m for m in lista_monstros if m[8] == True]  # índice 9: "chefe"
+        monstros_filtrados = [m for m in lista_monstros if m[8] == True]
     else:
         # Só monstros que não são chefes
         monstros_filtrados = [m for m in lista_monstros if m[8] == False]
@@ -187,7 +190,7 @@ def verificar_inimigo(seed_sala, sala):
     hash_val = hashlib.sha256(seed_sala.encode()).hexdigest()
     num = int(hash_val[:8], 16) % 100
 
-    return num < 80  # chance de inimigo
+    return num < FATOR_CHANCE_ENCONTRO
 
 
 def calcular_dano(arma):
@@ -211,14 +214,20 @@ def calcular_dano(arma):
 
     print(f"  Você rolou um d{dado_ataque} e tirou: {resultado_dado}")
 
+    dano_base = 0
     if critico:
-        dano = int(resultado_dado * multiplicador_critico)
-        print(Fore.RED + f"  !! CRÍTICO! Dano(x{multiplicador_critico}): {dano}")
+        dano_base = int(resultado_dado * multiplicador_critico)
+        print(Fore.RED + f"  !! CRÍTICO! Dano(x{multiplicador_critico}): {dano_base}")
     else:
-        dano = int(resultado_dado * multiplicador)
-        print(f"  Dano: {dano}")
+        dano_base = int(resultado_dado * multiplicador)
+        print(f"  Dano: {dano_base}")
 
-    return dano
+    dano_final = int(dano_base * FATOR_DANO_JOGADOR)
+
+    if FATOR_DANO_JOGADOR != 1.0:
+        print(Fore.LIGHTMAGENTA_EX + f"  Dano ajustado ({FATOR_DANO_JOGADOR*100:.0f}%): {dano_final}")
+
+    return dano_final
 
 
 def calcular_dano_monstro(monstro):
@@ -248,14 +257,20 @@ def calcular_dano_monstro(monstro):
     resultados_str = ' e '.join(map(str, resultados))
     print(f"  O {monstro['nome']} rolou {qtd_dados} d{dado_ataque} e tirou: {resultados_str}")
 
+    dano_base = 0
     if critico:
-        dano = int(resultado_total * multiplicador_critico)
-        print(Fore.RED + f"  O {monstro['nome']} acertou um CRÍTICO! Dano: {dano}")
+        dano_base = int(resultado_total * multiplicador_critico)
+        print(Fore.RED + f"  O {monstro['nome']} acertou um CRÍTICO! Dano base: {dano_base}")
     else:
-        dano = int(resultado_total * multiplicador)
-        print(f"  O {monstro['nome']} atacou! Dano: {dano}")
+        dano_base = int(resultado_total * multiplicador)
+        print(f"  O {monstro['nome']} atacou! Dano base: {dano_base}")
 
-    return dano
+    dano_final = int(dano_base * FATOR_DANO_MONSTRO)
+
+    if FATOR_DANO_MONSTRO != 1.0:
+        print(Fore.LIGHTMAGENTA_EX + f"  Dano ajustado ({FATOR_DANO_MONSTRO*100:.0f}%): {dano_final}")
+
+    return dano_final
 
 
 def calcular_defesa(armadura):
@@ -279,14 +294,20 @@ def calcular_defesa(armadura):
     resultado_dado = random.randint(1, dado_defesa)
     print(f"  Você rolou um d{dado_defesa} para defesa e tirou: {resultado_dado}")
 
+    defesa_base = 0
     if critico:
-        defesa_total = resultado_dado + defesa_passiva + bonus_defesa
-        print(Fore.GREEN + f"  Defesa EFICIENTE! Defesa total: {defesa_total}")
+        defesa_base = resultado_dado + defesa_passiva + bonus_defesa
+        print(Fore.GREEN + f"  Defesa EFICIENTE! Defesa total: {defesa_base}")
     else:
-        defesa_total = resultado_dado + defesa_passiva
-        print(Fore.LIGHTBLUE_EX + f"  Defesa: {defesa_total}")
+        defesa_base = resultado_dado + defesa_passiva
+        print(Fore.LIGHTBLUE_EX + f"  Defesa base: {defesa_base}")
 
-    return defesa_total
+    defesa_final = int(defesa_base * FATOR_DEFESA_JOGADOR)
+
+    if FATOR_DEFESA_JOGADOR != 1.0:
+        print(Fore.LIGHTMAGENTA_EX + f"  Defesa ajustada ({FATOR_DEFESA_JOGADOR*100:.0f}%): {defesa_final}")
+
+    return defesa_final
 
 
 def menu_batalha(monstro, arma, armadura, vida_jogador, nickname):
@@ -442,7 +463,7 @@ def menu_batalha(monstro, arma, armadura, vida_jogador, nickname):
             print(Fore.MAGENTA + "  Você joga um dado de 20 lados para fugir da batalha...")
             time.sleep(2)
             chance_fuga = random.randint(1, 20)
-            if (chance_fuga < 18):
+            if (chance_fuga <= FATOR_CHANCE_FUGA):
                 print(Fore.MAGENTA + f"  Dado: {chance_fuga} - Você não conseguiu fugir.")
                 time.sleep(1)
 
