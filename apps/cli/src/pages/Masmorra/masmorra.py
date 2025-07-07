@@ -1,3 +1,4 @@
+from colorama import Fore
 import random
 import re
 from colorama import Fore, Back, Style, init
@@ -30,9 +31,10 @@ centralizacao = "\n".join([linha.center(largura_terminal) for linha in ascii.spl
 logo = f"{Style.BRIGHT + Fore.LIGHTGREEN_EX}\n\n{centralizacao}\n\n\n"
 
 # FATORES DE BALANCEAMENTO GLOBAL
-FATOR_DANO_JOGADOR = 3.0       # Multiplicador para o dano do jogador (ex: 1.0 = 100%, 1.5 = 150%)
+FATOR_DANO_JOGADOR_BOSS = 15.0       # Multiplicador para o dano do jogador para BOSS(ex: 1.0 = 100%, 1.5 = 150%)
+FATOR_DANO_JOGADOR_MOB = 12.0       # Multiplicador para o dano do jogador para MOB(ex: 1.0 = 100%, 1.5 = 150%)
 FATOR_DEFESA_JOGADOR = 1.0  # Multiplicador para a defesa do jogador (ex: 1.0 = 100%)
-FATOR_DANO_MONSTRO = 1.0  # Multiplicador para o dano dos monstros (ex: 1.0 = 100%)
+FATOR_DANO_MONSTRO = 2.5  # Multiplicador para o dano dos monstros (ex: 1.0 = 100%)
 FATOR_CHANCE_ENCONTRO = 80  # Chance (em %) de encontrar um monstro em uma sala.
 FATOR_CHANCE_FUGA = 15  # O jogador precisa tirar um valor maior que este em um d20 para fugir.
 FATOR_CHANCE_DROP = 1.0  # Multiplicador para a chance de drop de itens (ex: 1.2 = 20% a mais de chance)
@@ -193,7 +195,7 @@ def verificar_inimigo(seed_sala, sala):
     return num < FATOR_CHANCE_ENCONTRO
 
 
-def calcular_dano(arma):
+def calcular_dano(arma, monstro):
     chance_critico = arma["chanceCritico"]
     dado_ataque_str = arma["dadoAtaque"]
     multiplicador = arma["multiplicador"]
@@ -222,10 +224,11 @@ def calcular_dano(arma):
         dano_base = int(resultado_dado * multiplicador)
         print(f"  Dano: {dano_base}")
 
-    dano_final = int(dano_base * FATOR_DANO_JOGADOR)
+    fator_dano = FATOR_DANO_JOGADOR_BOSS if monstro.get("chefe") else FATOR_DANO_JOGADOR_MOB
+    dano_final = int(dano_base * fator_dano)
 
-    if FATOR_DANO_JOGADOR != 1.0:
-        print(Fore.LIGHTMAGENTA_EX + f"  Dano ajustado ({FATOR_DANO_JOGADOR*100:.0f}%): {dano_final}")
+    if fator_dano != 1.0:
+        print(Fore.LIGHTMAGENTA_EX + f"  Dano ajustado ({fator_dano*100:.0f}%): {dano_final}")
 
     return dano_final
 
@@ -355,7 +358,7 @@ def menu_batalha(monstro, arma, armadura, vida_jogador, nickname):
         if escolha == '1':
             print("  Você ataca o monstro!")
             time.sleep(1.5)
-            dano = calcular_dano(arma)
+            dano = calcular_dano(arma, monstro)
             time.sleep(1.5)
             monstro["vidaMaxima"] -= dano
 
@@ -731,7 +734,7 @@ def mainMasmorra(nickname):
         print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}{dadosMasmorra[0]}".center(largura_terminal))
         print("\n")
         print(f"{Fore.WHITE}Digite 's' para confirmar ou 'n' para desistir.".center(largura_terminal))
-
+        # verificar_balanceamento_masmorra(nickname)
         print("\n\n\n\n\n")
         confirmacao = input(f"{Style.BRIGHT}{Fore.MAGENTA}>>> ").strip().lower()
 
@@ -898,3 +901,118 @@ def usar_pocao_batalha(nickname, vida_atual):
                 print(f"{Fore.RED}Número inválido! Escolha entre 1 e {len(pocoes_numeradas)}")
         except ValueError:
             print(f"{Fore.RED}Por favor, digite um número válido!")
+
+
+def verificar_balanceamento_masmorra(nickname):
+    """
+    Verifica se o balanceamento da masmorra está adequado
+    (mobs normais e bosses), exibindo debug, sugestões e
+    usando:
+        • FATOR_DANO_JOGADOR_MOB   – dano do jogador vs mobs
+        • FATOR_DANO_JOGADOR_BOSS  – dano do jogador vs bosses
+    """
+
+    # ──────────────────────────── COLETA DE DADOS ────────────────────────────
+    dados_arma = obter_arma(nickname)
+    dados_armadura = obter_armadura(nickname)
+    lista_monstros = obter_monstros(nickname)
+    vida_jogador = obter_vida_jogador(nickname)
+
+    if not dados_arma or not lista_monstros or vida_jogador is None:
+        print(Fore.RED + "❌ Dados insuficientes para verificação de balanceamento.")
+        return
+
+    # Debug bruto
+    print(Fore.LIGHTBLACK_EX + "\n🔎 DEBUG: dados coletados")
+    print(Fore.LIGHTBLACK_EX + f"- Arma: {dados_arma}")
+    print(Fore.LIGHTBLACK_EX + f"- Armadura: {dados_armadura}")
+    print(Fore.LIGHTBLACK_EX + f"- Vida do jogador: {vida_jogador}")
+    print(Fore.LIGHTBLACK_EX + f"- Monstros: {[{'nome': m[1], 'vidaMaxima': m[2], 'dano': m[5], 'mult': m[6], 'boss': m[8]} for m in lista_monstros]}")
+
+    # ──────────────────────────── OBJETOS DE COMBATE ─────────────────────────
+    arma_data = dados_arma[0] if isinstance(dados_arma, list) and dados_arma else dados_arma
+    dado_bruto = str(arma_data[1]) if str(arma_data[1]).startswith("d") else f"d{arma_data[1]}"
+
+    arma = {
+        "dadoAtaque":           dado_bruto,
+        "chanceCritico":        arma_data[2],
+        "multiplicador":        arma_data[3],
+        "multiplicadorCritico": arma_data[4]
+    }
+
+    if dados_armadura:
+        dado_def = str(dados_armadura[1]) if str(dados_armadura[1]).startswith("d") else f"d{dados_armadura[1]}"
+        armadura = {
+            "dadoDefesa":       dado_def,
+            "criticoDefensivo": dados_armadura[3],
+            "defesaPassiva":    dados_armadura[2],
+            "bonusDefesa":      dados_armadura[4]
+        }
+    else:
+        armadura = {"dadoDefesa": "d0", "criticoDefensivo": 0, "defesaPassiva": 0, "bonusDefesa": 0}
+
+    def dano_medio_jogador(tipo: str = "mob") -> float:
+        """Retorna dano médio do jogador contra MOB ou BOSS."""
+        faces = int(re.search(r'd(\d+)', arma["dadoAtaque"]).group(1))
+        base = (1 + faces) / 2
+        fator = FATOR_DANO_JOGADOR_MOB if tipo == "mob" else FATOR_DANO_JOGADOR_BOSS
+        return base * arma["multiplicador"] * fator
+
+    def dano_medio_monstro(monstro) -> float:
+        """Dano médio (já com multiplicador individual e fator global)."""
+        match = re.match(r'(\d*)d(\d+)', monstro[5])
+        if not match:
+            return 0
+        qtd, faces = (int(match.group(1)) if match.group(1) else 1), int(match.group(2))
+        base = qtd * (1 + faces) / 2
+        return base * monstro[6] * FATOR_DANO_MONSTRO
+
+    def defesa_media_jogador() -> float:
+        faces = int(re.search(r'd(\d+)', armadura["dadoDefesa"]).group(1)) if armadura["dadoDefesa"] != "d0" else 0
+        base = (1 + faces) / 2 if faces else 0
+        return (base + armadura["defesaPassiva"]) * FATOR_DEFESA_JOGADOR
+
+    # ──────────────────────────── MÉTRICAS GERAIS ───────────────────────────
+    dano_jogador_mob = dano_medio_jogador("mob")
+    dano_jogador_boss = dano_medio_jogador("boss")
+    defesa_jogador = defesa_media_jogador()
+
+    normais = [m for m in lista_monstros if not m[8]]
+    bosses = [m for m in lista_monstros if m[8]]
+
+    def relatorio_combate(entidade, dano_jog, dano_mob, vida_mob):
+        t_kill_mob = vida_mob / dano_jog if dano_jog else float("inf")
+        t_kill_plr = vida_jogador / dano_mob if dano_mob else float("inf")
+        rel = t_kill_plr / t_kill_mob if t_kill_mob else float("inf")
+
+        print(Fore.CYAN + f"\n🔸 {entidade.upper()}:")
+        print(Fore.YELLOW + f"• Vida média: {vida_mob:.2f}")
+        print(Fore.YELLOW + f"• Dano médio: {dano_mob:.2f}")
+        print(Fore.YELLOW + f"• Turnos p/ matar {entidade.lower()}: {t_kill_mob:.2f}")
+        print(Fore.YELLOW + f"• Turnos p/ morrer: {t_kill_plr:.2f}")
+        print(Fore.YELLOW + f"• Relação sobrevivência: {rel:.2f}")
+
+    print(Fore.LIGHTBLUE_EX + "\n📊 --- Verificação de Balanceamento ---")
+    print(Fore.YELLOW + f"• Dano médio jogador (vs mob):  {dano_jogador_mob:.2f}")
+    print(Fore.YELLOW + f"• Dano médio jogador (vs boss): {dano_jogador_boss:.2f}")
+    print(Fore.YELLOW + f"• Defesa média do jogador:      {defesa_jogador:.2f}")
+    print(Fore.YELLOW + f"• Vida do jogador:              {vida_jogador}")
+    print(Fore.YELLOW + f"• Chance de encontro:           {FATOR_CHANCE_ENCONTRO}%")
+
+    if normais:
+        danos = [dano_medio_monstro(m) for m in normais]
+        vidas = [m[2] for m in normais]        # índice 2 = vidaMaxima
+        relatorio_combate("Monstro",
+                          dano_jogador_mob,
+                          sum(danos)/len(danos),
+                          sum(vidas)/len(vidas))
+
+    if bosses:
+        danos = [dano_medio_monstro(m) for m in bosses]
+        vidas = [m[2] for m in bosses]
+        relatorio_combate("Boss",
+                          dano_jogador_boss,
+                          sum(danos)/len(danos),
+                          sum(vidas)/len(vidas))
+
+    print(Fore.LIGHTGREEN_EX + "\n✓ Verificação de balanceamento concluída.\n")
