@@ -12,6 +12,7 @@ import platform
 import os
 import shutil
 import textwrap
+from pages.Estabelecimento.moonlighter import mainMoonlighter
 
 # definição da largura da janela do terminal:
 largura_terminal = shutil.get_terminal_size().columns
@@ -115,6 +116,10 @@ def locomocao(nickname):
                     menu_banco(nickname)
                 if locais[escolha - 1][0] == 'O Chapéu de Madeira':
                     menu_chapeu_de_madeira(nickname, buscarSeedMapa(nickname))
+                if locais[escolha - 1][0] == 'Quarto':
+                    mainMoonlighter(nickname, 'Quarto')
+                if locais[escolha - 1][0] == 'Salao de Exposição':
+                    mainMoonlighter(nickname, 'Salao de Exposição')
         except ValueError:
             limpar_terminal()
             print('\033[?25l', end='', flush=True)

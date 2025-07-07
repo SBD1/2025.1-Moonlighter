@@ -51,7 +51,7 @@ def obter_itens_inventario(nickname):
         INNER JOIN "inst_inventario" INV_INST ON II."idInventario" = INV_INST."idInventario" 
             AND II."nickname" = INV_INST."nickname"
         INNER JOIN "inventario" INV ON INV_INST."idInventario" = INV."idInventario"
-        WHERE II."nickname" = %s
+        WHERE II."nickname" = %s AND II."idInventario" <> 5
         ORDER BY INV."idInventario", I."nome";
     """, (nickname,))
 
