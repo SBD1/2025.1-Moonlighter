@@ -199,7 +199,7 @@ def calcular_dano(arma):
     multiplicador_critico = arma["multiplicadorCritico"]
 
     #extrair numero do dado
-    match = re.match(r'd(\d+)', dado_ataque_str.lower())
+    match = re.match(r'd(\d+)', str(dado_ataque_str).lower())
     if not match:
         print("Erro: formato de dado inválido.")
         return 0
@@ -233,7 +233,7 @@ def calcular_dano_monstro(monstro):
     multiplicador = monstro.get("multiplicador", 1)
     multiplicador_critico = monstro.get("multiplicadorCritico", 2)
 
-    match = re.match(r'(\d*)d(\d+)', dado_ataque_str.lower())
+    match = re.match(r'(\d*)d(\d+)', str(dado_ataque_str).lower())
     if not match:
         print("Erro: formato de dado do monstro inválido.")
         return 0
@@ -267,7 +267,7 @@ def calcular_defesa(armadura):
     defesa_passiva = armadura["defesaPassiva"]
     bonus_defesa = armadura["bonusDefesa"]
 
-    match = re.match(r'd(\d+)', dado_defesa_str.lower())
+    match = re.match(r'd(\d+)', str(dado_defesa_str).lower())
     if not match:
         print("Erro: formato de dado de defesa inválido.")
         return 0
@@ -424,7 +424,7 @@ def menu_batalha(monstro, arma, armadura, vida_jogador, nickname):
             print(Fore.MAGENTA + "  Você joga um dado de 20 lados para fugir da batalha...")
             time.sleep(2)
             chance_fuga = random.randint(1, 20)
-            if (chance_fuga < 0): #DEBUG <18
+            if (chance_fuga < 18): 
                 print(Fore.MAGENTA + f"  Dado: {chance_fuga} - Você não conseguiu fugir.")
                 time.sleep(1)
 
@@ -522,46 +522,48 @@ def explorar_masmorra(matriz, pos_inicial=(7, 7), nickname=None, vida_jogador=No
     lista_monstros = obter_monstros(nickname)
     dados_arma = obter_arma(nickname)
     dados_armadura = obter_armadura(nickname)
+    dadosJogador = ObterDadosJogador
 
     if not dados_arma:
-        # print(Fore.RED + "Você não tem uma arma equipada. Fuja enquanto pode!")
-        # time.sleep(2)
-        # print(Fore.RED + "Equipe uma arma pelo seu inventário")
-        # time.sleep(2)
-        # atualizarParaLocalAnterior(dadosJogador)
-        # musicCity()
-        # return
-        dados_arma = [("d50", 200, 3.0, 15.0)] #arma e armadura para testes
-        armadura = {
-            "dadoDefesa": "d1",
-            "criticoDefensivo": 12,
-            "defesaPassiva": 20,
-            "bonusDefesa": 5
-        }
+        print(Fore.RED + "Você não tem uma arma equipada. Fuja enquanto pode!")
+        time.sleep(2)
+        print(Fore.RED + "Equipe uma arma pelo seu inventário")
+        time.sleep(2)
+        atualizarParaLocalAnterior(dadosJogador)
+        musicCity()
+        return
+    
 
     if isinstance(dados_arma, list) and len(dados_arma) > 0:
         arma_data = dados_arma[0]
     else:
         arma_data = dados_arma
+    
+    dado_bruto = str(arma_data[1])
+    if not dado_bruto.startswith("d"):
+        dado_bruto = f"d{dado_bruto}"
 
     arma = {
-                "dadoAtaque": arma_data[0],
-                "chanceCritico": arma_data[1],
-                "multiplicador": arma_data[2],
-                "multiplicadorCritico": arma_data[3]
+                "dadoAtaque": dado_bruto,
+                "chanceCritico": arma_data[2],
+                "multiplicador": arma_data[3],
+                "multiplicadorCritico": arma_data[4]
             }
             
     if not dados_armadura:
         armadura = None
     
     else:
-        armadura = {
-        "dadoDefesa": dados_armadura[0],
-        "criticoDefensivo": dados_armadura[1],
-        "defesaPassiva": dados_armadura[2],
-        "bonusDefesa": dados_armadura[3]
-    }  # armadura padrão para teste, exemplo simples
+        dado_def = str(dados_armadura[1])
+        if not dado_def.startswith("d"):
+            dado_def = f"d{dado_def}"
 
+        armadura = {
+        "dadoDefesa": dado_def,
+        "criticoDefensivo": dados_armadura[3],
+        "defesaPassiva": dados_armadura[2],
+        "bonusDefesa": dados_armadura[4]
+    } 
 
     while True:
         limpar_terminal()
@@ -719,10 +721,12 @@ def mainMasmorra(nickname):
                 traceback.print_exc()
                 input("Pressione enter para continuar...")
 
-            # pygame.mixer.music.fadeout(7000)
-            # time.sleep(7)
-            # limpar_terminal()
-            # print('\033[?25h', end='', flush=True)
+            pygame.mixer.music.fadeout(7000)
+            time.sleep(2)
+            limpar_terminal()
+            print('\033[?25h', end='', flush=True)
+            return
+
         else:
             limpar_terminal()
             print('\033[?25l', end='', flush=True)

@@ -36,18 +36,18 @@ def exibirHistoria(dadosJogador):
   busca = None
   time.sleep(3)
 
-#   while True:
-#     limpar_terminal()
-#     print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
-#     dialogo = buscarNarracao(busca)
+  while True:
+    limpar_terminal()
+    print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+    dialogo = buscarNarracao(busca)
 
 
-#     if dialogo is None:
-#         break
+    if dialogo is None:
+        break
 
-#     print_fade_in_centered(recolocarTexto("<NOME_DO_JOGADOR>", dialogo[0], dadosJogador[0]), delay=0.04)
-#     time.sleep(3)
-#     busca = dialogo[1]
+    print_fade_in_centered(recolocarTexto("<NOME_DO_JOGADOR>", dialogo[0], dadosJogador[0]), delay=0.04)
+    time.sleep(3)
+    busca = dialogo[1]
 
   limpar_terminal()
   pygame.mixer.music.fadeout(7000)
