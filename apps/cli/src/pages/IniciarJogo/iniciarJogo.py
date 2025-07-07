@@ -194,7 +194,7 @@ def exibirMapa():
     if sistema == "Windows":
         subprocess.Popen(f'start cmd /k python "{script_path}"', shell=True)
     elif sistema == "Linux":
-        subprocess.Popen(['gnome-terminal', '--', 'python3', script_path])
+        subprocess.Popen(['gnome-terminal', '--', 'bash', '-c', f'python3 {script_path}; exec bash'])
     else:
         print("Sistema operacional não suportado para abrir nova janela de terminal.")
 
