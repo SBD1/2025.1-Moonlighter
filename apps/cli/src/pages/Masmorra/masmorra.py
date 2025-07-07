@@ -29,6 +29,24 @@ centralizacao = "\n".join([linha.center(largura_terminal) for linha in ascii.spl
 logo = f"{Style.BRIGHT + Fore.LIGHTGREEN_EX}\n\n{centralizacao}\n\n\n"
 
 # definicoes e funcoes iniciais
+musicas = {
+    "cidade": "MoonlighterOST_02_Cidade.mp3",
+    "entrada_masmorra": "MoonlighterOST_06_SentientStone.mp3",
+    "batalha": "MoonlighterOST_22_Battle.mp3",
+    "golem": "MoonlighterOST_07_MasmorraGolem.mp3",
+    "rei_golem": "MoonlighterOST_08_GolemKing.mp3",
+    "floresta": "MoonlighterOST_10_MasmorraFloresta.mp3",
+    "mutae": "MoonlighterOST_13_CarnivorousMutae.mp3",
+    "deserto": "MoonlighterOST_14_MasmorraDeserto.mp3",
+    "naja": "MoonlighterOST_16_Naja.mp3",
+    "tecnologia": "MoonlighterOST_20_MasmorraTecnologia.mp3",
+    "fluxo_energia": "MoonlighterOST_21_FluxEnergy.mp3",
+}
+
+
+def tocar_musica(nome):
+    caminho = f"apps/cli/assets/musics/{musicas.get(nome)}"
+    trocar_musica(caminho)
 
 
 def trocar_musica(caminho_musica, fadeout_ms=1000, fadein_ms=3000):
@@ -46,48 +64,9 @@ def trocar_musica(caminho_musica, fadeout_ms=1000, fadein_ms=3000):
     musica_atual = caminho_musica
 
 
-def musicCity():  # musica da cidade
-    trocar_musica("apps/cli/assets/musics/MoonlighterOST_02_Cidade.mp3")
-
-
-def musicMasmorraEntrance():
-    trocar_musica("apps/cli/assets/musics/MoonlighterOST_06_SentientStone.mp3")
-
-
-def musicbattle():
-    trocar_musica("apps/cli/assets/musics/MoonlighterOST_22_Battle.mp3")
-
-
-def musicMasmorraGolem():  # musica da masmorra do golem
-    trocar_musica("apps/cli/assets/musics/MoonlighterOST_07_MasmorraGolem.mp3")
-
-
-def musicGolemKing():  # musica do chefe da masmorra do golem
-    trocar_musica("apps/cli/assets/musics/MoonlighterOST_08_GolemKing.mp3")
-
-
-def musicMasmorraFloresta():  # musica da masmorra da floresta
-    trocar_musica("apps/cli/assets/musics/MoonlighterOST_10_MasmorraFloresta.mp3")
-
-
-def musicCarnivorousMutae():  # musica do chefe da masmorra da floresta
-    trocar_musica("apps/cli/assets/musics/MoonlighterOST_13_CarnivorousMutae.mp3")
-
-
-def musicMasmorraDeserto():  # musica da masmorra do deserto
-    trocar_musica("apps/cli/assets/musics/MoonlighterOST_14_MasmorraDeserto.mp3")
-
-
-def musicNaja():  # musica do chefe da masmorra do deserto
-    trocar_musica("apps/cli/assets/musics/MoonlighterOST_16_Naja.mp3")
-
-
-def musicMasmorraTecnologia():  # musica da masmorra da tecnologia
-    trocar_musica("apps/cli/assets/musics/MoonlighterOST_20_MasmorraTecnologia.mp3")
-
-
-def musicFluxEnergy():  # musica do chefe da masmorra da tecnologia
-    trocar_musica("apps/cli/assets/musics/MoonlighterOST_21_FluxEnergy.mp3")
+def tocar_musica(nome):
+    caminho = f"apps/cli/assets/musics/{musicas.get(nome)}"
+    trocar_musica(caminho)
 
 
 def limpar_terminal():
@@ -315,17 +294,17 @@ def menu_batalha(monstro, arma, armadura, vida_jogador, nickname):
     musica_atual_anterior = musica_atual
     if monstro["chefe"]:
         if monstro["nome"] == "Rei Golem":
-            musicGolemKing()
+            tocar_musica("rei_golem")
         elif monstro["nome"] == "Mutae Carnívora":
-            musicCarnivorousMutae()
+            tocar_musica("mutae")
         elif monstro["nome"] == "Naja":
-            musicNaja()
+            tocar_musica("naja")
         elif monstro["nome"] == "Fluxo de Energia":
-            musicFluxEnergy()
+            tocar_musica("fluxo_tecnologia")
         else:
-            musicbattle()  # fallback
+            tocar_musica("batalha")  # fallback
     else:
-        musicbattle()
+        tocar_musica("batalha")
 
     while True:
         limpar_terminal()
@@ -383,7 +362,7 @@ def menu_batalha(monstro, arma, armadura, vida_jogador, nickname):
                     time.sleep(3)
                     atualizarParaLocalAnterior(ObterDadosJogador(nickname))
                     print(Fore.LIGHTCYAN_EX + "\n  Você foi transportado de volta para a Vila Rynoka.")
-                    musicCity()
+                    tocar_musica("cidade")
                     time.sleep(3)
                     return "sair", vida_jogador
 
@@ -393,7 +372,7 @@ def menu_batalha(monstro, arma, armadura, vida_jogador, nickname):
                     time.sleep(3)
                     atualizarParaLocalAnterior(ObterDadosJogador(nickname))
                     print(Fore.LIGHTCYAN_EX + "\n  Você foi transportado de volta para a Vila Rynoka.")
-                    musicCity()
+                    tocar_musica("cidade")
                     time.sleep(3)
                     return "sair", vida_jogador
 
@@ -403,7 +382,7 @@ def menu_batalha(monstro, arma, armadura, vida_jogador, nickname):
                     time.sleep(3)
                     atualizarParaLocalAnterior(ObterDadosJogador(nickname))
                     print(Fore.LIGHTCYAN_EX + "\n  Você foi transportado de volta para a Vila Rynoka.")
-                    musicCity()
+                    tocar_musica("cidade")
                     time.sleep(3)
                     return "sair", vida_jogador
 
@@ -413,7 +392,7 @@ def menu_batalha(monstro, arma, armadura, vida_jogador, nickname):
                     time.sleep(3)
                     atualizarParaLocalAnterior(ObterDadosJogador(nickname))
                     print(Fore.LIGHTCYAN_EX + "\n  Você foi transportado de volta para a Vila Rynoka.")
-                    musicCity()
+                    tocar_musica("cidade")
                     time.sleep(3)
                     return "sair", vida_jogador
 
@@ -423,7 +402,7 @@ def menu_batalha(monstro, arma, armadura, vida_jogador, nickname):
                     time.sleep(3)
                     atualizarParaLocalAnterior(ObterDadosJogador(nickname))
                     print(Fore.LIGHTCYAN_EX + "\n  Você foi transportado de volta para a Vila Rynoka.")
-                    musicCity()
+                    tocar_musica("cidade")
                     time.sleep(3)
                     return "sair", vida_jogador
 
@@ -445,7 +424,7 @@ def menu_batalha(monstro, arma, armadura, vida_jogador, nickname):
                 if vida_jogador <= 0:
                     print(Fore.RED + "  Você foi derrotado! Alguém te socorreu e te levou novamente para a cidade...")
                     time.sleep(3)
-                    musicCity()
+                    tocar_musica("cidade")
                     return "morte", vida_jogador
 
                 time.sleep(2)
@@ -456,7 +435,7 @@ def menu_batalha(monstro, arma, armadura, vida_jogador, nickname):
             if vida_jogador <= 0:
                 print(Fore.RED + "  Você foi derrotado! Alguém te socorreu e te levou novamente para a cidade...")
                 time.sleep(3)
-                musicCity()
+                tocar_musica("cidade")
                 return "morte", vida_jogador
 
         elif escolha == '3':
@@ -485,7 +464,7 @@ def menu_batalha(monstro, arma, armadura, vida_jogador, nickname):
                 if vida_jogador <= 0:
                     print(Fore.RED + "  Você foi derrotado! Alguém te socorreu e te levou novamente para a cidade...")
                     time.sleep(3)
-                    trocar_musica(musicCity)
+                    trocar_musica("cidade")
                     return "morte", vida_jogador
 
             # continua a batalha
@@ -504,13 +483,13 @@ def explorar_masmorra(matriz, pos_inicial=(7, 7), nickname=None, vida_jogador=No
 
     musicaLocal = musica_masmorra(nickname)
     if musicaLocal == "Masmorra do Golem":
-        musicMasmorraGolem()
+        tocar_musica("golem")
     elif musicaLocal == "Masmorra da Floresta":
-        musicMasmorraFloresta()
+        tocar_musica("floresta")
     elif musicaLocal == "Masmorra do Deserto":
-        musicMasmorraDeserto()
+        tocar_musica("deserto")
     elif musicaLocal == "Masmorra da Tecnologia":
-        musicMasmorraTecnologia()
+        tocar_musica("tecnologia")
 
     if vida_jogador is None:
         vida_jogador = obter_vida_jogador(nickname)
@@ -569,7 +548,7 @@ def explorar_masmorra(matriz, pos_inicial=(7, 7), nickname=None, vida_jogador=No
         print(Fore.RED + "Equipe uma arma pelo seu inventário")
         time.sleep(2)
         atualizarParaLocalAnterior(dadosJogador)
-        musicCity()
+        tocar_musica("cidade")
         return
 
     if isinstance(dados_arma, list) and len(dados_arma) > 0:
@@ -662,7 +641,7 @@ def explorar_masmorra(matriz, pos_inicial=(7, 7), nickname=None, vida_jogador=No
                         if vida_jogador <= 0:
                             print(Fore.RED + "  Você foi derrotado! Alguém te socorreu e te levou novamente para a cidade...")
                             time.sleep(3)
-                            musicCity()
+                            tocar_musica("cidade")
                             return "morte", vida_jogador
                     elif acao == "fugir":
                         trocar_musica(musica_atual)
@@ -720,7 +699,7 @@ def mainMasmorra(nickname):
         print('\033[?25h', end='', flush=True)
         return
 
-    musicMasmorraEntrance()
+    tocar_musica("entrada_masmorra")
     confirmacao = ''
 
     while confirmacao not in ['s', 'S', 'n', 'N']:
@@ -744,7 +723,7 @@ def mainMasmorra(nickname):
             print(f"{Style.BRIGHT}{Fore.YELLOW}Você decidiu não entrar na Masmorra.".center(largura_terminal))
             time.sleep(2)
             print('\033[?25h', end='', flush=True)
-            musicCity()
+            tocar_musica("cidade")
             return
         elif confirmacao == 's' or confirmacao == 'S':
             limpar_terminal()
