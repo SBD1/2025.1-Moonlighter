@@ -143,6 +143,30 @@ def buscarItensBaudeCasa(nickname):
         connection.close()
         print(Fore.RED + f"Erro ao buscar itens do baú: {e}")
         return []
+    
+def buscarItensMoonlighter(nickname):
+    connection = connect_to_db()
+    if connection is None:
+        print(Fore.RED + "Erro ao conectar ao banco de dados.")
+        return []
+
+    cursor = connection.cursor()
+    try:
+        cursor.execute("""
+              SELECT I."nome", II."quantidade", II."idInventario", II."idInstItem", II."idInventario", II."idItem"
+              FROM "inst_item" II
+                JOIN "item" I ON II."idItem" = I."idItem"
+              WHERE II."nickname" = %s AND II."seedMundoLojaJogador" IS NOT NULL;
+                       """, (nickname,))
+        itens = cursor.fetchall()
+        cursor.close()
+        connection.close()
+        return itens
+    except Exception as e:
+        cursor.rollback()
+        connection.close()
+        print(Fore.RED + f"Erro ao buscar itens do Moonlighter: {e}")
+        return []
 
 def moverItemParaBaudeCasa(nickname, idInstItem, quantidade, localInventario, idItem):
     connection = connect_to_db()
@@ -289,6 +313,180 @@ def moverItemDoBaudeCasa(nickname, idItem, quantidade, idInstItem):
         cursor.rollback()
         connection.close()
         print(Fore.RED + f"Erro ao mover item do baú para o inventário: {e}")
+        return False
+    
+def buscarSeedMundoLojaJogador(nickname):
+    connection = connect_to_db()
+    if connection is None:
+        print(Fore.RED + "Erro ao conectar ao banco de dados.")
+        return None
+
+    cursor = connection.cursor()
+    try:
+        cursor.execute("""
+            SELECT M."seedMundo" FROM "loja_jogador" LJ
+                       JOIN "mundo" M ON LJ."seedMundo" = M."seedMundo" 
+            WHERE M."nickname" = %s;
+                       """, (nickname,))
+        seed = cursor.fetchone()
+        cursor.close()
+        connection.close()
+        return seed[0] if seed else None
+    except Exception as e:
+        cursor.rollback()
+        connection.close()
+        print(Fore.RED + f"Erro ao buscar seed do mundo loja do jogador: {e}")
+        return None
+
+def adicionarItemMoonlighter(nickname, idItem, quantidade, localInventario, idInstItem):
+    connection = connect_to_db()
+    if connection is None:
+        print(Fore.RED + "Erro ao conectar ao banco de dados.")
+        return False
+
+    cursor = connection.cursor()
+    try:
+        seedMundoLojaJogador = buscarSeedMundoLojaJogador(nickname)
+        cursor.execute("""
+                SELECT "idInstItem" FROM "inst_item" WHERE "nickname" = %s AND "idItem" = %s AND "idInventario" = %s;
+                        """, (nickname, idItem, localInventario))
+        quantidadeItem = cursor.fetchone()
+        cursor.execute("""
+                SELECT "idInstItem" FROM "inst_item" WHERE "nickname" = %s AND "idItem" = %s AND "seedMundoLojaJogador" = %s;
+                        """, (nickname, idItem, seedMundoLojaJogador))
+        itemExistente = cursor.fetchone()
+
+        if quantidadeItem == quantidade:
+            if itemExistente:
+                cursor.execute("""
+                        UPDATE "inst_item" SET "quantidade" = "quantidade" + %s WHERE "idInstItem" = %s;
+                                """, (quantidade, itemExistente[0]))
+                cursor.execute("""
+                        DELETE FROM "inst_item" WHERE "idInstItem" = %s
+                               """, (idInstItem,))
+            else:
+                cursor.execute("""
+                        INSERT INTO "inst_item" ("idItem", "quantidade", "nickname", "seedMundoLojaJogador") VALUES
+                                (%s, %s, %s, %s)
+                                """, (idItem, quantidade, nickname, seedMundoLojaJogador))
+                cursor.execute("""
+                        DELETE FROM "inst_item" WHERE "idInstItem" = %s
+                               """, (idInstItem,))
+            cursor.execute("""
+                    UPDATE "inst_inventario" SET "slotOcupado" = "slotOcupado" - %s WHERE "nickname" = %s AND "idInventario" = %s;
+                        """, (quantidade, nickname, localInventario))
+            cursor.execute("""
+                    UPDATE "loja_jogador" SET "exposicaoUsada" = "exposicaoUsada" + %s WHERE "seedMundo" = %s;
+                           """, (quantidade, seedMundoLojaJogador))
+        else:
+            if itemExistente:
+                cursor.execute("""
+                        UPDATE "inst_item" SET "quantidade" = "quantidade" + %s WHERE "idInstItem" = %s;
+                                """, (quantidade, itemExistente[0]))
+                cursor.execute("""
+                        UPDATE "inst_item" SET "quantidade" = "quantidade" - %s WHERE "idInstItem" = %s;
+                                """, (quantidade, idInstItem))
+            else:
+                cursor.execute("""
+                        INSERT INTO "inst_item" ("idItem", "quantidade", "nickname", "seedMundoLojaJogador") VALUES
+                                (%s, %s, %s, %s)
+                                """, (idItem, quantidade, nickname, seedMundoLojaJogador))
+                cursor.execute("""
+                        UPDATE "inst_item" SET "quantidade" = "quantidade" - %s WHERE "idInstItem" = %s;
+                                """, (quantidade, idInstItem))
+            cursor.execute("""
+                    UPDATE "inst_inventario" SET "slotOcupado" = "slotOcupado" - %s WHERE "nickname" = %s AND "idInventario" = %s;
+                        """, (quantidade, nickname, localInventario))
+            cursor.execute("""
+                    UPDATE "loja_jogador" SET "exposicaoUsada" = "exposicaoUsada" + %s WHERE "seedMundo" = %s;
+                           """, (quantidade, seedMundoLojaJogador))
+            
+        cursor.execute("""
+              DELETE FROM "inst_item" WHERE "quantidade" <= 0 AND "nickname" = %s;
+                       """, (nickname,))
+
+        connection.commit()
+        cursor.close()
+        connection.close()
+        return True
+    except Exception as e:
+        cursor.rollback()
+        connection.close()
+        print(Fore.RED + f"Erro ao adicionar item no Moonlighter: {e}")
+        return False
+    
+def removerItemMoonlighter(nickname, idInstItem, quantidade, idItem):
+    connection = connect_to_db()
+    if connection is None:
+        print(Fore.RED + "Erro ao conectar ao banco de dados.")
+        return False
+
+    cursor = connection.cursor()
+    try:
+        seedMundoLojaJogador = buscarSeedMundoLojaJogador(nickname)
+        cursor.execute("""
+              SELECT "quantidade" FROM "inst_item" WHERE "nickname" = %s AND "idInstItem" = %s;
+                       """, (nickname, idInstItem))
+        quantidadeItem = cursor.fetchone()
+        cursor.execute("""
+              SELECT "idInstItem" FROM "inst_item" WHERE "nickname" = %s AND "idItem" = %s AND "idInventario" = 1;
+                       """, (nickname, idItem))
+        itemExistente = cursor.fetchone()
+
+        if quantidadeItem == quantidade:
+            if itemExistente:
+                cursor.execute("""
+                        UPDATE "inst_item" SET "quantidade" = "quantidade" + %s WHERE "idInstItem" = %s;
+                                """, (quantidade, itemExistente[0]))
+            else:
+                cursor.execute("""
+                        INSERT INTO "inst_item" ("idItem", "quantidade", "nickname", "idInventario") VALUES
+                                (%s, %s, %s, 1)
+                                """, (idItem, quantidade, nickname))
+            cursor.execute("""
+                        DELETE FROM "inst_item" WHERE "idInstItem" = %s
+                               """, (idInstItem,))
+            cursor.execute("""
+                    UPDATE "inst_inventario" SET "slotOcupado" = "slotOcupado" + %s WHERE "nickname" = %s AND "idInventario" = 1;
+                        """, (quantidade, nickname))
+            cursor.execute("""
+                    UPDATE "loja_jogador" SET "exposicaoUsada" = "exposicaoUsada" - %s WHERE "seedMundo" = %s;
+                       """, (quantidade, seedMundoLojaJogador))
+        else:
+            if itemExistente:
+                cursor.execute("""
+                        UPDATE "inst_item" SET "quantidade" = "quantidade" + %s WHERE "idInstItem" = %s;
+                                """, (quantidade, itemExistente[0]))
+                cursor.execute("""
+                        UPDATE "inst_item" SET "quantidade" = "quantidade" - %s WHERE "idInstItem" = %s;
+                                """, (quantidade, idInstItem))
+            else:
+                cursor.execute("""
+                        INSERT INTO "inst_item" ("idItem", "quantidade", "nickname", "idInventario") VALUES
+                                (%s, %s, %s, 1)
+                                """, (idItem, quantidade, nickname))
+                cursor.execute("""
+                        UPDATE "inst_item" SET "quantidade" = "quantidade" - %s WHERE "idInstItem" = %s;
+                                """, (quantidade, idInstItem))
+            cursor.execute("""
+                    UPDATE "inst_inventario" SET "slotOcupado" = "slotOcupado" + %s WHERE "nickname" = %s AND "idInventario" = 1;
+                        """, (quantidade, nickname))
+            cursor.execute("""
+                    UPDATE "loja_jogador" SET "exposicaoUsada" = "exposicaoUsada" - %s WHERE "seedMundo" = %s;
+                       """, (quantidade, seedMundoLojaJogador))
+            
+        cursor.execute("""
+              DELETE FROM "inst_item" WHERE "quantidade" <= 0 AND "nickname" = %s;
+                       """, (nickname,))
+
+        connection.commit()
+        cursor.close()
+        connection.close()
+        return True
+    except Exception as e:
+        cursor.rollback()
+        connection.close()
+        print(Fore.RED + f"Erro ao remover item do Moonlighter: {e}")
         return False
 
 def passarDiaMundo(nickname):

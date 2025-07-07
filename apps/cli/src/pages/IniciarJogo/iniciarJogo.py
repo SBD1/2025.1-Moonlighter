@@ -118,7 +118,7 @@ def locomocao(nickname):
                     menu_chapeu_de_madeira(nickname, buscarSeedMapa(nickname))
                 if locais[escolha - 1][0] == 'Quarto':
                     mainMoonlighter(nickname, 'Quarto')
-                if locais[escolha - 1][0] == 'Salao de Exposição':
+                if locais[escolha - 1][0] == 'Salão de Exposição':
                     mainMoonlighter(nickname, 'Salao de Exposição')
         except ValueError:
             limpar_terminal()
