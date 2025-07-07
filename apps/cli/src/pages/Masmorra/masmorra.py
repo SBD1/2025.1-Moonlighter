@@ -247,7 +247,7 @@ def calcular_dano_monstro(monstro):
     resultados = [random.randint(1, dado_ataque) for _ in range(qtd_dados)]
     resultado_total = sum(resultados)
     resultados_str = ' e '.join(map(str, resultados))
-    print(f"  O {monstro['nome']} rolou {qtd_dados}d{dado_ataque} e tirou: {resultados_str}")
+    print(f"  O {monstro['nome']} rolou {qtd_dados} d{dado_ataque} e tirou: {resultados_str}")
 
     if critico:
         dano = int(resultado_total * multiplicador_critico)
