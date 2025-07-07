@@ -331,6 +331,14 @@ def equipar_item(nickname, item_info):
             if not existe:
                 cadastrar_arma(id_item, 'd6', 10, 1.0, 1.5)
 
+            # Remove todas as outras armas do slot de equipamento primeiro
+            cursor.execute("""
+                UPDATE "inst_item" 
+                SET "idInventario" = 1 
+                WHERE "nickname" = %s AND "idInventario" = 4;
+            """, (nickname,))
+            
+            # Equipa a nova arma
             cursor.execute("""
                 UPDATE "inst_item" 
                 SET "idInventario" = 4 
@@ -358,6 +366,14 @@ def equipar_item(nickname, item_info):
                 # Cadastra com atributos padrão
                 cadastrar_armadura(id_item, 'd4', 2, 10, 1, 'leve')
 
+            # Remove todas as outras armaduras do slot de equipamento primeiro
+            cursor.execute("""
+                UPDATE "inst_item" 
+                SET "idInventario" = 1 
+                WHERE "nickname" = %s AND "idInventario" = 3;
+            """, (nickname,))
+            
+            # Equipa a nova armadura
             cursor.execute("""
                 UPDATE "inst_item" 
                 SET "idInventario" = 3 
@@ -405,24 +421,30 @@ def menu_inventario(nickname):
         
         print(f"\n{Style.BRIGHT}{Fore.YELLOW}OPÇÕES:")
         print(f"{Fore.LIGHTGREEN_EX}• Digite o número do item para interagir")
-        print(f"{Fore.LIGHTGREEN_EX}• Digite '0' para voltar ao menu principal")
+        print(f"{Fore.LIGHTGREEN_EX}• Digite 'E' para selecionar arma para equipar")
+        print(f"{Fore.LIGHTGREEN_EX}• Digite 'A' para selecionar armadura para equipar")
+        print(f"{Fore.RED}• Digite '0' para voltar ao menu principal")
         
-        escolha = input(f"\n{Style.BRIGHT}{Fore.MAGENTA}>> ").strip()
+        escolha = input(f"\n{Style.BRIGHT}{Fore.MAGENTA}>> ").strip().upper()
         
         if escolha == '0':
             return
-        
-        try:
-            num_item = int(escolha)
-            if 1 <= num_item <= len(itens_numerados):
-                item_selecionado = itens_numerados[num_item - 1]
-                menu_item_individual(nickname, item_selecionado)
-            else:
-                print(f"{Fore.RED}Número de item inválido!")
+        elif escolha == 'E':
+            selecionar_arma_para_equipar(nickname)
+        elif escolha == 'A':
+            selecionar_armadura_para_equipar(nickname)
+        else:
+            try:
+                num_item = int(escolha)
+                if 1 <= num_item <= len(itens_numerados):
+                    item_selecionado = itens_numerados[num_item - 1]
+                    menu_item_individual(nickname, item_selecionado)
+                else:
+                    print(f"{Fore.RED}Número de item inválido!")
+                    time.sleep(1)
+            except ValueError:
+                print(f"{Fore.RED}Por favor, digite um número válido, 'E' para arma ou 'A' para armadura!")
                 time.sleep(1)
-        except ValueError:
-            print(f"{Fore.RED}Por favor, digite um número válido!")
-            time.sleep(1)
 
 def menu_item_individual(nickname, item_info):
     """
@@ -470,3 +492,269 @@ def ver_inventario(nickname):
     Esta função será chamada do menu principal
     """
     menu_inventario(nickname)
+
+def listar_armas_disponiveis(nickname):
+    """
+    Lista todas as armas disponíveis no inventário do jogador
+    """
+    connection = connect_to_db()
+    if connection is None:
+        return None
+
+    cursor = connection.cursor()
+    cursor.execute("""
+        SELECT ii."idInstItem", i."idItem", i."nome", ii."quantidade", i."precoBase", 
+               a."dadoAtaque", a."chanceCritico", a."multiplicador", a."multiplicadorCritico",
+               CASE WHEN ii."idInventario" = 4 THEN 'Equipada' ELSE 'Na Mochila' END as status
+        FROM "inst_item" ii
+        JOIN "item" i ON ii."idItem" = i."idItem"
+        JOIN "arma" a ON i."idItem" = a."idItem"
+        WHERE ii."nickname" = %s AND i."tipo" = 'Arma'
+        ORDER BY ii."idInventario" DESC, i."precoBase" DESC
+    """, (nickname,))
+
+    armas = cursor.fetchall()
+    cursor.close()
+    connection.close()
+    return armas
+
+def selecionar_arma_para_equipar(nickname):
+    """
+    Interface para selecionar qual arma equipar
+    """
+    limpar_terminal()
+    print(logo)
+    
+    print(f"{Style.BRIGHT}{Fore.YELLOW}{'═' * largura_terminal}")
+    print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}SELEÇÃO DE ARMA - {nickname.upper()}".center(largura_terminal))
+    print(f"{Style.BRIGHT}{Fore.YELLOW}{'═' * largura_terminal}")
+    
+    armas = listar_armas_disponiveis(nickname)
+    
+    if not armas:
+        print(f"\n{Fore.RED}Você não possui nenhuma arma no inventário!")
+        print(f"{Fore.YELLOW}Volte ao menu principal e compre uma arma primeiro.")
+        time.sleep(3)
+        return None
+    
+    print(f"\n{Style.BRIGHT}{Fore.LIGHTCYAN_EX}ARMAS DISPONÍVEIS:")
+    print(f"{Fore.LIGHTBLUE_EX}{'Nº':<3} {'Nome':<25} {'Dado':<8} {'Crít':<6} {'Mult':<6} {'Preço':<8} {'Status':<12}")
+    print(f"{Fore.LIGHTBLACK_EX}{'─' * 70}")
+    
+    armas_numeradas = []
+    for i, arma in enumerate(armas, 1):
+        id_inst, id_item, nome, qtd, preco, dado, crit, mult, mult_crit, status = arma
+        status_color = Fore.GREEN if status == 'Equipada' else Fore.WHITE
+        print(f"{Fore.WHITE}{i:<3} {nome:<25} {dado:<8} {crit:<6} {mult:<6} {preco:<8} {status_color}{status:<12}")
+        armas_numeradas.append(arma)
+    
+    print(f"\n{Style.BRIGHT}{Fore.YELLOW}INSTRUÇÕES:")
+    print(f"{Fore.LIGHTGREEN_EX}• Digite o número da arma que deseja equipar")
+    print(f"{Fore.LIGHTGREEN_EX}• Digite '0' para cancelar")
+    
+    while True:
+        try:
+            escolha = input(f"\n{Style.BRIGHT}{Fore.MAGENTA}>> ").strip()
+            
+            if escolha == '0':
+                return None
+            
+            num_arma = int(escolha)
+            if 1 <= num_arma <= len(armas_numeradas):
+                arma_selecionada = armas_numeradas[num_arma - 1]
+                return equipar_arma_especifica(nickname, arma_selecionada)
+            else:
+                print(f"{Fore.RED}Número inválido! Escolha entre 1 e {len(armas_numeradas)}")
+        except ValueError:
+            print(f"{Fore.RED}Por favor, digite um número válido!")
+
+def equipar_arma_especifica(nickname, arma_info):
+    """
+    Equipa uma arma específica escolhida pelo jogador
+    """
+    id_inst_item, id_item, nome, quantidade, preco, dado, crit, mult, mult_crit, status = arma_info
+    
+    # Se já está equipada, não precisa fazer nada
+    if status == 'Equipada':
+        print(f"{Fore.YELLOW}{nome} já está equipada!")
+        time.sleep(2)
+        return True
+    
+    connection = connect_to_db()
+    if connection is None:
+        print(Fore.RED + "Erro ao conectar ao banco de dados.")
+        return False
+    
+    try:
+        cursor = connection.cursor()
+        
+        # Remove todas as outras armas do slot de equipamento primeiro
+        cursor.execute("""
+            UPDATE "inst_item" 
+            SET "idInventario" = 1 
+            WHERE "nickname" = %s AND "idInventario" = 4;
+        """, (nickname,))
+        
+        # Equipa a arma selecionada
+        cursor.execute("""
+            UPDATE "inst_item" 
+            SET "idInventario" = 4 
+            WHERE "nickname" = %s AND "idItem" = %s;
+        """, (nickname, id_item))
+        
+        # Atualizar slots ocupados
+        cursor.execute("""
+            UPDATE "inst_inventario"
+            SET "slotOcupado" = 1
+            WHERE "nickname" = %s AND "idInventario" = 4;
+        """, (nickname,))
+        
+        connection.commit()
+        cursor.close()
+        connection.close()
+        
+        print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}✓ {nome} foi equipada com sucesso!")
+        print(f"{Fore.LIGHTBLUE_EX}  Dado: {dado} | Crítico: {crit}% | Multiplicador: {mult}")
+        time.sleep(2)
+        return True
+        
+    except Exception as e:
+        print(f"{Fore.RED}Erro ao equipar arma: {e}")
+        connection.rollback()
+        cursor.close()
+        connection.close()
+        time.sleep(2)
+        return False
+
+def listar_armaduras_disponiveis(nickname):
+    """
+    Lista todas as armaduras disponíveis no inventário do jogador
+    """
+    connection = connect_to_db()
+    if connection is None:
+        return None
+
+    cursor = connection.cursor()
+    cursor.execute("""
+        SELECT ii."idInstItem", i."idItem", i."nome", ii."quantidade", i."precoBase", 
+               ar."dadoDefesa", ar."defesaPassiva", ar."criticoDefensivo", ar."bonusDefesa",
+               CASE WHEN ii."idInventario" = 3 THEN 'Equipada' ELSE 'Na Mochila' END as status
+        FROM "inst_item" ii
+        JOIN "item" i ON ii."idItem" = i."idItem"
+        JOIN "armadura" ar ON i."idItem" = ar."idItem"
+        WHERE ii."nickname" = %s AND i."tipo" = 'Armadura'
+        ORDER BY ii."idInventario" DESC, i."precoBase" DESC
+    """, (nickname,))
+
+    armaduras = cursor.fetchall()
+    cursor.close()
+    connection.close()
+    return armaduras
+
+def selecionar_armadura_para_equipar(nickname):
+    """
+    Interface para selecionar qual armadura equipar
+    """
+    limpar_terminal()
+    print(logo)
+    
+    print(f"{Style.BRIGHT}{Fore.YELLOW}{'═' * largura_terminal}")
+    print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}SELEÇÃO DE ARMADURA - {nickname.upper()}".center(largura_terminal))
+    print(f"{Style.BRIGHT}{Fore.YELLOW}{'═' * largura_terminal}")
+    
+    armaduras = listar_armaduras_disponiveis(nickname)
+    
+    if not armaduras:
+        print(f"\n{Fore.RED}Você não possui nenhuma armadura no inventário!")
+        print(f"{Fore.YELLOW}Volte ao menu principal e compre uma armadura primeiro.")
+        time.sleep(3)
+        return None
+    
+    print(f"\n{Style.BRIGHT}{Fore.LIGHTCYAN_EX}ARMADURAS DISPONÍVEIS:")
+    print(f"{Fore.LIGHTBLUE_EX}{'Nº':<3} {'Nome':<25} {'Dado':<8} {'Def':<6} {'Crít':<6} {'Preço':<8} {'Status':<12}")
+    print(f"{Fore.LIGHTBLACK_EX}{'─' * 70}")
+    
+    armaduras_numeradas = []
+    for i, armadura in enumerate(armaduras, 1):
+        id_inst, id_item, nome, qtd, preco, dado, def_pass, crit_def, bonus, status = armadura
+        status_color = Fore.GREEN if status == 'Equipada' else Fore.WHITE
+        print(f"{Fore.WHITE}{i:<3} {nome:<25} {dado:<8} {def_pass:<6} {crit_def:<6} {preco:<8} {status_color}{status:<12}")
+        armaduras_numeradas.append(armadura)
+    
+    print(f"\n{Style.BRIGHT}{Fore.YELLOW}INSTRUÇÕES:")
+    print(f"{Fore.LIGHTGREEN_EX}• Digite o número da armadura que deseja equipar")
+    print(f"{Fore.LIGHTGREEN_EX}• Digite '0' para cancelar")
+    
+    while True:
+        try:
+            escolha = input(f"\n{Style.BRIGHT}{Fore.MAGENTA}>> ").strip()
+            
+            if escolha == '0':
+                return None
+            
+            num_armadura = int(escolha)
+            if 1 <= num_armadura <= len(armaduras_numeradas):
+                armadura_selecionada = armaduras_numeradas[num_armadura - 1]
+                return equipar_armadura_especifica(nickname, armadura_selecionada)
+            else:
+                print(f"{Fore.RED}Número inválido! Escolha entre 1 e {len(armaduras_numeradas)}")
+        except ValueError:
+            print(f"{Fore.RED}Por favor, digite um número válido!")
+
+def equipar_armadura_especifica(nickname, armadura_info):
+    """
+    Equipa uma armadura específica escolhida pelo jogador
+    """
+    id_inst_item, id_item, nome, quantidade, preco, dado, def_pass, crit_def, bonus, status = armadura_info
+    
+    # Se já está equipada, não precisa fazer nada
+    if status == 'Equipada':
+        print(f"{Fore.YELLOW}{nome} já está equipada!")
+        time.sleep(2)
+        return True
+    
+    connection = connect_to_db()
+    if connection is None:
+        print(Fore.RED + "Erro ao conectar ao banco de dados.")
+        return False
+    
+    try:
+        cursor = connection.cursor()
+        
+        # Remove todas as outras armaduras do slot de equipamento primeiro
+        cursor.execute("""
+            UPDATE "inst_item" 
+            SET "idInventario" = 1 
+            WHERE "nickname" = %s AND "idInventario" = 3;
+        """, (nickname,))
+        
+        # Equipa a armadura selecionada
+        cursor.execute("""
+            UPDATE "inst_item" 
+            SET "idInventario" = 3 
+            WHERE "nickname" = %s AND "idItem" = %s;
+        """, (nickname, id_item))
+        
+        # Atualizar slots ocupados
+        cursor.execute("""
+            UPDATE "inst_inventario"
+            SET "slotOcupado" = 1
+            WHERE "nickname" = %s AND "idInventario" = 3;
+        """, (nickname,))
+        
+        connection.commit()
+        cursor.close()
+        connection.close()
+        
+        print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}✓ {nome} foi equipada com sucesso!")
+        print(f"{Fore.LIGHTBLUE_EX}  Dado: {dado} | Defesa Passiva: {def_pass} | Crítico: {crit_def}%")
+        time.sleep(2)
+        return True
+        
+    except Exception as e:
+        print(f"{Fore.RED}Erro ao equipar armadura: {e}")
+        connection.rollback()
+        cursor.close()
+        connection.close()
+        time.sleep(2)
+        return False
