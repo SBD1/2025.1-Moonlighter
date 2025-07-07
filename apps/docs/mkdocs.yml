@@ -17,6 +17,10 @@ nav:
     - Data Manipulation Language: pages/Modulo2/DML.md
     - Data Query Language: pages/Modulo2/DQL.md
     - Vídeo de Apresentação: pages/Modulo2/VideoApresentacao.md
+  - Módulo 3:
+    - Triggers: pages/Modulo3/Triggers.md
+    - Stored Procedures: pages/Modulo3/StoredProcedures.md
+    
 
 theme:
   name: material
