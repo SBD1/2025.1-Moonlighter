@@ -72,7 +72,10 @@ def atualizarParaLocalAnterior(dadosJogador):
     cursor = connection.cursor()
 
     cursor.execute("""UPDATE "jogador"
-                        SET "nomeLocal" = (SELECT "acesso" FROM "local" WHERE "nomeLocal" = %s), "updatedAt" = NOW()
+                        SET "nomeLocal" = (SELECT "acesso" FROM "local" WHERE "nomeLocal" = %s), 
+                            "PosiçãoX_Jogador" = 0, 
+                            "PosiçãoY_Jogador" = 0, 
+                            "updatedAt" = NOW()
                         WHERE "nickname" = %s;
                    """, (dadosJogador[6], dadosJogador[0]))
     

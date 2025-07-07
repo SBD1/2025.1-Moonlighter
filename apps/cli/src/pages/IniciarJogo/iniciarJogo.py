@@ -44,12 +44,12 @@ def cabecalho(nickname):
     print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}{dadosJogador[0]}".center(largura_terminal))
     print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}HP: {dadosJogador[2]} / {dadosJogador[1]} | OURO: {dadosJogador[3]}".center(largura_terminal))
     print("\n")
-    if dadosJogador[4] == -1:
+    if dadosJogador[4] == -1 or (dadosJogador[4] == 0 and dadosJogador[5] == 0):
         print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}{dadosJogador[6]}".center(largura_terminal))
         print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}DIA: {dadosMundo[3]} | PERÍODO: {dadosMundo[2]}".center(largura_terminal))
     else:
         print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}MASMORRA: {dadosJogador[6]}".center(largura_terminal))
-        print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}SALA [X][Y]: [{dadosJogador[3]}][{dadosJogador[4]}]".center(largura_terminal))
+        print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}SALA [X][Y]: [{dadosJogador[4]}][{dadosJogador[5]}]".center(largura_terminal))
     print(f"{Fore.LIGHTGREEN_EX}{Style.BRIGHT}╚════════════════════════════════════════════════════════════╝".center(largura_terminal))
     
     print("\n")
