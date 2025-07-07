@@ -215,17 +215,16 @@ def obter_arma(nickname):
     cursor = connection.cursor()
     cursor.execute('''
             SELECT a.*
-            FROM "inst_inventario" ii
-            JOIN "inst_item" ii2 ON ii."idInventario" = ii2."idInventario" AND ii."nickname" = ii2."nickname"
+            FROM "inst_item" ii2
             JOIN "item" i ON ii2."idItem" = i."idItem"
             JOIN "arma" a ON i."idItem" = a."idItem"
-            WHERE ii."nickname" = %s
+            WHERE ii2."nickname" = %s AND ii2."idInventario" = 4
             LIMIT 1;
         ''', (nickname,))
     arma = cursor.fetchone()
     cursor.close()
     connection.close()
-    return arma   
+    return arma
 
 def obter_armadura(nickname):
     connection = connect_to_db()
@@ -236,11 +235,10 @@ def obter_armadura(nickname):
     cursor = connection.cursor()
     cursor.execute('''
             SELECT ar.*
-            FROM "inst_inventario" ii
-            JOIN "inst_item" ii2 ON ii."idInventario" = ii2."idInventario" AND ii."nickname" = ii2."nickname"
+            FROM "inst_item" ii2
             JOIN "item" i ON ii2."idItem" = i."idItem"
             JOIN "armadura" ar ON i."idItem" = ar."idItem"
-            WHERE ii."nickname" = %s
+            WHERE ii2."nickname" = %s AND ii2."idInventario" = 3
             LIMIT 1;
     ''', (nickname,))
     
@@ -263,7 +261,7 @@ def obter_vida_jogador(nickname):
     vida = cursor.fetchone()
     cursor.close()
     connection.close()
-    return vida[0] if vida else None
+    return vida[0] if vida is not None else None
 
 def atualizar_vida_jogador(nickname, nova_vida):
     connection = connect_to_db()
@@ -350,3 +348,105 @@ def musica_masmorra(nickname):
         return resultado[0]  # Pega só o nomeLocal, que está na tupla
     else:
         return None
+
+def obter_drops_monstro(id_monstro):
+    """
+    Obtém todos os possíveis drops de um monstro específico
+    Retorna uma lista de tuplas com (id_item, nome_item, chance_drop, qtd_minima, qtd_maxima)
+    """
+    connection = connect_to_db()
+    if connection is None:
+        print("Erro ao conectar ao banco de dados.")
+        return []
+    
+    cursor = connection.cursor()
+    cursor.execute('''
+        SELECT mi."idItem", i."nome", mi."chanceDrop", mi."qtdMinima", mi."qtdMaxima"
+        FROM "monstro_item" mi
+        JOIN "item" i ON mi."idItem" = i."idItem"
+        WHERE mi."idMonstro" = %s
+        ORDER BY mi."chanceDrop" DESC
+    ''', (id_monstro,))
+    
+    drops = cursor.fetchall()
+    cursor.close()
+    connection.close()
+    return drops
+
+def processar_drops_monstro(id_monstro):
+    """
+    Processa os drops de um monstro baseado nas chances definidas no banco
+    Retorna uma lista de itens que foram dropados com suas quantidades
+    """
+    drops_possiveis = obter_drops_monstro(id_monstro)
+    drops_obtidos = []
+    
+    for id_item, nome_item, chance_drop, qtd_minima, qtd_maxima in drops_possiveis:
+        # Gera um número aleatório entre 0 e 1
+        if random.random() <= chance_drop:
+            # Se passou na chance, sorteia a quantidade
+            quantidade = random.randint(qtd_minima, qtd_maxima)
+            drops_obtidos.append({
+                'id_item': id_item,
+                'nome': nome_item,
+                'quantidade': quantidade
+            })
+    
+    return drops_obtidos
+
+def adicionar_item_ao_inventario(nickname, id_item, quantidade):
+    """
+    Adiciona um item ao inventário do jogador
+    """
+    connection = connect_to_db()
+    if connection is None:
+        print("Erro ao conectar ao banco de dados.")
+        return False
+    
+    cursor = connection.cursor()
+    
+    try:
+        # Verifica se o jogador já tem o item no inventário
+        cursor.execute('''
+            SELECT ii2."quantidade"
+            FROM "inst_inventario" ii
+            JOIN "inst_item" ii2 ON ii."idInventario" = ii2."idInventario" AND ii."nickname" = ii2."nickname"
+            WHERE ii."nickname" = %s AND ii2."idItem" = %s
+        ''', (nickname, id_item))
+        
+        resultado = cursor.fetchone()
+        
+        if resultado is not None and len(resultado) > 0 and resultado[0] is not None:
+            # Se já tem o item, atualiza a quantidade
+            quantidade_atual = resultado[0]
+            nova_quantidade = quantidade_atual + quantidade
+            
+            cursor.execute('''
+                UPDATE "inst_item"
+                SET "quantidade" = %s
+                FROM "inst_inventario" ii
+                WHERE "inst_item"."idInventario" = ii."idInventario" 
+                AND ii."nickname" = %s 
+                AND "inst_item"."idItem" = %s
+            ''', (nova_quantidade, nickname, id_item))
+        else:
+            # Se não tem o item, adiciona um novo
+            cursor.execute('''
+                INSERT INTO "inst_item" ("idInventario", "idItem", "quantidade", "nickname")
+                SELECT ii."idInventario", %s, %s, %s
+                FROM "inst_inventario" ii
+                WHERE ii."nickname" = %s
+                LIMIT 1
+            ''', (id_item, quantidade, nickname, nickname))
+        
+        connection.commit()
+        cursor.close()
+        connection.close()
+        return True
+        
+    except Exception as e:
+        connection.rollback()
+        cursor.close()
+        connection.close()
+        print(f"Erro ao adicionar item ao inventário: {e}")
+        return False
