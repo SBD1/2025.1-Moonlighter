@@ -109,7 +109,7 @@ def locomocao(nickname):
                 atualizar_local_jogador(locais[escolha - 1][0], nickname)
                 if locais[escolha - 1][0].startswith('Masmorra'):
                     mainMasmorra(nickname)
-                if locais[escolha - 1][0] == 'Forja Vulcânica':
+                if locais[escolha - 1][0] == 'Forja de Vulcan':
                     menu_forja(nickname, buscarSeedMapa(nickname))
                 if locais[escolha - 1][0] == 'Banco de Rynoka':
                     menu_banco(nickname)
