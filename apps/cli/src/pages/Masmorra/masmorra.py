@@ -611,7 +611,7 @@ def explorar_masmorra(matriz, pos_inicial=(7, 7), nickname=None, vida_jogador=No
                 'd': "→ Direita"
             }[tecla]
             print(Fore.YELLOW + f"  {tecla.upper()} - {direcao}")
-        print("\n" + Fore.RED + "  Q - sair")
+        print("\n" + Fore.RED + "  Q - Sair")
 
         comando = ler_tecla()
 
