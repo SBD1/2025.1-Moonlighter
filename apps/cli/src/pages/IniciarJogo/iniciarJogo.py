@@ -108,6 +108,7 @@ def locomocao(nickname):
                 continue
             else:
                 atualizar_local_jogador(locais[escolha - 1][0], nickname)
+                
                 try:
                     if locais[escolha - 1][0].startswith('Masmorra'):
                         mainMasmorra(nickname)

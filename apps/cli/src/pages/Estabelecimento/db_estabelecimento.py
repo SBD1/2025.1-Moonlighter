@@ -113,9 +113,9 @@ def forjar_item_por_jogador(nickname, item_id):
     try:
         cursor = connection.cursor()
         
-        # Verificar se o jogador tem ouro suficiente
+        # verificar se o jogador tem ouro suficiente
         cursor.execute("""
-            SELECT j."ouro", i."precoBase"
+            SELECT j."ouro", i."precoBase", i."nome"
             FROM "jogador" j
             CROSS JOIN "item" i
             WHERE j."nickname" = %s AND i."idItem" = %s
@@ -126,7 +126,7 @@ def forjar_item_por_jogador(nickname, item_id):
             print(Fore.RED + "Jogador ou item não encontrado!")
             return False
             
-        ouro_jogador, preco_item = resultado
+        ouro_jogador, preco_item, nome_item = resultado
         
         if ouro_jogador < preco_item:
             print(Fore.RED + f"Ouro insuficiente! Você tem {ouro_jogador} ouros, mas precisa de {preco_item} ouros.")
@@ -139,8 +139,15 @@ def forjar_item_por_jogador(nickname, item_id):
             WHERE "nickname" = %s
         """, (preco_item, nickname))
         
-        # TODO: Adicionar item ao inventário do jogador
-        # TODO: Verificar materiais necessários
+        # Adicionar item ao inventário do jogador
+        if not adicionar_item_ao_inventario(nickname, item_id, 1):
+            print(Fore.RED + "Erro ao adicionar item ao inventário!")
+            connection.rollback()
+            cursor.close()
+            connection.close()
+            return False
+        
+        print(Fore.GREEN + f"✅ {nome_item} foi forjado e adicionado ao seu inventário!")
         
         connection.commit()
         cursor.close()
@@ -568,6 +575,13 @@ def visualizar_itens_chapeu_de_madeira_por_jogador(nickname):
     """
     Visualiza poções disponíveis para compra no Chapéu de Madeira (sistema aleatório como Moonlighter original)
     """
+    # Verificar se a instância do Chapéu de Madeira existe, se não, criar
+    if not verificar_instancia_chapeu_de_madeira_por_jogador(nickname):
+        criar_instancia_chapeu_de_madeira_por_jogador(nickname, "O Chapéu de Madeira", 2, 15)
+    
+    # Verificar se o dia mudou para forçar atualização da loja
+    verificar_dia_mudou_e_atualizar_loja(nickname)
+    
     connection = connect_to_db()
     if connection is None:
         print(Fore.RED + "Erro ao conectar ao banco de dados.")
@@ -593,39 +607,39 @@ def visualizar_itens_chapeu_de_madeira_por_jogador(nickname):
         margem_lucro = margem_lucro if margem_lucro else 15  # Margem padrão de 15%
         
         # Calcular quantos itens mostrar baseado no dia (progressão)
-        # Dia 1-3: 3-5 poções, Dia 4-7: 4-7 poções, Dia 8+: 5-8 poções
+        # Dia 1-3: 5-5 poções, Dia 4-7: 5-8 poções, Dia 8+: 7-10 itens
         if dia_atual <= 3:
-            min_itens, max_itens = 3, 5
+            min_itens, max_itens = 5, 6
         elif dia_atual <= 7:
-            min_itens, max_itens = 4, 7
-        else:
             min_itens, max_itens = 5, 8
+        else:
+            min_itens, max_itens = 7, 9
         
         # Usar seed do mundo + dia para gerar itens consistentes por dia
         # Converter seed_mundo para número usando hash
         seed_hash = hash(seed_mundo) if seed_mundo else 0
         random.seed(seed_hash + dia_atual)
         
-        # Buscar apenas poções
+        # Buscar itens utilizaveis
         cursor.execute("""
             SELECT i."idItem", i."nome", i."precoBase", i."descricao", i."tipo"
             FROM "item" i
-            WHERE i."tipo" = 'Pocao'
+            WHERE i."tipo" = 'Pocao' OR i."tipo" = 'Arma' OR i."tipo" = 'Armadura'
             ORDER BY i."idItem"
         """)
         
-        todas_pocoes = cursor.fetchall()
+        todos_itens = cursor.fetchall()
         
-        # Selecionar poções aleatórias
+        # Selecionar itens aleatóriss
         num_itens = random.randint(min_itens, max_itens)
-        num_itens = min(num_itens, len(todas_pocoes))
+        num_itens = min(num_itens, len(todos_itens))
         
         if num_itens == 0:
             cursor.close()
             connection.close()
             return []
         
-        pocoes_selecionadas = random.sample(todas_pocoes, num_itens)
+        pocoes_selecionadas = random.sample(todos_itens, num_itens)
         
         # Calcular preços finais
         resultado_final = []
@@ -646,14 +660,14 @@ def visualizar_itens_chapeu_de_madeira_por_jogador(nickname):
         return resultado_final
         
     except Exception as e:
-        print(Fore.RED + f"Erro ao visualizar poções do Chapéu de Madeira: {e}")
+        print(Fore.RED + f"Erro ao visualizar itens do Chapéu de Madeira: {e}")
         if connection:
             connection.close()
         return None
 
 def comprar_item_chapeu_de_madeira_por_jogador(nickname, item_id, quantidade):
     """
-    Compra uma poção no Chapéu de Madeira para o jogador
+    Compra um item no Chapéu de Madeira para o jogador
     """
     connection = connect_to_db()
     if connection is None:
@@ -663,47 +677,43 @@ def comprar_item_chapeu_de_madeira_por_jogador(nickname, item_id, quantidade):
     try:
         cursor = connection.cursor()
         
-        # Verificar se o item é uma poção
+        # Verificar se o item existe
         cursor.execute("""
-            SELECT tipo FROM "item" WHERE "idItem" = %s
+            SELECT "nome", "precoBase", "tipo" FROM "item" WHERE "idItem" = %s
         """, (item_id,))
         
-        resultado_tipo = cursor.fetchone()
-        if not resultado_tipo or resultado_tipo[0] != 'Pocao':
-            print(Fore.RED + "Este item não é uma poção!")
-            return False
-        
-        # Buscar margem de lucro da instância do Chapéu de Madeira do jogador
-        cursor.execute("""
-            SELECT iv."margemLucro"
-            FROM "inst_varejo" iv
-            JOIN "mundo" m ON iv."seedMundo" = m."seedMundo"
-            WHERE m."nickname" = %s
-            LIMIT 1
-        """, (nickname,))
-        
-        resultado_margem = cursor.fetchone()
-        margem_lucro = resultado_margem[0] if resultado_margem else 15  # Margem padrão de 15%
-        
-        # Verificar se o jogador tem ouro suficiente
-        cursor.execute("""
-            SELECT j."ouro", 
-                   ROUND(i."precoBase" * (1 + %s / 100.0)) as preco_final
-            FROM "jogador" j
-            CROSS JOIN "item" i
-            WHERE j."nickname" = %s AND i."idItem" = %s
-        """, (margem_lucro, nickname, item_id))
-        
-        resultado = cursor.fetchone()
-        if not resultado:
-            print(Fore.RED + "Jogador ou poção não encontrada!")
+        item_info = cursor.fetchone()
+        if not item_info:
+            print(Fore.RED + f"Item com ID {item_id} não encontrado!")
+            cursor.close()
+            connection.close()
             return False
             
-        ouro_jogador, preco_final = resultado
+        nome_item, preco_base, tipo_item = item_info
+        
+        # Verificar se o jogador existe
+        cursor.execute("""
+            SELECT "ouro" FROM "jogador" WHERE "nickname" = %s
+        """, (nickname,))
+        
+        jogador_info = cursor.fetchone()
+        if not jogador_info:
+            print(Fore.RED + f"Jogador {nickname} não encontrado!")
+            cursor.close()
+            connection.close()
+            return False
+            
+        ouro_jogador = jogador_info[0]
+        
+        # Calcular preço final
+        margem_lucro = 15  # Margem padrão de 15%
+        preco_final = int(preco_base * (1 + margem_lucro / 100.0))
         custo_total = preco_final * quantidade
         
         if ouro_jogador < custo_total:
             print(Fore.RED + f"Ouro insuficiente! Você tem {ouro_jogador} ouros, mas precisa de {custo_total} ouros.")
+            cursor.close()
+            connection.close()
             return False
         
         # Deduzir ouro do jogador
@@ -713,22 +723,25 @@ def comprar_item_chapeu_de_madeira_por_jogador(nickname, item_id, quantidade):
             WHERE "nickname" = %s
         """, (custo_total, nickname))
         
-        # Adicionar poção ao inventário do jogador
-        cursor.execute("""
-            INSERT INTO "inst_item" ("idItem", "nickname", "quantidade")
-            VALUES (%s, %s, %s)
-            ON CONFLICT ("idItem", "nickname") 
-            DO UPDATE SET "quantidade" = "inst_item"."quantidade" + %s
-        """, (item_id, nickname, quantidade, quantidade))
+        # Adicionar item ao inventário do jogador
+        if not adicionar_item_ao_inventario(nickname, item_id, quantidade):
+            print(Fore.RED + "Erro ao adicionar item ao inventário!")
+            connection.rollback()
+            cursor.close()
+            connection.close()
+            return False
+        
+        print(Fore.GREEN + f"✅ {quantidade}x {nome_item} foi adicionado ao seu inventário!")
         
         connection.commit()
         cursor.close()
         connection.close()
         return True
     except Exception as e:
-        print(Fore.RED + f"Erro ao comprar poção: {e}")
+        print(Fore.RED + f"Erro ao comprar item: {e}")
         if connection:
             connection.rollback()
+            cursor.close()
             connection.close()
         return False
 
@@ -932,4 +945,133 @@ def exibir_dialogo_despedida(nome_npc, nome_jogador=None):
     """
     Exibe diálogo de despedida do NPC
     """
-    return exibir_dialogo_npc(nome_npc, "Despedida", nome_jogador) 
+    return exibir_dialogo_npc(nome_npc, "Despedida", nome_jogador)
+
+def adicionar_item_ao_inventario(nickname, item_id, quantidade):
+    """
+    Adiciona um item ao inventário principal do jogador
+    """
+    connection = connect_to_db()
+    if connection is None:
+        print(Fore.RED + "Erro ao conectar ao banco de dados.")
+        return False
+
+    try:
+        cursor = connection.cursor()
+
+        # Buscar id do inventário principal do jogador
+        cursor.execute('''
+            SELECT inst."idInventario"
+            FROM "inst_inventario" inst
+            JOIN "inventario" inv ON inst."idInventario" = inv."idInventario"
+            WHERE inst."nickname" = %s AND inv."nome" = 'Mochila Principal'
+        ''', (nickname,))
+        resultado = cursor.fetchone()
+        if not resultado:
+            print(Fore.RED + "Inventário principal não encontrado!")
+            cursor.close()
+            connection.close()
+            return False
+        id_inventario = resultado[0]
+
+        # Verificar se o item já existe no inventário principal
+        cursor.execute('''
+            SELECT "idInstItem", "quantidade", i."stackMaximo"
+            FROM "inst_item" ii
+            JOIN "item" i ON ii."idItem" = i."idItem"
+            WHERE ii."nickname" = %s 
+            AND ii."idItem" = %s 
+            AND ii."idInventario" = %s
+        ''', (nickname, item_id, id_inventario))
+        item_existente = cursor.fetchone()
+
+        if item_existente:
+            # Atualizar quantidade existente (respeitando stack máximo)
+            id_inst_item, quantidade_atual, stack_maximo = item_existente
+            nova_quantidade = min(quantidade_atual + quantidade, stack_maximo)
+            cursor.execute('''
+                UPDATE "inst_item"
+                SET "quantidade" = %s
+                WHERE "idInstItem" = %s
+            ''', (nova_quantidade, id_inst_item))
+        else:
+            # Verificar se há espaço no inventário
+            cursor.execute('''
+                SELECT (inv."slotMaximo" - inst."slotOcupado") as slots_livres
+                FROM "inst_inventario" inst
+                JOIN "inventario" inv ON inst."idInventario" = inv."idInventario"
+                WHERE inst."nickname" = %s AND inst."idInventario" = %s
+            ''', (nickname, id_inventario))
+            slots_info = cursor.fetchone()
+            if not slots_info or slots_info[0] <= 0:
+                print(Fore.RED + "Inventário cheio! Não é possível adicionar mais itens.")
+                cursor.close()
+                connection.close()
+                return False
+            # Inserir novo item no inventário
+            cursor.execute('''
+                INSERT INTO "inst_item" ("idItem", "quantidade", "nickname", "idInventario")
+                VALUES (%s, %s, %s, %s)
+            ''', (item_id, quantidade, nickname, id_inventario))
+
+        # Atualizar slots ocupados
+        cursor.execute('''
+            UPDATE "inst_inventario" 
+            SET "slotOcupado" = (
+                SELECT COUNT(*) 
+                FROM "inst_item" 
+                WHERE "nickname" = %s AND "idInventario" = %s
+            )
+            WHERE "nickname" = %s AND "idInventario" = %s
+        ''', (nickname, id_inventario, nickname, id_inventario))
+
+        connection.commit()
+        cursor.close()
+        connection.close()
+        return True
+
+    except Exception as e:
+        print(Fore.RED + f"Erro ao adicionar item ao inventário: {e}")
+        if connection:
+            connection.rollback()
+            cursor.close()
+            connection.close()
+        return False
+
+def verificar_dia_mudou_e_atualizar_loja(nickname):
+    """
+    Verifica o dia atual e força regeneração dos itens da loja
+    """
+    connection = connect_to_db()
+    if connection is None:
+        return False
+
+    try:
+        cursor = connection.cursor()
+        
+        # Buscar dia atual do mundo
+        cursor.execute("""
+            SELECT m."dia", m."seedMundo"
+            FROM "mundo" m
+            WHERE m."nickname" = %s
+        """, (nickname,))
+        
+        resultado = cursor.fetchone()
+        if not resultado:
+            cursor.close()
+            connection.close()
+            return False
+            
+        dia_atual, seed_mundo = resultado
+        
+        # Sempre regenerar os itens baseado no dia atual
+        
+        cursor.close()
+        connection.close()
+        return True
+        
+    except Exception as e:
+        print(Fore.RED + f"Erro ao verificar dia: {e}")
+        if connection:
+            connection.close()
+        return False 
