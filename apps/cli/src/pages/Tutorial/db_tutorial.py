@@ -16,7 +16,7 @@ def buscarNarracao(busca):
                         ON D."idDialogo" = DN."idDialogo"
                         INNER JOIN "npc" N
                         ON N."idNPC" = DN."idNPC"
-                        WHERE N."idNPC" = (SELECT "idNPC" FROM npc WHERE "nome" = 'Mundo') AND D."idDialogoPai" IS NULL;""")
+                        WHERE N."idNPC" = (SELECT "idNPC" FROM npc WHERE "nome" = 'Mundo') AND D."idDialogoPai" IS NULL AND D."tipo" = 'Tutorial';""")
     else:
         cursor.execute("""SELECT D."conteudo", D."idDialogo"
                         FROM "dialogo" D 
@@ -24,7 +24,7 @@ def buscarNarracao(busca):
                             ON D."idDialogo" = DN."idDialogo"
                             INNER JOIN "npc" N
                             ON N."idNPC" = DN."idNPC"
-                        WHERE N."idNPC" = (SELECT "idNPC" FROM npc WHERE "nome" = 'Mundo') AND D."idDialogoPai" = %s;""",
+                        WHERE N."idNPC" = (SELECT "idNPC" FROM npc WHERE "nome" = 'Mundo') AND D."idDialogoPai" = %s AND D."tipo" = 'Tutorial';""",
                         (busca,)
                     )
     narracao = cursor.fetchone()

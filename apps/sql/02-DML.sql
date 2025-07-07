@@ -778,6 +778,22 @@ INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
     VALUES
     ('Há tanto sonhado em abrir a misteriosa 5ª porta das Masmorras...', 8, 'Tutorial', (SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'A vida se tornou difícil, sobretudo para o jovem dono da loja mais antiga - <NOME_DO_JOGADOR>, da Moonlighter'));
 
+INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+    VALUES
+    ('Quando os olhos se fecham, o mundo não desaparece... ele apenas muda de forma.', 1, 'Sono', NULL);
+INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+    VALUES
+    ('Há portas escondidas entre as batidas do coração, levando a terras que só os sonhadores alcançam.', 2, 'Sono', (SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Quando os olhos se fecham, o mundo não desaparece... ele apenas muda de forma.'));
+INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+    VALUES
+    ('Você dormiu e recuperou todas as suas energias!', 3, 'Sono', (SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Há portas escondidas entre as batidas do coração, levando a terras que só os sonhadores alcançam.'));
+
+INSERT INTO "dialogo_npc" ("idDialogo", "idNPC")
+    VALUES
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Quando os olhos se fecham, o mundo não desaparece... ele apenas muda de forma.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Há portas escondidas entre as batidas do coração, levando a terras que só os sonhadores alcançam.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Você dormiu e recuperou todas as suas energias!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo'));
+
 INSERT INTO "dialogo_npc" ("idDialogo", "idNPC")
     VALUES
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Dentre as estrelas da noite, existe uma terra mais velha que a imaginação'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),

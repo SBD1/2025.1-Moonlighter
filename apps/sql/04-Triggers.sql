@@ -367,3 +367,18 @@ CREATE TRIGGER trigger_atualizar_tipo_apos_remover_masmorra
     AFTER DELETE ON "masmorra"
     FOR EACH ROW
     EXECUTE FUNCTION atualizar_tipo_apos_remover_masmorra();
+
+-- FUNÇÃO PARA ATUALIZAR O PERÍODO DO MUNDO
+CREATE OR REPLACE FUNCTION atualizar_periodo_mundo()
+RETURNS void AS $$
+BEGIN
+    UPDATE "mundo"
+    SET "periodo" = 
+        CASE
+            WHEN "periodo" = 'Manhã' THEN 'Tarde'
+            WHEN "periodo" = 'Tarde' THEN 'Noite'
+            ELSE "periodo"
+        END
+    WHERE "periodo" IN ('Manhã', 'Tarde');
+END;
+$$ LANGUAGE plpgsql;
