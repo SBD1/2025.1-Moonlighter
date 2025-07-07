@@ -340,6 +340,19 @@ def menu_batalha(monstro, arma, armadura, vida_jogador, nickname):
 
             if monstro["vidaMaxima"] <= 0:
                 print(f"  {monstro['nome']} derrotado!")
+                
+                # Processa drops do monstro
+                drops_obtidos = processar_drops_monstro(monstro["id"])
+                if drops_obtidos:
+                    print(f"\n{Fore.LIGHTGREEN_EX}  Você encontrou os seguintes itens:")
+                    for drop in drops_obtidos:
+                        print(f"    {Fore.YELLOW}• {drop['nome']} x{drop['quantidade']}")
+                        # Adiciona o item ao inventário
+                        adicionar_item_ao_inventario(nickname, drop['id_item'], drop['quantidade'])
+                    print(f"{Fore.LIGHTGREEN_EX}  Itens adicionados ao seu inventário!")
+                else:
+                    print(f"\n{Fore.LIGHTBLACK_EX}  O monstro não dropou nenhum item.")
+                
                 trocar_musica(musica_atual_anterior)
 
                 # Verifica se é o boss que libera a próxima masmorra
@@ -418,7 +431,12 @@ def menu_batalha(monstro, arma, armadura, vida_jogador, nickname):
         
         elif escolha == '2':
             print(Fore.CYAN + "  Você abre sua mochila para usar um item.")
-            return "usar_item", vida_jogador
+            vida_jogador = usar_pocao_batalha(nickname, vida_jogador)
+            if vida_jogador <= 0:
+                print(Fore.RED + "  Você foi derrotado! Alguém te socorreu e te levou novamente para a cidade...")
+                time.sleep(3)
+                musicCity()
+                return "morte", vida_jogador
         
         elif escolha == '3':
             print(Fore.MAGENTA + "  Você joga um dado de 20 lados para fugir da batalha...")
@@ -620,7 +638,12 @@ def explorar_masmorra(matriz, pos_inicial=(7, 7), nickname=None, vida_jogador=No
                         trocar_musica(musica_atual)
                         
                     elif acao == "usar_item":
-                        pass
+                        vida_jogador = usar_pocao_batalha(nickname, vida_jogador)
+                        if vida_jogador <= 0:
+                            print(Fore.RED + "  Você foi derrotado! Alguém te socorreu e te levou novamente para a cidade...")
+                            time.sleep(3)
+                            musicCity()
+                            return "morte", vida_jogador
                     elif acao == "fugir":
                         trocar_musica(musica_atual)
                     elif acao == "morte":
@@ -736,3 +759,145 @@ def mainMasmorra(nickname):
             time.sleep(2)
             print('\033[?25h', end='', flush=True)
             continue
+
+def usar_pocao_batalha(nickname, vida_atual):
+    """
+    Permite usar poções durante a batalha
+    """
+    from pages.IniciarJogo.db_iniciarJogo import ObterDadosJogador
+    from setup.database import connect_to_db
+    from colorama import Fore, Style
+    import time
+    
+    limpar_terminal()
+    print(f"{Style.BRIGHT}{Fore.CYAN}══════════ USAR POÇÃO ══════════")
+    print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}JOGADOR: {nickname.upper()}")
+    print(f"{Style.BRIGHT}{Fore.YELLOW}═══════════════════════════════")
+    
+    # Obter dados do jogador
+    dados_jogador = ObterDadosJogador(nickname)
+    vida_maxima = dados_jogador[1]
+    
+    print(f"\n{Fore.LIGHTBLUE_EX}HP Atual: {Fore.YELLOW}{vida_atual} {Fore.LIGHTWHITE_EX}/{vida_maxima}")
+    
+    # Buscar poções no inventário
+    connection = connect_to_db()
+    if connection is None:
+        print(f"{Fore.RED}Erro ao conectar ao banco de dados.")
+        return vida_atual
+    
+    cursor = connection.cursor()
+    cursor.execute("""
+        SELECT ii."idInstItem", i."idItem", i."nome", ii."quantidade", p."duracaoTurnos", i."descricao"
+        FROM "inst_item" ii
+        JOIN "item" i ON ii."idItem" = i."idItem"
+        JOIN "pocao" p ON i."idItem" = p."idItem"
+        WHERE ii."nickname" = %s AND i."tipo" = 'Pocao'
+        ORDER BY p."duracaoTurnos" DESC
+    """, (nickname,))
+    
+    pocoes = cursor.fetchall()
+    cursor.close()
+    connection.close()
+    
+    if not pocoes:
+        print(f"\n{Fore.RED}Você não possui nenhuma poção no inventário!")
+        print(f"{Fore.YELLOW}Volte ao menu principal e compre poções primeiro.")
+        time.sleep(3)
+        return vida_atual
+    
+    print(f"\n{Style.BRIGHT}{Fore.LIGHTCYAN_EX}POÇÕES DISPONÍVEIS:")
+    print(f"{Fore.LIGHTBLUE_EX}{'Nº':<3} {'Nome':<25} {'Cura':<8} {'Qtd':<5} {'Descrição'}")
+    print(f"{Fore.LIGHTBLACK_EX}{'─' * 70}")
+    
+    pocoes_numeradas = []
+    for i, pocao in enumerate(pocoes, 1):
+        id_inst, id_item, nome, qtd, cura, desc = pocao
+        print(f"{Fore.WHITE}{i:<3} {nome:<25} {cura:<8} {qtd:<5} {desc}")
+        pocoes_numeradas.append(pocao)
+    
+    print(f"\n{Style.BRIGHT}{Fore.YELLOW}INSTRUÇÕES:")
+    print(f"{Fore.LIGHTGREEN_EX}• Digite o número da poção que deseja usar")
+    print(f"{Fore.LIGHTGREEN_EX}• Digite '0' para cancelar")
+    
+    while True:
+        try:
+            escolha = input(f"\n{Style.BRIGHT}{Fore.MAGENTA}>> ").strip()
+            
+            if escolha == '0':
+                return vida_atual
+            
+            num_pocao = int(escolha)
+            if 1 <= num_pocao <= len(pocoes_numeradas):
+                pocao_selecionada = pocoes_numeradas[num_pocao - 1]
+                return aplicar_pocao(nickname, pocao_selecionada, vida_atual, vida_maxima)
+            else:
+                print(f"{Fore.RED}Número inválido! Escolha entre 1 e {len(pocoes_numeradas)}")
+        except ValueError:
+            print(f"{Fore.RED}Por favor, digite um número válido!")
+
+def aplicar_pocao(nickname, pocao_info, vida_atual, vida_maxima):
+    """
+    Aplica o efeito de uma poção e remove do inventário
+    """
+    from setup.database import connect_to_db
+    from pages.IniciarJogo.db_iniciarJogo import atualizar_vida_jogador
+    from colorama import Fore, Style
+    import time
+    
+    id_inst, id_item, nome, qtd, cura, desc = pocao_info
+    
+    # Calcular nova vida
+    nova_vida = min(vida_atual + cura, vida_maxima)
+    vida_restaurada = nova_vida - vida_atual
+    
+    print(f"\n{Style.BRIGHT}{Fore.LIGHTGREEN_EX}Usando {nome}...")
+    time.sleep(1)
+    
+    if vida_restaurada > 0:
+        print(f"{Fore.GREEN}✓ Restaurou {vida_restaurada} pontos de vida!")
+        print(f"{Fore.LIGHTBLUE_EX}HP: {vida_atual} → {nova_vida}")
+    else:
+        print(f"{Fore.YELLOW}Você já está com vida máxima!")
+    
+    # Remover poção do inventário
+    connection = connect_to_db()
+    if connection is None:
+        print(f"{Fore.RED}Erro ao conectar ao banco de dados.")
+        return vida_atual
+    
+    try:
+        cursor = connection.cursor()
+        
+        if qtd == 1:
+            # Remover item completamente
+            cursor.execute("""
+                DELETE FROM "inst_item" 
+                WHERE "idInstItem" = %s
+            """, (id_inst,))
+        else:
+            # Reduzir quantidade
+            cursor.execute("""
+                UPDATE "inst_item" 
+                SET "quantidade" = "quantidade" - 1
+                WHERE "idInstItem" = %s
+            """, (id_inst,))
+        
+        # Atualizar vida do jogador
+        atualizar_vida_jogador(nickname, nova_vida)
+        
+        connection.commit()
+        cursor.close()
+        connection.close()
+        
+        print(f"{Fore.LIGHTGREEN_EX}✓ {nome} foi consumida!")
+        time.sleep(2)
+        return nova_vida
+        
+    except Exception as e:
+        print(f"{Fore.RED}Erro ao usar poção: {e}")
+        connection.rollback()
+        cursor.close()
+        connection.close()
+        time.sleep(2)
+        return vida_atual
