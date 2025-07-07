@@ -29,58 +29,74 @@ centralizacao = "\n".join([linha.center(largura_terminal) for linha in ascii.spl
 logo = f"{Style.BRIGHT + Fore.LIGHTGREEN_EX}\n\n{centralizacao}\n\n\n"
 
 # definicoes e funcoes iniciais
+
+
 def trocar_musica(caminho_musica, fadeout_ms=1000, fadein_ms=3000):
     global musica_atual
 
     if musica_atual == caminho_musica:
         return
-    
+
     pygame.mixer.init()
     pygame.mixer.music.fadeout(fadeout_ms)
-    time.sleep(fadeout_ms / 1000)  
+    time.sleep(fadeout_ms / 1000)
     pygame.mixer.music.load(caminho_musica)
     pygame.mixer.music.play(-1, fade_ms=fadein_ms)
 
     musica_atual = caminho_musica
 
-def musicCity(): #musica da cidade
+
+def musicCity():  # musica da cidade
     trocar_musica("apps/cli/assets/musics/MoonlighterOST_02_Cidade.mp3")
+
 
 def musicMasmorraEntrance():
     trocar_musica("apps/cli/assets/musics/MoonlighterOST_06_SentientStone.mp3")
 
+
 def musicbattle():
     trocar_musica("apps/cli/assets/musics/MoonlighterOST_22_Battle.mp3")
 
-def musicMasmorraGolem(): #musica da masmorra do golem
+
+def musicMasmorraGolem():  # musica da masmorra do golem
     trocar_musica("apps/cli/assets/musics/MoonlighterOST_07_MasmorraGolem.mp3")
 
-def musicGolemKing(): #musica do chefe da masmorra do golem
+
+def musicGolemKing():  # musica do chefe da masmorra do golem
     trocar_musica("apps/cli/assets/musics/MoonlighterOST_08_GolemKing.mp3")
 
-def musicMasmorraFloresta(): #musica da masmorra da floresta
+
+def musicMasmorraFloresta():  # musica da masmorra da floresta
     trocar_musica("apps/cli/assets/musics/MoonlighterOST_10_MasmorraFloresta.mp3")
 
-def musicCarnivorousMutae(): #musica do chefe da masmorra da floresta
+
+def musicCarnivorousMutae():  # musica do chefe da masmorra da floresta
     trocar_musica("apps/cli/assets/musics/MoonlighterOST_13_CarnivorousMutae.mp3")
 
-def musicMasmorraDeserto(): #musica da masmorra do deserto
+
+def musicMasmorraDeserto():  # musica da masmorra do deserto
     trocar_musica("apps/cli/assets/musics/MoonlighterOST_14_MasmorraDeserto.mp3")
 
-def musicNaja(): #musica do chefe da masmorra do deserto
+
+def musicNaja():  # musica do chefe da masmorra do deserto
     trocar_musica("apps/cli/assets/musics/MoonlighterOST_16_Naja.mp3")
 
-def musicMasmorraTecnologia(): #musica da masmorra da tecnologia
+
+def musicMasmorraTecnologia():  # musica da masmorra da tecnologia
     trocar_musica("apps/cli/assets/musics/MoonlighterOST_20_MasmorraTecnologia.mp3")
 
-def musicFluxEnergy(): #musica do chefe da masmorra da tecnologia
+
+def musicFluxEnergy():  # musica do chefe da masmorra da tecnologia
     trocar_musica("apps/cli/assets/musics/MoonlighterOST_21_FluxEnergy.mp3")
+
 
 def limpar_terminal():
     os.system('cls' if os.name == 'nt' else 'clear')
 
+
 def enter_continue():
     input(Fore.LIGHTBLACK_EX + "\nPressione Enter para continuar...")
+
 
 def construir_matriz_masmorra(salas):
     matriz = {}
@@ -96,6 +112,7 @@ def construir_matriz_masmorra(salas):
 
     return matriz
 
+
 def mostrar_minimapa(matriz, pos_jogador=(7, 7), nickname=None, vida_jogador=None):
     if not matriz:
         print("Nenhuma sala para mostrar.")
@@ -109,7 +126,7 @@ def mostrar_minimapa(matriz, pos_jogador=(7, 7), nickname=None, vida_jogador=Non
     except ValueError as e:
         print(Fore.RED + "Não foi possível determinar os limites:", e)
         return
-    
+
     print(f"{Style.BRIGHT}{Fore.YELLOW}════════════════════════════════════════════════════".center(largura_terminal))
     print(f"{Style.BRIGHT}{Fore.YELLOW}{dadosMasmorra[0]}".center(largura_terminal))
     print(f"{Style.BRIGHT}{Fore.YELLOW}════════════════════════════════════════════════════".center(largura_terminal))
@@ -139,6 +156,7 @@ def mostrar_minimapa(matriz, pos_jogador=(7, 7), nickname=None, vida_jogador=Non
             else:
                 linha += f"{Fore.LIGHTBLACK_EX} ■ {Style.RESET_ALL}"
         print(linha)
+
 
 def sortear_monstro(seed_sala, lista_monstros, tipo_sala):
     digitos = ''.join(filter(str.isdigit, seed_sala))
@@ -177,7 +195,7 @@ def sortear_monstro(seed_sala, lista_monstros, tipo_sala):
 
 def verificar_inimigo(seed_sala, sala):
     if sala["visitado"]:
-        return False #se a sala ja foi visitada, nao ha inimigos
+        return False  # se a sala ja foi visitada, nao ha inimigos
 
     if sala["tipo"] == "Boss":
         return True
@@ -186,19 +204,20 @@ def verificar_inimigo(seed_sala, sala):
 
     if not digitos:
         return False
-    
-    hash_val = hashlib.sha256(seed_sala.encode()).hexdigest()
-    num = int(hash_val[:8], 16) % 100 
 
-    return num < 80  #chance de inimigo
+    hash_val = hashlib.sha256(seed_sala.encode()).hexdigest()
+    num = int(hash_val[:8], 16) % 100
+
+    return num < 80  # chance de inimigo
+
 
 def calcular_dano(arma):
     chance_critico = arma["chanceCritico"]
     dado_ataque_str = arma["dadoAtaque"]
-    multiplicador = arma["multiplicador"]  
+    multiplicador = arma["multiplicador"]
     multiplicador_critico = arma["multiplicadorCritico"]
 
-    #extrair numero do dado
+    # extrair numero do dado
     match = re.match(r'd(\d+)', str(dado_ataque_str).lower())
     if not match:
         print("Erro: formato de dado inválido.")
@@ -222,13 +241,14 @@ def calcular_dano(arma):
 
     return dano
 
+
 def calcular_dano_monstro(monstro):
     dado_ataque_str = monstro.get("dadoAtaque", "")
 
     if not dado_ataque_str:
         print("Erro: dado de ataque do monstro está vazio.")
         return 0
-    
+
     chance_critico = monstro.get("chanceCritico", 0)
     multiplicador = monstro.get("multiplicador", 1)
     multiplicador_critico = monstro.get("multiplicadorCritico", 2)
@@ -237,7 +257,7 @@ def calcular_dano_monstro(monstro):
     if not match:
         print("Erro: formato de dado do monstro inválido.")
         return 0
-    
+
     qtd_dados = int(match.group(1)) if match.group(1) else 1
     dado_ataque = int(match.group(2))
 
@@ -258,10 +278,11 @@ def calcular_dano_monstro(monstro):
 
     return dano
 
+
 def calcular_defesa(armadura):
     if not armadura:
         return 0
-    
+
     dado_defesa_str = armadura["dadoDefesa"]
     critico_defensivo = armadura["criticoDefensivo"]
     defesa_passiva = armadura["defesaPassiva"]
@@ -288,6 +309,7 @@ def calcular_defesa(armadura):
 
     return defesa_total
 
+
 def menu_batalha(monstro, arma, armadura, vida_jogador, nickname):
     global musica_atual
     musica_atual_anterior = musica_atual
@@ -304,7 +326,6 @@ def menu_batalha(monstro, arma, armadura, vida_jogador, nickname):
             musicbattle()  # fallback
     else:
         musicbattle()
-
 
     while True:
         limpar_terminal()
@@ -330,7 +351,7 @@ def menu_batalha(monstro, arma, armadura, vida_jogador, nickname):
 
         escolha = input(f"{Fore.LIGHTWHITE_EX}\n>>> ").strip()
 
-        #comandos da batalha
+        # comandos da batalha
         if escolha == '1':
             print("  Você ataca o monstro!")
             time.sleep(1.5)
@@ -340,7 +361,7 @@ def menu_batalha(monstro, arma, armadura, vida_jogador, nickname):
 
             if monstro["vidaMaxima"] <= 0:
                 print(f"  {monstro['nome']} derrotado!")
-                
+
                 # Processa drops do monstro
                 drops_obtidos = processar_drops_monstro(monstro["id"])
                 if drops_obtidos:
@@ -352,23 +373,23 @@ def menu_batalha(monstro, arma, armadura, vida_jogador, nickname):
                     print(f"{Fore.LIGHTGREEN_EX}  Itens adicionados ao seu inventário!")
                 else:
                     print(f"\n{Fore.LIGHTBLACK_EX}  O monstro não dropou nenhum item.")
-                
+
                 trocar_musica(musica_atual_anterior)
 
                 # Verifica se é o boss que libera a próxima masmorra
                 if monstro["nome"] == "Rei Golem":
                     print("\n" + Fore.GREEN + Style.BRIGHT + "  Parabéns! Você derrotou o Rei Golem e desbloqueou a Masmorra da Floresta!")
                     desbloquear_masmorra(nickname, "Masmorra da Floresta")
-                    time.sleep(3)  
+                    time.sleep(3)
                     atualizarParaLocalAnterior(ObterDadosJogador(nickname))
                     print(Fore.LIGHTCYAN_EX + "\n  Você foi transportado de volta para a Vila Rynoka.")
                     musicCity()
                     time.sleep(3)
                     return "sair", vida_jogador
-                
+
                 if monstro["nome"] == "Mutae Carnívora":
                     print("\n" + Fore.GREEN + Style.BRIGHT + "  Você se sente mais forte, desbloqueou a Masmorra do Deserto!")
-                    desbloquear_masmorra(nickname, "Masmorra do Deserto") 
+                    desbloquear_masmorra(nickname, "Masmorra do Deserto")
                     time.sleep(3)
                     atualizarParaLocalAnterior(ObterDadosJogador(nickname))
                     print(Fore.LIGHTCYAN_EX + "\n  Você foi transportado de volta para a Vila Rynoka.")
@@ -378,7 +399,7 @@ def menu_batalha(monstro, arma, armadura, vida_jogador, nickname):
 
                 if monstro["nome"] == "Golem Mãe":
                     print("\n" + Fore.GREEN + Style.BRIGHT + "  Você visivelmente está mais forte! Desbloqueou a Masmorra da Tecnologia!")
-                    desbloquear_masmorra(nickname, "Masmorra da Tecnologia") 
+                    desbloquear_masmorra(nickname, "Masmorra da Tecnologia")
                     time.sleep(3)
                     atualizarParaLocalAnterior(ObterDadosJogador(nickname))
                     print(Fore.LIGHTCYAN_EX + "\n  Você foi transportado de volta para a Vila Rynoka.")
@@ -389,13 +410,13 @@ def menu_batalha(monstro, arma, armadura, vida_jogador, nickname):
                 if monstro["nome"] == "Naja":
                     print("\n" + Fore.GREEN + Style.BRIGHT + "  Você visivelmente está mais forte! Desbloqueou a Masmorra da Tecnologia!")
                     desbloquear_masmorra(nickname, "Masmorra da Tecnologia")
-                    time.sleep(3) 
+                    time.sleep(3)
                     atualizarParaLocalAnterior(ObterDadosJogador(nickname))
                     print(Fore.LIGHTCYAN_EX + "\n  Você foi transportado de volta para a Vila Rynoka.")
                     musicCity()
                     time.sleep(3)
                     return "sair", vida_jogador
-                
+
                 if monstro["nome"] == "Fluxo de Energia":
                     print("\n" + Fore.GREEN + Style.BRIGHT + "  Parabéns! Você derrotou o Fluxo de Energia e desbloqueou a última masmorra: a Masmorra desconhecida!")
                     desbloquear_masmorra(nickname, "Masmorra Desconhecida")
@@ -426,9 +447,9 @@ def menu_batalha(monstro, arma, armadura, vida_jogador, nickname):
                     time.sleep(3)
                     musicCity()
                     return "morte", vida_jogador
-                
+
                 time.sleep(2)
-        
+
         elif escolha == '2':
             print(Fore.CYAN + "  Você abre sua mochila para usar um item.")
             vida_jogador = usar_pocao_batalha(nickname, vida_jogador)
@@ -437,16 +458,16 @@ def menu_batalha(monstro, arma, armadura, vida_jogador, nickname):
                 time.sleep(3)
                 musicCity()
                 return "morte", vida_jogador
-        
+
         elif escolha == '3':
             print(Fore.MAGENTA + "  Você joga um dado de 20 lados para fugir da batalha...")
             time.sleep(2)
             chance_fuga = random.randint(1, 20)
-            if (chance_fuga < 18): 
+            if (chance_fuga < 18):
                 print(Fore.MAGENTA + f"  Dado: {chance_fuga} - Você não conseguiu fugir.")
                 time.sleep(1)
 
-                #monstro ataca após falha na fuga
+                # monstro ataca após falha na fuga
                 print(Fore.RED + f"  O {monstro['nome']} aproveita e ataca!")
                 time.sleep(1.5)
 
@@ -466,8 +487,8 @@ def menu_batalha(monstro, arma, armadura, vida_jogador, nickname):
                     time.sleep(3)
                     trocar_musica(musicCity)
                     return "morte", vida_jogador
-            
-            #continua a batalha
+
+            # continua a batalha
             else:
                 print(Fore.MAGENTA + f"  Dado {chance_fuga} - Você fugiu com segurança")
                 time.sleep(1)
@@ -550,38 +571,37 @@ def explorar_masmorra(matriz, pos_inicial=(7, 7), nickname=None, vida_jogador=No
         atualizarParaLocalAnterior(dadosJogador)
         musicCity()
         return
-    
 
     if isinstance(dados_arma, list) and len(dados_arma) > 0:
         arma_data = dados_arma[0]
     else:
         arma_data = dados_arma
-    
+
     dado_bruto = str(arma_data[1])
     if not dado_bruto.startswith("d"):
         dado_bruto = f"d{dado_bruto}"
 
     arma = {
-                "dadoAtaque": dado_bruto,
-                "chanceCritico": arma_data[2],
-                "multiplicador": arma_data[3],
-                "multiplicadorCritico": arma_data[4]
-            }
-            
+        "dadoAtaque": dado_bruto,
+        "chanceCritico": arma_data[2],
+        "multiplicador": arma_data[3],
+        "multiplicadorCritico": arma_data[4]
+    }
+
     if not dados_armadura:
         armadura = None
-    
+
     else:
         dado_def = str(dados_armadura[1])
         if not dado_def.startswith("d"):
             dado_def = f"d{dado_def}"
 
         armadura = {
-        "dadoDefesa": dado_def,
-        "criticoDefensivo": dados_armadura[3],
-        "defesaPassiva": dados_armadura[2],
-        "bonusDefesa": dados_armadura[4]
-    } 
+            "dadoDefesa": dado_def,
+            "criticoDefensivo": dados_armadura[3],
+            "defesaPassiva": dados_armadura[2],
+            "bonusDefesa": dados_armadura[4]
+        }
 
     while True:
         limpar_terminal()
@@ -626,7 +646,7 @@ def explorar_masmorra(matriz, pos_inicial=(7, 7), nickname=None, vida_jogador=No
                 revelar_salvas_conectadas(matriz, pos)
                 atualiza_posicao_jogador(nickname, pos[0], pos[1])
 
-                #verifica se tem inimigo na sala
+                # verifica se tem inimigo na sala
                 seed_sala = matriz[pos].get("seedSala")
 
                 if verificar_inimigo(seed_sala, sala_atual):
@@ -636,7 +656,7 @@ def explorar_masmorra(matriz, pos_inicial=(7, 7), nickname=None, vida_jogador=No
                     if acao == "batalhar":
                         matriz[pos]["visitado"] = True
                         trocar_musica(musica_atual)
-                        
+
                     elif acao == "usar_item":
                         vida_jogador = usar_pocao_batalha(nickname, vida_jogador)
                         if vida_jogador <= 0:
@@ -679,6 +699,7 @@ def explorar_masmorra(matriz, pos_inicial=(7, 7), nickname=None, vida_jogador=No
             print("Comando inválido.")
             time.sleep(1)
 
+
 def mainMasmorra(nickname):
     global seedMasmorra, dadosMasmorra, dadosMundo
 
@@ -698,7 +719,7 @@ def mainMasmorra(nickname):
         time.sleep(3)
         print('\033[?25h', end='', flush=True)
         return
-    
+
     musicMasmorraEntrance()
     confirmacao = ''
 
@@ -748,7 +769,7 @@ def mainMasmorra(nickname):
             try:
                 salas = carregar_salas(seedMasmorra)
                 matriz = construir_matriz_masmorra(salas)
-                explorar_masmorra(matriz, pos_inicial=(12,12), nickname=nickname, vida_jogador=vida_jogador)
+                explorar_masmorra(matriz, pos_inicial=(12, 12), nickname=nickname, vida_jogador=vida_jogador)
             except Exception as e:
                 print("ERRO")
                 traceback.print_exc()
@@ -770,6 +791,7 @@ def mainMasmorra(nickname):
             print('\033[?25h', end='', flush=True)
             continue
 
+
 def usar_pocao_batalha(nickname, vida_atual):
     """
     Permite usar poções durante a batalha
@@ -778,24 +800,24 @@ def usar_pocao_batalha(nickname, vida_atual):
     from setup.database import connect_to_db
     from colorama import Fore, Style
     import time
-    
+
     limpar_terminal()
     print(f"{Style.BRIGHT}{Fore.CYAN}══════════ USAR POÇÃO ══════════")
     print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}JOGADOR: {nickname.upper()}")
     print(f"{Style.BRIGHT}{Fore.YELLOW}═══════════════════════════════")
-    
+
     # Obter dados do jogador
     dados_jogador = ObterDadosJogador(nickname)
     vida_maxima = dados_jogador[1]
-    
+
     print(f"\n{Fore.LIGHTBLUE_EX}HP Atual: {Fore.YELLOW}{vida_atual} {Fore.LIGHTWHITE_EX}/{vida_maxima}")
-    
+
     # Buscar poções no inventário
     connection = connect_to_db()
     if connection is None:
         print(f"{Fore.RED}Erro ao conectar ao banco de dados.")
         return vida_atual
-    
+
     cursor = connection.cursor()
     cursor.execute("""
         SELECT ii."idInstItem", i."idItem", i."nome", ii."quantidade", p."quantidade" as cura
@@ -805,38 +827,38 @@ def usar_pocao_batalha(nickname, vida_atual):
         WHERE ii."nickname" = %s
         ORDER BY p."quantidade" DESC
     """, (nickname,))
-    
+
     pocoes = cursor.fetchall()
     cursor.close()
     connection.close()
-    
+
     if not pocoes:
         print(f"\n{Fore.RED}Você não possui nenhuma poção no inventário!")
         print(f"{Fore.YELLOW}Volte ao menu principal e compre poções primeiro.")
         time.sleep(3)
         return vida_atual
-    
+
     print(f"\n{Style.BRIGHT}{Fore.LIGHTCYAN_EX}POÇÕES DISPONÍVEIS:")
     print(f"{Fore.LIGHTBLUE_EX}{'Nº':<3} {'Nome':<25} {'Cura':<8} {'Qtd':<5}")
     print(f"{Fore.LIGHTBLACK_EX}{'─' * 55}")
-    
+
     pocoes_numeradas = []
     for i, pocao in enumerate(pocoes, 1):
         id_inst, id_item, nome, qtd, cura = pocao
         print(f"{Fore.WHITE}{i:<3} {nome:<25} {cura:<8} {qtd:<5}")
         pocoes_numeradas.append(pocao)
-    
+
     print(f"\n{Style.BRIGHT}{Fore.YELLOW}INSTRUÇÕES:")
     print(f"{Fore.LIGHTGREEN_EX}• Digite o número da poção que deseja usar")
     print(f"{Fore.LIGHTGREEN_EX}• Digite '0' para cancelar")
-    
+
     while True:
         try:
             escolha = input(f"\n{Style.BRIGHT}{Fore.MAGENTA}>> ").strip()
-            
+
             if escolha == '0':
                 return vida_atual
-            
+
             num_pocao = int(escolha)
             if 1 <= num_pocao <= len(pocoes_numeradas):
                 pocao_selecionada = pocoes_numeradas[num_pocao - 1]
