@@ -38,7 +38,7 @@ def exibirHistoria(dadosJogador):
 
   while True:
     limpar_terminal()
-    print("\n\n\n\n\n\n\n\n\n\n\n\n\n")
+    print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
     dialogo = buscarNarracao(busca)
 
 
@@ -51,5 +51,6 @@ def exibirHistoria(dadosJogador):
 
   limpar_terminal()
   pygame.mixer.music.fadeout(7000)
+  time.sleep(7)
   print('\033[?25h', end='', flush=True)
-  iniciar_jogo()
+  iniciar_jogo(dadosJogador[0])

@@ -29,6 +29,26 @@ services:
     depends_on:
       - postgres
 
+  cronjob:
+    image: alpine
+    container_name: moonlighter-cronjob
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_started
+    command: |
+      sh -c "apk add --no-cache postgresql-client &&
+             echo 'Cronjob iniciado. Executando a tarefa a cada 15 minutos...' &&
+             while true; do
+               psql -h postgres -U moonlighter -d moonlighter -c 'SELECT atualizar_periodo_mundo();'
+               echo \"Próxima execução em 5 minutos... ($(date))\";
+               sleep 300;
+             done"
+    environment:
+      PGPASSWORD: moonlighter
+    networks:
+      - moonlighter-net
+
 volumes:
   postgres_data:
 

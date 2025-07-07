@@ -8,43 +8,41 @@
 
 -- INSERÇÃO NA TABELA LOCAL:
 INSERT INTO "local" VALUES
-    ('Vila Rynoka', '', 'Local', NULL);
+    ('Vila Rynoka', 'O som suave de pássaros e o rangido da madeira sob seus pés anunciam sua chegada à pacata Vila de Rynoka. As ruas de pedra irregular serpenteiam entre casinhas acolhedoras, com chaminés que soltam espirais preguiçosas de fumaça perfumada. Uma brisa fresca carrega o aroma de pão recém-assado e ferro forjado. Você ouve risos e passos apressados vindo da praça central, onde moradores se reúnem para conversar e negociar. Ao longe, o badalar de um sino marca o ritmo calmo da vila. Tudo parece pulsar em harmonia — do tilintar de moedas nas barracas ao eco distante das masmorras que sussurram histórias perigosas sob os pés de quem ousa explorar. Aqui, o cotidiano e o extraordinário convivem lado a lado, e cada canto guarda segredos esperando para serem descobertos.', 'Local', NULL);
 -- INSERÇÃO DE FILHOS NA TABELA LOCAL:
 INSERT INTO "local" VALUES
-    ('Centro Comercial', '', 'Local', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Vila Rynoka')),
-    ('Praça', '', 'Local', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Vila Rynoka')),
-    ('Moonlighter', '', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Vila Rynoka')),
-    ('Área das Masmorras', '', 'Local', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Vila Rynoka'));
+    ('Centro Comercial', 'O burburinho do comércio ecoa entre as lojas e barracas alinhadas com precisão caótica. O cheiro de couro novo, poções misteriosas e ferro quente se mistura ao ar, enquanto moradores e viajantes barganham com entusiasmo. Cada estabelecimento tem sua própria identidade: a Forja Vulcânica ressoa com marteladas e brasas incandescentes; a Tenda da Bruxa exala aromas enigmáticos e sussurros místicos; a Barraca do Tom vibra com energia e gritaria amigável. Aqui, o ouro gira rápido e segredos ainda mais depressa.', 'Local', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Vila Rynoka')),
+    ('Moonlighter', 'Uma loja modesta por fora, mas cheia de personalidade por dentro. O sino sobre a porta anuncia cada visitante com um tilintar familiar. Prateleiras organizadas com esmero exibem relíquias coletadas das profundezas das masmorras. Ao fundo, o salão de exposição brilha sob a luz de lamparinas penduradas, convidando os clientes a valorizar cada item raro. Subindo uma escada de madeira rangente, o quarto do lojista revela o verdadeiro lar de um explorador — mapas rabiscados, cadernos abertos e uma janela que dá para o céu estrelado.', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Vila Rynoka')),
+    ('Área das Masmorras', 'Ao sul da vila, um terreno irregular revela cinco portais enigmáticos encravados em pedras antigas. Cada um pulsa com uma energia diferente — do calor opressor da Masmorra do Deserto ao brilho etéreo da Masmorra da Tecnologia. O vento que sopra ali carrega mistério e perigo. Moradores evitam a área ao anoitecer, mas para aventureiros, é o limiar entre a rotina pacata da vila e os horrores — e tesouros — que aguardam nas profundezas. As pedras gastas no chão mostram quantos vieram... e quantos não voltaram.', 'Local', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Vila Rynoka'));
 INSERT INTO "local" VALUES
     ('Masmorra do Golem', 'Primeira masmorra acessível, repleta de sentinelas golem e criaturas de pedra. Enfrente o Rei Golem no 3º andar.', 'Masmorra', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Área das Masmorras')),
     ('Masmorra da Floresta', 'Masmorra florestal estreita, infestada de plantas mutantes e a Mutae Carnívora como chefe no último andar.', 'Masmorra', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Área das Masmorras')),
     ('Masmorra do Deserto', 'Antigas ruínas desérticas com tempestades de areia e o Guardião do Deserto aguardando no 3º andar.', 'Masmorra', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Área das Masmorras')),
     ('Masmorra da Tecnologia', 'Instalações tecnológicas abandonadas, protegidas por robôs, com o Guardião da Tecnologia aguardando no último andar.', 'Masmorra', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Área das Masmorras')),
-    ('Forja Vulcânica', '', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Centro Comercial')),
-    ('O Chapéu de Madeira', '', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Centro Comercial')),
-    ('Banco de Rynoka', '', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Centro Comercial')),
-    ('Tenda da Bruxa', '', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Centro Comercial')),
-    ('Barraca do Tom', '', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Centro Comercial')),
-    ('Quarto', '', 'Local', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Moonlighter')),
-    ('Salão de Exposição', '', 'Local', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Moonlighter'));
+    ('Masmorra Desconhecida', 'A última masmorra', 'Masmorra', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Área das Masmorras')),
+    ('Forja de Vulcan', 'Um calor abrasador e faíscas constantes preenchem o ar da Forja Vulcânica. Cada martelada ecoa como um trovão, moldando armas e armaduras com precisão quase cerimonial. Paredes de pedra escura emolduram fornos incandescentes e bigornas robustas. O ferreiro, de músculos rígidos e olhar concentrado, domina o ambiente com mãos calejadas e alma forjada no mesmo fogo. Aqui, não se vende metal — se entrega confiança em lâmina.', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Centro Comercial')),
+    ('Banco de Rynoka', 'Silencioso, organizado e impenetrável como um cofre. O Banco de Rynoka é o bastião da riqueza da vila. Pilares altos sustentam o teto abobadado, e mesas de carvalho robusto sustentam cálculos, registros e contratos. O banqueiro, sempre de luvas e expressão inalterada, calcula os juros com mais frieza que um golem de pedra. Investidores vêm, sonhadores vão, e o ouro nunca dorme.', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Centro Comercial')),
+    ('O Chapéu de Madeira', 'Pequena por fora, encantadora por dentro, a loja exala o cheiro de madeira polida e tecidos delicados. Bonecos de treino, armas estilizadas e acessórios decorativos repousam em estantes esculpidas com primor. Um artesão excêntrico — com um chapéu igualmente peculiar — recepciona os clientes com entusiasmo. Ele não apenas vende acessórios; vende identidade. Cada peça parece contar uma história... ou esconder um feitiço.', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Centro Comercial')),
+    ('Quarto', 'Seu refúgio pessoal. Pequeno, mas acolhedor, o quarto é iluminado por uma janela que filtra os primeiros raios do sol pela manhã e pelo brilho da lua à noite. Livros empilhados, rascunhos de planos e uma cama de lençóis amarrotados contam histórias de noites mal dormidas e sonhos ambiciosos. É aqui que você descansa, pensa e, às vezes, simplesmente observa a vida passar pela janela enquanto se prepara para o próximo dia de batalhas e negociações.', 'Local', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Moonlighter')),
+    ('Salão de Exposição', 'O coração da loja. Prateleiras bem organizadas, vitrines reluzentes e uma bancada de vendas que já presenciou incontáveis barganhas compõem o ambiente. É aqui que sua coragem vira lucro, onde cada item carrega o suor das masmorras e a esperança de prosperar. Clientes entram, observam com olhares calculistas, e você — como bom comerciante — sabe exatamente como precificar o desconhecido. Entre ouro, elogios e pechinchas, a reputação da loja é forjada todos os dias.', 'Local', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Moonlighter'));
 
 -- INSERÇÃO NA TABELA MASMORRA:
 INSERT INTO "masmorra"
     VALUES
-    ('Masmorra do Golem', 1, 3),
-    ('Masmorra da Floresta', 2, 3),
-    ('Masmorra do Deserto', 3, 3),
-    ('Masmorra da Tecnologia', 4, 3);
+    ('Masmorra do Golem', 1, 'Fácil'),
+    ('Masmorra da Floresta', 2, 'Fácil'),
+    ('Masmorra do Deserto', 3, 'Médio'),
+    ('Masmorra da Tecnologia', 4, 'Médio'),
+    ('Masmorra Desconhecida', 5, 'Difícil');
+
 
 -- INSERÇÃO NA TABELA ESTABELECIMENTO:
 INSERT INTO "estabelecimento" 
     VALUES
     ('Moonlighter'),
-    ('Forja Vulcânica'),
+    ('Forja de Vulcan'),
     ('O Chapéu de Madeira'),
-    ('Banco de Rynoka'),
-    ('Tenda da Bruxa'),
-    ('Barraca do Tom');
+    ('Banco de Rynoka');
 
 -- INSERÇÃO NA TABELA EFEITOS:
 INSERT INTO "efeito"
@@ -232,7 +230,7 @@ INSERT INTO "item"
     ('História da Floresta III', 'No entanto, a floresta não parou de crescer... e, aos poucos, nosso mundo foi coberto. As plantas não pararam de crescer... e lentamente... elas tomaram conta.', 'Livro', 5000, 'Floresta', 5, NULL),
     ('Lentes de Vidro', 'Vidro moldado em uma lente com o único propósito de focalizar a energia mágica. Muito útil na fabricação de armas mágicas.', 'Item', 100, 'Golem', 5, NULL),
     ('Runas de Ouro', 'Essas Runas de Ouro criam padrões maravilhosos nos Golems. Ocasionalmente, você pode recuperar uma intacta após a batalha.', 'Item', 300, 'Golem', 5, NULL),
-    ('Núcleo de Golem', 'O núcleo do próprio “coração” de um Golem. Encontramos maneiras de aproveitar a energia, mas não conseguimos criar vida a partir dela.', 'Item', 100, 'Golem', 5, NULL),
+    ('Núcleo de Golem', 'O núcleo do próprio "coração" de um Golem. Encontramos maneiras de aproveitar a energia, mas não conseguimos criar vida a partir dela.', 'Item', 100, 'Golem', 5, NULL),
     ('Design de Golem I', 'Essas imagens e anotações escritas às pressas parecem se assemelhar a um esquema de algum tipo. Algo parecido com o Golem que perambula pela Masmorra do Golem.', 'Livro', 1500, 'Golem', 5, NULL),
     ('Design de Golem II', 'Assim como nós viemos da terra, a pedra também veio. Aproveitando a energia vital que flui pelo solo, animamos a pedra para nos servir.', 'Livro', 2500, 'Golem', 1, NULL),
     ('Design de Golem III', 'Finalmente, imagens sobre a inserção de uma fonte de energia em um Golem. O mais frustrante, porém, é que a parte sobre a fusão da fonte de energia está riscada...', 'Livro', 1500, 'Golem', 5, NULL),
@@ -270,21 +268,12 @@ INSERT INTO "item"
     ('Hastes de Soldagem', 'Metal em um fio fino. Usado como agente de ligação.', 'Item', 3400, 'Tecnologia', 10, NULL),
     ('Pedra Branca', 'Peça de um recipiente para preservar as propriedades da água infundida.', 'Item', 250, 'Golem', 5, NULL),
     -- ITENS DO TIPO POÇÃO:
-    ('Poção do Deserto de Orientação', 'Os vaga-lumes guiarão o usuário até o próximo andar da Masmorra do Deserto.', 'Pocao', 8000, 'Mercador', 5, NULL),
-    ('Poção da Floresta de Orientação', 'Os vaga-lumes guiarão o usuário até o próximo andar da Masmorra da Floresta.', 'Pocao', 2500, 'Mercador', 5, NULL),
-    ('Poção do Golem de Orientação', 'Os vaga-lumes guiarão o usuário até o próximo andar da Masmorra do Golem.', 'Pocao', 400, 'Mercador', 5, NULL),
-    ('Poção da Tecnologia de Orientação', 'Os vaga-lumes guiarão o usuário até o próximo andar da Masmorra da Tecnologia.', 'Pocao', 16000, 'Mercador', 5, NULL),
-    ('Poção de Cura I', 'Restaura 40 pontos de vida. Deve-se ter sempre um ou dois desses em mãos.', 'Pocao', 125, 'Mercador', 5, NULL),
-    ('Poção de Cura II', 'Restaura 75 pontos de vida. Definitivamente, vale o preço.', 'Pocao', 800, 'Mercador', 5, NULL),
-    ('Poção de Cura III', 'Restaura 200 pontos de vida. Teria sido bom ter isso quando encontrei aquela criatura...', 'Pocao', 3000, 'Mercador', 5, NULL),
-    ('Poção de Cura IV', 'Restaura 500 pontos de vida. A Bruxa com certeza se superou aqui.', 'Pocao', 8000, 'Mercador', 5, NULL),
+    ('Poção de Cura I', 'Restaura 10 pontos de vida. Deve-se ter sempre um ou dois desses em mãos.', 'Pocao', 125, 'Mercador', 5, NULL),
+    ('Poção de Cura II', 'Restaura 35 pontos de vida. Definitivamente, vale o preço.', 'Pocao', 800, 'Mercador', 5, NULL),
+    ('Poção de Cura III', 'Restaura 50 pontos de vida. Teria sido bom ter isso quando encontrei aquela criatura...', 'Pocao', 3000, 'Mercador', 5, NULL),
+    ('Poção de Cura IV', 'Restaura 75 pontos de vida. A Bruxa com certeza se superou aqui.', 'Pocao', 8000, 'Mercador', 5, NULL),
     ('Hiper Poção', 'Restaura toda a saúde. Uma poção vital para as masmorras mais difíceis.', 'Pocao', 20520, 'Mercador', 5, NULL),
-    ('Cogumelo Mágico', 'Um cogumelo que emite um brilho sutil. O consumo dele concede atributos mágicos aleatórios por algum tempo... Nunca é uma aposta segura, para ser honesto.', 'Pocao', 60, 'Floresta', 10, NULL),
     ('Água Nutritiva', 'Água em redemoinho com nutrientes para o crescimento das plantas. Não para o consumo humano. Zenon não consegue me dizer isso o suficiente...', 'Pocao', 1750, 'Floresta', 5, NULL),
-    ('Poção de Revelação do Deserto', 'Revela o mapa da Masmorra do Deserto ao ser usado.', 'Pocao', 16000, 'Mercador', 5, NULL),
-    ('Poção de Revelação da Floresta', 'Revela o mapa da Masmorra da Floresta ao ser usado.', 'Pocao', 5000, 'Mercador', 5, NULL),
-    ('Poção de Revelação do Golem', 'Revela o mapa da Masmorra do Golem ao ser usado.', 'Pocao', 800, 'Mercador', 5, NULL),
-    ('Poção de Revelação da Tecnologia', 'Revela o mapa da Masmorra da Tecnologia ao ser usado.', 'Pocao', 32000, 'Mercador', 5, NULL),
     -- ITENS DO TIPO ARMA:
     ('Espada Grande Blaze', 'Provoca Queimadura. Deve ser a combinação de lava infundida diretamente no metal.', 'Arma', 285000, 'Tecnologia', 1, NULL),
     ('Lança de Vassoura', 'Uma ferramenta com uma finalidade simples. Limpar. Pelo menos, se estiver em mãos não treinadas.', 'Arma', 53, 'Mercador', 1, NULL),
@@ -334,42 +323,93 @@ INSERT INTO "item"
     ('Espada Grande Vulcânica', 'Uma das mais pesadas de Rynoka. Forjada em Aço do Deserto, é uma máquina de destruição imparável.', 'Arma', 265800, 'Deserto', 1, NULL),
     ('Espada Grande Tempestuosa', 'Eletrocuta. A madeira que compõe o cabo é projetada especificamente para proteger o usuário de qualquer eletrocussão indesejada.', 'Arma', 500000, 'Tecnologia', 1, NULL),
     -- ITENS DO TIPO ARMADURA:
-    ('Bandana de Tecido', 'Essa bandana semi-ordinária é tecida com as fibras mais resistentes para ajudar a proteger o usuário.', 'Armadura', 4000, 'Mercador', 1, NULL),
-    ('Bandana de Tecido II', 'Essa bandana semi-ordinária é tecida com as fibras mais resistentes para ajudar a proteger o usuário.', 'Armadura', 39000, 'Mercador', 1, NULL),
-    ('Bandana de Tecido III', 'Essa bandana semi-ordinária é tecida com as fibras mais resistentes para ajudar a proteger o usuário.', 'Armadura', 90500, 'Mercador', 1, NULL),
-    ('Bandana de Tecido IV', 'Essa bandana semi-ordinária é tecida com as fibras mais resistentes para ajudar a proteger o usuário.', 'Armadura', 200000, 'Mercador', 1, NULL),
-    ('Botas de Tecido', 'Botas feitas de tecido resistente. Perfeitas para viajantes, mas não são as melhores para proteger os pés de ataques inimigos.', 'Armadura' , 4000, 'Mercador', 1, NULL),
-    ('Peitoral de Tecido', 'O tecido resistente dessa túnica é durável e, ao mesmo tempo, leve.', 'Armadura', 4000, 'Mercador', 1, NULL),
-    ('Botas de Ferro', 'Originalmente produzido em massa para soldados do Grande Exército, mas funciona igualmente bem para qualquer pessoa que esteja mergulhando na masmorra.', 'Armadura', 4000, 'Mercador', 1, NULL),
-    ('Peitoral de Ferro', 'Armadura básica mais comumente usada por mercadores. Bastante leve, com resistência e mobilidade decentes.', 'Armadura', 4000, 'Mercador', 1, NULL),
-    ('Capacete de Ferro', 'Chapelaria feita com os metais mais leves disponíveis. É uma troca entre armadura e agilidade.', 'Armadura', 4000, 'Mercador', 1, NULL),
-    ('Botas de Aço', 'Oferecem uma proteção retumbante. O que é bom, porque ninguém vai se esquivar de musgo com tanto metal preso aos pés.', 'Armadura', 4000, 'Mercador', 1, NULL),
-    ('Peitoral de Aço', 'A placa peitoral oferece a melhor proteção contra inimigos. No entanto, é incrivelmente pesado. Basicamente, é um pedaço de aço preso ao peito.', 'Armadura', 4000, 'Mercador', 1, NULL),
-    ('Capacete de Aço', 'Camadas dos metais mais pesados e espessos criados em um capacete robusto, resistente e redutor de danos.', 'Armadura', 4000, 'Mercador', 1, NULL),
-    ('Botas de Tecido II', 'Botas feitas de tecido resistente. Perfeitas para viajantes, mas não são as melhores para proteger os pés de ataques inimigos.', 'Armadura', 39000, 'Mercador', 1, NULL),
-    ('Botas de Tecido III', 'Botas feitas de tecido resistente. Perfeitas para viajantes, mas não são as melhores para proteger os pés de ataques inimigos.', 'Armadura', 90500, 'Mercador', 1, NULL),
-    ('Botas de Tecido IV', 'Botas feitas de tecido resistente. Perfeitas para viajantes, mas não são as melhores para proteger os pés de ataques inimigos.', 'Armadura', 200000, 'Mercador', 1, NULL),
-    ('Peitoral de Tecido II', 'O tecido resistente dessa túnica é durável e, ao mesmo tempo, leve.', 'Armadura', 39000, 'Mercador', 1, NULL),
-    ('Botas de Ferro II', 'Originalmente produzido em massa para soldados do Grande Exército, mas funciona igualmente bem para qualquer pessoa que esteja mergulhando na masmorra.', 'Armadura', 44500, 'Mercador', 1, NULL),
-    ('Peitoral de Ferro II', 'Armadura básica mais comumente usada por mercadores. Bastante leve, com resistência e mobilidade decentes.', 'Armadura', 44500, 'Mercador', 1, NULL),
-    ('Capacete de Ferro II', 'Chapelaria feita com os metais mais leves disponíveis. É uma troca entre armadura e agilidade.', 'Armadura', 44500, 'Mercador', 1, NULL),
-    ('Botas de Aço II', 'Oferecem uma proteção retumbante. O que é bom, porque ninguém vai se esquivar de musgo com tanto metal preso aos pés.', 'Armadura', 44500, 'Mercador', 1, NULL),
-    ('Peitoral de Aço II', 'A placa peitoral oferece a melhor proteção contra inimigos. No entanto, é incrivelmente pesado. Basicamente, é um pedaço de aço preso ao peito.', 'Armadura', 44500, 'Mercador', 1, NULL),
-    ('Capacete de Aço II', 'Camadas dos metais mais pesados e espessos criados em um capacete robusto, resistente e redutor de danos.', 'Armadura', 44500, 'Mercador', 1, NULL),
-    ('Peitoral de Tecido III', 'O tecido resistente dessa túnica é durável e, ao mesmo tempo, leve.', 'Armadura', 90500, 'Mercador', 1, NULL),
-    ('Peitoral de Tecido IV', 'O tecido resistente dessa túnica é durável e, ao mesmo tempo, leve.', 'Armadura', 200000, 'Mercador', 1, NULL),
-    ('Botas de Ferro III', 'Originalmente produzido em massa para soldados do Grande Exército, mas funciona igualmente bem para qualquer pessoa que esteja mergulhando na masmorra.', 'Armadura', 90000, 'Mercador', 1, NULL),
-    ('Botas de Ferro IV', 'Originalmente produzido em massa para soldados do Grande Exército, mas funciona igualmente bem para qualquer pessoa que esteja mergulhando na masmorra.', 'Armadura', 200000, 'Mercador', 1, NULL),
-    ('Peitoral de Ferro III', 'Armadura básica mais comumente usada por mercadores. Bastante leve, com resistência e mobilidade decentes.', 'Armadura', 90000, 'Mercador', 1, NULL),
-    ('Peitoral de Ferro IV', 'Armadura básica mais comumente usada por mercadores. Bastante leve, com resistência e mobilidade decentes.', 'Armadura', 200000, 'Mercador', 1, NULL),
-    ('Capacete de Ferro III', 'Chapelaria feita com os metais mais leves disponíveis. É uma troca entre armadura e agilidade.', 'Armadura', 90500, 'Mercador', 1, NULL),
-    ('Capacete de Ferro IV', 'Chapelaria feita com os metais mais leves disponíveis. É uma troca entre armadura e agilidade.', 'Armadura', 200000, 'Mercador', 1, NULL),
-    ('Botas de Aço III', 'Oferecem uma proteção retumbante. O que é bom, porque ninguém vai se esquivar de musgo com tanto metal preso aos pés.', 'Armadura', 90000, 'Mercador', 1, NULL),
-    ('Botas de Aço IV', 'Oferecem uma proteção retumbante. O que é bom, porque ninguém vai se esquivar de musgo com tanto metal preso aos pés.', 'Armadura', 200000, 'Mercador', 1, NULL),
-    ('Peitoral de Aço III', 'A placa peitoral oferece a melhor proteção contra inimigos. No entanto, é incrivelmente pesado. Basicamente, é um pedaço de aço preso ao peito.', 'Armadura', 90000, 'Mercador', 1, NULL),
-    ('Peitoral de Aço IV', 'A placa peitoral oferece a melhor proteção contra inimigos. No entanto, é incrivelmente pesado. Basicamente, é um pedaço de aço preso ao peito.', 'Armadura', 200000, 'Mercador', 1, NULL),
-    ('Capacete de Aço III', 'Camadas dos metais mais pesados e espessos criados em um capacete robusto, resistente e redutor de danos.', 'Armadura', 90000, 'Mercador', 1, NULL),
-    ('Capacete de Aço IV', 'Camadas dos metais mais pesados e espessos criados em um capacete robusto, resistente e redutor de danos.', 'Armadura', 200000, 'Mercador', 1, NULL);
+    ('Armadura de Tecido I', 'Armadura tecido', 'Armadura', 4000, 'Mercador', 1, NULL),
+    ('Armadura de Tecido II', 'Armadura tecido', 'Armadura', 39000, 'Mercador', 1, NULL),
+    ('Armadura de Tecido III', 'Armadura tecido', 'Armadura', 90500, 'Mercador', 1, NULL),
+    ('Armadura de Tecido IV', 'Armadura tecido', 'Armadura', 200000, 'Mercador', 1, NULL),
+    ('Armadura de Ferro I', 'Armadura ferro', 'Armadura', 4000, 'Mercador', 1, NULL),
+    ('Armadura de Ferro II', 'Armadura ferro', 'Armadura', 44500, 'Mercador', 1, NULL),
+    ('Armadura de Ferro III', 'Armadura ferro', 'Armadura', 90000, 'Mercador', 1, NULL),
+    ('Armadura de Ferro IV', 'Armadura ferro', 'Armadura', 200000, 'Mercador', 1, NULL),
+    ('Armadura de Aço I', 'Armadura aço', 'Armadura', 4000, 'Mercador', 1, NULL),
+    ('Armadura de Aço II', 'Armadura aço', 'Armadura', 44500, 'Mercador', 1, NULL),
+    ('Armadura de Aço III', 'Armadura aço', 'Armadura', 90000, 'Mercador', 1, NULL),
+    ('Armadura de Aço IV', 'Armadura aço', 'Armadura', 200000, 'Mercador', 1, NULL);
+
+
+-- INSERÇÃO NA TABELA ARMA:
+INSERT INTO "arma" VALUES
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Espada Grande Blaze'), 'd20', 30.0, 2, 4, 'Espada'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Espada do Herói'), 'd12', 20.0, 2, 4, 'Espada'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Espada do Herói II'), 'd20', 30.0, 3, 5, 'Espada'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Espada do Herói III'), 'd20', 35.0, 3, 5, 'Espada'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Espada Grande Buster'), 'd10', 10.0, 2, 3, 'Espada'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Espada Grande de Treinamento'), 'd6', 5.0, 1, 2, 'Espada'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Espada Grande de Pedra'), 'd10', 12.0, 2, 3, 'Espada'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Espada Grande Selvagem'), 'd12', 20.0, 2, 3, 'Espada'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Espada Grande Venenoso'), 'd12', 25.0, 2, 4, 'Espada'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Espada Grande Vulcânica'), 'd20', 32.0, 3, 5, 'Espada'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Espada Grande Tempestuosa'), 'd20', 35.0, 3, 5, 'Espada'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Espada Curta do Comandante'), 'd12', 25.0, 2, 4, 'Espada'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Espada Curta de Treinamento'), 'd6', 5.0, 1, 2, 'Espada'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Espada Curta Enferrujada'), 'd8', 8.0, 1, 2, 'Espada'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Espada Curta de Soldado'), 'd10', 12.0, 2, 3, 'Espada'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Espada Curta de Cavaleiro'), 'd12', 20.0, 2, 4, 'Espada'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Espada Curta Venenosa'), 'd12', 25.0, 2, 4, 'Espada'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Espada Curta Reborn'), 'd20', 30.0, 3, 5, 'Espada'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Monopla de Capitão'), 'd12', 20.0, 2, 3, 'Monopla'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Monopla de Treinamento'), 'd6', 5.0, 1, 2, 'Monopla'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Monopla de Luta'), 'd10', 10.0, 2, 3, 'Monopla'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Monopla Rústica'), 'd10', 10.0, 2, 3, 'Monopla'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Monopla dos Espíritos da Floresta'), 'd12', 25.0, 2, 4, 'Monopla'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Monopla Gêmeas Venenosas'), 'd12', 25.0, 2, 4, 'Monopla'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Monopla Flamejante'), 'd20', 30.0, 3, 5, 'Monopla'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Monopla Tempestuosa'), 'd20', 35.0, 3, 5, 'Monopla'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Arco de Treinamento'), 'd6', 5.0, 1, 2, 'Arco'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Arco de Catapulta'), 'd10', 10.0, 2, 3, 'Arco'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Arco do Herói'), 'd12', 20.0, 2, 4, 'Arco'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Arco do Herói II'), 'd12', 25.0, 2, 4, 'Arco'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Arco Natural'), 'd12', 25.0, 2, 4, 'Arco'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Arco Venenoso'), 'd12', 25.0, 2, 4, 'Arco'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Arco do Herói III'), 'd20', 30.0, 3, 5, 'Arco'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Arco do Herói IV'), 'd20', 35.0, 3, 5, 'Arco'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Arco Lança-Chamas'), 'd20', 30.0, 3, 5, 'Arco'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Arco Tempestuoso'), 'd20', 35.0, 3, 5, 'Arco'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Arco do Soldado'), 'd20', 30.0, 2, 4, 'Arco'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Arco de Exeter'), 'd20', 40.0, 3, 6, 'Arco'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Arco de Caçador'), 'd10', 12.0, 2, 3, 'Arco'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Lança de Vassoura'), 'd4', 2.0, 1, 2, 'Lança'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Lança de Treinamento'), 'd6', 5.0, 1, 2, 'Lança'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Lança de Perfuração de Golem'), 'd10', 10.0, 2, 3, 'Lança'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Lança do Guerreiro'), 'd12', 20.0, 2, 3, 'Lança'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Lança com Ferrão de Veneno'), 'd12', 25.0, 2, 4, 'Lança'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Lança de Madeira'), 'd12', 25.0, 2, 4, 'Lança'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Lança Infernal'), 'd20', 30.0, 3, 5, 'Lança'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Lança do Macaco'), 'd20', 35.0, 3, 5, 'Lança');
+
+-- INSERÇÃO NA TABELA ARMADURA:
+INSERT INTO "armadura" VALUES
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Tecido I'), 'd6', 3, 10, 2, 'Armadura'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Tecido II'), 'd8', 4, 15, 4, 'Armadura'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Tecido III'), 'd10', 5, 20, 5, 'Armadura'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Tecido IV'), 'd12', 6, 25, 6, 'Armadura'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Ferro I'), 'd6', 3, 10, 2, 'Armadura'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Ferro II'), 'd8', 4, 15, 4, 'Armadura'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Ferro III'), 'd10', 5, 20, 5, 'Armadura'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Ferro IV'), 'd12', 6, 25, 6, 'Armadura'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Aço I'), 'd6', 3, 10, 2, 'Armadura'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Aço II'), 'd8', 4, 15, 4, 'Armadura'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Aço III'), 'd10', 5, 20, 5, 'Armadura'),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Aço IV'), 'd12', 6, 25, 6, 'Armadura');
+
+INSERT INTO "pocao" VALUES
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Poção de Cura I'), 10),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Poção de Cura II'), 35),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Poção de Cura III'), 50),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Poção de Cura IV'), 75),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Hiper Poção'), 9999),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Água Nutritiva'), 20);
+
 
 -- INSERÇÃO NA TABELA RECEITA
     INSERT INTO "receita"
@@ -408,42 +448,6 @@ INSERT INTO "item"
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Espada Grande Tempestuosa'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Espada Grande Blaze'), 1),
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Espada Grande Tempestuosa'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Bateria de Célula Tripla'), 2), 
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Espada Grande Tempestuosa'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Metal Condutor'), 4),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Bandana de Tecido'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Tecido'), 4),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Bandana de Tecido'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Esfera de Água'), 2), 
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Bandana de Tecido'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Restos de Fundição'), 3),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Bandana de Tecido II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Bandana de Tecido'), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Bandana de Tecido II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Palha'), 3),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Bandana de Tecido II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Mágica'), 5),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Bandana de Tecido III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Bandana de Tecido II'), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Bandana de Tecido III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Corda do Deserto'), 3),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Bandana de Tecido III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Tecido à Prova de Fogo'), 5),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Bandana de Tecido IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Bandana de Tecido III'), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Bandana de Tecido IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Tratada'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Bandana de Tecido IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Fios'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Tecido'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Tecido'), 6),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Tecido'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Esfera de Água'), 4),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Tecido'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Restos de Fundição'), 3),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Tecido II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Tecido'), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Tecido II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Palha'), 3),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Tecido II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Mágica'), 5),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Tecido III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Tecido II'), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Tecido III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Corda do Deserto'), 3),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Tecido III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Tecido à Prova de Fogo'), 5),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Tecido IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Tecido III'), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Tecido IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Tratada'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Tecido IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Fios'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Tecido'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Tecido'), 10),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Tecido'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Esfera de Água'), 6),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Tecido'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Restos de Fundição'), 3),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Tecido II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Tecido'), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Tecido II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Palha'), 3),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Tecido II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Mágica'), 5),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Tecido III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Tecido II'), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Tecido III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Corda do Deserto'), 3),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Tecido III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Tecido à Prova de Fogo'), 5),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Tecido IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Tecido III'), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Tecido IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Tratada'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Tecido IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Fios'), 2),
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Arco do Herói'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Tecido'), 3),
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Arco do Herói'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Aço Endurecido'), 5),
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Arco do Herói'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Ferramenta Rúnica'), 1),
@@ -456,78 +460,6 @@ INSERT INTO "item"
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Arco do Herói IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Arco do Herói III'), 1),
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Arco do Herói IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Bobina de Cobre'), 2),
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Arco do Herói IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pistola de Solda'), 3),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Barra de Ferro'), 6),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Dente'), 14),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Restos de Fundição'), 3),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro'), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Folhas Fortes'), 4),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Raiz Preservada'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro II'), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Magnetita'), 4),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pó Isolante'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro III'), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Wolfram'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Ferro IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Fios de Ouro'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Barra de Ferro'), 6),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Dente'), 14),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Restos de Fundição'), 3),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro'), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Folhas Fortes'), 4),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Raiz Preservada'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro II'), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Magnetita'), 4),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pó Isolante'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro III'), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Wolfram'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Ferro IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Fios de Ouro'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Barra de Ferro'), 6),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Dente'), 4),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Restos de Fundição'), 3),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro'), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Folhas Fortes'), 4),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Raiz Preservada'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro II'), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Magnetita'), 4),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pó Isolante'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro III'), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Wolfram'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Ferro IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Fios de Ouro'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Aço'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Aço Endurecido'), 4),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Aço'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Barra de Ferro'), 12),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Aço'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Restos de Fundição'), 3),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Aço II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Aço'), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Aço II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Antiga'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Aço II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Mágica'), 5),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Aço III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Aço II'), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Aço III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Lingote de Aço do Deserto'), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Aço III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pó Inflamável'), 4),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Aço IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Aço III'), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Aço IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Wolfram'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Botas de Aço IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Bobina de Cobre'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Aço'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Aço Endurecido'), 8),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Aço'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Barra de Ferro'), 14),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Aço'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Restos de Fundição'), 3),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Aço II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Aço'), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Aço II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Antiga'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Aço II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Mágica'), 5),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Aço III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Aço II'), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Aço III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Lingote de Aço do Deserto'), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Aço III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pó Inflamável'), 4),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Aço IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Aço III'), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Aço IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Wolfram'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Peitoral de Aço IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Bobina de Cobre'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Aço'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Aço Endurecido'), 6),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Aço'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Barra de Ferro'), 12),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Aço'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Restos de Fundição'), 3),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Aço II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Aço'), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Aço II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Antiga'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Aço II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Mágica'), 5),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Aço III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Aço II'), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Aço III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Lingote de Aço do Deserto'), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Aço III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pó Inflamável'), 4),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Aço IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Aço III'), 1),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Aço IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Wolfram'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Capacete de Aço IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Bobina de Cobre'), 2),
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Arco de Treinamento'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Restos de Fundição'), 4),
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Arco de Treinamento'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Barra de Ferro'), 6),
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Arco de Treinamento'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Raiz'), 10),
@@ -578,7 +510,43 @@ INSERT INTO "item"
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Monopla Flamejante'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Motor Termomagnético'), 3),
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Monopla Tempestuosa'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Monopla Flamejante'), 1),
     ((SELECT "idItem" FROM "item" WHERE "nome" = 'Monopla Tempestuosa'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Bateria de Célula Tripla'), 2),
-    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Monopla Tempestuosa'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Metal Condutor'), 4);
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Monopla Tempestuosa'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Metal Condutor'), 4),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Tecido I'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Tecido'), 10),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Tecido I'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Cipó'), 8),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Tecido I'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Barra de Ferro'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Tecido II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Tecido I'), 1),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Tecido II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Bulbo Antigo'), 3),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Tecido II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Tecido'), 12),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Tecido III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Tecido II'), 1),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Tecido III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Raiz'), 15),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Tecido III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Madeira Antiga'), 3),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Tecido IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Tecido III'), 1),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Tecido IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Joia de Fogo'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Tecido IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Bulbo Antigo'), 4),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Ferro I'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Barra de Ferro'), 10),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Ferro I'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Dente'), 6),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Ferro I'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Cinzel de Golem'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Ferro II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Ferro I'), 1),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Ferro II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Ferramenta Rúnica'), 1),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Ferro II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Barra de Ferro'), 8),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Ferro III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Ferro II'), 1),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Ferro III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Lingote de Aço do Deserto'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Ferro III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pedra de Amolar'), 8),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Ferro IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Ferro III'), 1),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Ferro IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Metal Condutor'), 3),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Ferro IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Motor Termomagnético'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Aço I'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Aço Endurecido'), 6),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Aço I'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Restos de Fundição'), 5),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Aço I'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Cinzel de Golem'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Aço II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Aço I'), 1),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Aço II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Ferramenta Rúnica'), 1),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Aço II'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Lingote de Aço do Deserto'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Aço III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Aço II'), 1),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Aço III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Bateria de Célula Tripla'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Aço III'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Pistola de Solda'), 1),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Aço IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Aço III'), 1),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Aço IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Bobina de Cobre'), 2),
+    ((SELECT "idItem" FROM "item" WHERE "nome" = 'Armadura de Aço IV'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Joia de Fogo'), 2);
 
 -- INSERÇÃO DOS DROPS DE MONSTROS
 INSERT INTO "monstro_item" 
@@ -667,7 +635,6 @@ INSERT INTO "monstro_item"
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Slime Venenoso'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Geléia de Veneno'), 0.8, 2, 4),
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Slime Venenoso'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Ácido Puro'), 0.25, 1, 1),
     -- Cogumelo Giratório (Masmorra da Floresta)
-    ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Cogumelo Giratório'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Cogumelo Mágico'), 0.4, 1, 2),
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Cogumelo Giratório'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Esporos Venenosos'), 0.2, 1, 1),
     -- Arbusto de Esporos (Masmorra da Floresta)
     ((SELECT "idMonstro" FROM "monstro" WHERE "nome" = 'Arbusto de Esporos'), (SELECT "idItem" FROM "item" WHERE "nome" = 'Esporos Venenosos'), 0.7, 1, 3),
@@ -776,12 +743,12 @@ INSERT INTO "monstro_item"
 INSERT INTO "npc" ("nome", "tipoNPC", "descricao", "ativo")
     VALUES
     ('Zenon', 'Guia', 'Sábio ancião que oferece conselhos e conhecimento.', FALSE),
-    ('Andrei', 'Ferreiro', 'Ferreiro que aprimora armas e armaduras na Forja Vulcânica.', FALSE),
-    ('Eris', 'Alquimista', 'Alquimista que vende e aprimora poções no Chapéu de Madeira.', FALSE),
-    ('Edward', 'Banqueiro', 'Banqueiro que gerencia investimentos para a cidade de Rynoka.', FALSE),
-    ('Juliette', 'Decoradora', 'Ajuda a melhorar e decorar a loja Moonlighter em "Le Retailer".', FALSE),
+    ('Andrei', 'Ferreiro', 'Ferreiro que aprimora armas e armaduras na Forja Vulcânica.', TRUE),
+    ('Eris', 'Alquimista', 'Alquimista que vende e compra itens no Chapéu de Madeira.', TRUE),
+    ('Edward', 'Banqueiro', 'Banqueiro que gerencia investimentos para a cidade de Rynoka.', TRUE),
+    ('Juliette', 'Decoradora', 'Ajuda a melhorar e decorar a loja Moonlighter em "Le Retailer".', TRUE),
     ('Tom', 'Vendedor Ambulante', 'Vendedor ambulante que oferece itens raros e exóticos.', FALSE),
-    ('Mercador Viajante', 'Comprador Especializado', 'Compra itens específicos por um preço elevado periodicamente.', FALSE),
+    ('Mercador Viajante', 'Comprador Especializado', 'Compra itens específicos por um preço elevado periodicamente.', TRUE),
     ('Pedro Doidão', 'Residente', 'Residente excêntrico da cidade de Rynoka com dicas peculiares.', FALSE),
     ('Bruxa dos Murmúrios', 'Encantadora', 'Bruxa misteriosa que pode encantar equipamentos com efeitos.', FALSE),
     ('Mundo', 'Mundo', 'Interações relacionadas à narração do mundo', FALSE);
@@ -811,6 +778,22 @@ INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
     VALUES
     ('Há tanto sonhado em abrir a misteriosa 5ª porta das Masmorras...', 8, 'Tutorial', (SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'A vida se tornou difícil, sobretudo para o jovem dono da loja mais antiga - <NOME_DO_JOGADOR>, da Moonlighter'));
 
+INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+    VALUES
+    ('Quando os olhos se fecham, o mundo não desaparece... ele apenas muda de forma.', 1, 'Sono', NULL);
+INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+    VALUES
+    ('Há portas escondidas entre as batidas do coração, levando a terras que só os sonhadores alcançam.', 2, 'Sono', (SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Quando os olhos se fecham, o mundo não desaparece... ele apenas muda de forma.'));
+INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+    VALUES
+    ('Você dormiu e recuperou todas as suas energias!', 3, 'Sono', (SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Há portas escondidas entre as batidas do coração, levando a terras que só os sonhadores alcançam.'));
+
+INSERT INTO "dialogo_npc" ("idDialogo", "idNPC")
+    VALUES
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Quando os olhos se fecham, o mundo não desaparece... ele apenas muda de forma.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Há portas escondidas entre as batidas do coração, levando a terras que só os sonhadores alcançam.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Você dormiu e recuperou todas as suas energias!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo'));
+
 INSERT INTO "dialogo_npc" ("idDialogo", "idNPC")
     VALUES
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Dentre as estrelas da noite, existe uma terra mais velha que a imaginação'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
@@ -830,7 +813,123 @@ INSERT INTO "inventario"
     ('Mochila', 15),              -- Inventário principal, perde ao morrer
     ('Bolsos', 5),                -- Slots seguros, mantém após morte
     ('Equipamento - Armadura', 1), -- Slot para conjunto de armadura
-    ('Equipamento - Arma 1', 1),   -- Slot para arma primária
-    ('Equipamento - Arma 2', 1),   -- Slot para arma secundária
-    ('Equipamento - Acessório', 3), -- Slots para acessórios
-    ('Familiar Mimic', 28);        -- Slots extras do familiar, mantém após morte
+    ('Equipamento - Arma', 1),   -- Slot para arma primária
+    ('Baú da Casa', 40);
+
+-- INSERÇÃO DOS DIÁLOGOS DOS NPCS DOS ESTABELECIMENTOS
+
+-- Diálogos do Andrei (Ferreiro)
+INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+VALUES
+    ('Bem-vindo à Forja Vulcânica, <NOME_JOGADOR>! Sou Andrei, o ferreiro desta cidade.', 1, 'Saudacao', NULL),
+    ('Precisa de uma arma nova, ou quer aprimorar alguma existente?', 2, 'Saudacao', NULL),
+    ('Olha, vejo que trouxe alguns materiais interessantes!', 1, 'Catalogo', NULL),
+    ('Essa arma tem potencial, mas posso torná-la ainda mais poderosa.', 2, 'Catalogo', NULL),
+    ('Excelente escolha! Vou trabalhar nisso imediatamente.', 1, 'Fabricacao', NULL),
+    ('O fogo da forja está perfeito hoje. Vai ficar incrível!', 2, 'Fabricacao', NULL),
+    ('Aqui está sua arma, <NOME_JOGADOR>, mais forte que nunca!', 1, 'Entrega', NULL),
+    ('Espero que ela te sirva bem nas masmorras, <NOME_JOGADOR>.', 2, 'Entrega', NULL),
+    ('Volte sempre quando precisar de uma nova arma, <NOME_JOGADOR>!', 1, 'Despedida', NULL),
+    ('Que os deuses da forja te protejam!', 2, 'Despedida', NULL);
+
+-- Diálogos do Eris (Alquimista)
+INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+VALUES
+    ('Bem-vindo ao Chapéu de Madeira, <NOME_JOGADOR>! Sou Eris, a alquimista.', 1, 'Saudacao', NULL),
+    ('Precisando de itens para sua aventura?', 2, 'Saudacao', NULL),
+    ('Tenho itens para todas as situações!', 1, 'Catalogo', NULL),
+    ('Essas belezuras vão te dar a força que precisa.', 2, 'Catalogo', NULL),
+    ('Deixe-me preparar esse item com ingredientes especiais.', 1, 'Fabricacao', NULL),
+    ('A alquimia é uma arte que requer paciência e precisão.', 2, 'Fabricacao', NULL),
+    ('Aqui está seu item, <NOME_JOGADOR>, feito com os melhores materiais!', 1, 'Entrega', NULL),
+    ('Use com sabedoria, são itens poderosos!', 2, 'Entrega', NULL),
+    ('Volte quando precisar de mais itens, <NOME_JOGADOR>!', 1, 'Despedida', NULL),
+    ('Que a magia te acompanhe em suas jornadas, <NOME_JOGADOR>!', 2, 'Despedida', NULL);
+
+-- Diálogos do Edward (Banqueiro)
+INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+VALUES
+    ('Bem-vindo ao Banco de Rynoka, <NOME_JOGADOR>! Sou Edward, seu banqueiro.', 1, 'Saudacao', NULL),
+    ('Como posso ajudá-lo com seus investimentos hoje?', 2, 'Saudacao', NULL),
+    ('Temos várias opções de investimento para você!', 1, 'Catalogo', NULL),
+    ('Este investimento pode render bons lucros no futuro.', 2, 'Catalogo', NULL),
+    ('Excelente decisão! Vou processar seu investimento.', 1, 'Compra', NULL),
+    ('Seu dinheiro está seguro conosco, pode confiar.', 2, 'Compra', NULL),
+    ('Aqui está o recibo do seu saque, <NOME_JOGADOR>.', 1, 'Entrega', NULL),
+    ('Espero que os lucros tenham sido generosos!', 2, 'Entrega', NULL),
+    ('Volte sempre que precisar de serviços bancários, <NOME_JOGADOR>!', 1, 'Despedida', NULL),
+    ('Que a prosperidade te acompanhe, <NOME_JOGADOR>!', 2, 'Despedida', NULL);
+
+-- Associação dos diálogos com os NPCs
+INSERT INTO "dialogo_npc" ("idDialogo", "idNPC")
+VALUES
+    -- Andrei (Ferreiro)
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Bem-vindo à Forja Vulcânica, <NOME_JOGADOR>! Sou Andrei, o ferreiro desta cidade.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Precisa de uma arma nova, ou quer aprimorar alguma existente?'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Olha, vejo que trouxe alguns materiais interessantes!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Essa arma tem potencial, mas posso torná-la ainda mais poderosa.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Excelente escolha! Vou trabalhar nisso imediatamente.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'O fogo da forja está perfeito hoje. Vai ficar incrível!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Aqui está sua arma, <NOME_JOGADOR>, mais forte que nunca!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Espero que ela te sirva bem nas masmorras, <NOME_JOGADOR>.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Volte sempre quando precisar de uma nova arma, <NOME_JOGADOR>!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Que os deuses da forja te protejam!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei')),
+    
+    -- Eris (Alquimista)
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Bem-vindo ao Chapéu de Madeira, <NOME_JOGADOR>! Sou Eris, a alquimista.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Precisando de itens para sua aventura?'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Tenho itens para todas as situações!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Essas belezuras vão te dar a força que precisa.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Deixe-me preparar esse item com ingredientes especiais.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'A alquimia é uma arte que requer paciência e precisão.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Aqui está seu item, <NOME_JOGADOR>, feito com os melhores materiais!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Use com sabedoria, são itens poderosos!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Volte quando precisar de mais itens, <NOME_JOGADOR>!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Que a magia te acompanhe em suas jornadas, <NOME_JOGADOR>!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris')),
+    
+    -- Edward (Banqueiro)
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Bem-vindo ao Banco de Rynoka, <NOME_JOGADOR>! Sou Edward, seu banqueiro.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Como posso ajudá-lo com seus investimentos hoje?'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Temos várias opções de investimento para você!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Este investimento pode render bons lucros no futuro.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Excelente decisão! Vou processar seu investimento.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Seu dinheiro está seguro conosco, pode confiar.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Aqui está o recibo do seu saque, <NOME_JOGADOR>.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Espero que os lucros tenham sido generosos!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Volte sempre que precisar de serviços bancários, <NOME_JOGADOR>!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Que a prosperidade te acompanhe, <NOME_JOGADOR>!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward'));
+
+-- DIÁLOGOS DE VENDA DOS NPCS
+
+-- Diálogos de venda do Andrei (Ferreiro)
+INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+VALUES
+    ('Ah, quer vender alguns materiais, <NOME_JOGADOR>?', 1, 'Venda', NULL),
+    ('Deixe-me ver o que você trouxe...', 2, 'Venda', NULL);
+
+-- Diálogos de venda do Eris (Comerciante)
+INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+VALUES
+    ('Interessante! Que itens você gostaria de vender, <NOME_JOGADOR>?', 1, 'Venda', NULL),
+    ('Vou avaliar cada um com cuidado.', 2, 'Venda', NULL);
+
+-- Diálogos de venda do Edward (Banqueiro)
+INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+VALUES
+    ('Ah, quer vender alguns itens, <NOME_JOGADOR>?', 1, 'Venda', NULL),
+    ('Posso ajudar com isso também.', 2, 'Venda', NULL);
+
+-- Associação dos diálogos de venda com os NPCs
+INSERT INTO "dialogo_npc" ("idDialogo", "idNPC")
+VALUES
+    -- Andrei (Ferreiro)
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Ah, quer vender alguns materiais, <NOME_JOGADOR>?' LIMIT 1), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei' LIMIT 1)),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Deixe-me ver o que você trouxe...' LIMIT 1), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Andrei' LIMIT 1)),
+    
+    -- Eris (Comerciante)
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Interessante! Que itens você gostaria de vender, <NOME_JOGADOR>?' LIMIT 1), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris' LIMIT 1)),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Vou avaliar cada um com cuidado.' LIMIT 1), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Eris' LIMIT 1)),
+    
+    -- Edward (Banqueiro)
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Ah, quer vender alguns itens, <NOME_JOGADOR>?' LIMIT 1), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward' LIMIT 1)),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Posso ajudar com isso também.' LIMIT 1), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Edward' LIMIT 1));
