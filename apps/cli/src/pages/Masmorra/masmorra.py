@@ -227,9 +227,6 @@ def calcular_dano(arma, monstro):
     fator_dano = FATOR_DANO_JOGADOR_BOSS if monstro.get("chefe") else FATOR_DANO_JOGADOR_MOB
     dano_final = int(dano_base * fator_dano)
 
-    if fator_dano != 1.0:
-        print(Fore.LIGHTMAGENTA_EX + f"  Dano ajustado ({fator_dano*100:.0f}%): {dano_final}")
-
     return dano_final
 
 
@@ -270,9 +267,6 @@ def calcular_dano_monstro(monstro):
 
     dano_final = int(dano_base * FATOR_DANO_MONSTRO)
 
-    if FATOR_DANO_MONSTRO != 1.0:
-        print(Fore.LIGHTMAGENTA_EX + f"  Dano ajustado ({FATOR_DANO_MONSTRO*100:.0f}%): {dano_final}")
-
     return dano_final
 
 
@@ -306,9 +300,6 @@ def calcular_defesa(armadura):
         print(Fore.LIGHTBLUE_EX + f"  Defesa base: {defesa_base}")
 
     defesa_final = int(defesa_base * FATOR_DEFESA_JOGADOR)
-
-    if FATOR_DEFESA_JOGADOR != 1.0:
-        print(Fore.LIGHTMAGENTA_EX + f"  Defesa ajustada ({FATOR_DEFESA_JOGADOR*100:.0f}%): {defesa_final}")
 
     return defesa_final
 
