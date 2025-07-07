@@ -36,7 +36,6 @@ FATOR_DEFESA_JOGADOR = 1.0  # Multiplicador para a defesa do jogador (ex: 1.0 = 
 FATOR_DANO_MONSTRO = 2.5  # Multiplicador para o dano dos monstros (ex: 1.0 = 100%)
 FATOR_CHANCE_ENCONTRO = 80  # Chance (em %) de encontrar um monstro em uma sala.
 FATOR_CHANCE_FUGA = 15  # O jogador precisa tirar um valor maior que este em um d20 para fugir.
-FATOR_CHANCE_DROP = 1.0  # Multiplicador para a chance de drop de itens (ex: 1.2 = 20% a mais de chance)
 
 # definicoes e funcoes iniciais
 musicas = {
@@ -216,15 +215,15 @@ def calcular_dano(arma, monstro):
     print(f"  Você rolou um d{dado_ataque} e tirou: {resultado_dado}")
 
     dano_base = 0
+    fator_dano = FATOR_DANO_JOGADOR_BOSS if monstro.get("chefe") else FATOR_DANO_JOGADOR_MOB
     if critico:
         dano_base = int(resultado_dado * multiplicador_critico)
-        print(Fore.RED + f"  !! CRÍTICO! Dano(x{multiplicador_critico}): {dano_base}")
+        dano_final = int(dano_base * fator_dano)
+        print(Fore.RED + f"  !! CRÍTICO! Dano(x{multiplicador_critico}): {dano_final}")
     else:
         dano_base = int(resultado_dado * multiplicador)
-        print(f"  Dano: {dano_base}")
-
-    fator_dano = FATOR_DANO_JOGADOR_BOSS if monstro.get("chefe") else FATOR_DANO_JOGADOR_MOB
-    dano_final = int(dano_base * fator_dano)
+        dano_final = int(dano_base * fator_dano)
+        print(f"  Dano: {dano_final}")
 
     return dano_final
 
@@ -259,10 +258,10 @@ def calcular_dano_monstro(monstro):
     dano_base = 0
     if critico:
         dano_base = int(resultado_total * multiplicador_critico)
-        print(Fore.RED + f"  O {monstro['nome']} acertou um CRÍTICO! Dano base: {dano_base}")
+        print(Fore.RED + f"  O {monstro['nome']} acertou um CRÍTICO! Dano base: {dano_base * FATOR_DANO_MONSTRO}")
     else:
         dano_base = int(resultado_total * multiplicador)
-        print(f"  O {monstro['nome']} atacou! Dano base: {dano_base}")
+        print(f"  O {monstro['nome']} atacou! Dano base: {dano_base * FATOR_DANO_MONSTRO}")
 
     dano_final = int(dano_base * FATOR_DANO_MONSTRO)
 
@@ -293,10 +292,10 @@ def calcular_defesa(armadura):
     defesa_base = 0
     if critico:
         defesa_base = resultado_dado + defesa_passiva + bonus_defesa
-        print(Fore.GREEN + f"  Defesa EFICIENTE! Defesa total: {defesa_base}")
+        print(Fore.GREEN + f"  Defesa EFICIENTE! Defesa total: {defesa_base * FATOR_DEFESA_JOGADOR}")
     else:
         defesa_base = resultado_dado + defesa_passiva
-        print(Fore.LIGHTBLUE_EX + f"  Defesa base: {defesa_base}")
+        print(Fore.LIGHTBLUE_EX + f"  Defesa base: {defesa_base * FATOR_DEFESA_JOGADOR}")
 
     defesa_final = int(defesa_base * FATOR_DEFESA_JOGADOR)
 
