@@ -230,7 +230,7 @@ def dropar_item(nickname, item_info):
             cursor.close()
             connection.close()
             
-            print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}✓ {quantidade_dropar}x {nome} foi dropado com sucesso!")
+            print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX} {quantidade_dropar}x {nome} foi dropado com sucesso!")
             time.sleep(2)
             return True
         else:
@@ -613,7 +613,7 @@ def equipar_arma_especifica(nickname, arma_info):
         cursor.close()
         connection.close()
         
-        print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}✓ {nome} foi equipada com sucesso!")
+        print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX} {nome} foi equipada com sucesso!")
         print(f"{Fore.LIGHTBLUE_EX}  Dado: {dado} | Crítico: {crit}% | Multiplicador: {mult}")
         time.sleep(2)
         return True
@@ -746,7 +746,7 @@ def equipar_armadura_especifica(nickname, armadura_info):
         cursor.close()
         connection.close()
         
-        print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}✓ {nome} foi equipada com sucesso!")
+        print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX} {nome} foi equipada com sucesso!")
         print(f"{Fore.LIGHTBLUE_EX}  Dado: {dado} | Defesa Passiva: {def_pass} | Crítico: {crit_def}%")
         time.sleep(2)
         return True

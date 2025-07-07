@@ -11,7 +11,6 @@ import shutil
 import time
 import hashlib  # Adicionado para a função de verificação de inimigo
 from utils.geracaoProceduralMasmorra import gerarMasmorra
-import traceback
 
 if sys.platform.startswith('win'):
     import msvcrt
@@ -562,8 +561,8 @@ def explorar_masmorra(matriz, pos_inicial=(7, 7), nickname=None, vida_jogador=No
         time.sleep(2)
         print(Fore.RED + "Equipe uma arma pelo seu inventário")
         time.sleep(2)
-        atualizarParaLocalAnterior(dadosJogador)
         tocar_musica("cidade")
+        atualizarParaLocalAnterior(dadosJogador)
         return
 
     if isinstance(dados_arma, list) and len(dados_arma) > 0:
@@ -765,9 +764,8 @@ def mainMasmorra(nickname):
                 matriz = construir_matriz_masmorra(salas)
                 explorar_masmorra(matriz, pos_inicial=(12, 12), nickname=nickname, vida_jogador=vida_jogador)
             except Exception as e:
-                print("ERRO")
-                traceback.print_exc()
                 input("Pressione enter para continuar...")
+                return
 
             pygame.mixer.music.fadeout(7000)
             time.sleep(2)
