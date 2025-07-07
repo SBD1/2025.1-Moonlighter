@@ -54,6 +54,7 @@ def cabecalho(nickname):
     print("\n")
 
 def quarto(nickname):
+  limpar_terminal()
 
   while True:
     cabecalho(nickname)
@@ -307,6 +308,8 @@ def quarto(nickname):
       return "Sair"
 
 def sala_exposicao(nickname):
+  limpar_terminal()
+
   while True:
     cabecalho(nickname)
     print(f"{Style.BRIGHT + Fore.YELLOW}O que você deseja fazer?".center(largura_terminal))
@@ -524,6 +527,9 @@ def sala_exposicao(nickname):
             print(f"{Style.BRIGHT + Fore.YELLOW}Item removido com sucesso!".center(largura_terminal))
             time.sleep(2)
             continue
+      elif int(opcao) == 3:
+        limpar_terminal()
+        continue
     elif int(opcao) == 2:
       dadosMundo = obterDadosMundo(nickname)
       if dadosMundo[2] == "Noite":
