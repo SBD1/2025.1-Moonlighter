@@ -439,4 +439,4 @@ def tela_inicial(introduction = False):
 
 # Executa a tela inicial
 if __name__ == '__main__':
-    tela_inicial()
+    tela_inicial(True)
