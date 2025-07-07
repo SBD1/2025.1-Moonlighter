@@ -524,6 +524,33 @@ def sala_exposicao(nickname):
             print(f"{Style.BRIGHT + Fore.YELLOW}Item removido com sucesso!".center(largura_terminal))
             time.sleep(2)
             continue
+    elif int(opcao) == 2:
+      dadosMundo = obterDadosMundo(nickname)
+      if dadosMundo[2] == "Noite":
+        limpar_terminal()
+        cabecalho(nickname)
+        print("\n\n\n\n")
+        print(f"{Style.BRIGHT + Fore.RED}Você não pode abrir o Moonlighter durante a noite!".center(largura_terminal))
+        time.sleep(2)
+        continue
+      else:
+        limpar_terminal()
+        cabecalho(nickname)
+        print("\n\n\n\n")
+        print(f"{Style.BRIGHT + Fore.YELLOW}Abrindo o Moonlighter para Vendas....".center(largura_terminal))
+        time.sleep(2)
+        venderItens(nickname)
+        limpar_terminal()
+        cabecalho(nickname)
+        print("\n\n\n\n")
+        print(f"{Style.BRIGHT + Fore.YELLOW}Seus Itens foram Vendidos!".center(largura_terminal))
+        time.sleep(2)
+        limpar_terminal()
+        cabecalho(nickname)
+        print(f"{Style.BRIGHT + Fore.YELLOW}Você ficou o dia inteiro vendendo seus itens. Já anoiteceu!".center(largura_terminal))
+        time.sleep(2)
+        limpar_terminal()
+        continue
     elif int(opcao) == 3:
       mudarLocalizacaoJogador(nickname, "Quarto")
       return "Quarto"

@@ -509,3 +509,63 @@ def passarDiaMundo(nickname):
         connection.close()
         print(Fore.RED + f"Erro ao passar dia no mundo: {e}")
         return False
+
+def venderItens(nickname):
+    connection = connect_to_db()
+    if connection is None:
+        print(Fore.RED + "Erro ao conectar ao banco de dados.")
+        return False
+
+    cursor = connection.cursor()
+    try:
+        seedMundoLojaJogador = buscarSeedMundoLojaJogador(nickname)
+        cursor.execute("""
+                SELECT SUM(I."precoBase") FROM "inst_item" II
+                    JOIN "item" I ON II."idItem" = I."idItem"
+                WHERE II."nickname" = %s AND II."seedMundoLojaJogador" = %s;
+                        """, (nickname, seedMundoLojaJogador))
+        ValorVenda = cursor.fetchone()
+        
+        cursor.execute("""
+              UPDATE "loja_jogador" SET "exposicaoUsada" = 0 WHERE "seedMundo" = %s;
+                       """, (seedMundoLojaJogador,))
+        cursor.execute("""
+            DELETE FROM "inst_item" WHERE "nickname" = %s AND "seedMundoLojaJogador" = %s;
+                    """, (nickname, seedMundoLojaJogador))
+        cursor.execute("""
+            UPDATE "jogador" SET "ouro" = "ouro" + %s WHERE "nickname" = %s;
+                       """, (ValorVenda[0] if ValorVenda[0] is not None else 0, nickname))
+        cursor.execute("""
+            UPDATE "mundo" SET "periodo" = 'Noite' WHERE "nickname" = %s;
+            """, (nickname,))
+        
+        connection.commit()
+        cursor.close()
+        connection.close()
+        return True
+    except Exception as e:
+        cursor.rollback()
+        connection.close()
+        print(Fore.RED + f"Erro ao vender itens: {e}")
+        return False
+    
+def obterDadosMundo(nickname):
+    connection = connect_to_db()
+    if connection is None:
+        print(Fore.RED + "Erro ao conectar ao banco de dados.")
+        return None
+
+    cursor = connection.cursor()
+    try:
+        cursor.execute("""
+            SELECT * FROM "mundo" WHERE "nickname" = %s;
+            """, (nickname,))
+        dados_mundo = cursor.fetchone()
+        cursor.close()
+        connection.close()
+        return dados_mundo
+    except Exception as e:
+        cursor.rollback()
+        connection.close()
+        print(Fore.RED + f"Erro ao obter dados do mundo: {e}")
+        return None
