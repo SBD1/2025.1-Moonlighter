@@ -34,7 +34,7 @@ def print_in_centered(text):
 def cabecalho_chapeu_de_madeira(nickname):
     dadosJogador = buscar_dadosJogador(nickname)
     print(f"{Fore.LIGHTGREEN_EX}{Style.BRIGHT}╔══════════════════════════════════ CHAPÉU DE MADEIRA ══════════════════════════════════╗".center(largura_terminal))
-    print(f"{Fore.YELLOW}{Style.BRIGHT}Loja de Poções - Especializada em Poções".center(largura_terminal))
+    print(f"{Fore.YELLOW}{Style.BRIGHT}Loja Oficial da Vila Rynoka".center(largura_terminal))
     print(f"{Fore.LIGHTGREEN_EX}════════════════════════════════════════════════════════════════════════════".center(largura_terminal))
     print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}{dadosJogador[0]}".center(largura_terminal))
     print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}OURO: {dadosJogador[3]}".center(largura_terminal))
@@ -103,18 +103,37 @@ def buscar_inventario_jogador(jogador):
     if connection:
         try:
             cursor = connection.cursor()
+            
+            # Primeiro, buscar o id do inventário principal do jogador
             cursor.execute("""
-                SELECT ii.idItem, i.nome, i.descricao, i.tipo, i.precoBase, ii.quantidade
-                FROM inst_item ii
-                JOIN item i ON ii.idItem = i.idItem
-                WHERE ii.nickname = %s AND ii.quantidade > 0
-                ORDER BY i.nome
+                SELECT inst."idInventario"
+                FROM "inst_inventario" inst
+                JOIN "inventario" inv ON inst."idInventario" = inv."idInventario"
+                WHERE inst."nickname" = %s AND inv."nome" = 'Mochila Principal'
             """, (jogador,))
+            resultado_inv = cursor.fetchone()
+            
+            if not resultado_inv:
+                cursor.close()
+                connection.close()
+                return []
+            
+            id_inventario = resultado_inv[0]
+            
+            # Buscar itens no inventário principal
+            cursor.execute("""
+                SELECT ii."idItem", i."nome", i."descricao", i."tipo", i."precoBase", ii."quantidade"
+                FROM "inst_item" ii
+                JOIN "item" i ON ii."idItem" = i."idItem"
+                WHERE ii."nickname" = %s AND ii."idInventario" = %s AND ii."quantidade" > 0
+                ORDER BY i."nome"
+            """, (jogador, id_inventario))
             resultado = cursor.fetchall()
             cursor.close()
             connection.close()
             return resultado
-        except:
+        except Exception as e:
+            print(f"Erro ao buscar inventário: {e}")
             if connection:
                 connection.close()
     return []
@@ -191,7 +210,7 @@ def vender_item_para_loja(jogador, item_id, quantidade):
 
 def menu_chapeu_de_madeira(jogador, seedMundo):
     """
-    Menu principal da loja de poções
+    Menu principal da loja
     """
     init(autoreset=True)
     
@@ -220,8 +239,8 @@ def menu_chapeu_de_madeira(jogador, seedMundo):
         print("\n")
         print(f"{Style.BRIGHT}{Fore.CYAN}O que você gostaria de fazer?".center(largura_terminal))
         print("\n")
-        print(f"{Fore.YELLOW}{Style.BRIGHT}1 - Ver poções disponíveis para compra")
-        print(f"{Fore.YELLOW}{Style.BRIGHT}2 - Comprar uma poção")
+        print(f"{Fore.YELLOW}{Style.BRIGHT}1 - Ver itens disponíveis para compra")
+        print(f"{Fore.YELLOW}{Style.BRIGHT}2 - Comprar itens")
         print(f"{Fore.YELLOW}{Style.BRIGHT}3 - Ver itens do seu inventário")
         print(f"{Fore.YELLOW}{Style.BRIGHT}4 - Vender um item")
         print(f"{Fore.RED}{Style.BRIGHT}5 - Sair da Loja")
@@ -253,7 +272,7 @@ def menu_chapeu_de_madeira(jogador, seedMundo):
 
 def ver_itens_disponiveis(jogador):
     """
-    Função para ver poções disponíveis para compra
+    Função para ver itens disponíveis para compra
     """
     limpar_terminal()
     cabecalho_chapeu_de_madeira(jogador)
@@ -262,7 +281,7 @@ def ver_itens_disponiveis(jogador):
     exibir_dialogo_catalogo("Eris", jogador)
     enter_continue()
     
-    print(f"{Style.BRIGHT}{Fore.CYAN}══════════ POÇÕES DISPONÍVEIS PARA COMPRA ══════════".center(largura_terminal))
+    print(f"{Style.BRIGHT}{Fore.CYAN}══════════ ITENS DISPONÍVEIS PARA COMPRA ══════════".center(largura_terminal))
     print(f"{Fore.YELLOW}💡 Dica: O estoque muda a cada dia!".center(largura_terminal))
     print("\n")
     
@@ -296,13 +315,13 @@ def ver_itens_disponiveis(jogador):
             print(f"{Fore.WHITE}{id_item:<5} {nome:<25} {preco_dinamico:<10} {tipo_item:<12}".center(largura_terminal))
             print(f"{Fore.LIGHTBLACK_EX}{descricao}".center(largura_terminal))
             if vendas_jogador > 0:
-                print(f"{Fore.YELLOW}     ⚠️  Você já vendeu {vendas_jogador}x deste item (preço reduzido)".center(largura_terminal))
+                print(f"{Fore.YELLOW}      Você já vendeu {vendas_jogador}x deste item (preço reduzido)".center(largura_terminal))
             print()
     else:
         limpar_terminal()
         cabecalho_chapeu_de_madeira(jogador)
         print("\n\n\n\n")
-        print(f"{Fore.RED}{Style.BRIGHT}Nenhuma poção disponível para compra!".center(largura_terminal))
+        print(f"{Fore.RED}{Style.BRIGHT}Nenhum item disponível para compra!".center(largura_terminal))
     
     print("\n")
     enter_continue()
@@ -433,14 +452,14 @@ def vender_item(jogador):
 
 def comprar_item(jogador):
     """
-    Função para comprar uma poção
+    Função para comprar ITEM
     """
     limpar_terminal()
     cabecalho_chapeu_de_madeira(jogador)
-    print(f"\n{Style.BRIGHT}{Fore.CYAN}══════════ COMPRAR POÇÃO ══════════".center(largura_terminal))
+    print(f"\n{Style.BRIGHT}{Fore.CYAN}══════════ COMPRAR iTENS ══════════".center(largura_terminal))
     print("\n")
     
-    # Mostrar poções disponíveis
+    # Mostrar ITENS disponíveis
     itens = visualizar_itens_chapeu_de_madeira_por_jogador(jogador)
     if not itens:
         print(f"{Fore.RED}{Style.BRIGHT}Nenhuma poção disponível para compra!".center(largura_terminal))
@@ -461,7 +480,7 @@ def comprar_item(jogador):
                 cursor.execute("SELECT tipo FROM item WHERE idItem = %s", (id_item,))
                 resultado = cursor.fetchone()
                 if resultado:
-                    tipo_item = resultado[0] or "Outro"
+                    tipo_item = resultado[0] #or "Outro"
                 cursor.close()
                 connection.close()
             except:
@@ -490,7 +509,7 @@ def comprar_item(jogador):
                 break
         
         if not item_encontrado:
-            print(f"{Fore.RED}Poção não encontrada!")
+            print(f"{Fore.RED}Item não encontrado!")
             enter_continue()
             return
         
@@ -515,12 +534,12 @@ def comprar_item(jogador):
             limpar_terminal()
             cabecalho_chapeu_de_madeira(jogador)
             print("\n\n\n\n\n\n")
-            print(f"\n{Fore.GREEN}✅ {quantidade}x '{item_encontrado[1]}' comprado(s) com sucesso!".center(largura_terminal))
+            print(f"\n{Fore.GREEN} {quantidade}x '{item_encontrado[1]}' comprado(s) com sucesso!".center(largura_terminal))
         else:
             limpar_terminal()
             cabecalho_chapeu_de_madeira(jogador)
             print("\n\n\n\n\n\n")
-            print(f"{Fore.RED}{Style.BRIGHT}❌ Erro ao comprar poção!".center(largura_terminal))
+            print(f"{Fore.RED}{Style.BRIGHT}Erro ao comprar item!".center(largura_terminal))
 
     except ValueError:
         limpar_terminal()

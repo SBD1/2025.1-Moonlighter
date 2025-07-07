@@ -106,7 +106,7 @@ def menu_categoria_itens(jogador, modo):
     """
     Menu de escolha por categoria de item
     """
-    categorias = ["Arco", "Bandana", "Botas", "Capacete", "Espada", "Peitoral"]
+    categorias = ["Arco", "Espada", "Monopla", "Armadura"]
     
     while True:
         limpar_terminal()
