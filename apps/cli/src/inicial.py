@@ -349,6 +349,42 @@ def continuar_jogo():
                 print('\033[?25l', end='', flush=True)
 
                 print(f"{Style.BRIGHT}{Fore.YELLOW}CARREGANDO JOGO...".center(largura_terminal))
+                if jogador_selecionado[6].startswith("Masmorra"):
+                    connection = connect_to_db()
+                    if connection is None:
+                        print(Fore.RED + "Erro ao conectar ao banco de dados.")
+                        print('\033[?25h', end='', flush=True)
+                        time.sleep(3)
+                        return
+                    cursor = connection.cursor()
+                    cursor.execute("UPDATE jogador SET \"nomeLocal\" = 'Vila Rynoka', \"PosiçãoX_Jogador\" = -1, \"PosiçãoY_Jogador\" = -1 WHERE \"nickname\" = %s;", (jogador_selecionado[0],))
+                    connection.commit()
+                    cursor.close()
+                    connection.close()
+                if jogador_selecionado[6] == "Salão de Exposição" or jogador_selecionado[6] == "Quarto":
+                    connection = connect_to_db()
+                    if connection is None:
+                        print(Fore.RED + "Erro ao conectar ao banco de dados.")
+                        print('\033[?25h', end='', flush=True)
+                        time.sleep(3)
+                        return
+                    cursor = connection.cursor()
+                    cursor.execute("UPDATE jogador SET \"nomeLocal\" = 'Moonlighter' WHERE \"nickname\" = %s;", (jogador_selecionado[0],))
+                    connection.commit()
+                    cursor.close()
+                    connection.close()
+                if jogador_selecionado[6] == "Forja de Vulcan" or jogador_selecionado[6] == "O Chapéu de Madeira" or jogador_selecionado[6] == "Banco de Rynoka":
+                    connection = connect_to_db()
+                    if connection is None:
+                        print(Fore.RED + "Erro ao conectar ao banco de dados.")
+                        print('\033[?25h', end='', flush=True)
+                        time.sleep(3)
+                        return
+                    cursor = connection.cursor()
+                    cursor.execute("UPDATE jogador SET \"nomeLocal\" = 'Centro Comercial' WHERE \"nickname\" = %s;", (jogador_selecionado[0],))
+                    connection.commit()
+                    cursor.close()
+                    connection.close()
                 time.sleep(2)
                 pygame.mixer.music.fadeout(7000)
                 time.sleep(2)

@@ -125,7 +125,19 @@ npm run db:up
 Isso executa o mesmo processo anterior, mas via script definido no `package.json`, facilitando o uso para toda a equipe.
 
 #### PASSO 2: Execute o jogo!
-_[Em construção...]_
+Após executar o PASSO 1, é necessário instalar as dependências da linguagem Python. Para isso, estando na **Raíz** do Projeto, rode o comando abaixo:
+
+```shell
+pip install -r requirements.txt
+```
+
+Agora, o seu ambiente está pronto para executar o jogo Moonlighter! Basta executar o comando abaixo:
+
+```shell
+python3 apps/cli/main.py
+```
+
+Aproveite a experiência!
 
 ## 📝 Contribua com o projeto!
 

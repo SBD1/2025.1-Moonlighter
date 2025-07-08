@@ -17,6 +17,7 @@ print(Style.BRIGHT + Fore.LIGHTYELLOW_EX + '''
         ║  | Masmorra Desconhecida  | ┌─────────────────────┐  ║
         ║  └────────────────────────┘ | Forja de Vulcan     |  ║
         ║                             | O chapéu de Madeira |  ║
+        ║                             | Banco de Rynoka     |  ║
         ║                             └─────────────────────┘  ║
         ║        MOONLIGHTER                                   ║
         ║   ┌────────────────────┐                             ║
