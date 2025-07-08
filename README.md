@@ -80,9 +80,16 @@ python3 -m venv .venv
 ```
 
 #### 2. Ative o Ambiente Virtual:
+Linux:
 ```shell
 source .venv/bin/activate
 ```
+
+Windows:
+```shell
+.venv\Scripts\Activate.ps1
+```
+
 #### 3. Instale o mkdocs:
 ```shell
 pip install mkdocs
@@ -170,7 +177,7 @@ git clone https://github.com/SBD1/2025.1-Moonlighter.git
 Para contribuir no projeto com os commits, baixe as dependências do Husky para que as verificações possam acontecer:
 
 ```shell
-npm install
+pip install -r apps/cli/requirements.txt
 ```
 
 #### 4. Suba o serviço de sua escolha
