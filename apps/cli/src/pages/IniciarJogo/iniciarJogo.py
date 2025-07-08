@@ -122,7 +122,7 @@ def locomocao(nickname):
                     print(Fore.RED + "Erro ao executar a masmorra:", e)
                     traceback.print_exc()
                     input("Pressione Enter para continuar...")
-                if locais[escolha - 1][0] == 'Forja Vulcânica':
+                if locais[escolha - 1][0] == 'Forja de Vulcan':
                     menu_forja(nickname, buscarSeedMapa(nickname))
                 if locais[escolha - 1][0] == 'Banco de Rynoka':
                     menu_banco(nickname)
