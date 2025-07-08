@@ -20,6 +20,7 @@ nav:
   - Módulo 3:
     - Triggers: pages/Modulo3/Triggers.md
     - Stored Procedures: pages/Modulo3/StoredProcedures.md
+    - Vídeo de Apresentação: pages/Modulo3/VideoApresentacao.md
     
 
 theme:
