@@ -50,7 +50,6 @@ def exibirFinal(dadosJogador):
         busca = dialogo[1]
 
     limpar_terminal()
-    pygame.mixer.music.fadeout(7000)
     time.sleep(7)
 
     print("\n\n\n\n\n\n\n")
@@ -77,6 +76,7 @@ def exibirFinal(dadosJogador):
     print(f"{Fore.YELLOW}{Style.BRIGHT}Yan Matheus".center(largura_terminal))
     time.sleep(2)
     limpar_terminal()
+    pygame.mixer.music.fadeout(7000)
 
     print("\n\n\n\n\n\n\n")
     print(f"{Fore.YELLOW}{Style.BRIGHT}Obrigado por jogar!".center(largura_terminal))

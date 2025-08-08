@@ -1,7 +1,7 @@
 -- ---------------------------------------------------------------------------------------------------------------
 -- Data de Criação ........: 09/06/2025                                                                         --
 -- Autor(es) ..............: Yan Matheus, João Pedro                                                            --
--- Versão .................: 2.0                                                                                --
+-- Versão .................: 2.1                                                                                --
 -- Banco de Dados .........: PostgreSQL                                                                         --
 -- Descrição ..............: Criação das tabelas para o jogo Moonlighter                                        --
 -- ---------------------------------------------------------------------------------------------------------------
@@ -40,7 +40,7 @@ CREATE TABLE "jogador" (
     "nickname" character varying(60) PRIMARY KEY,
     "maxHP" SMALLINT NOT NULL,
     "atualHP" SMALLINT NOT NULL,
-    "ouro" SMALLINT NOT NULL,
+    "ouro" INTEGER NOT NULL,
     "PosiçãoX_Jogador" SMALLINT NOT NULL,
     "PosiçãoY_Jogador" SMALLINT NOT NULL,
     "nomeLocal" CHARACTER varying(60) NOT NULL,
