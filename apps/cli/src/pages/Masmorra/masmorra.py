@@ -11,6 +11,7 @@ import shutil
 import time
 import hashlib  # Adicionado para a função de verificação de inimigo
 from utils.geracaoProceduralMasmorra import gerarMasmorra
+from pages.Final.final import exibirFinal
 
 if sys.platform.startswith('win'):
     import msvcrt
@@ -411,12 +412,15 @@ def menu_batalha(monstro, arma, armadura, vida_jogador, nickname):
 
                 if monstro["nome"] == "Fluxo de Energia":
                     print("\n" + Fore.GREEN + Style.BRIGHT + "  Parabéns! Você derrotou o Fluxo de Energia e desbloqueou a última masmorra: a Masmorra desconhecida!")
-                    desbloquear_masmorra(nickname, "Masmorra Desconhecida")
+                    desbloquear_masmorra(nickname, "A quinta porta")
                     time.sleep(3)
                     atualizarParaLocalAnterior(ObterDadosJogador(nickname))
                     print(Fore.LIGHTCYAN_EX + "\n  Você foi transportado de volta para a Vila Rynoka.")
                     tocar_musica("cidade")
                     time.sleep(3)
+
+                    exibirFinal(ObterDadosJogador(nickname))
+
                     return "sair", vida_jogador
 
                 time.sleep(2)
@@ -706,10 +710,14 @@ def mainMasmorra(nickname):
         print(logo)
         print("\n\n\n\n")
         atualizarParaLocalAnterior(dadosJogador)
-        print(f"{Style.BRIGHT}{Fore.YELLOW}Você ainda se sente muito inseguro para entrar nesta Masmorra.".center(largura_terminal))
+        print(f"{Style.BRIGHT}{Fore.YELLOW}Você ainda se sente muito inseguro para entrar aqui.".center(largura_terminal))
         print(f"{Style.BRIGHT}{Fore.RED}Derrote o chefe da Masmorra Anterior primeiro!".center(largura_terminal))
         time.sleep(3)
         print('\033[?25h', end='', flush=True)
+        return
+    
+    if dadosMasmorra[0] == 'A quinta porta':
+        exibirFinal(ObterDadosJogador(nickname))
         return
 
     tocar_musica("entrada_masmorra")

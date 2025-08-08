@@ -19,7 +19,7 @@ INSERT INTO "local" VALUES
     ('Masmorra da Floresta', 'Masmorra florestal estreita, infestada de plantas mutantes e a Mutae Carnívora como chefe no último andar.', 'Masmorra', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Área das Masmorras')),
     ('Masmorra do Deserto', 'Antigas ruínas desérticas com tempestades de areia e o Guardião do Deserto aguardando no 3º andar.', 'Masmorra', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Área das Masmorras')),
     ('Masmorra da Tecnologia', 'Instalações tecnológicas abandonadas, protegidas por robôs, com o Guardião da Tecnologia aguardando no último andar.', 'Masmorra', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Área das Masmorras')),
-    ('Masmorra Desconhecida', 'A última masmorra', 'Masmorra', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Área das Masmorras')),
+    ('A quinta porta', 'A última masmorra', 'Masmorra', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Área das Masmorras')),
     ('Forja de Vulcan', 'Um calor abrasador e faíscas constantes preenchem o ar da Forja Vulcânica. Cada martelada ecoa como um trovão, moldando armas e armaduras com precisão quase cerimonial. Paredes de pedra escura emolduram fornos incandescentes e bigornas robustas. O ferreiro, de músculos rígidos e olhar concentrado, domina o ambiente com mãos calejadas e alma forjada no mesmo fogo. Aqui, não se vende metal — se entrega confiança em lâmina.', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Centro Comercial')),
     ('Banco de Rynoka', 'Silencioso, organizado e impenetrável como um cofre. O Banco de Rynoka é o bastião da riqueza da vila. Pilares altos sustentam o teto abobadado, e mesas de carvalho robusto sustentam cálculos, registros e contratos. O banqueiro, sempre de luvas e expressão inalterada, calcula os juros com mais frieza que um golem de pedra. Investidores vêm, sonhadores vão, e o ouro nunca dorme.', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Centro Comercial')),
     ('O Chapéu de Madeira', 'Pequena por fora, encantadora por dentro, a loja exala o cheiro de madeira polida e tecidos delicados. Bonecos de treino, armas estilizadas e acessórios decorativos repousam em estantes esculpidas com primor. Um artesão excêntrico — com um chapéu igualmente peculiar — recepciona os clientes com entusiasmo. Ele não apenas vende acessórios; vende identidade. Cada peça parece contar uma história... ou esconder um feitiço.', 'Estabelecimento', (SELECT "nomeLocal" FROM "local" WHERE "nomeLocal" = 'Centro Comercial')),
@@ -32,8 +32,8 @@ INSERT INTO "masmorra"
     ('Masmorra do Golem', 1, 'Fácil'),
     ('Masmorra da Floresta', 2, 'Fácil'),
     ('Masmorra do Deserto', 3, 'Médio'),
-    ('Masmorra da Tecnologia', 4, 'Médio'),
-    ('Masmorra Desconhecida', 5, 'Difícil');
+    ('Masmorra da Tecnologia', 4, 'Difícil'),
+    ('A quinta porta', 5, 'Fácil');
 
 
 -- INSERÇÃO NA TABELA ESTABELECIMENTO:
@@ -788,6 +788,28 @@ INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
     VALUES
     ('Você dormiu e recuperou todas as suas energias!', 3, 'Sono', (SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Há portas escondidas entre as batidas do coração, levando a terras que só os sonhadores alcançam.'));
 
+INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+    VALUES
+    ('Quando o último eco se apagou nas masmorras, as sombras finalmente cederam ao despertar da luz.', 1, 'Final', NULL);
+INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+    VALUES
+    ('E ali, no silêncio que sucedeu a batalha derradeira, Rynoka tornou-se mais que um vilarejo — tornou-se lenda viva.', 2, 'Final', (SELECT "idDialogo" FROM "dialogo" WHERE "ordem" = 1 AND "tipo" = 'Final'));
+INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+    VALUES
+    ('<NOME_DO_JOGADOR>, custoso foi cada passo, cada mercadoria vendida… mas foi nas profundezas do medo que você encontrou seu renascer.', 3, 'Final', (SELECT "idDialogo" FROM "dialogo" WHERE "ordem" = 2 AND "tipo" = 'Final'));
+INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+    VALUES
+    ('Todos os rostos que compartilharam seu caminho, heróis e mercadores, agora sorriem sob um céu que antes foi cortejado pelo desespero.', 4, 'Final', (SELECT "idDialogo" FROM "dialogo" WHERE "ordem" = 3 AND "tipo" = 'Final'));
+INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+    VALUES
+    ('A misteriosa quinta porta, que jazera trancada por eras, agora repousa aberta — não como fim, mas como portal para o que há de vir.', 5, 'Final', (SELECT "idDialogo" FROM "dialogo" WHERE "ordem" = 4 AND "tipo" = 'Final'));
+INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+    VALUES
+    ('E enquanto as estrelas observam, você ergue sua loja — não mais apenas um ponto de venda, mas um farol para novas histórias.', 6, 'Final', (SELECT "idDialogo" FROM "dialogo" WHERE "ordem" = 5 AND "tipo" = 'Final'));
+INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+    VALUES
+    ('A terra mais velha que a imaginação respira outra vez, e seu nome ecoa, tão antigo quanto os ecos das masmorras… mas tão vivo quanto o futuro que você construiu.', 7, 'Final', (SELECT "idDialogo" FROM "dialogo" WHERE "ordem" = 6 AND "tipo" = 'Final'));
+
 INSERT INTO "dialogo_npc" ("idDialogo", "idNPC")
     VALUES
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Quando os olhos se fecham, o mundo não desaparece... ele apenas muda de forma.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
@@ -804,6 +826,16 @@ INSERT INTO "dialogo_npc" ("idDialogo", "idNPC")
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Mas as masmorras se provaram perigosas. E foram fechadas pelas vidas perdidas em suas profundezas'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'A vida se tornou difícil, sobretudo para o jovem dono da loja mais antiga - <NOME_DO_JOGADOR>, da Moonlighter'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
     ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Há tanto sonhado em abrir a misteriosa 5ª porta das Masmorras...'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo'));
+
+INSERT INTO "dialogo_npc" ("idDialogo", "idNPC")
+    VALUES
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Quando o último eco se apagou nas masmorras, as sombras finalmente cederam ao despertar da luz.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'E ali, no silêncio que sucedeu a batalha derradeira, Rynoka tornou-se mais que um vilarejo — tornou-se lenda viva.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = '<NOME_DO_JOGADOR>, custoso foi cada passo, cada mercadoria vendida… mas foi nas profundezas do medo que você encontrou seu renascer.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Todos os rostos que compartilharam seu caminho, heróis e mercadores, agora sorriem sob um céu que antes foi cortejado pelo desespero.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'A misteriosa quinta porta, que jazera trancada por eras, agora repousa aberta — não como fim, mas como portal para o que há de vir.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'E enquanto as estrelas observam, você ergue sua loja — não mais apenas um ponto de venda, mas um farol para novas histórias.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
+    ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'A terra mais velha que a imaginação respira outra vez, e seu nome ecoa, tão antigo quanto os ecos das masmorras… mas tão vivo quanto o futuro que você construiu.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo'));
 
 -- INSERÇÃO NA TABELA INVENTÁRIO:
 INSERT INTO "inventario"

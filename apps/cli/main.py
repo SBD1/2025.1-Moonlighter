@@ -9,6 +9,12 @@ def abrir_terminal(script_rel_path):
     if sistema == "Windows":
         subprocess.Popen(f'start /max cmd /k python "{main_path}"', shell=True)
     elif sistema == "Linux":
-        subprocess.Popen(['gnome-terminal', '--maximize', '--', 'python3', main_path])
+        subprocess.Popen([
+        'gnome-terminal', 
+        '--maximize', 
+        '--', 
+        'bash', '-c', 
+        f'python3 "{main_path}"; echo "Pressione Enter para sair..."; read'
+    ])
 
 abrir_terminal("apps/cli/src/inicial.py")
