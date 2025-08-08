@@ -856,6 +856,28 @@ Ao contrário dos comandos DDL, que geralmente afetam a estrutura do banco de fo
     INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
         VALUES
         ('Há tanto sonhado em abrir a misteriosa 5ª porta das Masmorras...', 8, 'Tutorial', (SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'A vida se tornou difícil, sobretudo para o jovem dono da loja mais antiga - <NOME_DO_JOGADOR>, da Moonlighter'));
+    
+    INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+        VALUES
+        ('Quando o último eco se apagou nas masmorras, as sombras finalmente cederam ao despertar da luz.', 1, 'Final', NULL);
+    INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+        VALUES
+        ('E ali, no silêncio que sucedeu a batalha derradeira, Rynoka tornou-se mais que um vilarejo — tornou-se lenda viva.', 2, 'Final', (SELECT "idDialogo" FROM "dialogo" WHERE "ordem" = 1 AND "tipo" = 'Final'));
+    INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+        VALUES
+        ('<NOME_DO_JOGADOR>, custoso foi cada passo, cada mercadoria vendida… mas foi nas profundezas do medo que você encontrou seu renascer.', 3, 'Final', (SELECT "idDialogo" FROM "dialogo" WHERE "ordem" = 2 AND "tipo" = 'Final'));
+    INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+        VALUES
+        ('Todos os rostos que compartilharam seu caminho, heróis e mercadores, agora sorriem sob um céu que antes foi cortejado pelo desespero.', 4, 'Final', (SELECT "idDialogo" FROM "dialogo" WHERE "ordem" = 3 AND "tipo" = 'Final'));
+    INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+        VALUES
+        ('A misteriosa quinta porta, que jazera trancada por eras, agora repousa aberta — não como fim, mas como portal para o que há de vir.', 5, 'Final', (SELECT "idDialogo" FROM "dialogo" WHERE "ordem" = 4 AND "tipo" = 'Final'));
+    INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+        VALUES
+        ('E enquanto as estrelas observam, você ergue sua loja — não mais apenas um ponto de venda, mas um farol para novas histórias.', 6, 'Final', (SELECT "idDialogo" FROM "dialogo" WHERE "ordem" = 5 AND "tipo" = 'Final'));
+    INSERT INTO "dialogo" ("conteudo", "ordem", "tipo", "idDialogoPai")
+        VALUES
+        ('A terra mais velha que a imaginação respira outra vez, e seu nome ecoa, tão antigo quanto os ecos das masmorras… mas tão vivo quanto o futuro que você construiu.', 7, 'Final', (SELECT "idDialogo" FROM "dialogo" WHERE "ordem" = 6 AND "tipo" = 'Final'));
     ```
 ??? info "_dialogo_npc_ INSERT"
 
@@ -870,6 +892,23 @@ Ao contrário dos comandos DDL, que geralmente afetam a estrutura do banco de fo
         ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Mas as masmorras se provaram perigosas. E foram fechadas pelas vidas perdidas em suas profundezas'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
         ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'A vida se tornou difícil, sobretudo para o jovem dono da loja mais antiga - <NOME_DO_JOGADOR>, da Moonlighter'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
         ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Há tanto sonhado em abrir a misteriosa 5ª porta das Masmorras...'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo'));
+
+    INSERT INTO "dialogo_npc" ("idDialogo", "idNPC")
+        VALUES
+        ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Quando os olhos se fecham, o mundo não desaparece... ele apenas muda de forma.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
+        ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Há portas escondidas entre as batidas do coração, levando a terras que só os sonhadores alcançam.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
+        ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Você dormiu e recuperou todas as suas energias!'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo'));
+
+    
+    INSERT INTO "dialogo_npc" ("idDialogo", "idNPC")
+        VALUES
+        ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Quando o último eco se apagou nas masmorras, as sombras finalmente cederam ao despertar da luz.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
+        ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'E ali, no silêncio que sucedeu a batalha derradeira, Rynoka tornou-se mais que um vilarejo — tornou-se lenda viva.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
+        ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = '<NOME_DO_JOGADOR>, custoso foi cada passo, cada mercadoria vendida… mas foi nas profundezas do medo que você encontrou seu renascer.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
+        ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'Todos os rostos que compartilharam seu caminho, heróis e mercadores, agora sorriem sob um céu que antes foi cortejado pelo desespero.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
+        ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'A misteriosa quinta porta, que jazera trancada por eras, agora repousa aberta — não como fim, mas como portal para o que há de vir.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
+        ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'E enquanto as estrelas observam, você ergue sua loja — não mais apenas um ponto de venda, mas um farol para novas histórias.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo')),
+        ((SELECT "idDialogo" FROM "dialogo" WHERE "conteudo" = 'A terra mais velha que a imaginação respira outra vez, e seu nome ecoa, tão antigo quanto os ecos das masmorras… mas tão vivo quanto o futuro que você construiu.'), (SELECT "idNPC" FROM "npc" WHERE "nome" = 'Mundo'));
     ```
 ??? info "_inventario_ INSERT"
 
@@ -893,3 +932,4 @@ Ao contrário dos comandos DDL, que geralmente afetam a estrutura do banco de fo
 | Data       | Versão | Autor(es)        | Mudanças                                               |
 | ---------- | ------ | ---------------- | ------------------------------------------------------ |
 | 11/06/2025 | `1.0`  | Todos da Equipe  | Criação da Página e Inserção do DML                    |
+| 08/08/2025 | `1.1`  | Yan Matheus      | Criação do diálogo final                               |

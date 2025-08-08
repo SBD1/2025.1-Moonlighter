@@ -72,7 +72,7 @@ Cada tabela está documentada com seus respectivos campos, tipos de dados, restr
     | `nickname`         | Indica o nome do jogador                                                          | Varchar  | 60     | `PK`       |
     | `maxHP`            | Indica o número máximo de vida disponível do jogador                              | SmallInt |        | `NOT NULL` |
     | `atualHP`          | Indica a vida atual do jogador                                                    | SmallInt |        | `NOT NULL` |
-    | `ouro`             | Indica a quantidade de Ouro que o jogador possui                                  | SmallInt |        | `NOT NULL` |
+    | `ouro`             | Indica a quantidade de Ouro que o jogador possui                                  | Integere |        | `NOT NULL` |
     | `posicaoX_Jogador` | Indica a posição de linha de uma matriz quando estiver dentro da masmorra         | SmallInt |        | `NOT NULL` |
     | `posicaoY_Jogador` | Indica a posição de coluna de uma matriz quando estiver dentro da masmorra        | SmallInt |        | `NOT NULL` |
     | `nomeLocal`        | Referência à Tabela `Local` para indicar onde o jogador está
@@ -1324,13 +1324,14 @@ As versões abaixo registram Dicionários que foram depreciadas após análises 
 
 # Versão:
 
-| Data       | Versão | Autor(es)        | Mudanças                                                              |
-| ---------- | ------ | ---------------- | --------------------------------------------------------------------- |
-| 30/04/2025 | `1.0`  | Daniel Rodrigues | Adição do Tópico "O que é um dicionário de dados?"                    |
-| 01/05/2025 | `1.1`  | Yan Matheus      | Adição das tabelas do dicionário de dados                             |
-| 01/05/2025 | `1.2`  | Daniel Rodrigues | Reorganização das Tabelas e Adição das Restrições                     |
-| 23/05/2025 | `1.3`  | Yan Matheus      | Reorganização das Tabelas e correção das Restrições                   |
-| 24/05/2025 | `1.4`  | Daniel Rodrigues | Separação das diferentes versões do Dicionário e correções Pontuais   |
-| 24/05/2025 | `1.5`  | Daniel Rodrigues | Atualização de atributos                                              |
-| 01/06/2025 | `1.6`  | Arthur Evangelista | Atualização do tamanho da descrição na Tabela NPC.                  |
-| 11/06/2025 | `2.0`  | Daniel Rodrigues | Atualização do Novo Dicionário de Dados                  |
+| Data       | Versão | Autor(es)          | Mudanças                                                              |
+| ---------- | ------ | ------------------ | --------------------------------------------------------------------- |
+| 30/04/2025 | `1.0`  | Daniel Rodrigues   | Adição do Tópico "O que é um dicionário de dados?"                    |
+| 01/05/2025 | `1.1`  | Yan Matheus        | Adição das tabelas do dicionário de dados                             |
+| 01/05/2025 | `1.2`  | Daniel Rodrigues   | Reorganização das Tabelas e Adição das Restrições                     |
+| 23/05/2025 | `1.3`  | Yan Matheus        | Reorganização das Tabelas e correção das Restrições                   |
+| 24/05/2025 | `1.4`  | Daniel Rodrigues   | Separação das diferentes versões do Dicionário e correções Pontuais   |
+| 24/05/2025 | `1.5`  | Daniel Rodrigues   | Atualização de atributos                                              |
+| 01/06/2025 | `1.6`  | Arthur Evangelista | Atualização do tamanho da descrição na Tabela NPC.                    |
+| 11/06/2025 | `2.0`  | Daniel Rodrigues   | Atualização do Novo Dicionário de Dados                               |
+| 08/08/2025 | `2.1`  | Yan Matheus        | Atualização do ouro do jogador                                        |

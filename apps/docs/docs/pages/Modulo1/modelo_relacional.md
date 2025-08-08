@@ -39,4 +39,4 @@ As versões abaixo registram Modelos de Relacionamento que foram depreciadas ap�
 | Data       | Versão | Autor(es)        | Mudanças                                                        |
 | ---------- | ------ | ---------------- | --------------------------------------------------------------- |
 | 01/05/2025 | `1.0`  | Igor  Justino    | Desenvolvimento da página de documentação de Modelo Relacional  |
-| 11/06/2025 | `2.0`  | Daniel Rodrigues | Inserção da nova versão do Modelo Relacional  |
+| 11/06/2025 | `2.0`  | Daniel Rodrigues | Inserção da nova versão do Modelo Relacional                    |

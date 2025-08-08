@@ -11,6 +11,7 @@ import shutil
 import time
 import hashlib  # Adicionado para a função de verificação de inimigo
 from utils.geracaoProceduralMasmorra import gerarMasmorra
+from pages.Final.final import exibirFinal
 
 if sys.platform.startswith('win'):
     import msvcrt
@@ -411,12 +412,15 @@ def menu_batalha(monstro, arma, armadura, vida_jogador, nickname):
 
                 if monstro["nome"] == "Fluxo de Energia":
                     print("\n" + Fore.GREEN + Style.BRIGHT + "  Parabéns! Você derrotou o Fluxo de Energia e desbloqueou a última masmorra: a Masmorra desconhecida!")
-                    desbloquear_masmorra(nickname, "Masmorra Desconhecida")
+                    desbloquear_masmorra(nickname, "A quinta porta")
                     time.sleep(3)
                     atualizarParaLocalAnterior(ObterDadosJogador(nickname))
                     print(Fore.LIGHTCYAN_EX + "\n  Você foi transportado de volta para a Vila Rynoka.")
                     tocar_musica("cidade")
                     time.sleep(3)
+
+                    exibirFinal(ObterDadosJogador(nickname))
+
                     return "sair", vida_jogador
 
                 time.sleep(2)
@@ -444,7 +448,23 @@ def menu_batalha(monstro, arma, armadura, vida_jogador, nickname):
 
         elif escolha == '2':
             print(Fore.CYAN + "  Você abre sua mochila para usar um item.")
+            vida_anterior = vida_jogador
             vida_jogador = usar_pocao_batalha(nickname, vida_jogador)
+
+            if vida_jogador != vida_anterior:
+                print(Fore.RED + "  Enquanto você usava a poção, o monstro aproveitou para atacar!")
+                time.sleep(1.5)
+                dano_monstro = calcular_dano_monstro(monstro)
+                time.sleep(1.5)
+                defesa_total = calcular_defesa(armadura) if armadura else 0
+                time.sleep(1.5)
+                dano_final = max(dano_monstro - defesa_total, 0)
+
+                print(Fore.RED + f"  Dano final recebido: {dano_final}")
+                vida_jogador -= dano_final
+                atualizar_vida_jogador(nickname, vida_jogador)
+                time.sleep(1.5)
+
             if vida_jogador <= 0:
                 print(Fore.RED + "  Você foi derrotado! Alguém te socorreu e te levou novamente para a cidade...")
                 time.sleep(3)
@@ -706,10 +726,14 @@ def mainMasmorra(nickname):
         print(logo)
         print("\n\n\n\n")
         atualizarParaLocalAnterior(dadosJogador)
-        print(f"{Style.BRIGHT}{Fore.YELLOW}Você ainda se sente muito inseguro para entrar nesta Masmorra.".center(largura_terminal))
+        print(f"{Style.BRIGHT}{Fore.YELLOW}Você ainda se sente muito inseguro para entrar aqui.".center(largura_terminal))
         print(f"{Style.BRIGHT}{Fore.RED}Derrote o chefe da Masmorra Anterior primeiro!".center(largura_terminal))
         time.sleep(3)
         print('\033[?25h', end='', flush=True)
+        return
+    
+    if dadosMasmorra[0] == 'A quinta porta':
+        exibirFinal(ObterDadosJogador(nickname))
         return
 
     tocar_musica("entrada_masmorra")
