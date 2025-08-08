@@ -448,7 +448,23 @@ def menu_batalha(monstro, arma, armadura, vida_jogador, nickname):
 
         elif escolha == '2':
             print(Fore.CYAN + "  Você abre sua mochila para usar um item.")
+            vida_anterior = vida_jogador
             vida_jogador = usar_pocao_batalha(nickname, vida_jogador)
+
+            if vida_jogador != vida_anterior:
+                print(Fore.RED + "  Enquanto você usava a poção, o monstro aproveitou para atacar!")
+                time.sleep(1.5)
+                dano_monstro = calcular_dano_monstro(monstro)
+                time.sleep(1.5)
+                defesa_total = calcular_defesa(armadura) if armadura else 0
+                time.sleep(1.5)
+                dano_final = max(dano_monstro - defesa_total, 0)
+
+                print(Fore.RED + f"  Dano final recebido: {dano_final}")
+                vida_jogador -= dano_final
+                atualizar_vida_jogador(nickname, vida_jogador)
+                time.sleep(1.5)
+
             if vida_jogador <= 0:
                 print(Fore.RED + "  Você foi derrotado! Alguém te socorreu e te levou novamente para a cidade...")
                 time.sleep(3)

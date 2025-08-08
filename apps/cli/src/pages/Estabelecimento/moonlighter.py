@@ -32,7 +32,7 @@ def print_in_centered(text):
         print(Style.BRIGHT + Fore.WHITE + linha_centralizada)
 
 def cabecalho(nickname):
-        
+    limpar_terminal()
     dadosJogador = buscar_dadosJogador(nickname)
     dadosMundo = buscarInfoMundo(nickname)
 
@@ -40,12 +40,8 @@ def cabecalho(nickname):
     print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}{dadosJogador[0]}".center(largura_terminal))
     print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}HP: {dadosJogador[1]} / {dadosJogador[2]} | OURO: {dadosJogador[3]}".center(largura_terminal))
     print("\n")
-    if dadosJogador[4] == -1:
-        print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}{dadosJogador[6]}".center(largura_terminal))
-        print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}DIA: {dadosMundo[3]} | PERÍODO: {dadosMundo[2]}".center(largura_terminal))
-    else:
-        print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}MASMORRA: {dadosJogador[6]}".center(largura_terminal))
-        print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}SALA [X][Y]: [{dadosJogador[3]}][{dadosJogador[4]}]".center(largura_terminal))
+    print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}{dadosJogador[6]}".center(largura_terminal))
+    print(f"{Fore.LIGHTWHITE_EX}{Style.BRIGHT}DIA: {dadosMundo[3]} | PERÍODO: {dadosMundo[2]}".center(largura_terminal))
     print(f"{Fore.LIGHTGREEN_EX}{Style.BRIGHT}╚════════════════════════════════════════════════════════════╝".center(largura_terminal))
     
     print("\n")
